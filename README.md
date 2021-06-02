@@ -1,6 +1,6 @@
-# seba-master-movie-frontend application
+Breender Frontend Project
 
-Movie database app example application based on React. Backend can be found [here](https://github.com/sebischair/seba-master-movie-backend)
+---------------- TODO : Adjust Documentation ---------
 
 ## Prerequisites
 
