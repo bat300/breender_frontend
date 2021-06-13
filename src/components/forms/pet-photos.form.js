@@ -7,7 +7,6 @@ function PetPhotosForm(props) {
     const classes = useStyles();
 
     return (
-        <React.Fragment>
             <div className={classes.layout}>
                 <Paper className={classes.paper}>
                     <Grid container alignItems="center" justify="center" direction="column">
@@ -19,26 +18,29 @@ function PetPhotosForm(props) {
                     </Grid>
                 </Paper>
             </div>
-        </React.Fragment>
     );
 }
 
 const useStyles = makeStyles((theme) => ({
     layout: {
-        width: 'auto',
+        display: 'flex',
         flex: 1,
-        [theme.breakpoints.up('sm')]: {
-            width: 450,
-        },
+        minWidth: 400,
+        maxWidth: 500,
+        margin: 10,
     },
     paper: {
-        marginTop: theme.spacing(3),
-        marginBottom: theme.spacing(3),
-        padding: theme.spacing(2),
-        [theme.breakpoints.up(600 + theme.spacing(3) * 2)]: {
-            marginTop: theme.spacing(6),
-            marginBottom: theme.spacing(6),
-            padding: theme.spacing(3),
+        width: '100%',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: theme.spacing(6),
+        marginBottom: theme.spacing(6),
+        padding: theme.spacing(3),
+        [theme.breakpoints.down('sm')]: {
+            marginTop: theme.spacing(3),
+            marginBottom: theme.spacing(3),
+            padding: theme.spacing(2),
         },
     },
     label: {
