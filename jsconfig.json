@@ -3,6 +3,7 @@
         "baseUrl": "src",
         "checkJs": true,
         "jsx": "react",
+        "noImplicitAny": false,
         "paths": {
             "src/*": ["*"]
         }
