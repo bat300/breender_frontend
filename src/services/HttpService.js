@@ -13,11 +13,17 @@ export default class HttpService {
     }
 
     static async get(url, onSuccess, onError) {
+        console.log("url: ", url)
         let token = window.localStorage["jwtToken"];
+        console.log("token: ", token);
         let header = new Headers();
+        console.log("header: ", header);
         if (token) {
             header.append("Authorization", `JWT ${token}`);
         }
+        console.log("token: ", token);
+
+
 
         try {
             let resp = await fetch(url, {

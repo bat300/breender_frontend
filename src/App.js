@@ -14,6 +14,7 @@ import ScrollContainer from "./components/ScrollContainer";
 import reducers from "./redux/reducers";
 import routes from "./routes";
 import Header from "./components/Header";
+import Search from "./components/Search";
 import Footer from "./components/Footer";
 import AppTheme from "./theming/themetypes";
 import AppThemeOptions from "./theming/themes";
@@ -31,7 +32,7 @@ function App() {
 
     // set document title
     useEffect(() => {
-        document.title = "Movie Database App";
+        document.title = "Breender App";
     }, []);
 
     // create store for redux
@@ -55,13 +56,9 @@ function App() {
                             darkmode={theme === AppTheme.DARK}
                             toggletheme={toggleTheme}
                         />
+                        <Search />
                         <ScrollContainer>
-                            <Switch>
-                                {routes.map((route, i) => (
-                                    <Route key={i} {...route} />
-                                ))}
-                            </Switch>
-                            <Footer />
+
                         </ScrollContainer>
                     </React.Fragment>
                 </Provider>

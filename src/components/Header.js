@@ -3,13 +3,12 @@ import { withRouter } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import { AppBar, IconButton, Toolbar, Typography } from "@material-ui/core";
 
-import MenuIcon from "@material-ui/icons/Menu";
-import LocalMoviesIcon from "@material-ui/icons/LocalMovies";
-import GitHubIcon from "@material-ui/icons/GitHub";
-import WbSunnyIcon from "@material-ui/icons/WbSunny";
-import Brightness3Icon from "@material-ui/icons/Brightness3";
-
+import logo from '../images/breender.svg';
+import SearchIcon from '@material-ui/icons/Search';
+import ChatBubbleOutlineIcon from '@material-ui/icons/ChatBubbleOutline';
+import PersonIcon from '@material-ui/icons/Person';
 import KebabMenu from "./KebabMenu";
+
 
 const useStyles = makeStyles((theme) => ({
     toolbar: {
@@ -17,8 +16,15 @@ const useStyles = makeStyles((theme) => ({
     },
     title: {
         flexGrow: 1,
-        paddingLeft: theme.spacing(1),
+        paddingLeft: theme.spacing(2),
     },
+    title2: {
+        paddingLeft: theme.spacing(2),
+    },
+    logo: {
+        flexGrow: 1,
+        alignItems: "flex-start",
+    }
 }));
 
 /**
@@ -30,12 +36,9 @@ function Header(props) {
 
     const [menuAnchor, setMenuAnchor] = React.useState(null);
 
-    const onClickGithub = (event) => {
-        var win = window.open(
-            "https://github.com/sebischair/seba-master-movie-frontend",
-            "_blank"
-        );
-        win.focus();
+    const onClickLogo = () => {
+        console.log('Tapped')
+        props.history.push("/");
     };
 
     return (
@@ -46,28 +49,55 @@ function Header(props) {
                 onClose={() => setMenuAnchor(null)}
             />
             <Toolbar className={classes.toolbar}>
-                <LocalMoviesIcon
-                    fontSize="large"
-                    onClick={() => props.history.push("/")}
-                />
+                <div onClick={onClickLogo} className={classes.logo}>
+                    <img src={`${logo}#svgView(preserveAspectRatio(xMaxYMax))`} height="55px" style={{ cursor: "pointer" }} />
+                </div>
+                <Typography
+                    className={classes.title2}
+                    variant="h5"
+                    color="inherit"
+                    style={{ cursor: "pointer" }}
+                >
+                    Find a mate
+                </Typography>
+                <Typography
+                    className={classes.title2}
+                    variant="h5"
+                    color="inherit"
+                >
+                    |
+                </Typography>
+                <Typography
+                    className={classes.title2}
+                    variant="h5"
+                    color="inherit"
+                    style={{ cursor: "pointer" }}
+                >
+                    Blog
+                </Typography>
+                <Typography
+                    className={classes.title2}
+                    variant="h5"
+                    color="inherit"
+                >
+                    |
+                </Typography>
                 <Typography
                     className={classes.title}
                     variant="h5"
                     color="inherit"
+                    style={{ cursor: "pointer" }}
                 >
-                    Movie Database App
+                    Premium
                 </Typography>
-                <IconButton onClick={onClickGithub} color="inherit">
-                    <GitHubIcon />
+                <IconButton onClick={onClickLogo} color="inherit">
+                    <SearchIcon />
                 </IconButton>
-                <IconButton onClick={props.toggletheme} color="inherit">
-                    {props.darkmode ? <WbSunnyIcon /> : <Brightness3Icon />}
+                <IconButton onClick={onClickLogo} color="inherit">
+                    <ChatBubbleOutlineIcon />
                 </IconButton>
-                <IconButton
-                    onClick={(event) => setMenuAnchor(event.currentTarget)}
-                    color="inherit"
-                >
-                    <MenuIcon />
+                <IconButton onClick={(event) => setMenuAnchor(event.currentTarget)} color="inherit">
+                    <PersonIcon />
                 </IconButton>
             </Toolbar>
         </AppBar>
