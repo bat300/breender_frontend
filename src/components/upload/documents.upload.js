@@ -1,17 +1,22 @@
 import React, { useState } from 'react';
-import firebase from 'firebase';
 import 'antd/dist/antd.css';
 import { Upload } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import { storage } from './../../firebase';
 import { sha256 } from 'js-sha256';
 import { Button } from '@material-ui/core';
+import { useDispatch } from 'react-redux';
+import { useDocuments } from 'helper/hooks/pets.hooks';
+import { updateDocuments } from 'redux/actions';
 
 const DocumentsUpload = (props) => {
-    const [fileList, setFileList] = useState([]);
-    const [uploadedDocs, setUploadedDocs] = useState(new Array());
+    const dispatch = useDispatch();
 
-    let maxFiles = props.maxFiles || 8;
+    const [fileList, setFileList] = useState([]);
+    const [uploadedDocs, setUploadedDocs] = useState([]);
+
+    let maxFileNumber = props.maxFiles || 8;
+    const documents = useDocuments();
 
     // update file list
     const handleChange = ({ fileList }) => setFileList(fileList);
@@ -38,15 +43,17 @@ const DocumentsUpload = (props) => {
             // upload image
             let uploadTask = imgFile.put(data.file, metadata);
 
-            uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED, () => {
-                uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
+            uploadTask.then((snapshot) => {
+                snapshot.ref.getDownloadURL().then((downloadURL) => {
                     console.log('File available at', downloadURL);
-                    setUploadedDocs([...uploadedDocs, { name: data.file.name, fullPath: imgPath, downloadUrl: downloadURL}])
+                    setUploadedDocs([...uploadedDocs, { name: data.file.name, fullPath: imgPath, downloadUrl: downloadURL }]);
+
+                    let docs = [...documents, { name: docName, type: data.file.type, url: downloadURL, uploadDate: new Date(), verified: false }]
+                    dispatch(updateDocuments(docs));
                 });
             });
 
             data.onSuccess(null, uploadTask);
-
         } catch (e) {
             data.onError(e);
         }
@@ -54,8 +61,8 @@ const DocumentsUpload = (props) => {
 
     // remove the image from firebase
     const handleRemove = async (file) => {
-    
         let obj = uploadedDocs.find((value) => value.name === file.name);
+        let obj2 = documents.find((value) => String(obj.fullPath) === `documents/${value.name}`);
 
         const storageRef = await storage.ref();
         storageRef
@@ -63,8 +70,16 @@ const DocumentsUpload = (props) => {
             .delete()
             .then(() => {
                 const index = uploadedDocs.indexOf(obj);
-                uploadedDocs.splice(index, 1);
+                let temp = uploadedDocs.splice(index, 1);
+                setUploadedDocs(temp);
+
+                const index2 = documents.indexOf(obj2);
+                let temp2 = documents.splice(index2, 1);
+
+                dispatch(updateDocuments(temp2));
+
                 console.log('Deletion was successful');
+
             })
             .catch((error) => {
                 console.log('Error while deletion has occurred', error);
@@ -74,8 +89,10 @@ const DocumentsUpload = (props) => {
     return (
         <div>
             <Upload listType="text" fileList={fileList} onChange={handleChange} customRequest={customUpload} onRemove={handleRemove}>
-                {fileList.length >= maxFiles ? null : (
-                    <Button size={props.size || 'medium'} variant="contained" color="primary" startIcon={<UploadOutlined />}>Upload</Button>
+                {fileList.length >= maxFileNumber ? null : (
+                    <Button size={props.size || 'medium'} variant="contained" color="primary" startIcon={<UploadOutlined />}>
+                        Upload
+                    </Button>
                 )}
             </Upload>
         </div>

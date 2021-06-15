@@ -1,17 +1,23 @@
 import React, { useState } from 'react';
-import firebase from 'firebase';
 import 'antd/dist/antd.css';
 import { Upload, Modal } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { storage } from './../../firebase';
 import { sha256 } from 'js-sha256';
+import { useDispatch } from 'react-redux';
+import { updatePictures } from 'redux/actions';
+import { usePictures } from 'helper/hooks/pets.hooks';
 
 const MultiplePhotosUpload = (props) => {
+    const dispatch = useDispatch();
+
     const [previewVisible, setPreviewVisible] = useState(false);
     const [previewImage, setPreviewImage] = useState('');
     const [previewTitle, setPreviewTitle] = useState('');
     const [fileList, setFileList] = useState([]);
-    const [uploadedImages, setUploadedImages] = useState(new Array());
+    const [uploadedImages, setUploadedImages] = useState([]);
+
+    const pictures = usePictures();
 
     // get base64 format of the uploaded picture
     const getBase64 = (photo) => {
@@ -60,10 +66,14 @@ const MultiplePhotosUpload = (props) => {
             // upload image
             let uploadTask = imgFile.put(data.file, metadata);
 
-            uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED, () => {
-                uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
-                    console.log('File available at', downloadURL);
+            uploadTask.then((snapshot) => {
+                snapshot.ref.getDownloadURL().then(async (downloadURL) => {
                     setUploadedImages([...uploadedImages, { name: data.file.name, fullPath: imgPath, downloadUrl: downloadURL }]);
+                    console.log('File available at', downloadURL);
+
+                    // set global state
+                    let pics = [...pictures, downloadURL];
+                    dispatch(updatePictures(pics));
                 });
             });
 
@@ -84,6 +94,13 @@ const MultiplePhotosUpload = (props) => {
             .then(() => {
                 const index = uploadedImages.indexOf(obj);
                 uploadedImages.splice(index, 1);
+
+                // save in parent component
+                let downloadLinks = uploadedImages.map((x) => {
+                    return x.downloadUrl;
+                });
+                dispatch(updatePictures(downloadLinks))
+
                 console.log('Deletion was successful');
             })
             .catch((error) => {
