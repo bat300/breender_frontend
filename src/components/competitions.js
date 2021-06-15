@@ -8,6 +8,8 @@ import { Button, Grid } from '@material-ui/core';
 import { Input, Form } from 'antd';
 import DocumentsUpload from './upload/documents.upload';
 import moment from 'moment';
+import { useDispatch } from 'react-redux';
+import { updateCompetitions } from 'redux/actions';
 
 const EditableContext = createContext(null);
 const DATE_FORMAT = 'DD.MM.YYYY';
@@ -89,6 +91,8 @@ const EditableCell = ({ title, editable, children, dataIndex, record, handleSave
 
 const CompetitionsComponent = (props) => {
     const classes = useStyles();
+    const dispatch = useDispatch();
+
     const [count, setCount] = useState(0);
     const [competitions, setCompetitions] = useState([]);
 
@@ -168,7 +172,7 @@ const CompetitionsComponent = (props) => {
 
     // add new row
     const handleAdd = () => {
-        const newData = { key: count, name: String(''), date: new Date(), category: '', prize: '', certificate: {} };
+        const newData = { key: count, name: '', date: new Date(), category: '', prize: '', certificate: {} };
         setCompetitions([...competitions, newData]);
         setCount(count + 1);
     };
@@ -177,6 +181,7 @@ const CompetitionsComponent = (props) => {
     const handleDelete = (key) => {
         const newData = competitions.filter((item) => item.key !== key);
         setCompetitions(newData);
+        setCount(count - 1);
     };
 
     const handleSave = (row) => {
@@ -185,7 +190,8 @@ const CompetitionsComponent = (props) => {
         const item = newData[index];
         newData.splice(index, 1, { ...item, ...row });
         setCompetitions(newData);
-        console.log(competitions);
+
+        dispatch(updateCompetitions(newData));
     };
 
     // handle change of the competition date
@@ -198,7 +204,7 @@ const CompetitionsComponent = (props) => {
             return item;
         });
         setCompetitions(newData);
-        handleSave(record);
+        dispatch(updateCompetitions(newData));
     };
 
     return (
