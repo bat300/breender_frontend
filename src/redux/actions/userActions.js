@@ -19,10 +19,22 @@ export function login(username, password) {
 }
 
 export function confirmEmail(email, token) {
-    
-  UserService.confirmEmail(email, token);
+  function onSuccess(confirmation) {
+    return { type: "CONFIRM_EMAIL_SUCCESS", confirmation: confirmation};
+  }
+  function onFailure(error) {
+    return { type: "CONFIRM_EMAIL_FAILURE", error: error };
+  }
 
-  return { type: "CONFIRM_EMAIL" };
+  return async (dispatch) => {
+    try {
+       let resp = await UserService.confirmEmail(email, token);
+      dispatch(onSuccess(resp));
+    } catch (e) {
+      dispatch(onFailure(e));
+    }
+  };
+  
 }
 
 export function logout() {

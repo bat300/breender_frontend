@@ -1,5 +1,4 @@
 import HttpService from "./HttpService";
-import jsonwebtoken from "jsonwebtoken"
 
 export default class UserService {
   static baseURL() {
@@ -31,10 +30,6 @@ export default class UserService {
     return new Promise((resolve, reject) => {
       HttpService.get(
         `${UserService.baseURL()}/confirmation/${email}/${token}`,
-        {
-          email: email,
-          token: token,
-        },
         function (data) {
           resolve(data);
         },
@@ -53,7 +48,7 @@ export default class UserService {
           username: user,
           password: pass,
         },
-        function (data) { 
+        function (data) {
           resolve(data);
         },
         function (textStatus) {
