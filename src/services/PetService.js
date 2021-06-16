@@ -1,22 +1,8 @@
 import HttpService from "./HttpService";
 
-export default class MovieService {
+export default class PetService {
   static baseURL() {
     return "http://localhost:4000/pets";
-  }
-
-  static getPets() {
-    return new Promise(async (resolve, reject) => {
-      HttpService.get(
-        this.baseURL(),
-        function (data) {
-          resolve(data);
-        },
-        function (textStatus) {
-          reject(textStatus);
-        }
-      );
-    });
   }
 
   static getPet(id) {
@@ -27,7 +13,7 @@ export default class MovieService {
           if (data !== undefined || Object.keys(data).length !== 0) {
             resolve(data);
           } else {
-            reject("Error while retrieving movie");
+            reject("Error while retrieving pet");
           }
         },
         function (textStatus) {

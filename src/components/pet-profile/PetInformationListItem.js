@@ -6,7 +6,6 @@ import {
   ListItemAvatar,
   Avatar,
 } from "@material-ui/core";
-import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
 import GetAppIcon from "@material-ui/icons/GetApp";
 import VerificationIcon from "../../components/VerificationIcon";
 
