@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import { connect, useSelector } from "react-redux";
-import { makeStyles } from "@material-ui/core/styles";
 import { getPet } from "../redux/actions/petActions";
 import PetProfileComponent from "../components/pet-profile/PetProfileComponent";
 import Loading from "../components/Loading";
@@ -9,8 +8,6 @@ import Loading from "../components/Loading";
  * Manages the process of getting pet details data
  * @param {props} props
  */
-
-const useStyles = makeStyles((theme) => ({}));
 
 function PetProfileView(props) {
   let { match, getPet } = props;
