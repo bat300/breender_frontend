@@ -1,53 +1,97 @@
-import React from 'react';
-import { connect } from 'react-redux';
+import React, { useState } from 'react';
+import { connect, useDispatch } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
-import { Grid } from '@material-ui/core';
 import { PetInformationForm, PetPhotosForm } from 'components/forms';
+import { Button } from '@material-ui/core';
+import { useCompetitions, useDocuments, usePictures, useProfilePicture } from 'helper/hooks/pets.hooks';
+import { addPet } from 'redux/actions';
+import { useUser } from 'helper/hooks/auth.hooks';
 
 const AddPetView = (props) => {
     const classes = useStyles();
+    const dispatch = useDispatch();
+
+    const [name, setName] = useState('');
+    const [nickname, setNickname] = useState('');
+    const [sex, setSex] = useState('');
+    const [birthDate, setBirthDate] = useState(new Date());
+    const [species, setSpecies] = useState('');
+    const [breed, setBreed] = useState('');
+    const [price, setPrice] = useState(0);
+
+    const profilePicture = useProfilePicture();
+    const pictures = usePictures();
+    const documents = useDocuments();
+    const competitions = useCompetitions();
+    const user = useUser();
+
+    // check if all required fields are filled
+    const formIsValid = () => {
+        return name && sex && species && breed;
+    };
+
+    const createPet = () => {
+        let pet = {
+            ownerId: user.id,
+            officialName: name,
+            nickname: nickname,
+            birthDate: birthDate,
+            sex: sex,
+            price: price,
+            profilePicture: profilePicture,
+            pictures: pictures,
+            breed: breed,
+            species: species,
+            competitions: competitions,
+            documents: documents,
+        };
+
+        try {
+            //PetService.createPet(pet);
+            dispatch(addPet(pet))
+        } catch (err) {
+            throw new Error(err)
+        }
+    };
 
     return (
-        <React.Fragment>
+        <div>
             <div className={classes.layout}>
-                <Grid container spacing={2}>
-                    <Grid item>
-                        <PetPhotosForm />
-                    </Grid>
-                    <Grid item>
-                        <PetInformationForm />
-                    </Grid>
-                </Grid>
+                <PetPhotosForm />
+                <PetInformationForm
+                    nameProp={{ name, setName }}
+                    nicknameProp={{ nickname, setNickname }}
+                    sexProp={{ sex, setSex }}
+                    birthDateProp={{ birthDate, setBirthDate }}
+                    speciesProp={{ species, setSpecies }}
+                    breedProp={{ breed, setBreed }}
+                    priceProp={{ price, setPrice }}
+                />
             </div>
-        </React.Fragment>
+            <div className={classes.button}>
+                <Button disabled={!formIsValid()} onClick={createPet} type="submit" variant="contained" color="primary" size="large">
+                    Save
+                </Button>
+            </div>
+        </div>
     );
-}
+};
 
 const useStyles = makeStyles((theme) => ({
     layout: {
-        width: 'auto',
-        alignSelf: 'center',
-    },
-    paper: {
-        marginTop: theme.spacing(3),
-        marginBottom: theme.spacing(3),
-        padding: theme.spacing(2),
-        [theme.breakpoints.up(600 + theme.spacing(3) * 2)]: {
-            marginTop: theme.spacing(6),
-            marginBottom: theme.spacing(6),
-            padding: theme.spacing(3),
+        display: 'flex',
+        width: '100%',
+        justifyContent: 'center',
+        [theme.breakpoints.down('sm')]: {
+            flexDirection: 'column',
+            width: 'auto',
+            alignItems: 'center',
         },
     },
-    stepper: {
-        padding: theme.spacing(3, 0, 5),
-    },
-    buttons: {
+    button: {
         display: 'flex',
         justifyContent: 'flex-end',
-    },
-    button: {
-        marginTop: theme.spacing(3),
-        marginLeft: theme.spacing(1),
+        marginRight: 50,
     },
 }));
 
