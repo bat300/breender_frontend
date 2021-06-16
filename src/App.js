@@ -17,6 +17,7 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 import AppTheme from "./theming/themetypes";
 import AppThemeOptions from "./theming/themes";
+import AxiosConfiguration from './helper/axios'
 
 const useStyles = makeStyles((theme) => ({
     appRoot: {
@@ -28,6 +29,8 @@ const useStyles = makeStyles((theme) => ({
 
 function App() {
     const classes = useStyles();
+
+    useEffect(() => AxiosConfiguration.setupInterceptors(), []);
 
     // set document title
     useEffect(() => {
