@@ -3,31 +3,72 @@ import React, { useState } from 'react';
 import DateFnsUtils from '@date-io/date-fns';
 import { makeStyles } from '@material-ui/core/styles';
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
-import { FormControl, Grid, InputLabel, InputAdornment, MenuItem, Select, TextField, Paper, Divider } from '@material-ui/core';
+import { FormControl, Grid, InputLabel, InputAdornment, MenuItem, Select, TextField, Paper, Divider, FormHelperText } from '@material-ui/core';
 import { dogBreeds, catBreeds, horseBreeds } from 'helper/data/breeds';
 import DocumentsUpload from '../upload/documents.upload';
 import CompetitionsComponent from '../competitions';
 
-const PetInformationForm = (props) => {
+// define types for error handling
+const PetFormInputs = {
+    name: 'name',
+    sex: 'sex',
+    species: 'species',
+    breed: 'breed',
+};
+
+const PetInformationForm = ({ nameProp, nicknameProp, sexProp, birthDateProp, speciesProp, breedProp, priceProp }) => {
     const classes = useStyles();
-    const [name, setName] = useState('');
-    const [nickname, setNickname] = useState('');
-    const [sex, setSex] = useState('');
-    const [birthDate, setBirthDate] = useState(new Date());
-    const [species, setSpecies] = useState('');
-    const [breed, setBreed] = useState('');
-    const [price, setPrice] = useState(0);
+    const { name, setName } = nameProp;
+    const { nickname, setNickname } = nicknameProp;
+    const { sex, setSex } = sexProp;
+    const { birthDate, setBirthDate } = birthDateProp;
+    const { species, setSpecies } = speciesProp;
+    const { breed, setBreed } = breedProp;
+    const { price, setPrice } = priceProp;
+    const [errors, setErrors] = useState({ name: false, nickname: false, sex: false, species: false, breed: false });
+
+    const validationErrors = {
+        name: 'Name is required',
+        nickname: 'Nickname is required',
+        sex: 'Sex is required',
+        species: 'Species is required',
+        breed: 'Breed is required',
+    };
+
+    // validate fields
+    const validate = (type, value) => {
+        let temp = { ...errors };
+        if (value === '') {
+            temp[type] = true;
+        } else {
+            temp[type] = false;
+        }
+        setErrors({ ...temp });
+    };
 
     // handle variable changes
-    const handleNameChange = (name) => setName(name.target.value);
-    const handleNicknameChange = (nickname) => setNickname(nickname.target.value);
-    const handleSexChange = (sex) => setSex(sex.target.value);
-    const handlePriceChange = (price) => setPrice(price.target.value);
+    const handleNameChange = (e) => {
+        validate(PetFormInputs.name, e.target.value);
+        setName(e.target.value);
+    };
+    const handleNicknameChange = (e) => setNickname(e.target.value);
+    
+    const handleSexChange = (e) => {
+        validate(PetFormInputs.sex, e.target.value);
+        setSex(e.target.value);
+    };
+    const handlePriceChange = (e) => setPrice(e.target.value);
 
     const handleDateChange = (date) => setBirthDate(date);
 
-    const handleSpeciesChange = (species) => setSpecies(species.target.value);
-    const handleBreedChange = (breed) => setBreed(breed.target.value);
+    const handleSpeciesChange = (e) => {
+        validate(PetFormInputs.species, e.target.value);
+        setSpecies(e.target.value);
+    };
+    const handleBreedChange = (e) => {
+        validate(PetFormInputs.breed, e.target.value);
+        setBreed(e.target.value);
+    };
 
     // sort breeds data
     const sortedDogBreeds = dogBreeds.sort((a, b) => a.localeCompare(b));
@@ -43,10 +84,33 @@ const PetInformationForm = (props) => {
                         <React.Fragment>
                             <Grid container spacing={3}>
                                 <Grid item xs={12}>
-                                    <TextField size="small" required id="name" name="name" value={name} onChange={handleNameChange} label="Official Name" variant="outlined" fullWidth />
+                                    <TextField
+                                        size="small"
+                                        required
+                                        id="name"
+                                        name="name"
+                                        value={name}
+                                        onChange={handleNameChange}
+                                        onBlur={handleNameChange}
+                                        label="Official Name"
+                                        variant="outlined"
+                                        fullWidth
+                                        {...(errors[PetFormInputs.name] && { error: true, helperText: validationErrors[PetFormInputs.name] })}
+                                    />
                                 </Grid>
                                 <Grid item xs={12}>
-                                    <TextField required size="small" id="nickname" name="nickname" value={nickname} onChange={handleNicknameChange} label="Nickname" variant="outlined" fullWidth />
+                                    <TextField
+                                        size="small"
+                                        id="nickname"
+                                        name="nickname"
+                                        value={nickname}
+                                        onChange={handleNicknameChange}
+                                        onBlur={handleNicknameChange}
+                                        label="Nickname"
+                                        variant="outlined"
+                                        fullWidth
+                                        {...(errors[PetFormInputs.nickname] && { error: true, helperText: validationErrors[PetFormInputs.nickname] })}
+                                    />
                                 </Grid>
                                 <Grid item xs={12} sm={6}>
                                     <KeyboardDatePicker
@@ -67,28 +131,30 @@ const PetInformationForm = (props) => {
                                     />
                                 </Grid>
                                 <Grid item xs={12} sm={6}>
-                                    <FormControl required variant="outlined" size="small" fullWidth>
+                                    <FormControl required variant="outlined" size="small" fullWidth error={errors[PetFormInputs.sex]}>
                                         <InputLabel id="sex-label">Sex</InputLabel>
-                                        <Select label="Sex" id="sex" value={sex} onChange={handleSexChange}>
+                                        <Select label="Sex" id="sex" value={sex} onChange={handleSexChange} onBlur={handleSexChange}>
                                             <MenuItem value={'female'}>female</MenuItem>
                                             <MenuItem value={'male'}>male</MenuItem>
                                         </Select>
+                                        <FormHelperText>{errors[PetFormInputs.sex] && validationErrors[PetFormInputs.sex]}</FormHelperText>
                                     </FormControl>
                                 </Grid>
                                 <Grid item xs={12}>
-                                    <FormControl required variant="outlined" size="small" fullWidth>
+                                    <FormControl required variant="outlined" size="small" fullWidth error={errors[PetFormInputs.species]}>
                                         <InputLabel id="species-label">Species</InputLabel>
-                                        <Select label="Species" id="species" value={species} onChange={handleSpeciesChange}>
+                                        <Select label="Species" id="species" value={species} onChange={handleSpeciesChange} onBlur={handleSpeciesChange}>
                                             <MenuItem value={'dog'}>Dog</MenuItem>
                                             <MenuItem value={'cat'}>Cat</MenuItem>
                                             <MenuItem value={'horse'}>Horse</MenuItem>
                                         </Select>
+                                        <FormHelperText>{errors[PetFormInputs.species] && validationErrors[PetFormInputs.species]}</FormHelperText>
                                     </FormControl>
                                 </Grid>
                                 <Grid item xs={12}>
-                                    <FormControl required variant="outlined" size="small" fullWidth>
+                                    <FormControl required variant="outlined" size="small" fullWidth error={errors[PetFormInputs.breed]}>
                                         <InputLabel id="breed-label">Breed</InputLabel>
-                                        <Select label="Breed" id="breed" value={breed} onChange={handleBreedChange}>
+                                        <Select label="Breed" id="breed" value={breed} onChange={handleBreedChange} onBlur={handleBreedChange}>
                                             {species === 'dog'
                                                 ? sortedDogBreeds.map((breed) => {
                                                       return <MenuItem value={breed}>{breed}</MenuItem>;
@@ -103,6 +169,7 @@ const PetInformationForm = (props) => {
                                                   })
                                                 : null}
                                         </Select>
+                                        <FormHelperText>{errors[PetFormInputs.breed] && validationErrors[PetFormInputs.breed]}</FormHelperText>
                                     </FormControl>
                                 </Grid>
                                 <Grid item xs={12}>
@@ -117,7 +184,6 @@ const PetInformationForm = (props) => {
                                 </Grid>
                                 <Grid item xs={12}>
                                     <TextField
-                                        required
                                         fullWidth
                                         size="small"
                                         id="price"
