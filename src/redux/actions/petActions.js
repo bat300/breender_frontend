@@ -12,14 +12,14 @@ const PetTypes = {
     UPDATE_COMPETITIONS: 'UPDATE_COMPETITIONS',
 };
 
-export function getPets() {
+export const getPets = () => {
     // when the backend call was successfull and the pets are retrieved
     // in the dispatcher the pets will be added to the global state
-    function onSuccess(pets) {
+    const getPetsAction = (pets) => {
         return { type: PetTypes.GET_PETS, pets: pets };
     }
 
-    function onFailure(error) {
+    const onFailure = (error) => {
         // error handling
         console.log('Failed to get the pets', error);
     }
@@ -29,18 +29,18 @@ export function getPets() {
             // get pets from the backend
             let pets = await PetService.getPets();
             // call onSuccess in context of redux
-            dispatch(onSuccess(pets));
+            dispatch(getPetsAction(pets));
         } catch (e) {
             onFailure(e);
         }
     };
 }
 
-export function deletePet(id) {
-    function onSuccess(pets) {
+export const deletePet = (id) => {
+    const deletePetAction = (pets) => {
         return { type: PetTypes.DELETE_PET, pets: pets };
     }
-    function onFailure(error) {
+    const onFailure = (error) => {
         console.log('Error while deleting a pet', error);
     }
 
@@ -48,44 +48,44 @@ export function deletePet(id) {
         try {
             await PetService.deletePet(id);
             let pets = await PetService.getPets();
-            dispatch(onSuccess(pets));
+            dispatch(deletePetAction(pets));
         } catch (e) {
             onFailure(e);
         }
     };
 }
 
-export function addPet(pet) {
-    function onSuccess() {
+export const addPet = (pet) => {
+    const addPetAction = () => {
         return { type: PetTypes.ADD_PET };
     }
-    function onFailure(error) {
-        console.log('Error while adding a pet', error);
+    const onFailure = (err) => {
+        console.log('Error while adding a pet', err);
     }
 
     return async (dispatch) => {
         try {
             await PetService.createPet(pet);
-            dispatch(onSuccess());
+            dispatch(addPetAction());
         } catch (e) {
             onFailure(e);
         }
     };
 }
 
-export function changePet(changedPet) {
-    function onSuccess(pet) {
+export const changePet = (changedPet) => {
+    const changePetAction = (pet) => {
         return { type: PetTypes.UPDATE_PET, pet: pet };
     }
 
-    function onFailure(error) {
+    const onFailure = (error) => {
         console.log('Error while changing a pet', error);
     }
 
     return async (dispatch) => {
         try {
             let pet = await PetService.updatePet(changedPet);
-            dispatch(onSuccess(pet));
+            dispatch(changePetAction(pet));
         } catch (e) {
             onFailure(e);
         }
@@ -93,17 +93,17 @@ export function changePet(changedPet) {
 }
 
 export const getPet = (id) => {
-    function onSuccess(pet) {
+    const getPetAction = (pet) => {
         return { type: PetTypes.GET_PET, pet: pet };
     }
-    function onFailure(error) {
+    const onFailure = (error) => {
         console.log('Failed to load a pet', error);
     }
 
     return async (dispatch, getState) => {
         try {
             let pet = await PetService.getPet(id);
-            dispatch(onSuccess(pet));
+            dispatch(getPetAction(pet));
         } catch (e) {
             onFailure(e);
         }
