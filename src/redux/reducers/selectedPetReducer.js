@@ -1,10 +1,10 @@
 export default function selectedPet(state = {}, action) {
   switch (action.type) {
-    case "GETMOVIE_SUCCESS":
+    case "GETPET_SUCCESS":
       return { pet: action.pet };
-    case "GETMVOVIE_ERROR":
+    case "GETPET_ERROR":
       return { error: action.error };
-    case "CHANGE_SELECTED_MOVIE":
+    case "CHANGE_SELECTED_PET":
       return {
         pet: {
           ...state.pet,

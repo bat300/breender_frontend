@@ -8,7 +8,7 @@ import PetDocumentsList from "./PetDocumentsList";
 import PaymentButton from "../../components/PaymentButton";
 
 /**
- * Manages the process of getting movie details data
+ * Manages the process of getting pet details data
  * @param {props} props
  */
 
