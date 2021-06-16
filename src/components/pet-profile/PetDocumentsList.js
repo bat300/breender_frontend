@@ -26,6 +26,7 @@ function generateDocumentItems(documents) {
       primary={doc.name}
       secondary={doc.type}
       verified={doc.verified}
+      url={doc.url}
       itemType="document"
     />
   ));

@@ -7,7 +7,6 @@ import {
   CardContent,
   Typography,
   CardActions,
-  Icon,
   Button,
 } from "@material-ui/core";
 import GetAppIcon from "@material-ui/icons/GetApp";
@@ -55,10 +54,11 @@ function PetCompetitionsCard(props) {
             color="default"
             className={classes.button}
             startIcon={<GetAppIcon />}
+            component="a"
+            href={props.certificate.url ? props.certificate.url : null}
+            disabled={props.certificate.url ? false : true}
           >
-            <a href={props.certificate.url} download className={classes.link}>
-              Certificate
-            </a>
+            Certificate
           </Button>
         </CardActions>
       </Card>
