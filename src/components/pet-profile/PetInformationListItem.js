@@ -12,10 +12,8 @@ import VerificationIcon from "../../components/VerificationIcon";
 function PetInformationListItem(props) {
   return (
     <ListItem
-      button={props.itemType == "owner" || props.itemType == "document"}
-      component={
-        props.itemType == "owner" || props.itemType == "document" ? "a" : null
-      }
+      button={isButton(props.itemType)}
+      component={isButton(props.itemType) ? "a" : null}
       href={props.itemType == "document" ? props.url : null}
     >
       <Icon itemType={props.itemType} avatar={props.avatar} />
@@ -40,6 +38,10 @@ function Icon(props) {
         {props.itemType == "document" ? <GetAppIcon /> : null}
       </ListItemIcon>
     );
+}
+
+function isButton(type) {
+  return type == "owner" || type == "document";
 }
 
 export default PetInformationListItem;
