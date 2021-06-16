@@ -20,9 +20,6 @@ const useStyles = makeStyles((theme) => ({
   maxWidth: {
     width: "100%",
   },
-  centered: {
-    width: "50%%",
-  },
   paper: {
     marginTop: theme.spacing(3),
     marginBottom: theme.spacing(3),
@@ -63,12 +60,13 @@ function PetProfileComponent(props) {
             <Grid
               container
               alignItems="center"
+              align="center"
               justify="center"
               direction="row"
               className={classes.gridMargin}
               spacing={2}
             >
-              <Grid item className={classes.centered}>
+              <Grid item xs={4}>
                 <Typography variant="h4" align="center">
                   {props.officialName}
                 </Typography>
@@ -76,13 +74,10 @@ function PetProfileComponent(props) {
                   pictures={props.pictures}
                   profilePicture={props.profilePicture}
                 />
-
-                <div className={classes.centered}>
-                  <PaymentButton price={props.price} />
-                </div>
+                <PaymentButton price={props.price} />
               </Grid>
               <Divider variant="middle" />
-              <Grid item className={classes.centered}>
+              <Grid item item xs={7}>
                 <PetInformation
                   officialName={props.officialName}
                   nickname={props.nickname}

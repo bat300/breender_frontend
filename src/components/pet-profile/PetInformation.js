@@ -9,6 +9,9 @@ const useStyles = makeStyles((theme) => ({
     flex: 1,
     maxWidth: "100%",
   },
+  helf: {
+    width: "50%",
+  },
 }));
 
 function PetInformation(props) {
@@ -16,8 +19,14 @@ function PetInformation(props) {
 
   return (
     <div className={classes.layout}>
-      <Grid container direction="row" alignItems="center" justify="center">
-        <Grid item xs={3}>
+      <Grid
+        container
+        direction="row"
+        align="center"
+        justify="center"
+        alignItems="center"
+      >
+        <Grid item xs={6}>
           <List>
             <PetInformationListItem
               primary={props.officialName}
@@ -38,7 +47,7 @@ function PetInformation(props) {
             />
           </List>
         </Grid>
-        <Grid item xs={3}>
+        <Grid item xs={6}>
           <List>
             <PetInformationListItem primary={props.breed} secondary={"Breed"} />
             <PetInformationListItem primary={"3 years old"} secondary={"Age"} />

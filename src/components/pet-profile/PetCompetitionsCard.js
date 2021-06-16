@@ -23,6 +23,10 @@ const useStyles = makeStyles((theme) => ({
   button: {
     margin: theme.spacing(1),
   },
+  link: {
+    color: "black",
+    textDecoration: "none",
+  },
 }));
 
 function PetCompetitionsCard(props) {
@@ -52,7 +56,9 @@ function PetCompetitionsCard(props) {
             className={classes.button}
             startIcon={<GetAppIcon />}
           >
-            Certificate
+            <a href={props.certificate.url} download className={classes.link}>
+              Certificate
+            </a>
           </Button>
         </CardActions>
       </Card>
