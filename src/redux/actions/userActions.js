@@ -10,8 +10,8 @@ export function login(username, password) {
 
     return async (dispatch) => {
         try {
-            let resp = await UserService.login(username, password);
-            dispatch(onSuccess(resp.user));
+            let user = await UserService.login(username, password);
+            dispatch(onSuccess(user));
         } catch (e) {
             dispatch(onFailure(e));
         }
