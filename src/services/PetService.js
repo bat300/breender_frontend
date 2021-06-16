@@ -1,88 +1,64 @@
-import HttpService from "./HttpService";
+import axios from 'axios';
 
 export default class PetService {
 
-    URL = process.env.API_URL + 'pets';
+    static URL() {
+        return "http://localhost:4000/pets";
+    }
 
     static getPets() {
         return new Promise(async (resolve, reject) => {
-            HttpService.get(
-                URL,
-                function (data) {
-                    resolve(data);
-                },
-                function (textStatus) {
-                    reject(textStatus);
-                }
-            );
+            try {
+                const { data } = await axios.get(`/pets/`)
+                resolve(data);
+            } catch (err) {
+                reject(err)
+            }
         });
     }
 
     static getPet(id) {
         return new Promise(async (resolve, reject) => {
-            HttpService.get(
-                `${URL}/${id}`,
-                function (data) {
-                    if (data !== undefined || Object.keys(data).length !== 0) {
-                        resolve(data);
-                    } else {
-                        reject("Error while retrieving a pet");
-                    }
-                },
-                function (data) {
-                    reject(data);
-                }
-            );
+            try {
+                const { data } = await axios.get(`/pets/${id}`)
+                resolve(data);
+            } catch (err) {
+                reject(err)
+            }
         });
     }
 
     static deletePet(id) {
-        return new Promise((resolve, reject) => {
-            HttpService.remove(
-                `${URL}/${id}`,
-                function (data) {
-                    if (data.message !== undefined) {
-                        resolve(data.message);
-                    } else {
-                        reject("Error while deleting a pet");
-                    }
-                },
-                function (data) {
-                    reject(data);
-                }
-            );
+        return new Promise(async (resolve, reject) => {
+            try {
+                const { data } = await axios.delete(`/pets/${id}`)
+                resolve(data);
+            } catch (err) {
+                reject(err)
+            }
         });
     }
 
     static updatePet(pet) {
-        return new Promise((resolve, reject) => {
-            HttpService.put(
-                `${URL}/${pet._id}`,
-                pet,
-                function (data) {
-                    resolve(data);
-                },
-                function (data) {
-                    reject(data);
-                }
-            );
+        return new Promise(async (resolve, reject) => {
+            try {
+                const { data } = await axios.put(`/pets/${pet._id}`, pet)
+                resolve(data);
+            } catch (err) {
+                reject(err)
+            }
         });
     }
 
     static createPet(pet) {
-        pet.id = Math.floor(Math.random() * 100000000 + 1).toString();
 
-        return new Promise((resolve, reject) => {
-            HttpService.post(
-                URL,
-                pet,
-                function (data) {
-                    resolve(data);
-                },
-                function (data) {
-                    reject(data);
-                }
-            );
+        return new Promise(async (resolve, reject) => {
+            try {
+                const { data } = await axios.post(`/pets/`, pet)
+                resolve(data);
+            } catch (err) {
+                reject(err)
+            }
         });
     }
 }
