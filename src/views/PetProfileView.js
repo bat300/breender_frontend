@@ -32,7 +32,7 @@ function PetProfileView(props) {
     <PetProfileComponent
       officialName={selectedPet.officialName}
       nickname={selectedPet.nickname}
-      birthDate={calculateAge(selectedPet.birthDate)}
+      age={calculateAge(selectedPet.birthDate)}
       sex={selectedPet.sex}
       price={selectedPet.price}
       profilePicture={selectedPet.profilePicture}

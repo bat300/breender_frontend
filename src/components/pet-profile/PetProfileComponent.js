@@ -81,7 +81,7 @@ function PetProfileComponent(props) {
                 <PetInformation
                   officialName={props.officialName}
                   nickname={props.nickname}
-                  birthDate={props.birthDate}
+                  age={props.age}
                   sex={props.sex}
                   price={props.price}
                   breed={props.breed}
