@@ -17,7 +17,7 @@ class AxiosConfiguration {
     setNewCancelToken = () => (this.cancelSource = axios.CancelToken.source());
 
     getHeader = () => ({
-        'Authorization': 'Bearer ' + localStorage["jwtToken"],
+        Authorization: 'Bearer ' + localStorage["jwtToken"],
         'Content-Type': 'application/json',
         'x-timezone-offset': moment().utcOffset(),
     });
