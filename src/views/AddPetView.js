@@ -6,10 +6,13 @@ import { Button } from '@material-ui/core';
 import { useCompetitions, useDocuments, usePictures, useProfilePicture } from 'helper/hooks/pets.hooks';
 import { addPet } from 'redux/actions';
 import { useUser } from 'helper/hooks/auth.hooks';
+import { notification } from 'antd';
+import { useHistory } from 'react-router-dom';
 
 const AddPetView = (props) => {
     const classes = useStyles();
     const dispatch = useDispatch();
+    const history = useHistory();
 
     const [name, setName] = useState('');
     const [nickname, setNickname] = useState('');
@@ -30,7 +33,8 @@ const AddPetView = (props) => {
         return name && profilePicture && sex && species && breed;
     };
 
-    const createPet = () => {
+    const createPet = async () => {
+        // combine all information about a pet
         let pet = {
             ownerId: user.id,
             officialName: name,
@@ -47,10 +51,21 @@ const AddPetView = (props) => {
         };
 
         try {
-            //PetService.createPet(pet);
-            dispatch(addPet(pet))
+            await dispatch(addPet(pet));
+
+            notification['success']({
+                message: 'Success',
+                description: 'Your four-legged friend was added to your profile!',
+                placement: 'bottomRight',
+            });
+            // redirect to the home page
+            history.push('/');
         } catch (err) {
-            throw new Error(err)
+            notification['error']({
+                message: 'Error',
+                description: 'There was a problem uploading your pet.',
+                placement: 'bottomRight',
+            });
         }
     };
 
