@@ -4,10 +4,12 @@ import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
+import PropTypes from "prop-types";
 
 const useStyles = makeStyles((theme) => ({
     root: {
         flexGrow: 1,
+        padding: theme.spacing(1),
     },
     paper: {
         padding: theme.spacing(2),
@@ -32,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-export default function SearchResultElement() {
+export default function SearchResultElement(props) {
     const classes = useStyles();
 
     return (
@@ -46,18 +48,18 @@ export default function SearchResultElement() {
                         <Grid item xs container direction="column" spacing={2}>
                             <Grid item xs>
                                 <Typography className={classes.accentText} gutterBottom variant="h6">
-                                    Sunshine
+                                    {props.pet.officialName}
                                 </Typography>
                                 <Grid container spacing={2}>
                                     <Grid item xs>
                                         <Typography variant="body2" gutterBottom style={{ fontWeight: 600 }}>
                                             Age:
-                                    </Typography>
+                                        </Typography>
                                     </Grid>
                                     <Grid item xs>
                                         <Typography variant="body2" gutterBottom>
-                                            5 Years old
-                                    </Typography>
+                                            {props.pet.age} years old
+                                        </Typography>
                                     </Grid>
                                 </Grid>
 
@@ -65,36 +67,36 @@ export default function SearchResultElement() {
                                     <Grid item xs>
                                         <Typography variant="body2" gutterBottom style={{ fontWeight: 600 }}>
                                             Sex:
-                                    </Typography>
+                                        </Typography>
                                     </Grid>
                                     <Grid item xs>
                                         <Typography variant="body2" gutterBottom>
-                                            Female
-                                    </Typography>
+                                            {props.pet.sex}
+                                        </Typography>
                                     </Grid>
                                 </Grid>
                                 <Grid container spacing={2}>
                                     <Grid item xs>
                                         <Typography variant="body2" gutterBottom style={{ fontWeight: 600 }}>
                                             Breed:
-                                    </Typography>
+                                        </Typography>
                                     </Grid>
                                     <Grid item xs>
                                         <Typography variant="body2" gutterBottom>
-                                            Devon Rex
-                                    </Typography>
+                                            {props.breed}
+                                        </Typography>
                                     </Grid>
                                 </Grid>
                                 <Grid container spacing={2}>
                                     <Grid item xs>
                                         <Typography variant="body2" gutterBottom style={{ fontWeight: 600 }}>
                                             Competition:
-                                    </Typography>
+                                        </Typography>
                                     </Grid>
                                     <Grid item xs>
                                         <Typography variant="body2" gutterBottom>
-                                            No
-                                    </Typography>
+                                            {props.pet.competitions.length == 0 ? ('no') : ('yes')}
+                                        </Typography>
                                     </Grid>
                                 </Grid>
                                 <Grid container justify="flex-end" spacing={2}>
@@ -105,7 +107,7 @@ export default function SearchResultElement() {
                             </Grid>
                         </Grid>
                         <Grid item>
-                            <Typography variant="subtitle1">$50.00</Typography>
+                            <Typography variant="subtitle1">{props.pet.price ? (props.pet.price) : (0)} €</Typography>
                         </Grid>
                     </Grid>
                 </Grid>
@@ -113,3 +115,8 @@ export default function SearchResultElement() {
         </div>
     )
 }
+
+// attributes of props and their type
+SearchResultElement.propTypes = {
+    pet: PropTypes.object,
+};

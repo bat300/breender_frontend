@@ -9,8 +9,8 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Typography from '@material-ui/core/Typography';
 import Slider from '@material-ui/core/Slider';
 import Button from '@material-ui/core/Button';
-import SearchResultElement from "./SearchResultElement";
 import { getPets } from "../redux/actions/petActions";
+import SearchResults from "./SearchResults";
 
 const useStyles = makeStyles((theme) => ({
     filters: {
@@ -34,13 +34,12 @@ const useStyles = makeStyles((theme) => ({
 function Search(props) {
     const classes = useStyles();
     var pets = useSelector((state) => state.entities.pets);
+    const [requestSent, setRequestSent] = React.useState(false);
 
     const loadPets = async () => {
         // trigger the redux action getMovies
-        console.log('Apply was clicked')
-        console.log('Species: ', chosenSpecies, ' sex: ', sex, ' breed: ', breed, 'age range: ', ageRange)
+        setRequestSent(true);
         pets = props.dispatch(getPets(chosenSpecies, sex, breed, ageRange));
-        console.log('Pets are ', pets)
     };
 
     const species = [
@@ -187,11 +186,9 @@ function Search(props) {
                     Apply
                 </Button>
             </div>
-            <div>
-                <SearchResultElement />
-            </div>
+            <SearchResults pets={pets} requestSent={requestSent} />
         </div>
     )
 }
 
-export default connect()(Search);
+export default connect()(withRouter(Search));

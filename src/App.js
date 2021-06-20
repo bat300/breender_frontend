@@ -14,8 +14,6 @@ import ScrollContainer from "./components/ScrollContainer";
 import reducers from "./redux/reducers";
 import routes from "./routes";
 import Header from "./components/Header";
-import Search from "./components/Search";
-import Footer from "./components/Footer";
 import AppTheme from "./theming/themetypes";
 import AppThemeOptions from "./theming/themes";
 
@@ -56,9 +54,12 @@ function App() {
                             darkmode={theme === AppTheme.DARK}
                             toggletheme={toggleTheme}
                         />
-                        <Search />
                         <ScrollContainer>
-
+                            <Switch>
+                                {routes.map((route, i) => (
+                                    <Route key={i} {...route} />
+                                ))}
+                            </Switch>
                         </ScrollContainer>
                     </React.Fragment>
                 </Provider>
