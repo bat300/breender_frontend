@@ -27,7 +27,7 @@ const AddPetView = (props) => {
 
     // check if all required fields are filled
     const formIsValid = () => {
-        return name && sex && species && breed;
+        return name && profilePicture && sex && species && breed;
     };
 
     const createPet = () => {

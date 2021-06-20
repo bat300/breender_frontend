@@ -13,6 +13,7 @@ import { storage } from './../../firebase';
 import { sha256 } from 'js-sha256';
 import { useDispatch } from 'react-redux';
 import { updateProfilePicture } from 'redux/actions';
+import { FormHelperText } from '@material-ui/core';
 
 const AvatarUpload = (props) => {
     const classes = useStyles();
@@ -133,7 +134,10 @@ const AvatarUpload = (props) => {
                             <DeleteOutlinedIcon color="error" />
                         </IconButton>
                     </div>
-                ) : null}
+                ) : <div style={{ justifyContent: 'center', display: 'flex' }}>
+                     <FormHelperText>Avatar upload is required!</FormHelperText>
+                    </div>
+                    }
                 <Upload accept="image/*" name="avatar" listType="picture" showUploadList={false} beforeUpload={beforeUpload} onChange={handleChange} customRequest={customUpload}>
                     <Button variant="contained" color="primary" style={{ margin: 30 }}>
                         Choose Photo
