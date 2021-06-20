@@ -83,7 +83,7 @@ export default function SearchResultElement(props) {
                                     </Grid>
                                     <Grid item xs>
                                         <Typography variant="body2" gutterBottom>
-                                            {props.breed}
+                                            {props.pet.breed}
                                         </Typography>
                                     </Grid>
                                 </Grid>

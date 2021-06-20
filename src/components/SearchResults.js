@@ -13,7 +13,7 @@ function SearchResults(props) {
     ) : !Array.isArray(props.pets.pets) ? (
         <div>error</div>
     ) :
-        (<SearchResultsList pets={props.pets.pets} breed={props.pets.breed} />)
+        (<SearchResultsList pets={props.pets.pets} />)
 }
 
 export default connect()(withRouter(SearchResults));

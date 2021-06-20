@@ -5,7 +5,7 @@ import SearchResultElement from "./SearchResultElement";
 
 function SearchResultsList(props) {
     return (props.pets.map((petObject) => (
-        <SearchResultElement pet={petObject} breed={props.breed} key={petObject._id} />
+        <SearchResultElement pet={petObject} key={petObject._id} />
     )))
 }
 
