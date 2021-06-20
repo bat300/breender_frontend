@@ -5,7 +5,7 @@ import { Upload } from 'antd';
 import { LoadingOutlined } from '@ant-design/icons';
 // material-ui imports
 import { makeStyles } from '@material-ui/core/styles';
-import { Button, IconButton, Snackbar } from '@material-ui/core';
+import { Button, IconButton, Snackbar, FormHelperText } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
 import PetsIcon from '@material-ui/icons/Pets';
 import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
@@ -13,7 +13,7 @@ import { storage } from './../../firebase';
 import { sha256 } from 'js-sha256';
 import { useDispatch } from 'react-redux';
 import { updateProfilePicture } from 'redux/actions';
-import { FormHelperText } from '@material-ui/core';
+import { useUser } from 'helper/hooks/auth.hooks';
 
 const AvatarUpload = (props) => {
     const classes = useStyles();
@@ -24,6 +24,8 @@ const AvatarUpload = (props) => {
     const [errorMessage, setErrorMessage] = useState('');
     const [fullPath, setFullPath] = useState('');
     const [imageUrl, setImageUrl] = useState('');
+
+    const user = useUser();
 
     const getBase64 = (img, callback) => {
         const reader = new FileReader();
@@ -73,14 +75,14 @@ const AvatarUpload = (props) => {
         const storageRef = await storage.ref();
         const imageName = sha256(data.file.name); //a unique name for the image
 
-        /** @TODO change to the structure
+        /** The structure of the firebase path
          * -| users
          *   -| userId
          *     -| pets
-         *      -| pictures
+         *      -| images
          */
 
-        const imgPath = `images/${imageName}.png`;
+        const imgPath = `users/${user.id}/pets/images/${imageName}.png`;
         // define storage path in the firebase
         const imgFile = storageRef.child(imgPath);
         try {

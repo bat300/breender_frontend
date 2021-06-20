@@ -7,6 +7,7 @@ import { sha256 } from 'js-sha256';
 import { useDispatch } from 'react-redux';
 import { updatePictures } from 'redux/actions';
 import { usePictures } from 'helper/hooks/pets.hooks';
+import { useUser } from 'helper/hooks/auth.hooks';
 
 const MultiplePhotosUpload = (props) => {
     const dispatch = useDispatch();
@@ -18,6 +19,7 @@ const MultiplePhotosUpload = (props) => {
     const [uploadedImages, setUploadedImages] = useState([]);
 
     const pictures = usePictures();
+    const user = useUser();
 
     // get base64 format of the uploaded picture
     const getBase64 = (photo) => {
@@ -52,14 +54,14 @@ const MultiplePhotosUpload = (props) => {
         const storageRef = await storage.ref();
         const imageName = sha256(data.file.name); //a unique name for the image
 
-        /** @TODO change to the structure
+        /** Firebase structure
          * -| users
          *   -| userId
          *     -| pets
-         *      -| pictures
+         *      -| images
          */
 
-        const imgPath = `images/${imageName}.png`;
+        const imgPath = `users/${user.id}/pets/images/${imageName}.png`;
         // define storage path in the firebase
         const imgFile = storageRef.child(imgPath);
         try {

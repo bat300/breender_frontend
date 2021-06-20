@@ -8,6 +8,7 @@ import { Button } from '@material-ui/core';
 import { useDispatch } from 'react-redux';
 import { useDocuments } from 'helper/hooks/pets.hooks';
 import { updateDocuments } from 'redux/actions';
+import { useUser } from 'helper/hooks/auth.hooks';
 
 const DocumentsUpload = (props) => {
     const dispatch = useDispatch();
@@ -17,6 +18,7 @@ const DocumentsUpload = (props) => {
 
     let maxFileNumber = props.maxFiles || 8;
     const documents = useDocuments();
+    const user = useUser();
 
     // update file list
     const handleChange = ({ fileList }) => setFileList(fileList);
@@ -29,14 +31,14 @@ const DocumentsUpload = (props) => {
         const storageRef = await storage.ref();
         const docName = sha256(data.file.name); //a unique name for the image
 
-        /** @TODO change to the structure
+        /** Firebase storage structure
          * -| users
          *   -| userId
          *     -| pets
          *      -| documents
          */
 
-        const imgPath = `documents/${docName}`;
+        const imgPath = `users/${user.id}/pets/documents/${docName}`;
         // define storage path in the firebase
         const imgFile = storageRef.child(imgPath);
         try {
