@@ -40,17 +40,17 @@ function PetInformation(props) {
               primary={props.ownerId}
               secondary={"Owner"}
               itemType={"owner"}
-              //TODO: This needs to have the real avatar
-              avatar={
-                "https://image.stern.de/30558644/t/e9/v3/w1440/r1.7778/-/donald-trump.jpg"
-              }
+              avatar={props.avatar ? props.avatar : null}
             />
           </List>
         </Grid>
         <Grid item xs={6}>
           <List>
             <PetInformationListItem primary={props.breed} secondary={"Breed"} />
-            <PetInformationListItem primary={"3 years old"} secondary={"Age"} />
+            <PetInformationListItem
+              primary={props.age + " years old"}
+              secondary={"Age"}
+            />
             <PetInformationListItem primary={props.sex} secondary={"Sex"} />
           </List>
         </Grid>

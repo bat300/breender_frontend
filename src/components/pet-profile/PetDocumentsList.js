@@ -5,7 +5,6 @@ import PetInformationListItem from "./PetInformationListItem";
 
 const useStyles = makeStyles((theme) => ({
   centered: {
-    width: "90%",
     alignItems: "start",
   },
 }));
@@ -21,15 +20,17 @@ function PetDocumentsList(props) {
 }
 
 function generateDocumentItems(documents) {
-  return documents.map((doc) => (
-    <PetInformationListItem
-      primary={doc.name}
-      secondary={doc.type}
-      verified={doc.verified}
-      url={doc.url}
-      itemType="document"
-    />
-  ));
+  return documents
+    ? documents.map((doc) => (
+        <PetInformationListItem
+          primary={doc.name}
+          secondary={doc.type}
+          verified={doc.verified}
+          url={doc.url}
+          itemType="document"
+        />
+      ))
+    : null;
 }
 
 export default PetDocumentsList;

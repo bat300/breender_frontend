@@ -40,7 +40,6 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: theme.spacing(4),
   },
   spacedDivider: {
-    width: "90%",
     marginBottom: theme.spacing(2),
     marginTop: theme.spacing(3),
   },
@@ -74,10 +73,12 @@ function PetProfileComponent(props) {
                   pictures={props.pictures}
                   profilePicture={props.profilePicture}
                 />
-                <PaymentButton price={props.price} />
+                {props.price && props.price > 0 && (
+                  <PaymentButton price={props.price} />
+                )}
               </Grid>
               <Divider variant="middle" />
-              <Grid item item xs={7}>
+              <Grid item xs={7}>
                 <PetInformation
                   officialName={props.officialName}
                   nickname={props.nickname}
@@ -125,14 +126,34 @@ function PetOptionalInformation(props) {
       className={classes.gridMargin}
       spacing={2}
     >
+      {props.competitions.length !== 0 && (
+        <Competitions competitions={props.competitions} />
+      )}
+      {props.documents.length !== 0 && (
+        <Documents documents={props.documents} />
+      )}
+    </Grid>
+  );
+}
+
+function Competitions(props) {
+  const classes = useStyles();
+  return (
+    <Grid item className={classes.maxWidth}>
       <LeftTypography text="Competitions:" />
       <PetCompetitionsList
         competitions={props.competitions}
         ownerId={props.ownerId}
       />
-
       <Divider variant="middle" className={classes.spacedDivider} />
+    </Grid>
+  );
+}
 
+function Documents(props) {
+  const classes = useStyles();
+  return (
+    <Grid item className={classes.maxWidth}>
       <LeftTypography text="Documents:" />
       <PetDocumentsList documents={props.documents} ownerId={props.ownerId} />
     </Grid>

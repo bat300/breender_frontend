@@ -19,7 +19,7 @@ function PetCompetitionsList(props) {
 }
 
 function generateCompetitionCards(competitions) {
-  return competitions.map((comp) => (
+  return competitions? competitions.map((comp) => (
     <PetCompetitionsCard
       name={comp.name}
       date={comp.date}
@@ -27,7 +27,7 @@ function generateCompetitionCards(competitions) {
       prize={comp.prize}
       certificate={comp.certificate}
     />
-  ));
+  )) : null;
 }
 
 export default PetCompetitionsList;

@@ -3,6 +3,7 @@ import { connect, useSelector } from "react-redux";
 import { getPet } from "../redux/actions/petActions";
 import PetProfileComponent from "../components/pet-profile/PetProfileComponent";
 import Loading from "../components/Loading";
+import { useDispatch } from "react-redux";
 
 /**
  * Manages the process of getting pet details data
@@ -10,16 +11,20 @@ import Loading from "../components/Loading";
  */
 
 function PetProfileView(props) {
-  let { match, getPet } = props;
-
-  // from redux store
-  const selectedPet = useSelector((state) => state.selectedPet);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     // get id of pet from URL
-    let petId = match.params.id;
-    getPet(petId);
-  }, [match.params]);
+    let petId = props.match.params.id;
+
+    async function loadPet(id) {
+      await dispatch(getPet(id));
+    }
+
+    return loadPet(petId);
+  }, [dispatch, props.match.params.id]);
+
+  const selectedPet = useSelector((state) => state.selectedPet);
 
   return !selectedPet.pet && !selectedPet.error ? (
     <Loading />
@@ -27,27 +32,28 @@ function PetProfileView(props) {
     <div>error</div>
   ) : selectedPet.pet ? (
     <PetProfileComponent
-      officialName={selectedPet.officialName}
-      nickname={selectedPet.nickname}
-      age={calculateAge(selectedPet.birthDate)}
-      sex={selectedPet.sex}
-      price={selectedPet.price}
-      profilePicture={selectedPet.profilePicture}
-      pictures={selectedPet.pictures}
-      breed={selectedPet.breed}
-      species={selectedPet.species}
-      documents={selectedPet.documents}
-      competitions={selectedPet.competitions}
-      ownerId={selectedPet.ownerId}
+      officialName={selectedPet.pet.officialName}
+      nickname={selectedPet.pet.nickname}
+      age={calculateAge(selectedPet.pet.birthDate)}
+      sex={selectedPet.pet.sex}
+      price={selectedPet.pet.price}
+      profilePicture={selectedPet.pet.profilePicture}
+      pictures={selectedPet.pet.pictures}
+      breed={selectedPet.pet.breed}
+      species={selectedPet.pet.species}
+      documents={selectedPet.pet.documents}
+      competitions={selectedPet.pet.competitions}
+      ownerId={selectedPet.pet.ownerId}
     />
   ) : null;
 }
 
 function calculateAge(birthDate) {
-  var ageDifMs = Date.now() - birthDate.getTime();
+  var ageDifMs = Date.now() - new Date(birthDate).getTime();
   var ageDate = new Date(ageDifMs); // miliseconds from epoch
-  return Math.abs(ageDate.getUTCFullYear() - 1970);
+  var result = Math.abs(ageDate.getUTCFullYear() - 1970);
+  return result ? result : 0;
 }
 
 // connect() establishes allows the usage of redux functionality
-export default connect(null, { getPet })(PetProfileView);
+export default connect()(PetProfileView);

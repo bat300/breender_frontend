@@ -5,7 +5,7 @@ import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
 
 const useStyles = makeStyles((theme) => ({
   button: {
-    margin: theme.spacing(1),
+    margin: theme.spacing(3),
     padding: theme.spacing(1),
     paddingLeft: theme.spacing(6),
     paddingRight: theme.spacing(6),
