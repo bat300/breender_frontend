@@ -23,6 +23,7 @@ function generateDocumentItems(documents) {
   return documents
     ? documents.map((doc) => (
         <PetInformationListItem
+          key={doc.name + doc.type}
           primary={doc.name}
           secondary={doc.type}
           verified={doc.verified}
