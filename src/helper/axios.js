@@ -28,7 +28,6 @@ class AxiosConfiguration {
                 if (localStorage["jwtToken"] !== null) {
                     config.headers = this.getHeader();
                 }
-                console.log(config.headers)
 
                 this.setNewCancelToken();
                 config.cancelToken = this.cancelSource.token;

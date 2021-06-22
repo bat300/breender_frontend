@@ -85,7 +85,6 @@ const AddPetView = (props) => {
         const metadata = {
             contentType: 'image/png',
         };
-        console.log(value);
 
         let url = await FirebaseService.upload(value.path, value.data, metadata);
         value.src = url;
