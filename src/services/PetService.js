@@ -5,10 +5,10 @@ export default class PetService {
         return 'http://localhost:4000/pets';
     }
 
-    static getPets() {
+    static getPets(species, sex, breed, age) {
         return new Promise(async (resolve, reject) => {
             try {
-                const { data } = await axios.get(`/pets/`);
+                const { data } = await axios.get(`/pets/search?species=${species}&sex=${sex}&breed=${breed}&age[]=${age}`);
                 resolve(data);
             } catch (err) {
                 reject(err);

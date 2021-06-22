@@ -1,4 +1,3 @@
-import NotificationService from 'services/NotificationService';
 import PetService from '../../services/PetService';
 
 const PetTypes = {
@@ -13,24 +12,24 @@ const PetTypes = {
     UPDATE_COMPETITIONS: 'UPDATE_COMPETITIONS',
 };
 
-export const getPets = () => {
-    // when the backend call was successfull and the pets are retrieved
-    // in the dispatcher the pets will be added to the global state
-    const getPetsAction = (pets) => {
-        return { type: PetTypes.GET_PETS, pets: pets };
-    };
-
-    const onFailure = (error) => {
+export const getPets = (species, sex, breed, age) => {
+    // when the backend call was successfull and the movies are retrieved
+    // in the dispatcher the movies will be added to the global state
+    function onSuccess(pets) {
+        return { type: 'GETPETS_SUCCESS', pets: pets };
+    }
+    // when the backend call was failed
+    function onFailure(error) {
         // error handling
-        console.log('Failed to get the pets', error);
-    };
+        console.log('failed to get the pets', error);
+    }
 
     return async (dispatch) => {
         try {
-            // get pets from the backend
-            let pets = await PetService.getPets();
+            // ask for the pets in the backend
+            let pets = await PetService.getPets(species, sex, breed, age);
             // call onSuccess in context of redux
-            dispatch(getPetsAction(pets));
+            dispatch(onSuccess(pets));
         } catch (e) {
             onFailure(e);
         }

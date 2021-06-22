@@ -1,39 +1,25 @@
-import React, { useEffect } from "react";
-import Grid from "@material-ui/core/Grid";
-import Button from "@material-ui/core/Button";
-import LinearProgress from "@material-ui/core/LinearProgress";
+import React, { useEffect } from 'react';
 
-import { confirmEmail } from "../redux/actions";
+import { connect, useSelector } from 'react-redux';
+import EmailConfirmationComponent from '../components/EmailConfirmationComponent';
+
+import { confirmEmail } from '../redux/actions';
 /**
  * For having an internal scroll container
  * @param {props} props
  */
 function EmailConfirmationView(props) {
     //const [message, setMessage] = React.useState("Confirming your email adress...");
+    const confirmation = useSelector((state) => state.confirmation);
 
-  useEffect(() => {
-    confirmEmail(props.match.params.email, props.match.params.token);
-  }, [props]);
+    function onMove() {
+        props.history.push('/');
+    }
 
-  return (
-    <Grid
-      container
-      spacing={0}
-      direction="column"
-      alignItems="center"
-      justify="center"
-      style={{ minHeight: "100vh" }}
-    >
-      <Grid item xs={3}>
-        <Button variant="contained">Default</Button>
-      </Grid>
-      <Grid item xs={3}>
-        <h1>Your email is being confirmed...</h1>
-        <LinearProgress />
-      </Grid>
+    useEffect(() => {
+        props.dispatch(confirmEmail(props.match.params.email, props.match.params.token));
+    }, []);
 
-    </Grid>
-    
-  );
+    return <EmailConfirmationComponent confirmation={confirmation} onMove={onMove} />;
 }
-export default EmailConfirmationView;
+export default connect()(EmailConfirmationView);
