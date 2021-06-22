@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux';
 
-export const useProfilePicture = () => useSelector((state) => state.pets.profileUrl);
+export const useProfilePicture = () => useSelector((state) => state.pets.profilePicture);
 
 export const usePictures = () => useSelector((state) => state.pets.pictures);
 
