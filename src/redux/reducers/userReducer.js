@@ -11,11 +11,9 @@ const getUser = () => {
             return {};
         }
         return {
-            user: {
-                _id: userJson._id,
+                id: userJson._id,
                 username: userJson.username,
                 role: userJson.role,
-            },
         };
     }
     return {};

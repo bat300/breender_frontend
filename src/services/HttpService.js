@@ -2,13 +2,11 @@ export default class HttpService {
     static extractUser(token) {
         let base64Url = token.split(".")[1];
         let base64 = base64Url.replace("-", "+").replace("_", "/");
-        let userJson = JSON.parse(window.atob(base64));
+        let userJson = JSON.parse(atob(base64));
         return {
-            user: {
-                _id: userJson._id,
-                username: userJson.username,
-                role: userJson.role,
-            },
+            id: userJson._id,
+            username: userJson.username,
+            role: userJson.role,
         };
     }
 
