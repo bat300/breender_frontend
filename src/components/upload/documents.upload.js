@@ -2,33 +2,40 @@ import React, { useState } from 'react';
 import 'antd/dist/antd.css';
 import { Upload } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
-import { storage } from './../../firebase';
 import { sha256 } from 'js-sha256';
 import { Button } from '@material-ui/core';
 import { useDispatch } from 'react-redux';
-import { useDocuments } from 'helper/hooks/pets.hooks';
-import { updateDocuments } from 'redux/actions';
+import { useCompetitions, useDocuments } from 'helper/hooks/pets.hooks';
+import { updateCompetitions, updateDocuments } from 'redux/actions';
 import { useUser } from 'helper/hooks/auth.hooks';
 
+/**
+ *
+ * @param  props
+ * @returns Component to upload pet documents or certificates
+ */
 const DocumentsUpload = (props) => {
     const dispatch = useDispatch();
 
-    const [fileList, setFileList] = useState([]);
-    const [uploadedDocs, setUploadedDocs] = useState([]);
-
-    let maxFileNumber = props.maxFiles || 8;
+    // get global states
     const documents = useDocuments();
     const user = useUser();
+    const competitions = useCompetitions();
+
+    const [fileList, setFileList] = useState([]);
+    //const [uploadedDocs, setUploadedDocs] = useState([]);
+
+    const isCompetition = props.type === 'competitions' || false;
+    const keyFolder = isCompetition ? 'competitions' : 'documents';
+    const pathPrefix = `users/${user.id}/pets/documents`;
+    let key = isCompetition && props.competitionId;
+    let maxFileNumber = props.maxFiles || 8;
 
     // update file list
     const handleChange = ({ fileList }) => setFileList(fileList);
 
-    // upload image to the firebase
+    // upload image
     const customUpload = async (data) => {
-        const metadata = {
-            contentType: data.type,
-        };
-        const storageRef = await storage.ref();
         const docName = sha256(data.file.name); //a unique name for the image
 
         /** Firebase storage structure
@@ -37,55 +44,58 @@ const DocumentsUpload = (props) => {
          *     -| pets
          *      -| documents
          */
+        const imgPath = `${pathPrefix}/${docName}`;
 
-        const imgPath = `users/${user.id}/pets/documents/${docName}`;
-        // define storage path in the firebase
-        const imgFile = storageRef.child(imgPath);
-        try {
-            // upload image
-            let uploadTask = imgFile.put(data.file, metadata);
+        const newData = {
+            name: data.file.name,
+            type: data.file.type,
+            path: imgPath,
+            url: undefined,
+            uploadDate: new Date(),
+            verified: false,
+            data: data,
+        };
 
-            uploadTask.then((snapshot) => {
-                snapshot.ref.getDownloadURL().then((downloadURL) => {
-                    console.log('File available at', downloadURL);
-                    setUploadedDocs([...uploadedDocs, { name: data.file.name, fullPath: imgPath, downloadUrl: downloadURL }]);
-
-                    let docs = [...documents, { name: docName, type: data.file.type, url: downloadURL, uploadDate: new Date(), verified: false }]
-                    dispatch(updateDocuments(docs));
-                });
+        if (isCompetition) {
+            let competitionData = [...competitions];
+            competitionData.map((item, index) => {
+                if (index === key) {
+                    item.certificate = newData;
+                    return item;
+                }
+                return item;
             });
-
-            data.onSuccess(null, uploadTask);
-        } catch (e) {
-            data.onError(e);
+            dispatch(updateCompetitions(competitionData));
+        } else {
+            let docs = [...documents, newData];
+            dispatch(updateDocuments(docs));
         }
+
+        data.onSuccess(null);
     };
 
-    // remove the image from firebase
+    // remove document
     const handleRemove = async (file) => {
-        let obj = uploadedDocs.find((value) => value.name === file.name);
-        let obj2 = documents.find((value) => String(obj.fullPath) === `documents/${value.name}`);
 
-        const storageRef = await storage.ref();
-        storageRef
-            .child(obj.fullPath)
-            .delete()
-            .then(() => {
-                const index = uploadedDocs.indexOf(obj);
-                let temp = uploadedDocs.splice(index, 1);
-                setUploadedDocs(temp);
-
-                const index2 = documents.indexOf(obj2);
-                let temp2 = documents.splice(index2, 1);
-
-                dispatch(updateDocuments(temp2));
-
-                console.log('Deletion was successful');
-
-            })
-            .catch((error) => {
-                console.log('Error while deletion has occurred', error);
+        // remove competition
+        if (isCompetition) {
+            let competitionData = [...competitions];
+            competitionData.map((item, index) => {
+                if (index === key) {
+                    item.certificate = {};
+                    return item;
+                }
+                return item;
             });
+
+            dispatch(updateCompetitions(competitionData));
+            // remove document
+        } else {
+            let docTemp = [...documents];
+            let docObj = docTemp.filter((value) => value.name !== file.name);
+
+            dispatch(updateDocuments(docObj));
+        }
     };
 
     return (
