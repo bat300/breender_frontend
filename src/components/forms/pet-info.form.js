@@ -52,7 +52,7 @@ const PetInformationForm = ({ nameProp, nicknameProp, sexProp, birthDateProp, sp
         setName(e.target.value);
     };
     const handleNicknameChange = (e) => setNickname(e.target.value);
-    
+
     const handleSexChange = (e) => {
         validate(PetFormInputs.sex, e.target.value);
         setSex(e.target.value);
@@ -145,7 +145,7 @@ const PetInformationForm = ({ nameProp, nicknameProp, sexProp, birthDateProp, sp
                                         <InputLabel id="species-label">Species</InputLabel>
                                         <Select label="Species" id="species" value={species} onChange={handleSpeciesChange} onBlur={handleSpeciesChange}>
                                             {Object.keys(breeds).map((value) => {
-                                                return <MenuItem value={value}>{value}</MenuItem>
+                                                return <MenuItem key={value} value={value}>{value}</MenuItem>
                                             })}
                                         </Select>
                                         <FormHelperText>{errors[PetFormInputs.species] && validationErrors[PetFormInputs.species]}</FormHelperText>
@@ -157,17 +157,17 @@ const PetInformationForm = ({ nameProp, nicknameProp, sexProp, birthDateProp, sp
                                         <Select label="Breed" id="breed" value={breed} onChange={handleBreedChange} onBlur={handleBreedChange}>
                                             {species === 'dog'
                                                 ? sortedDogBreeds.map((breed) => {
-                                                      return <MenuItem value={breed}>{breed}</MenuItem>;
-                                                  })
+                                                    return <MenuItem key={breed} value={breed}>{breed}</MenuItem>;
+                                                })
                                                 : species === 'cat'
-                                                ? sortedCatBreeds.map((breed) => {
-                                                      return <MenuItem value={breed}>{breed}</MenuItem>;
-                                                  })
-                                                : species === 'horse'
-                                                ? sortedHorseBreeds.map((breed) => {
-                                                      return <MenuItem value={breed}>{breed}</MenuItem>;
-                                                  })
-                                                : null}
+                                                    ? sortedCatBreeds.map((breed) => {
+                                                        return <MenuItem key={breed} value={breed}>{breed}</MenuItem>;
+                                                    })
+                                                    : species === 'horse'
+                                                        ? sortedHorseBreeds.map((breed) => {
+                                                            return <MenuItem key={breed} value={breed}>{breed}</MenuItem>;
+                                                        })
+                                                        : null}
                                         </Select>
                                         <FormHelperText>{errors[PetFormInputs.breed] && validationErrors[PetFormInputs.breed]}</FormHelperText>
                                     </FormControl>
