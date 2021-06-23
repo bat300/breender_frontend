@@ -11,6 +11,7 @@ import Slider from '@material-ui/core/Slider';
 import Button from '@material-ui/core/Button';
 import { getPets } from '../redux/actions/petActions';
 import SearchResults from './SearchResults';
+import { breeds } from 'helper/data/breeds';
 
 const useStyles = makeStyles((theme) => ({
     filters: {
@@ -37,24 +38,12 @@ function Search(props) {
     const [requestSent, setRequestSent] = React.useState(false);
 
     const loadPets = async () => {
-        // trigger the redux action getMovies
+        // trigger the redux action getPets
         setRequestSent(true);
         pets = props.dispatch(getPets(chosenSpecies, sex, breed, ageRange));
     };
 
-    const species = ['dog', 'cat', 'rabbit', 'mouse', 'hamster', 'horse'];
-
     const sexes = ['female', 'male'];
-
-    const breeds = {
-        dog: ['Afador', 'Affenhuahua', 'Affenpinscher', 'Afghan Hound', 'Airedale Terrier', 'Akbash', 'Akita', 'Maltesa'],
-        cat: ['Abyssinian Cat', 'American Bobtail', 'American Curl', 'American Shorthair', 'American Wirehair', 'Balinese-Javanese', 'Bengal', 'Cornish Rex', 'Devon Rex'],
-        rabbit: ['American', 'Belgian Hare', 'Blanc de Hotot', 'Californian', 'Checkered Giant', 'Dutch', 'English Lop', 'English Spot', 'Flemish Giant'],
-        mouse: ['Field', 'House', 'Westerm Harvest', 'White-Footed'],
-        hamster: ['Dwarf Roborovski', "Campbell's Dwarf Russian", 'Syrian Golden'],
-        horse: ['American Quarter', 'Arabian', 'Thoroughbred', 'Appaloosa', 'Morgan', 'Warmbloods', 'Pony'],
-        '': [],
-    };
 
     const [chosenSpecies, setSpecies] = React.useState('');
 
@@ -109,7 +98,7 @@ function Search(props) {
                 <FormControl className={classes.formControl}>
                     <InputLabel id="species-select-label">Species</InputLabel>
                     <Select labelId="species-select-label" id="species-select" value={chosenSpecies} onChange={handleSpeciesChange}>
-                        {species.map((oneSpecies) => (
+                        {Object.keys(breeds).map((oneSpecies) => (
                             <MenuItem key={oneSpecies} value={oneSpecies}>
                                 {oneSpecies}
                             </MenuItem>
@@ -131,7 +120,7 @@ function Search(props) {
                 <FormControl className={classes.formControl}>
                     <InputLabel id="breed-select-label">Breed</InputLabel>
                     <Select labelId="breed-select-label" id="breed-select" value={breed} onChange={handleBreedChange}>
-                        {breeds[chosenSpecies].map((breed) => (
+                        {(breeds[chosenSpecies] ?? []).map((breed) => (
                             <MenuItem key={breed} value={breed}>
                                 {breed}
                             </MenuItem>
