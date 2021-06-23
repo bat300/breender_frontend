@@ -128,6 +128,7 @@ const AddPetView = (props) => {
 
         dispatch(addPet(pet, onSuccess, onError));
         setLoading(false);
+        props.history.push('/');
     };
 
     return (
