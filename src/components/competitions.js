@@ -52,7 +52,7 @@ const EditableCell = ({ title, focused, editable, children, dataIndex, record, h
             const values = await form.validateFields();
             toggleEdit();
             handleSave({ ...record, ...values });
-        } catch (errInfo) {}
+        } catch (errInfo) { }
     };
 
     let childNode = children;
@@ -139,7 +139,7 @@ const CompetitionsComponent = (props) => {
             key: 'remove',
             render: (_, record) =>
                 competitions.length >= 1 ? (
-                    <Button size="small" variant="text" color="primary" onClick={() => handleDelete(record.key)}>
+                    <Button size="small" variant="text" color="secondary" onClick={() => handleDelete(record.key)}>
                         Remove
                     </Button>
                 ) : null,
@@ -223,7 +223,7 @@ const CompetitionsComponent = (props) => {
                     <Button
                         onClick={handleAdd}
                         variant="outlined"
-                        color="primary"
+                        color="secondary"
                         style={{
                             margin: 10,
                         }}

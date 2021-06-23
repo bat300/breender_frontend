@@ -23,9 +23,11 @@ const useStyles = makeStyles((theme) => ({
     loginButtons: {
         display: "flex",
         justifyContent: "space-between",
+        color: "secondary",
     },
     loginButton: {
         marginLeft: theme.spacing(1),
+        color: "secondary",
     },
 }));
 
@@ -105,7 +107,7 @@ function LoginComponent(props) {
                         <Button
                             className={classes.loginButton}
                             variant="contained"
-                            color="primary"
+                            color="secondary"
                             onClick={onLogin}
                             disabled={username === "" || password === ""}
                             type="submit"

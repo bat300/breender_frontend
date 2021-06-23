@@ -94,9 +94,9 @@ const AvatarUpload = (props) => {
 
     // remove the image from firebase
     const handleRemove = async (file) => {
-        
+
         setImageUrl('');
-    
+
         // update in global state
         dispatch(updateProfilePicture({}));
     };
@@ -119,7 +119,7 @@ const AvatarUpload = (props) => {
                     </div>
                 )}
                 <Upload accept="image/*" name="avatar" listType="picture" showUploadList={false} beforeUpload={beforeUpload} onChange={handleChange} customRequest={customUpload}>
-                    <Button variant="contained" color="primary" style={{ margin: 30 }}>
+                    <Button variant="contained" color="secondary" style={{ margin: 30 }}>
                         Choose Photo
                     </Button>
                 </Upload>
