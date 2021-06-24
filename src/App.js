@@ -7,22 +7,12 @@ import { MuiThemeProvider, createMuiTheme, makeStyles } from '@material-ui/core/
 import CssBaseline from '@material-ui/core/CssBaseline';
 import ScrollContainer from './components/ScrollContainer';
 
-<<<<<<< HEAD
-import reducers from "./redux/reducers";
-import routes from "./routes";
-import Header from "./components/Header";
-import Footer from "./components/Footer";
-import AppTheme from "./theming/themetypes";
-import AppThemeOptions from "./theming/themes";
-import AxiosConfiguration from './helper/axios.js';
-=======
 import reducers from './redux/reducers';
 import routes from './routes';
 import Header from './components/Header';
 import AppTheme from './theming/themetypes';
 import AppThemeOptions from './theming/themes';
 import AxiosConfiguration from './helper/axios';
->>>>>>> 1ff72f4713e31191e3e23d235c6567416e510afd
 
 const useStyles = makeStyles((theme) => ({
     appRoot: {
