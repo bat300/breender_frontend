@@ -1,23 +1,3 @@
-<<<<<<< HEAD
-import axios from "axios";
-
-export default class PetService {
-  static baseURL() {
-    return "http://localhost:4000/pets";
-  }
-
-  static getPet(id) {
-    return new Promise(async (resolve, reject) => {
-      try {
-        const { data } = await axios.get(`/pets/${id}`);
-        resolve(data);
-      } catch (err) {
-        reject(err);
-      }
-    });
-  }
-}
-=======
 import axios from 'axios';
 
 export default class PetService {
@@ -74,4 +54,3 @@ export default class PetService {
         return data;
     }
 }
->>>>>>> 1ff72f4713e31191e3e23d235c6567416e510afd

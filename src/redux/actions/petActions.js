@@ -1,24 +1,3 @@
-<<<<<<< HEAD
-import PetService from "../../services/PetService";
-
-export const getPet = (id) => {
-  function onSuccess(pet) {
-    return { type: "GETPET_SUCCESS", pet: pet };
-  }
-  function onFailure(error) {
-    console.log("failed to load a pet", error);
-  }
-
-  return async (dispatch) => {
-    try {
-      let pet = await PetService.getPet(id);
-      dispatch(onSuccess(pet));
-    } catch (e) {
-      onFailure(e);
-    }
-  };
-};
-=======
 import PetService from '../../services/PetService';
 
 const PetTypes = {
@@ -200,4 +179,3 @@ export const updateCompetitions = (competitions) => {
         }
     };
 };
->>>>>>> 1ff72f4713e31191e3e23d235c6567416e510afd
