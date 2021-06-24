@@ -1,16 +1,13 @@
-import React, { useEffect } from "react";
-import { Route, Switch } from "react-router-dom";
-import { Provider } from "react-redux";
-import { createStore, applyMiddleware } from "redux";
-import thunkMiddleware from "redux-thunk";
-import {
-    MuiThemeProvider,
-    createMuiTheme,
-    makeStyles,
-} from "@material-ui/core/styles";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import ScrollContainer from "./components/ScrollContainer";
+import React, { useEffect } from 'react';
+import { Route, Switch } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import { createStore, applyMiddleware } from 'redux';
+import thunkMiddleware from 'redux-thunk';
+import { MuiThemeProvider, createMuiTheme, makeStyles } from '@material-ui/core/styles';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import ScrollContainer from './components/ScrollContainer';
 
+<<<<<<< HEAD
 import reducers from "./redux/reducers";
 import routes from "./routes";
 import Header from "./components/Header";
@@ -18,12 +15,20 @@ import Footer from "./components/Footer";
 import AppTheme from "./theming/themetypes";
 import AppThemeOptions from "./theming/themes";
 import AxiosConfiguration from './helper/axios.js';
+=======
+import reducers from './redux/reducers';
+import routes from './routes';
+import Header from './components/Header';
+import AppTheme from './theming/themetypes';
+import AppThemeOptions from './theming/themes';
+import AxiosConfiguration from './helper/axios';
+>>>>>>> 1ff72f4713e31191e3e23d235c6567416e510afd
 
 const useStyles = makeStyles((theme) => ({
     appRoot: {
-        height: "100vh",
-        display: "flex",
-        flexDirection: "column",
+        height: '100vh',
+        display: 'flex',
+        flexDirection: 'column',
     },
 }));
 
@@ -34,7 +39,7 @@ function App() {
 
     // set document title
     useEffect(() => {
-        document.title = "Movie Database App";
+        document.title = 'Breender App';
     }, []);
 
     // create store for redux
@@ -54,17 +59,13 @@ function App() {
                 <Provider store={store}>
                     <CssBaseline />
                     <React.Fragment>
-                        <Header
-                            darkmode={theme === AppTheme.DARK}
-                            toggletheme={toggleTheme}
-                        />
+                        <Header darkmode={theme === AppTheme.DARK} toggletheme={toggleTheme} />
                         <ScrollContainer>
                             <Switch>
                                 {routes.map((route, i) => (
                                     <Route key={i} {...route} />
                                 ))}
                             </Switch>
-                            <Footer />
                         </ScrollContainer>
                     </React.Fragment>
                 </Provider>

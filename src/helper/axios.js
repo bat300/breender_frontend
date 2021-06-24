@@ -17,7 +17,11 @@ class AxiosConfiguration {
     setNewCancelToken = () => (this.cancelSource = axios.CancelToken.source());
 
     getHeader = () => ({
+<<<<<<< HEAD
         Authorization: 'Bearer ' + window.localStorage["jwtToken"],
+=======
+        Authorization: 'Bearer ' + localStorage["jwtToken"],
+>>>>>>> 1ff72f4713e31191e3e23d235c6567416e510afd
         'Content-Type': 'application/json',
         'x-timezone-offset': moment().utcOffset(),
     });
@@ -25,7 +29,11 @@ class AxiosConfiguration {
     setupRequestInterceptor() {
         axios.interceptors.request.use(
             async (config: any) => {
+<<<<<<< HEAD
                 if (window.localStorage["jwtToken"] !== null) {
+=======
+                if (localStorage["jwtToken"] !== null) {
+>>>>>>> 1ff72f4713e31191e3e23d235c6567416e510afd
                     config.headers = this.getHeader();
                 }
 
