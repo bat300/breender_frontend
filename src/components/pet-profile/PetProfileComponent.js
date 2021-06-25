@@ -44,7 +44,6 @@ const useStyles = makeStyles((theme) => ({
 
 function PetProfileComponent(props) {
     const classes = useStyles();
-    props.pictures.push(props.profilePicture);
 
     return (
         <div className={classes.layout}>
