@@ -20,7 +20,15 @@ function PetPhotos(props) {
         <div className={classes.layout}>
             <Grid container alignItems="center" justify="center" direction="column">
                 <CircleProfileImage imageUrl={props.profilePicture.src} />
-                {props.pictures.length !== 0 && <Lightbox images={props.pictures} showImageModifiers={false} />}
+                {props.pictures.length !== 0 && (
+                    <Lightbox
+                        images={props.pictures}
+                        showImageModifiers={false}
+                        renderDescriptionFunc={(image) => {
+                            return <div />;
+                        }}
+                    />
+                )}
             </Grid>
         </div>
     );
