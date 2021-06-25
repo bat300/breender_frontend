@@ -1,4 +1,4 @@
-import React from 'react';
+import  React, { useEffect } from 'react';
 import { connect, useSelector } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import { withRouter } from 'react-router-dom';
@@ -34,13 +34,18 @@ const useStyles = makeStyles((theme) => ({
 function Search(props) {
     const classes = useStyles();
     var pets = useSelector((state) => state.entities.pets);
-    const [requestSent, setRequestSent] = React.useState(false);
 
     const loadPets = async () => {
-        // trigger the redux action getMovies
-        setRequestSent(true);
+        // trigger the redux action getPets
         pets = props.dispatch(getPets(chosenSpecies, sex, breed, ageRange));
     };
+
+    useEffect(() => {
+        // load pets when the page is loaded or the pets were filtered.
+        if (!pets) {
+            loadPets();
+        }
+    },[pets] )
 
     const species = ['dog', 'cat', 'rabbit', 'mouse', 'hamster', 'horse'];
 
@@ -158,7 +163,7 @@ function Search(props) {
                     Apply
                 </Button>
             </div>
-            <SearchResults pets={pets} requestSent={requestSent} />
+            <SearchResults pets={pets} />
         </div>
     );
 }

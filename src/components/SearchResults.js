@@ -5,9 +5,6 @@ import Loading from './Loading';
 import SearchResultsList from './SearchResultsList';
 
 function SearchResults(props) {
-    if (!props.requestSent) {
-        return <div />;
-    }
     return !props.pets ? <Loading /> : !Array.isArray(props.pets.pets) ? <div>error</div> : <SearchResultsList pets={props.pets.pets} />;
 }
 
