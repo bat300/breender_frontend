@@ -12,6 +12,7 @@ import Button from '@material-ui/core/Button';
 import { getPets } from '../redux/actions/petActions';
 import SearchResults from './SearchResults';
 
+
 const useStyles = makeStyles((theme) => ({
     filters: {
         display: 'flex',
@@ -48,7 +49,6 @@ function Search(props) {
         pets = props.dispatch(getPets('', '', '', [1, 10])); //change parameters manually because values remain constant inside render and are not updated immediately
     };
 
-
     const resetFilters = async () => {
         updateFilters().then(() => loadPets());
     };
@@ -73,6 +73,8 @@ function Search(props) {
         horse: ['American Quarter', 'Arabian', 'Thoroughbred', 'Appaloosa', 'Morgan', 'Warmbloods', 'Pony'],
         '': [],
     };
+
+    const orders = ['ascending', 'descending'];
 
     const [chosenSpecies, setSpecies] = React.useState('');
 
@@ -117,6 +119,12 @@ function Search(props) {
         setAgeRange(newRange);
     };
 
+    const [order, setOrder] = React.useState('descending');
+
+    const handleOrderChange = (event) => {
+        setOrder(event.target.value);
+    };
+
     function valuetext(value) {
         return `${value} years old`;
     }
@@ -156,6 +164,16 @@ function Search(props) {
                         ))}
                     </Select>
                 </FormControl>
+                <FormControl className={classes.formControl}>
+                    <InputLabel id="breed-select-label">Sort by</InputLabel>
+                    <Select labelId="breed-select-label" id="sort-select" value={order} onChange={handleOrderChange}>
+                        {orders.map((order) => (
+                            <MenuItem key={order} value={order}>
+                                {order} price
+                            </MenuItem>
+                        ))}
+                    </Select>
+                </FormControl>
 
                 <div className={classes.ageSlider}>
                     <Typography>Age Range</Typography>
@@ -179,7 +197,7 @@ function Search(props) {
                     Reset filters
                 </Button>
             </div>
-            <SearchResults pets={pets} />
+            <SearchResults pets={pets} order={order} />
         </div>
     );
 }

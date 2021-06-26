@@ -4,8 +4,9 @@ import { withRouter } from 'react-router-dom';
 import SearchResultElement from './SearchResultElement';
 import Grid from '@material-ui/core/Grid';
 
+
 function SearchResultsList(props) {
-    return props.pets.length > 0? props.pets.map((petObject) => <SearchResultElement pet={petObject} key={petObject._id} />) : 
+    return props.pets.length > 0? props.order == 'descending' ? props.pets.sort((a, b) => a.price < b.price ? 1 : -1).map((petObject) => <SearchResultElement pet={petObject} key={petObject._id} />) : props.pets.sort((a, b) => a.price   > b.price ? 1 : -1).map((petObject) => <SearchResultElement pet={petObject} key={petObject._id} />) :
     <Grid container spacing={2} justify="center"><div style={{fontSize: 30}}>No results found</div></Grid>;
 
 }
