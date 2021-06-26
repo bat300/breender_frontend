@@ -1,4 +1,4 @@
-import  React, { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { connect, useSelector } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import { withRouter } from 'react-router-dom';
@@ -40,12 +40,25 @@ function Search(props) {
         pets = props.dispatch(getPets(chosenSpecies, sex, breed, ageRange));
     };
 
+    const updateFilters = async () => {
+        setSpecies('');
+        setSex('');
+        setBreed('');
+        setAgeRange([1, 10]);
+        pets = props.dispatch(getPets('', '', '', [1, 10])); //change parameters manually because values remain constant inside render and are not updated immediately
+    };
+
+
+    const resetFilters = async () => {
+        updateFilters().then(() => loadPets());
+    };
+
     useEffect(() => {
         // load pets when the page is loaded or the pets were filtered.
         if (!pets) {
             loadPets();
         }
-    },[pets] )
+    }, [pets]);
 
     const species = ['dog', 'cat', 'rabbit', 'mouse', 'hamster', 'horse'];
 
@@ -161,6 +174,9 @@ function Search(props) {
 
                 <Button className={classes.button} variant="contained" color="secondary" onClick={loadPets}>
                     Apply
+                </Button>
+                <Button className={classes.button} variant="contained" color="secondary" onClick={resetFilters}>
+                    Reset filters
                 </Button>
             </div>
             <SearchResults pets={pets} />
