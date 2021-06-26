@@ -18,6 +18,7 @@ import Footer from "./components/Footer";
 import AppTheme from "./theming/themetypes";
 import AppThemeOptions from "./theming/themes";
 import AxiosConfiguration from './helper/axios'
+import { composeWithDevTools } from 'redux-devtools-extension';
 
 const useStyles = makeStyles((theme) => ({
     appRoot: {
@@ -38,7 +39,7 @@ function App() {
     }, []);
 
     // create store for redux
-    const store = createStore(reducers, applyMiddleware(thunkMiddleware));
+    const store = createStore(reducers, composeWithDevTools(applyMiddleware(thunkMiddleware)));
 
     // theme for app
     const [theme, setTheme] = React.useState(AppTheme.LIGHT);
