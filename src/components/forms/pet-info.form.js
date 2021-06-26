@@ -4,7 +4,7 @@ import DateFnsUtils from '@date-io/date-fns';
 import { makeStyles } from '@material-ui/core/styles';
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import { FormControl, Grid, InputLabel, InputAdornment, MenuItem, Select, TextField, Paper, Divider, FormHelperText } from '@material-ui/core';
-import { dogBreeds, catBreeds, horseBreeds } from 'helper/data/breeds';
+import { breeds } from 'helper/data/breeds';
 import DocumentsUpload from '../upload/documents.upload';
 import CompetitionsComponent from '../competitions';
 
@@ -71,9 +71,9 @@ const PetInformationForm = ({ nameProp, nicknameProp, sexProp, birthDateProp, sp
     };
 
     // sort breeds data
-    const sortedDogBreeds = dogBreeds.sort((a, b) => a.localeCompare(b));
-    const sortedCatBreeds = catBreeds.sort((a, b) => a.localeCompare(b));
-    const sortedHorseBreeds = horseBreeds.sort((a, b) => a.localeCompare(b));
+    const sortedDogBreeds = breeds.dog.sort((a, b) => a.localeCompare(b));
+    const sortedCatBreeds = breeds.cat.sort((a, b) => a.localeCompare(b));
+    const sortedHorseBreeds = breeds.horse.sort((a, b) => a.localeCompare(b));
 
     return (
         <div className={classes.layout}>
@@ -144,9 +144,9 @@ const PetInformationForm = ({ nameProp, nicknameProp, sexProp, birthDateProp, sp
                                     <FormControl required variant="outlined" size="small" fullWidth error={errors[PetFormInputs.species]}>
                                         <InputLabel id="species-label">Species</InputLabel>
                                         <Select label="Species" id="species" value={species} onChange={handleSpeciesChange} onBlur={handleSpeciesChange}>
-                                            <MenuItem value={'dog'}>Dog</MenuItem>
-                                            <MenuItem value={'cat'}>Cat</MenuItem>
-                                            <MenuItem value={'horse'}>Horse</MenuItem>
+                                            {Object.keys(breeds).map((value) => {
+                                                return <MenuItem value={value}>{value}</MenuItem>
+                                            })}
                                         </Select>
                                         <FormHelperText>{errors[PetFormInputs.species] && validationErrors[PetFormInputs.species]}</FormHelperText>
                                     </FormControl>

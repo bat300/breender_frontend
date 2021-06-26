@@ -1,10 +1,12 @@
 export default function entities(state = {}, action) {
     switch (action.type) {
-        case "GETMOVIES_SUCCESS":
+        case 'GETPETS_SUCCESS':
+            return { pets: action.pets };
+        case 'GETMOVIES_SUCCESS':
             return { movies: action.movies };
-        case "DELETEMOVIE_SUCCESS":
+        case 'DELETEMOVIE_SUCCESS':
             return { movies: action.movies };
-        case "ADDMOVIE_SUCCESS":
+        case 'ADDMOVIE_SUCCESS':
             return { ...state };
         default:
             return state;

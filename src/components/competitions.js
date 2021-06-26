@@ -27,8 +27,8 @@ const EditableRow = ({ index, ...props }) => {
 };
 
 // Define editable cell
-const EditableCell = ({ title, editable, children, dataIndex, record, handleSave, ...restProps }) => {
-    const [editing, setEditing] = useState(false);
+const EditableCell = ({ title, focused, editable, children, dataIndex, record, handleSave, ...restProps }) => {
+    const [editing, setEditing] = useState(focused || false);
     const inputRef = useRef(null);
     const form = useContext(EditableContext);
 
@@ -131,7 +131,7 @@ const CompetitionsComponent = (props) => {
             title: 'Certificate',
             dataIndex: 'certificate',
             key: 'certificate',
-            render: (_, record) => (competitions.length >= 1 ? <DocumentsUpload maxFiles={1} size={'small'} /> : null),
+            render: (_, record) => (competitions.length >= 1 ? <DocumentsUpload type="competitions" competitionId={record.key} maxFiles={1} size={'small'} /> : null),
         },
         {
             title: 'Remove',
@@ -166,6 +166,7 @@ const CompetitionsComponent = (props) => {
                 dataIndex: col.dataIndex,
                 title: col.title,
                 handleSave: handleSave,
+                focused: col.key === 'name' ? true : false,
             }),
         };
     });
@@ -175,6 +176,8 @@ const CompetitionsComponent = (props) => {
         const newData = { key: count, name: '', date: new Date(), category: '', prize: '', certificate: {} };
         setCompetitions([...competitions, newData]);
         setCount(count + 1);
+
+        dispatch(updateCompetitions(newData));
     };
 
     // delete row
@@ -182,8 +185,11 @@ const CompetitionsComponent = (props) => {
         const newData = competitions.filter((item) => item.key !== key);
         setCompetitions(newData);
         setCount(count - 1);
+
+        dispatch(updateCompetitions(newData));
     };
 
+    // save competitions data
     const handleSave = (row) => {
         const newData = [...competitions];
         const index = newData.findIndex((item) => row.key === item.key);

@@ -2,10 +2,9 @@ import axios from 'axios';
 import moment from 'moment';
 
 class AxiosConfiguration {
-
     constructor() {
         this.cancelSource = axios.CancelToken.source();
-        axios.defaults.baseURL = "http://localhost:4000";
+        axios.defaults.baseURL = 'http://localhost:4000';
     }
 
     setupInterceptors() {
@@ -17,7 +16,7 @@ class AxiosConfiguration {
     setNewCancelToken = () => (this.cancelSource = axios.CancelToken.source());
 
     getHeader = () => ({
-        Authorization: 'Bearer ' + localStorage["jwtToken"],
+        Authorization: 'Bearer ' + localStorage['jwtToken'],
         'Content-Type': 'application/json',
         'x-timezone-offset': moment().utcOffset(),
     });
@@ -25,10 +24,9 @@ class AxiosConfiguration {
     setupRequestInterceptor() {
         axios.interceptors.request.use(
             async (config: any) => {
-                if (localStorage["jwtToken"] !== null) {
+                if (localStorage['jwtToken'] !== null) {
                     config.headers = this.getHeader();
                 }
-                console.log(config.headers)
 
                 this.setNewCancelToken();
                 config.cancelToken = this.cancelSource.token;

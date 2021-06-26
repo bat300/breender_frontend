@@ -5,14 +5,14 @@ import { Upload } from 'antd';
 import { LoadingOutlined } from '@ant-design/icons';
 // material-ui imports
 import { makeStyles } from '@material-ui/core/styles';
-import { Button, IconButton, Snackbar } from '@material-ui/core';
+import { Button, IconButton, Snackbar, FormHelperText } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
 import PetsIcon from '@material-ui/icons/Pets';
 import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
-import { storage } from './../../firebase';
 import { sha256 } from 'js-sha256';
 import { useDispatch } from 'react-redux';
 import { updateProfilePicture } from 'redux/actions';
+import { useUser } from 'helper/hooks/auth.hooks';
 
 const AvatarUpload = (props) => {
     const classes = useStyles();
@@ -21,8 +21,9 @@ const AvatarUpload = (props) => {
     const [loading, setLoading] = useState(false);
     const [openAlert, setOpenAlert] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
-    const [fullPath, setFullPath] = useState('');
     const [imageUrl, setImageUrl] = useState('');
+
+    const user = useUser();
 
     const getBase64 = (img, callback) => {
         const reader = new FileReader();
@@ -66,59 +67,38 @@ const AvatarUpload = (props) => {
     };
 
     const customUpload = async (data) => {
-        const metadata = {
-            contentType: data.type,
-        };
-        const storageRef = await storage.ref();
         const imageName = sha256(data.file.name); //a unique name for the image
 
-        /** @TODO change to the structure
+        /** The structure of the firebase path
          * -| users
          *   -| userId
          *     -| pets
-         *      -| pictures
+         *      -| images
          */
 
-        const imgPath = `images/${imageName}.png`;
-        // define storage path in the firebase
-        const imgFile = storageRef.child(imgPath);
-        try {
-            // upload image
-            let uploadTask = imgFile.put(data.file, metadata);
+        const imgPath = `users/${user.id}/pets/images/${imageName}`;
 
-            uploadTask.then((snapshot) => {
-                snapshot.ref.getDownloadURL().then((url) => {
-                    console.log('File available at', url);
-                    setFullPath(imgPath);
+        const newData = {
+            title: data.file.name,
+            description: '',
+            src: undefined,
+            path: imgPath,
+            data: data,
+        };
 
-                    // update in global state
-                    dispatch(updateProfilePicture(url));
-                });
-            });
+        // update in global state
+        dispatch(updateProfilePicture(newData));
 
-            data.onSuccess(null, uploadTask);
-        } catch (e) {
-            data.onError(e);
-        }
+        data.onSuccess(null);
     };
 
     // remove the image from firebase
     const handleRemove = async (file) => {
-        const storageRef = await storage.ref();
-        storageRef
-            .child(fullPath)
-            .delete()
-            .then(() => {
-                setFullPath('');
-                setImageUrl('');
-
-                // update in global state
-                dispatch(updateProfilePicture(''));
-                console.log('Deletion was successful');
-            })
-            .catch((error) => {
-                console.log('Error while deletion has occurred', error);
-            });
+        
+        setImageUrl('');
+    
+        // update in global state
+        dispatch(updateProfilePicture({}));
     };
 
     return (
@@ -133,7 +113,11 @@ const AvatarUpload = (props) => {
                             <DeleteOutlinedIcon color="error" />
                         </IconButton>
                     </div>
-                ) : null}
+                ) : (
+                    <div style={{ justifyContent: 'center', display: 'flex' }}>
+                        <FormHelperText>Avatar upload is required!</FormHelperText>
+                    </div>
+                )}
                 <Upload accept="image/*" name="avatar" listType="picture" showUploadList={false} beforeUpload={beforeUpload} onChange={handleChange} customRequest={customUpload}>
                     <Button variant="contained" color="primary" style={{ margin: 30 }}>
                         Choose Photo

@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import 'antd/dist/antd.css';
 import { Upload, Modal } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
-import { storage } from './../../firebase';
 import { sha256 } from 'js-sha256';
 import { useDispatch } from 'react-redux';
 import { updatePictures } from 'redux/actions';
 import { usePictures } from 'helper/hooks/pets.hooks';
+import { useUser } from 'helper/hooks/auth.hooks';
 
 const MultiplePhotosUpload = (props) => {
     const dispatch = useDispatch();
@@ -15,9 +15,9 @@ const MultiplePhotosUpload = (props) => {
     const [previewImage, setPreviewImage] = useState('');
     const [previewTitle, setPreviewTitle] = useState('');
     const [fileList, setFileList] = useState([]);
-    const [uploadedImages, setUploadedImages] = useState([]);
 
     const pictures = usePictures();
+    const user = useUser();
 
     // get base64 format of the uploaded picture
     const getBase64 = (photo) => {
@@ -46,66 +46,41 @@ const MultiplePhotosUpload = (props) => {
 
     // upload image to the firebase
     const customUpload = async (data) => {
-        const metadata = {
-            contentType: data.type,
-        };
-        const storageRef = await storage.ref();
         const imageName = sha256(data.file.name); //a unique name for the image
 
-        /** @TODO change to the structure
+        /** Firebase structure
          * -| users
          *   -| userId
          *     -| pets
-         *      -| pictures
+         *      -| images
          */
 
-        const imgPath = `images/${imageName}.png`;
-        // define storage path in the firebase
-        const imgFile = storageRef.child(imgPath);
-        try {
-            // upload image
-            let uploadTask = imgFile.put(data.file, metadata);
+        const imgPath = `users/${user.id}/pets/images/${imageName}`;
 
-            uploadTask.then((snapshot) => {
-                snapshot.ref.getDownloadURL().then(async (downloadURL) => {
-                    setUploadedImages([...uploadedImages, { name: data.file.name, fullPath: imgPath, downloadUrl: downloadURL }]);
-                    console.log('File available at', downloadURL);
+        const newData = {
+            title: data.file.name,
+            path: imgPath,
+            src: undefined,
+            description: '',
+            data: data,
+        };
+        // setUploadedImages([...uploadedImages, newData]);
 
-                    // set global state
-                    let pics = [...pictures, downloadURL];
-                    dispatch(updatePictures(pics));
-                });
-            });
+        // set global state
+        let pics = [...pictures, newData];
+        dispatch(updatePictures(pics));
 
-            data.onSuccess(null, uploadTask);
-        } catch (e) {
-            data.onError(e);
-        }
+        data.onSuccess(null);
     };
 
     // remove the image from firebase
     const handleRemove = async (file) => {
-        let obj = uploadedImages.find((value) => value.name === file.name);
 
-        const storageRef = await storage.ref();
-        storageRef
-            .child(obj.fullPath)
-            .delete()
-            .then(() => {
-                const index = uploadedImages.indexOf(obj);
-                uploadedImages.splice(index, 1);
+        let picTemp = [...pictures];
+        let pics = picTemp.filter((value) => value.title !== file.name);
 
-                // save in parent component
-                let downloadLinks = uploadedImages.map((x) => {
-                    return x.downloadUrl;
-                });
-                dispatch(updatePictures(downloadLinks))
+        dispatch(updatePictures(pics));            
 
-                console.log('Deletion was successful');
-            })
-            .catch((error) => {
-                console.log('Error while deletion has occurred', error);
-            });
     };
 
     return (

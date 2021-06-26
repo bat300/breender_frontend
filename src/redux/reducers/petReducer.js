@@ -1,7 +1,7 @@
 const initialState = {
     pets: [],
     pet: {},
-    profileUrl: '',
+    profilePicture: {},
     pictures: [],
     documents: [],
     competitions: [],
@@ -20,13 +20,13 @@ const pets = (state = initialState, action) => {
         case 'GET_PET':
             return { ...state, pet: action.pet };
         case 'UPDATE_PROFILE_PICTURE':
-            return { ...state, profileUrl: action.profileUrl };
+            return { ...state, profilePicture: action.profilePicture };
         case 'UPDATE_PICTURES':
             return { ...state, pictures: action.pictures };
         case 'UPDATE_DOCUMENTS':
             return { ...state, documents: action.documents };
         case 'UPDATE_COMPETITIONS':
-            return { ...state, documents: action.competitions };
+            return { ...state, competitions: action.competitions };
         default:
             return state;
     }
