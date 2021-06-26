@@ -3,6 +3,7 @@ import UserLoginView from './views/UserLoginView';
 import SignUpView from './views/SignUpView';
 import MovieDetailsView from './views/MovieDetailsView';
 import AddPetView from './views/AddPetView';
+import PetProfileView from "./views/PetProfileView";
 import EmailConfirmationView from './views/EmailConfirmationView';
 import Search from './components/Search';
 
@@ -30,6 +31,10 @@ const routes = [
     {
         path: '/movie/:id',
         component: MovieDetailsView,
+    },
+    {
+      path: "/pet/:id",
+      component: PetProfileView,
     },
     /** @TODO added for the test, maybe need to deleted later */
     {
