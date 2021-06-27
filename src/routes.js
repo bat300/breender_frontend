@@ -11,8 +11,7 @@ import { LocalStorageService } from 'services';
 import Header from 'components/Header';
 import AppTheme from 'theming/themetypes';
 
-// used for routing
-export const PrivateRoute = (props) => {
+const DefaultHeader = () => {
     // theme for app
     const [theme, setTheme] = React.useState(AppTheme.LIGHT);
 
@@ -20,10 +19,14 @@ export const PrivateRoute = (props) => {
     const toggleTheme = () => {
         setTheme(theme === AppTheme.LIGHT ? AppTheme.DARK : AppTheme.LIGHT);
     };
+    return <Header darkmode={theme === AppTheme.DARK} toggletheme={toggleTheme} />;
+};
 
+// used for routing
+export const PrivateRoute = (props) => {
     return LocalStorageService.isAuthorized() ? (
         <Route {...props}>
-            <Header darkmode={theme === AppTheme.DARK} toggletheme={toggleTheme} />
+            <DefaultHeader />
             {props.children}
         </Route>
     ) : (
@@ -31,23 +34,24 @@ export const PrivateRoute = (props) => {
     );
 };
 
-export const AuthRoute = (props) => <Route {...props}>{props.children}</Route>;
+export const DefaultRoute = (props) => <Route {...props}>{props.children}</Route>;
 
 const Routes = () => {
     return (
         <Switch>
-            <AuthRoute exact path="/login">
+            <DefaultRoute exact path="/login">
                 <UserLoginView />
-            </AuthRoute>
-            <AuthRoute path="/register">
+            </DefaultRoute>
+            <DefaultRoute path="/register">
                 <SignUpView />
-            </AuthRoute>
-            <AuthRoute path="/confirmation/:email/:token">
+            </DefaultRoute>
+            <DefaultRoute path="/confirmation/:email/:token">
                 <EmailConfirmationView />
-            </AuthRoute>
-            <PrivateRoute exact path="/">
+            </DefaultRoute>
+            <DefaultRoute exact path="/">
+                <DefaultHeader />
                 <Search />
-            </PrivateRoute>
+            </DefaultRoute>
             <PrivateRoute exact path="/pet/:id">
                 {null}
             </PrivateRoute>
