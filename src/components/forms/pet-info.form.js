@@ -16,15 +16,15 @@ const PetFormInputs = {
     breed: 'breed',
 };
 
-const PetInformationForm = ({ nameProp, nicknameProp, sexProp, birthDateProp, speciesProp, breedProp, priceProp }) => {
+const PetInformationForm = ({ pet }) => {
     const classes = useStyles();
-    const { name, setName } = nameProp;
-    const { nickname, setNickname } = nicknameProp;
-    const { sex, setSex } = sexProp;
-    const { birthDate, setBirthDate } = birthDateProp;
-    const { species, setSpecies } = speciesProp;
-    const { breed, setBreed } = breedProp;
-    const { price, setPrice } = priceProp;
+    const [name, setName] = useState(pet.officialName);
+    const [nickname, setNickname] = useState(pet.nickname);
+    const [sex, setSex] = useState(pet.sex);
+    const [birthDate, setBirthDate] = useState(new Date(pet.birthDate));
+    const [species, setSpecies] = useState(pet.species);
+    const [breed, setBreed] = useState(pet.breed);
+    const [price, setPrice] = useState(pet.price);
     const [errors, setErrors] = useState({ name: false, nickname: false, sex: false, species: false, breed: false });
 
     const validationErrors = {

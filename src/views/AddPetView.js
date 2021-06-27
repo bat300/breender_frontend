@@ -1,42 +1,53 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect, useDispatch } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import { PetInformationForm, PetPhotosForm } from 'components/forms';
 import { Button, CircularProgress } from '@material-ui/core';
-import { useCompetitions, useDocuments, usePictures, useProfilePicture } from 'helper/hooks/pets.hooks';
-import { addPet, updateCompetitions, updateDocuments, updatePictures, updateProfilePicture } from 'redux/actions';
+import { usePet } from 'helper/hooks/pets.hooks';
+import { addPet, clearPetInfos, updateProfilePicture, updateSelectedPet } from 'redux/actions';
 import { useUser } from 'helper/hooks/auth.hooks';
 import { useHistory } from 'react-router-dom';
 import FirebaseService from 'services/FirebaseService';
 import NotificationService from 'services/NotificationService';
+import Loading from 'components/Loading';
 
 const AddPetView = (props) => {
     const classes = useStyles();
     const dispatch = useDispatch();
     const history = useHistory();
 
-    const [loading, setLoading] = useState(false);
-    const [name, setName] = useState('');
-    const [nickname, setNickname] = useState('');
-    const [sex, setSex] = useState('');
-    const [birthDate, setBirthDate] = useState(new Date());
-    const [species, setSpecies] = useState('');
-    const [breed, setBreed] = useState('');
-    const [price, setPrice] = useState(0);
+    const [loading, setLoading] = useState(true);
 
-    const profilePicture = useProfilePicture();
-    const pictures = usePictures();
-    const documents = useDocuments();
-    const competitions = useCompetitions();
+    useEffect(() => {
+        let loading = true;
+
+        const clear = async () => {
+            if (!loading) return;
+            setLoading(false);
+        };
+
+        clear();
+
+        return () => {
+            loading = false;
+        };
+    }, [dispatch]);
+
+    window.onbeforeunload = (event) => {
+        dispatch(clearPetInfos())
+        dispatch(updateProfilePicture({}))
+    }
+
+    const pet = usePet();
     const user = useUser();
 
     const isEmpty = (str) => str === '';
 
     // check if all required fields are filled
-    const formIsDisabled = isEmpty(name) && isEmpty(profilePicture) && isEmpty(sex) && isEmpty(species) && isEmpty(breed);
+    const formIsDisabled = isEmpty(pet.name) && pet.profilePicture === undefined && isEmpty(pet.sex) && isEmpty(pet.species) && isEmpty(pet.breed);
 
     const uploadCompetitions = async () => {
-        const competitionsData = [...competitions];
+        const competitionsData = [...pet?.competitions];
         for (let index = 0; index < competitionsData.length; index++) {
             let value = competitionsData[index];
             if (value.certificate) {
@@ -48,11 +59,14 @@ const AddPetView = (props) => {
             }
         }
 
-        await dispatch(updateCompetitions(competitionsData));
+        let petData = pet;
+        petData.competitions = competitionsData;
+
+        await dispatch(updateSelectedPet(petData));
     };
 
     const uploadDocuments = async () => {
-        const documentsData = [...documents];
+        const documentsData = [...pet?.documents];
         for (let index = 0; index < documentsData.length; index++) {
             let value = documentsData[index];
             const metadata = {
@@ -62,11 +76,14 @@ const AddPetView = (props) => {
             documentsData[index].url = url;
         }
 
-        await dispatch(updateDocuments(documentsData));
+        let petData = pet;
+        petData.documents = documentsData;
+
+        await dispatch(updateSelectedPet(petData));
     };
 
     const uploadPictures = async () => {
-        const picturesData = [...pictures];
+        const picturesData = [...pet.pictures];
         for (let index = 0; index < picturesData.length; index++) {
             let value = picturesData[index];
             const metadata = {
@@ -76,12 +93,13 @@ const AddPetView = (props) => {
             let url = await FirebaseService.upload(value.path, value.data, metadata);
             picturesData[index].src = url;
         }
-
-        await dispatch(updatePictures(picturesData));
+        let petData = pet;
+        petData.pictures = picturesData;
+        await dispatch(updateSelectedPet(petData));
     };
 
     const uploadProfilePicture = async () => {
-        let value = profilePicture;
+        let value = pet.profilePicture;
         const metadata = {
             contentType: 'image/png',
         };
@@ -89,7 +107,10 @@ const AddPetView = (props) => {
         let url = await FirebaseService.upload(value.path, value.data, metadata);
         value.src = url;
 
-        await dispatch(updateProfilePicture(value));
+        let petData = pet;
+        petData.profilePicture = value;
+
+        await dispatch(updateSelectedPet(petData));
     };
 
     const createPet = async () => {
@@ -102,46 +123,43 @@ const AddPetView = (props) => {
         await uploadProfilePicture();
 
         // combine all information about a pet
-        let pet = {
+        let petToUpload = {
             ownerId: user.id,
-            officialName: name,
-            nickname: nickname,
-            birthDate: birthDate,
-            sex: sex,
-            price: price,
-            profilePicture: profilePicture,
-            pictures: pictures,
-            breed: breed,
-            species: species,
-            competitions: competitions,
-            documents: documents,
+            officialName: pet.name,
+            nickname: pet.nickname,
+            birthDate: pet.birthDate,
+            sex: pet.sex,
+            price: pet.price,
+            profilePicture: pet.profilePicture,
+            pictures: pet.pictures,
+            breed: pet.breed,
+            species: pet.species,
+            competitions: pet.competitions,
+            documents: pet.documents,
         };
 
         const onSuccess = () => {
             NotificationService.notify('success', 'Success', 'Your four-legged friend was added to your profile!');
             history.push('/');
+            dispatch(clearPetInfos());
         };
 
         const onError = () => {
             NotificationService.notify('error', 'Error', 'There was a problem uploading your pet.');
         };
 
-        dispatch(addPet(pet, onSuccess, onError));
+        dispatch(addPet(petToUpload, onSuccess, onError));
         setLoading(false);
     };
 
-    return (
+    return loading ? (
+        <Loading />
+    ) : (
         <div>
             <div className={classes.layout}>
                 <PetPhotosForm />
                 <PetInformationForm
-                    nameProp={{ name, setName }}
-                    nicknameProp={{ nickname, setNickname }}
-                    sexProp={{ sex, setSex }}
-                    birthDateProp={{ birthDate, setBirthDate }}
-                    speciesProp={{ species, setSpecies }}
-                    breedProp={{ breed, setBreed }}
-                    priceProp={{ price, setPrice }}
+                    pet={pet}
                 />
             </div>
             <div className={classes.button}>
