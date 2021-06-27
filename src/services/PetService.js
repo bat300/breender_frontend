@@ -46,16 +46,10 @@ export default class PetService {
         });
     }
 
-    static updatePet(pet) {
+    static async updatePet(pet) {
         this.setToken();
-        return new Promise(async (resolve, reject) => {
-            try {
-                const { data } = await axios.put(`/pets/${pet._id}`, pet);
-                resolve(data);
-            } catch (err) {
-                reject(err);
-            }
-        });
+        const { data } = await axios.put(`/pets/${pet.id}`, pet);
+        return data;
     }
 
     static async createPet(pet) {
