@@ -5,7 +5,8 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import PropTypes from 'prop-types';
-import Image from 'material-ui-image'
+import Image from 'material-ui-image';
+import { useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -37,6 +38,11 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SearchResultElement(props) {
     const classes = useStyles();
+    const history = useHistory();
+
+    function goToPetProfile() {
+        history.push("/pet/" + props.pet._id);
+    }
 
     return (
         <div className={classes.root}>
@@ -101,19 +107,19 @@ export default function SearchResultElement(props) {
                                     </Grid>
                                 </Grid>
                                 <Grid container justify="flex-end" spacing={2}>
-                                    <Button className={classes.button} variant="contained" color="secondary">
+                                    <Button className={classes.button} variant="contained" color="secondary" onClick={goToPetProfile}>
                                         View profile
                                     </Button>
                                 </Grid>
                             </Grid>
                         </Grid>
                         <Grid item>
-                            <Typography variant="subtitle1">{props.pet.price ? props.pet.price : 0} €</Typography>
+                            <Typography className={classes.accentText} gutterBottom variant="h6" style={{ fontWeight: 600 }}>{props.pet.price ? props.pet.price : 0}€</Typography>
                         </Grid>
                     </Grid>
                 </Grid>
             </Paper>
-        </div>
+        </div >
     );
 }
 
