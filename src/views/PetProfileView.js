@@ -32,6 +32,7 @@ function PetProfileView(props) {
         <div>error</div>
     ) : selectedPet.pet ? (
         <PetProfileComponent
+            id={props.match.params.id}
             officialName={selectedPet.pet.officialName}
             nickname={selectedPet.pet.nickname}
             age={calculateAge(selectedPet.pet.birthDate)}
@@ -56,8 +57,9 @@ function calculateAge(birthDate) {
 }
 
 function getAlbumWithProfilePicture(selectedPet) {
-    selectedPet.pictures.push(selectedPet.profilePicture);
-    return selectedPet.pictures;
+    let pictures = [...selectedPet.pictures];
+    pictures.push(selectedPet.profilePicture)
+    return pictures;
 }
 
 // connect() establishes allows the usage of redux functionality
