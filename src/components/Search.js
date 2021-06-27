@@ -74,7 +74,7 @@ function Search(props) {
         '': [],
     };
 
-    const orders = ['ascending', 'descending'];
+    const orders = ['ascending price', 'descending price', 'newest'];
 
     const [chosenSpecies, setSpecies] = React.useState('');
 
@@ -169,7 +169,7 @@ function Search(props) {
                     <Select labelId="breed-select-label" id="sort-select" value={order} onChange={handleOrderChange}>
                         {orders.map((order) => (
                             <MenuItem key={order} value={order}>
-                                {order} price
+                                {order}
                             </MenuItem>
                         ))}
                     </Select>
