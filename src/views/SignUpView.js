@@ -1,10 +1,8 @@
-import React, { useEffect } from "react";
-import { withRouter } from "react-router-dom";
-import { connect, useSelector } from "react-redux";
-
-import SignUpComponent from "../components/SignUpComponent";
-
-import { register } from "../redux/actions";
+import React, { useEffect } from 'react';
+import { withRouter } from 'react-router-dom';
+import { connect, useSelector } from 'react-redux';
+import { register } from '../redux/actions';
+import SignUpPaper from '../components/SignUpPaper';
 
 /**
  * For register new users
@@ -15,25 +13,19 @@ function SignUpView(props) {
 
     useEffect(() => {
         if (user.user) {
-            props.history.push("/");
+            props.history.push('/');
         }
     }, [user, props.history]);
 
-    const onRegister = (email, username, password, city, isAdmin) => {
-        props.dispatch(register(email, username, password, city, isAdmin));
+    const onRegister = (email, username, password, city, isAdmin, subscriptionPlan) => {
+        props.dispatch(register(email, username, password, city, isAdmin, subscriptionPlan));
     };
 
     const onCancel = () => {
-        props.history.push("/");
+        props.history.push('/');
     };
 
-    return (
-        <SignUpComponent
-            user={user}
-            onRegister={onRegister}
-            onCancel={onCancel}
-        />
-    );
+    return <SignUpPaper user={user} onRegister={onRegister} onCancel={onCancel} />;
 }
 
 export default connect()(withRouter(SignUpView));

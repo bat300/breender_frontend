@@ -45,7 +45,7 @@ export function loginReset() {
     return { type: 'LOGIN_RESET' };
 }
 
-export function register(email, username, password, city, isAdmin) {
+export function register(email, username, password, city, isAdmin, subscriptionPlan) {
     function onSuccess(user) {
         return { type: 'LOGIN_SUCCESS', user: user };
     }
@@ -55,7 +55,8 @@ export function register(email, username, password, city, isAdmin) {
 
     return async (dispatch) => {
         try {
-            let resp = await UserService.register(email, username, password, city, isAdmin);
+            console.log(subscriptionPlan);
+            let resp = await UserService.register(email, username, password, city, isAdmin, subscriptionPlan);
             dispatch(onSuccess(resp.user));
         } catch (e) {
             dispatch(onFailure(e));

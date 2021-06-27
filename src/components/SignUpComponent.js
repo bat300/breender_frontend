@@ -12,6 +12,7 @@ import {
   FormControlLabel,
   Checkbox,
 } from "@material-ui/core";
+import { register } from "../redux/actions";
 
 const useStyles = makeStyles((theme) => ({
   usersignUpRoot: {
@@ -75,6 +76,7 @@ const provincesAndCities = {
   ],
 };
 
+
 /**
  * For register new users
  * @param {props} props
@@ -82,73 +84,50 @@ const provincesAndCities = {
 function SignUpComponent(props) {
   const classes = useStyles();
 
-  const [username, setUsername] = React.useState("");
+  const saveAndContinue = (e) => {
+    e.preventDefault()
+    props.nextStep()
+}
+
+
+
+  /*const [username, setUsername] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [password2, setPassword2] = React.useState("");
   const [email, setEmail] = React.useState("");
   const [province, setProvince] = React.useState("");
   const [city, setCity] = React.useState("");
-  const [isAdmin, setIsAdmin] = React.useState(false);
+  const [isAdmin, setIsAdmin] = React.useState(false);*/
 
   const [registerError, setRegisterError] = React.useState("");
 
-  //let province = null;
+  const values = props.values;
+
   let options = null;
 
-  if (province) {
-    options = provincesAndCities[province].map((elem) => (
+  if (values.province) {
+    options = provincesAndCities[values.province].map((elem) => (
       <MenuItem key={elem} value={elem}>
         {elem}
       </MenuItem>
     ));
   }
-
-  useEffect(() => {
-    if (props.user.error) {
-      setRegisterError(props.user.error);
-    } else {
-      setRegisterError("");
-    }
-  }, [props.user]);
-
   const onRegister = (e) => {
     e.preventDefault();
-    props.onRegister(email, username, password, city, isAdmin);
+    props.onRegister(values.email, values.username, values.password, values.city, values.isAdmin);
   };
 
-  const onChangeEmail = (e) => {
-    setEmail(e.target.value);
-    setRegisterError("");
+  const onNext =(e) => {
+   // e.preventDefault();
+   // props.history.push({pathname: '/register', state: user});
+
   };
 
-  const onChangeUsername = (e) => {
-    setUsername(e.target.value);
-    setRegisterError("");
-  };
 
-  const onChangePassword = (e) => {
-    setPassword(e.target.value);
-    setRegisterError("");
-  };
-
-  const onChangePassword2 = (e) => {
-    setPassword2(e.target.value);
-    setRegisterError("");
-  };
-
-  const onChangeCity = (e) => {
-    setCity(e.target.value);
-    setRegisterError("");
-  };
-
-  const onChangeProvince = (e) => {
-    setProvince(e.target.value);
-    setRegisterError("");
-  };
 
   const onBlurPassword = (e) => {
-    if (password !== "" && password2 !== "") {
-      if (password !== password2) {
+    if (values.password !== "" && values.password2 !== "") {
+      if (values.password !== values.password2) {
         setRegisterError("Passwords do not match.");
       } else {
         setRegisterError("");
@@ -168,26 +147,26 @@ function SignUpComponent(props) {
           <TextField
             label="Email"
             fullWidth
-            value={email}
-            onChange={onChangeEmail}
+            value={values.email}
+            onChange={props.handleChange('email')}
           />
         </div>
         <div className={classes.signUpRow}>
           <TextField
             label="Username"
             fullWidth
-            value={username}
-            onChange={onChangeUsername}
+            value={values.username}
+            onChange={props.handleChange('username')}
           />
         </div>
         <div className={classes.signUpRow}>
           <TextField
             label="Password"
             fullWidth
-            value={password}
-            onChange={onChangePassword}
+            value={values.password}
+            onChange={props.handleChange('password')}
             error={registerError !== ""}
-            onBlur={onBlurPassword}
+           
             type="password"
           />
         </div>
@@ -195,8 +174,8 @@ function SignUpComponent(props) {
           <TextField
             label="Repeat Password"
             fullWidth
-            value={password2}
-            onChange={onChangePassword2}
+            value={values.password2}
+            onChange={props.handleChange('password2')}
             error={registerError !== ""}
             onBlur={onBlurPassword}
             type="password"
@@ -208,8 +187,8 @@ function SignUpComponent(props) {
               <InputLabel>State/Province</InputLabel>
               <Select
                 label="State/Province"
-                value={province}
-                onChange={onChangeProvince}
+                value={values.province}
+                onChange={props.handleChange('province')}
               >
                 <MenuItem value={"bavaria"}>Bavaria</MenuItem>
                 <MenuItem value={"lower-saxony"}>Lower Saxony</MenuItem>
@@ -225,14 +204,14 @@ function SignUpComponent(props) {
           <Grid item xs={6}>
             <div className={classes.signUpRow}>
               <InputLabel>City</InputLabel>
-              <Select label="City" value={city} onChange={onChangeCity}>
+              <Select label="City" value={values.city} onChange={props.handleChange('city')}>
                 {options}
               </Select>
             </div>
           </Grid>
-        </Grid>
+  </Grid> 
 
-        <div className={classes.signUpRow}>
+        {/*<div className={classes.signUpRow}>
           <FormControlLabel
             control={
               <Checkbox
@@ -243,7 +222,7 @@ function SignUpComponent(props) {
             }
             label="Is Admin"
           />
-        </div>
+          </div>*/}
         {registerError !== "" ? (
           <div className={classes.signUpRow}>
             <Typography color="error">{registerError}</Typography>
@@ -257,17 +236,18 @@ function SignUpComponent(props) {
             className={classes.signUpButton}
             variant="contained"
             color="primary"
-            onClick={onRegister}
             disabled={
-              username === "" ||
-              password === "" ||
-              password2 === "" ||
-              registerError !== "" ||
-              password !== password2
+              values.username === '' ||
+              values.password === '' ||
+              values.password2 === '' ||
+              values.password !== values.password2 ||
+              values.province === '' ||
+              values.city === '' ||
+              registerError !== '' 
             }
-            type="submit"
+            onClick={saveAndContinue}
           >
-            Register
+            Next
           </Button>
         </div>
       </Paper>
