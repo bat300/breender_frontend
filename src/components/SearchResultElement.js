@@ -26,7 +26,6 @@ const useStyles = makeStyles((theme) => ({
         display: 'block',
         maxWidth: '100%',
         maxHeight: '100%',
-        objectFit: 'cover'
     },
     button: {
         margin: theme.spacing(1),
@@ -44,7 +43,7 @@ export default function SearchResultElement(props) {
             <Paper className={classes.paper}>
                 <Grid container spacing={2} justify="center">
                     <Grid item className={classes.image}>
-                        <Image className={classes.img} src={props.pet.profilePicture ? props.pet.profilePicture.src : ''} />
+                        <Image style={{ objectFit: 'contain' }} className={classes.img} src={props.pet.profilePicture ? props.pet.profilePicture.src : ''} />
                     </Grid>
                     <Grid item xs={8} sm container>
                         <Grid item xs container direction="column" spacing={2}>
