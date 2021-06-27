@@ -4,6 +4,7 @@ import { Redirect, Route, Switch } from 'react-router-dom';
 import UserLoginView from './views/UserLoginView';
 import SignUpView from './views/SignUpView';
 import AddPetView from './views/AddPetView';
+import PetProfileView from "./views/PetProfileView";
 import EmailConfirmationView from './views/EmailConfirmationView';
 import Search from './components/Search';
 // services
@@ -53,7 +54,7 @@ const Routes = () => {
                 <Search />
             </DefaultRoute>
             <PrivateRoute exact path="/pet/:id">
-                {null}
+                <PetProfileView />
             </PrivateRoute>
             <PrivateRoute exact path="/add-pet">
                 <AddPetView />
