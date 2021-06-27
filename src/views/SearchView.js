@@ -10,7 +10,7 @@ import Typography from '@material-ui/core/Typography';
 import Slider from '@material-ui/core/Slider';
 import Button from '@material-ui/core/Button';
 import { getPets } from '../redux/actions/petActions';
-import SearchResults from './SearchResults';
+import SearchResults from '../components/SearchResults';
 import { breeds } from 'helper/data/breeds';
 
 const useStyles = makeStyles((theme) => ({
@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-function Search(props) {
+function SearchView(props) {
     const classes = useStyles();
     var pets = useSelector((state) => state.entities.pets);
     const [requestSent, setRequestSent] = React.useState(false);
@@ -152,4 +152,4 @@ function Search(props) {
     );
 }
 
-export default connect()(withRouter(Search));
+export default connect()(withRouter(SearchView));
