@@ -2,80 +2,178 @@ import React, { useEffect, useState } from 'react';
 import { connect, useDispatch } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import { PetInformationForm, PetPhotosForm } from 'components/forms';
-import { Button } from '@material-ui/core';
-import { useCompetitions, useDocuments, usePet, usePictures, useProfilePicture } from 'helper/hooks/pets.hooks';
-import { addPet, getPet } from 'redux/actions';
+import { Button, CircularProgress } from '@material-ui/core';
+import { usePet, useProfilePicture } from 'helper/hooks/pets.hooks';
+import { changePet, clearPetInfos, getPet, updateProfilePicture, updateSelectedPet } from 'redux/actions';
 import { useUser } from 'helper/hooks/auth.hooks';
 import Loading from 'components/Loading';
+import { NotificationService, FirebaseService } from 'services';
+import { useHistory } from 'react-router-dom';
 
 const EditPetView = (props) => {
     const classes = useStyles();
     const dispatch = useDispatch();
+    const history = useHistory();
 
     const id = props.match.params.id;
-    let pet = usePet();
-
-    const [loading, setLoading] = useState(true);
-    const [name, setName] = useState('');
-    const [nickname, setNickname] = useState('');
-    const [sex, setSex] = useState('');
-    const [birthDate, setBirthDate] = useState(new Date());
-    const [species, setSpecies] = useState('');
-    const [breed, setBreed] = useState('');
-    const [price, setPrice] = useState(0);
-
-    const profilePicture = useProfilePicture();
-    const pictures = usePictures();
-    const documents = useDocuments();
-    const competitions = useCompetitions();
+    const pet = usePet();    
     const user = useUser();
 
-    useEffect(() => {
-        if (loading) {
-            fetchPet().then(() => {
-                props.forceUpdate();
-                console.log(pet);
-                setName(pet.officialName);
-                //setLoading(false);
-            });
-        }
-    }, [loading]);
+    const [loading, setLoading] = useState(true);
 
-    const fetchPet = async () => {
-        try {
-            dispatch(getPet(id));
-        } catch (err) {
-            // notify error occurred
+    useEffect(() => {
+        const fetchPet = async () => {
+            await dispatch(getPet(id));
+            await setLoading(false)
         }
+        fetchPet();
+    }, [dispatch, id]);
+
+    window.onbeforeunload = (event) => {
+        dispatch(clearPetInfos());
+        dispatch(updateProfilePicture({}));
     };
+
+    // get old profile picture to delete it later if it was updated
+    const oldProfilePicture = useProfilePicture();
+    const isEmpty = (str) => str === '' || str === undefined;
 
     // check if all required fields are filled
-    const formIsValid = () => {
-        return name && sex && species && breed;
+    const formIsDisabled = () => {
+        return isEmpty(pet.name) || isEmpty(pet.profilePicture?.path) || isEmpty(pet.sex) || isEmpty(pet.species) || isEmpty(pet.breed);
     };
 
-    const createPet = () => {
-        let pet = {
+    const uploadCompetitions = async () => {
+        const competitionsData = [...pet.competitions];
+        for (let index = 0; index < competitionsData.length; index++) {
+            let value = competitionsData[index];
+
+            if (value.certificate) {
+                if (value.certificate.status === 'upload') {
+                    const metadata = {
+                        contentType: value.certificate.type,
+                    };
+                    let url = await FirebaseService.upload(value.certificate.path, value.certificate.data, metadata);
+                    competitionsData[index].certificate.url = url;
+                } else if (value.certificate.status === 'delete') {
+                    await FirebaseService.remove(value.certificate.path);
+                }
+            }
+        }
+
+        let petData = pet;
+        petData.competitions = competitionsData.filter((value) => value.certificate.status !== 'delete');
+        await dispatch(updateSelectedPet(petData));
+    };
+
+    const uploadDocuments = async () => {
+        const documentsData = [...pet.documents];
+        for (let index = 0; index < documentsData.length; index++) {
+            let value = documentsData[index];
+
+            if (value.status === 'upload') {
+                const metadata = {
+                    contentType: value.type,
+                };
+                let url = await FirebaseService.upload(value.path, value.data, metadata);
+                documentsData[index].url = url;
+            } else if (value.status === 'delete') {
+                await FirebaseService.remove(value.path);
+            }
+        }
+
+        let petData = pet;
+        petData.documents = documentsData.filter((value) => value.status !== 'delete');
+        await dispatch(updateSelectedPet(petData));
+    };
+
+    const uploadPictures = async () => {
+        const picturesData = [...pet.pictures];
+        for (let index = 0; index < picturesData.length; index++) {
+            let value = picturesData[index];
+
+            if (value.status === 'upload') {
+                const metadata = {
+                    contentType: 'image/png',
+                };
+
+                let url = await FirebaseService.upload(value.path, value.data, metadata);
+                picturesData[index].src = url;
+            } else if (value.status === 'delete') {
+                await FirebaseService.remove(value.path);
+            }
+        }
+        let petData = pet;
+        petData.pictures = picturesData.filter((value) => value.status !== 'delete');
+        await dispatch(updateSelectedPet(petData));
+    };
+
+    const uploadProfilePicture = async () => {
+        // update profile picture only if new was uploaded
+        if (oldProfilePicture) {
+            // delete old one
+            await FirebaseService.remove(oldProfilePicture.path);
+
+            // upload new one
+            let value = pet.profilePicture;
+            const metadata = {
+                contentType: 'image/png',
+            };
+
+            let url = await FirebaseService.upload(value.path, value.data, metadata);
+            value.src = url;
+
+            let petData = pet;
+            petData.profilePicture = value;
+
+            await dispatch(updateSelectedPet(petData));
+        }
+    };
+
+    const updatePet = async () => {
+        setLoading(true);
+
+        // upload documents and pics to firebase first
+        await uploadDocuments();
+        await uploadCompetitions();
+        await uploadPictures();
+        await uploadProfilePicture();
+
+        // combine all information about a pet
+        let petToUpload = {
+            id: id,
             ownerId: user.id,
-            officialName: name,
-            nickname: nickname,
-            birthDate: birthDate,
-            sex: sex,
-            price: price,
-            profilePicture: profilePicture,
-            pictures: pictures,
-            breed: breed,
-            species: species,
-            competitions: competitions,
-            documents: documents,
+            officialName: pet.name,
+            nickname: pet.nickname,
+            birthDate: pet.birthDate,
+            sex: pet.sex,
+            price: pet.price,
+            profilePicture: pet.profilePicture,
+            pictures: pet.pictures,
+            breed: pet.breed,
+            species: pet.species,
+            competitions: pet.competitions,
+            documents: pet.documents,
         };
 
-        try {
-            //PetService.createPet(pet);
-            dispatch(addPet(pet));
-        } catch (err) {
-            throw new Error(err);
-        }
+        const onSuccess = () => {
+            NotificationService.notify('success', 'Success', 'Your four-legged friend was successfully updated!');
+            history.push('/');
+        };
+
+        const onError = () => {
+            NotificationService.notify('error', 'Error', 'There was a problem updating your pet.');
+        };
+
+        dispatch(changePet(petToUpload, onSuccess, onError));
+        setLoading(false);
+    };
+
+    // on canceling the view
+    const onCancel = async () => {
+        await dispatch(clearPetInfos());
+        await dispatch(updateProfilePicture({}));
+        history.goBack();
     };
 
     return pet && !loading ? (
@@ -83,18 +181,15 @@ const EditPetView = (props) => {
             <div className={classes.layout}>
                 <PetPhotosForm />
                 <PetInformationForm
-                    nameProp={{ name, setName }}
-                    nicknameProp={{ nickname, setNickname }}
-                    sexProp={{ sex, setSex }}
-                    birthDateProp={{ birthDate, setBirthDate }}
-                    speciesProp={{ species, setSpecies }}
-                    breedProp={{ breed, setBreed }}
-                    priceProp={{ price, setPrice }}
+                    pet={pet}
                 />
             </div>
             <div className={classes.button}>
-                <Button disabled={!formIsValid()} onClick={createPet} type="submit" variant="contained" color="primary" size="large">
-                    Save
+                <Button onClick={onCancel} variant="contained" color="secondary" size="large" style={{ marginRight: 20 }}>
+                    Cancel
+                </Button>
+                <Button disabled={formIsDisabled()} onClick={updatePet} type="submit" variant="contained" color="primary" size="large">
+                    {loading ? <CircularProgress size={20} color="white" style={{ marginRight: 10 }} /> : ''} Save
                 </Button>
             </div>
         </div>
@@ -117,7 +212,7 @@ const useStyles = makeStyles((theme) => ({
     button: {
         display: 'flex',
         justifyContent: 'flex-end',
-        marginRight: 50,
+        marginRight: 20,
     },
 }));
 
