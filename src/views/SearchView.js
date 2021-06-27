@@ -76,20 +76,16 @@ function SearchView(props) {
             value: 10,
             label: '10 years',
         },
-        {
-            value: 15,
-            label: '15 years',
-        },
     ];
 
-    const [ageRange, setAgeRange] = React.useState([1, 10]);
+    const [ageRange, setAgeRange] = React.useState([1, 5]);
 
     const handleAgeRangeChange = (event, newRange) => {
         setAgeRange(newRange);
     };
 
-    function valuetext(value) {
-        return `${value} years old`;
+    function agetext(age) {
+        return `${age} years old`;
     }
 
     return (
@@ -135,9 +131,9 @@ function SearchView(props) {
                         onChange={handleAgeRangeChange}
                         valueLabelDisplay="auto"
                         aria-labelledby="range-slider"
-                        getAriaValueText={valuetext}
-                        min={1}
-                        max={15}
+                        getAriaValueText={agetext}
+                        min={0.5}
+                        max={10}
                         marks={ageMarks}
                         color="secondary"
                     />
