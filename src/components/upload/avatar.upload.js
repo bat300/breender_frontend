@@ -18,12 +18,13 @@ import { usePet } from 'helper/hooks/pets.hooks';
 const AvatarUpload = (props) => {
     const classes = useStyles();
     const dispatch = useDispatch();
+    const { mode } = props;
     const pet = usePet();
 
     const [loading, setLoading] = useState(false);
     const [openAlert, setOpenAlert] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
-    const [imageUrl, setImageUrl] = useState(pet.profilePicture !== undefined ? pet.profilePicture.src: '');
+    const [imageUrl, setImageUrl] = useState(mode === 'add' ? '' : pet.profilePicture.src);
  
     const user = useUser();
 

@@ -23,12 +23,13 @@ const prepareFileList = (pet) => {
 
 const MultiplePhotosUpload = (props) => {
     const dispatch = useDispatch();
+    const { mode } = props;
     const pet = usePet();
 
     const [previewVisible, setPreviewVisible] = useState(false);
     const [previewImage, setPreviewImage] = useState('');
     const [previewTitle, setPreviewTitle] = useState('');
-    const [fileList, setFileList] = useState(pet ? prepareFileList(pet) : []);
+    const [fileList, setFileList] = useState(mode === 'add' ? [] : prepareFileList(pet));
 
     const user = useUser();
 

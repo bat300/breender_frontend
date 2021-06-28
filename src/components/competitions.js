@@ -105,13 +105,14 @@ const prepareCompetitions = (competitions) => {
 const CompetitionsComponent = (props) => {
     const classes = useStyles();
     const dispatch = useDispatch();
+    const { mode } = props;
 
     const pet = usePet();
 
     const [count, setCount] = useState(0);
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [competitions, setCompetitions] = useState(pet ? prepareCompetitions(pet.competitions) : []);
-    const [editedCompetitions, setEditedCompetitions] = useState(pet ? prepareCompetitions(pet.competitions) : []);
+    const [editedCompetitions, setEditedCompetitions] = useState(mode === 'add' ? [] : prepareCompetitions(pet.competitions));
 
     const columnsData = [
         {

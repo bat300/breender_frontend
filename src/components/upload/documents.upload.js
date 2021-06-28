@@ -46,6 +46,7 @@ const prepareCompetitionsFileList = (pet) => {
 
 const DocumentsUpload = (props) => {
     const dispatch = useDispatch();
+    const { mode } = props;
 
     // get global states
     const user = useUser();
@@ -53,7 +54,7 @@ const DocumentsUpload = (props) => {
     
     const isCompetition = props.type === 'competitions' || false;
 
-    const [fileList, setFileList] = useState(pet ? isCompetition ? prepareCompetitionsFileList(pet) : prepareDocumentsFileList(pet) : []);
+    const [fileList, setFileList] = useState(mode === 'add' ? [] : isCompetition ? prepareCompetitionsFileList(pet) : prepareDocumentsFileList(pet));
 
     const keyFolder = isCompetition ? 'competitions' : 'documents';
     const pathPrefix = `users/${user.id}/pets/documents`;
