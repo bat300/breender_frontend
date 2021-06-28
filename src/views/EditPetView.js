@@ -16,18 +16,37 @@ const EditPetView = (props) => {
     const history = useHistory();
 
     const id = props.match.params.id;
-    const pet = usePet();    
+    const pet = usePet();
     const user = useUser();
 
     const [loading, setLoading] = useState(true);
+    const [formIsDisabled, setFormIsDisabled] = useState(false);
+    const [name, setName] = useState(pet.officialName);
+    const [nickname, setNickname] = useState(pet.nickname);
+    const [sex, setSex] = useState(pet.sex);
+    const [birthDate, setBirthDate] = useState(new Date(pet.birthDate));
+    const [species, setSpecies] = useState(pet.species);
+    const [breed, setBreed] = useState(pet.breed);
+    const [price, setPrice] = useState(pet.price);
 
     useEffect(() => {
-        const fetchPet = async () => {
-            await dispatch(getPet(id));
-            await setLoading(false)
+        const isEmpty = (str) => str === '' || str === undefined;
+        const disabled = isEmpty(name) || isEmpty(pet?.profilePicture?.path) || isEmpty(sex) || isEmpty(species) || isEmpty(breed);
+        setFormIsDisabled(disabled);
+    }, [name, sex, breed, species, pet?.profilePicture?.path]);
+
+    useEffect(() => {
+        if(pet.officialName) {
+            setLoading(false);
+        } else {
+            const fetchPet = async () => {
+                await dispatch(getPet(id));
+                await setLoading(false);
+            };
+            fetchPet();
         }
-        fetchPet();
-    }, [dispatch, id]);
+
+    }, [dispatch, id, pet.officialName]);
 
     window.onbeforeunload = (event) => {
         dispatch(clearPetInfos());
@@ -36,12 +55,6 @@ const EditPetView = (props) => {
 
     // get old profile picture to delete it later if it was updated
     const oldProfilePicture = useProfilePicture();
-    const isEmpty = (str) => str === '' || str === undefined;
-
-    // check if all required fields are filled
-    const formIsDisabled = () => {
-        return isEmpty(pet.name) || isEmpty(pet.profilePicture?.path) || isEmpty(pet.sex) || isEmpty(pet.species) || isEmpty(pet.breed);
-    };
 
     const uploadCompetitions = async () => {
         const competitionsData = [...pet.competitions];
@@ -143,15 +156,15 @@ const EditPetView = (props) => {
         let petToUpload = {
             id: id,
             ownerId: user.id,
-            officialName: pet.name,
-            nickname: pet.nickname,
-            birthDate: pet.birthDate,
-            sex: pet.sex,
-            price: pet.price,
+            officialName: name,
+            nickname: nickname,
+            birthDate: birthDate,
+            sex: sex,
+            price: price,
             profilePicture: pet.profilePicture,
             pictures: pet.pictures,
-            breed: pet.breed,
-            species: pet.species,
+            breed: breed,
+            species: species,
             competitions: pet.competitions,
             documents: pet.documents,
         };
@@ -181,14 +194,20 @@ const EditPetView = (props) => {
             <div className={classes.layout}>
                 <PetPhotosForm />
                 <PetInformationForm
-                    pet={pet}
+                    nameProp={{ name, setName }}
+                    nicknameProp={{ nickname, setNickname }}
+                    sexProp={{ sex, setSex }}
+                    birthDateProp={{ birthDate, setBirthDate }}
+                    speciesProp={{ species, setSpecies }}
+                    breedProp={{ breed, setBreed }}
+                    priceProp={{ price, setPrice }}
                 />
             </div>
             <div className={classes.button}>
                 <Button onClick={onCancel} variant="contained" color="secondary" size="large" style={{ marginRight: 20 }}>
                     Cancel
                 </Button>
-                <Button disabled={formIsDisabled()} onClick={updatePet} type="submit" variant="contained" color="primary" size="large">
+                <Button disabled={formIsDisabled} onClick={updatePet} type="submit" variant="contained" color="primary" size="large">
                     {loading ? <CircularProgress size={20} color="white" style={{ marginRight: 10 }} /> : ''} Save
                 </Button>
             </div>

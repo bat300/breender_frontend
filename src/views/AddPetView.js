@@ -16,7 +16,24 @@ const AddPetView = (props) => {
     const dispatch = useDispatch();
     const history = useHistory();
 
+    const pet = usePet();
+    const user = useUser();
+
     const [loading, setLoading] = useState(true);
+    const [formIsDisabled, setFormIsDisabled] = useState(false);
+    const [name, setName] = useState('');
+    const [nickname, setNickname] = useState('');
+    const [sex, setSex] = useState('');
+    const [birthDate, setBirthDate] = useState(new Date());
+    const [species, setSpecies] = useState('');
+    const [breed, setBreed] = useState('');
+    const [price, setPrice] = useState('');
+
+    useEffect(() => {
+        const isEmpty = (str) => str === '' || str === undefined;
+        const disabled = isEmpty(name) || isEmpty(pet?.profilePicture?.path) || isEmpty(sex) || isEmpty(species) || isEmpty(breed);
+        setFormIsDisabled(disabled);
+    }, [name, sex, breed, species, pet?.profilePicture?.path]);
 
     useEffect(() => {
         let loading = true;
@@ -34,17 +51,9 @@ const AddPetView = (props) => {
     }, [dispatch]);
 
     window.onbeforeunload = (event) => {
-        dispatch(clearPetInfos())
-        dispatch(updateProfilePicture({}))
-    }
-
-    const pet = usePet();
-    const user = useUser();
-
-    const isEmpty = (str) => str === '';
-
-    // check if all required fields are filled
-    const formIsDisabled = isEmpty(pet.name) && pet.profilePicture === undefined && isEmpty(pet.sex) && isEmpty(pet.species) && isEmpty(pet.breed);
+        dispatch(clearPetInfos());
+        dispatch(updateProfilePicture({}));
+    };
 
     const uploadCompetitions = async () => {
         const competitionsData = [...pet?.competitions];
@@ -125,15 +134,15 @@ const AddPetView = (props) => {
         // combine all information about a pet
         let petToUpload = {
             ownerId: user.id,
-            officialName: pet.name,
-            nickname: pet.nickname,
-            birthDate: pet.birthDate,
-            sex: pet.sex,
-            price: pet.price,
+            officialName: name,
+            nickname: nickname,
+            birthDate: birthDate,
+            sex: sex,
+            price: price,
             profilePicture: pet.profilePicture,
             pictures: pet.pictures,
-            breed: pet.breed,
-            species: pet.species,
+            breed: breed,
+            species: species,
             competitions: pet.competitions,
             documents: pet.documents,
         };
@@ -157,9 +166,16 @@ const AddPetView = (props) => {
     ) : (
         <div>
             <div className={classes.layout}>
-                <PetPhotosForm />
+                <PetPhotosForm mode="add"/>
                 <PetInformationForm
-                    pet={pet}
+                    mode="add"
+                    nameProp={{ name, setName }}
+                    nicknameProp={{ nickname, setNickname }}
+                    sexProp={{ sex, setSex }}
+                    birthDateProp={{ birthDate, setBirthDate }}
+                    speciesProp={{ species, setSpecies }}
+                    breedProp={{ breed, setBreed }}
+                    priceProp={{ price, setPrice }}
                 />
             </div>
             <div className={classes.button}>

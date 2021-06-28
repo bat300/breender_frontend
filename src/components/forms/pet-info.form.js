@@ -16,15 +16,15 @@ const PetFormInputs = {
     breed: 'breed',
 };
 
-const PetInformationForm = ({ pet }) => {
+const PetInformationForm = ({ nameProp, nicknameProp, sexProp, breedProp, speciesProp, priceProp, birthDateProp, mode }) => {
     const classes = useStyles();
-    const [name, setName] = useState(pet.officialName);
-    const [nickname, setNickname] = useState(pet.nickname);
-    const [sex, setSex] = useState(pet.sex);
-    const [birthDate, setBirthDate] = useState(new Date(pet.birthDate));
-    const [species, setSpecies] = useState(pet.species);
-    const [breed, setBreed] = useState(pet.breed);
-    const [price, setPrice] = useState(pet.price);
+    const { name, setName } = nameProp;
+    const { nickname, setNickname } = nicknameProp;
+    const { sex, setSex } = sexProp;
+    const { breed, setBreed } = breedProp;
+    const { species, setSpecies } = speciesProp;
+    const { price, setPrice } = priceProp;
+    const { birthDate, setBirthDate } = birthDateProp;
     const [errors, setErrors] = useState({ name: false, nickname: false, sex: false, species: false, breed: false });
 
     const validationErrors = {
@@ -52,7 +52,7 @@ const PetInformationForm = ({ pet }) => {
         setName(e.target.value);
     };
     const handleNicknameChange = (e) => setNickname(e.target.value);
-    
+
     const handleSexChange = (e) => {
         validate(PetFormInputs.sex, e.target.value);
         setSex(e.target.value);
@@ -145,7 +145,7 @@ const PetInformationForm = ({ pet }) => {
                                         <InputLabel id="species-label">Species</InputLabel>
                                         <Select label="Species" id="species" value={species} onChange={handleSpeciesChange} onBlur={handleSpeciesChange}>
                                             {Object.keys(breeds).map((value) => {
-                                                return <MenuItem value={value}>{value}</MenuItem>
+                                                return <MenuItem value={value}>{value}</MenuItem>;
                                             })}
                                         </Select>
                                         <FormHelperText>{errors[PetFormInputs.species] && validationErrors[PetFormInputs.species]}</FormHelperText>
@@ -173,14 +173,14 @@ const PetInformationForm = ({ pet }) => {
                                     </FormControl>
                                 </Grid>
                                 <Grid item xs={12}>
-                                    <CompetitionsComponent />
+                                    <CompetitionsComponent mode={mode} />
                                 </Grid>
                                 <Grid item xs={12}>
                                     <Divider />
                                     <Grid>
                                         <label className={classes.label}>Upload Documents</label>
                                     </Grid>
-                                    <DocumentsUpload />
+                                    <DocumentsUpload mode={mode} />
                                 </Grid>
                                 <Grid item xs={12}>
                                     <TextField
