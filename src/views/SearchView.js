@@ -13,7 +13,6 @@ import { getPets } from '../redux/actions/petActions';
 import SearchResults from '../components/SearchResults';
 import { breeds } from 'helper/data/breeds';
 
-
 const useStyles = makeStyles((theme) => ({
     filters: {
         display: 'flex',
@@ -41,7 +40,7 @@ function SearchView(props) {
     const [order, setOrder] = React.useState('descending');
     const [sex, setSex] = React.useState('');
     const [breed, setBreed] = React.useState('');
-    const [ageRange, setAgeRange] = React.useState([1, 5]);
+    const [ageRange, setAgeRange] = React.useState([1, 10]);
 
     const sexes = ['female', 'male'];
     const orders = ['ascending price', 'descending price', 'newest'];
@@ -83,7 +82,7 @@ function SearchView(props) {
     };
 
     const resetFilters = async () => {
-        updateFilters().then(() => loadPets());
+        updateFilters();
     };
 
     const handleSpeciesChange = (event) => {
