@@ -6,7 +6,7 @@ import Loading from '../components/Loading';
 import { useDispatch } from 'react-redux';
 
 function MessengerView(props) {
-    const user = useSelector((state) => state.user);
+    const user = useSelector((state) => state.user.user);
     const loadedConversations = useSelector((state) => state.conversations.conversations);
 
     useEffect(() => {
