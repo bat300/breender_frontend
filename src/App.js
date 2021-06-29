@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import { Route, Switch } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import { persistStore, persistReducer } from 'redux-persist';
@@ -8,15 +7,13 @@ import thunkMiddleware from 'redux-thunk';
 import { MuiThemeProvider, createMuiTheme, makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import ScrollContainer from './components/ScrollContainer';
-
+import { composeWithDevTools } from 'redux-devtools-extension';
 import reducers from './redux/reducers';
-import routes from './routes';
-import Header from './components/Header';
 import AppTheme from './theming/themetypes';
 import AppThemeOptions from './theming/themes';
 import AxiosConfiguration from './helper/axios';
-import { composeWithDevTools } from 'redux-devtools-extension';
 import { PersistGate } from 'redux-persist/integration/react';
+import Routes from './routes';
 
 const useStyles = makeStyles((theme) => ({
     appRoot: {
@@ -49,27 +46,17 @@ function App() {
     // theme for app
     const [theme, setTheme] = React.useState(AppTheme.LIGHT);
 
-    // toggle theme
-    const toggleTheme = () => {
-        setTheme(theme === AppTheme.LIGHT ? AppTheme.DARK : AppTheme.LIGHT);
-    };
-
     return (
         <div className={classes.appRoot}>
             <MuiThemeProvider theme={createMuiTheme(AppThemeOptions[theme])}>
                 <Provider store={store}>
                     <PersistGate loading={null} persistor={persistor}>
-                        <CssBaseline />
-                        <React.Fragment>
-                            <Header darkmode={theme === AppTheme.DARK} toggletheme={toggleTheme} />
-                            <ScrollContainer>
-                                <Switch>
-                                    {routes.map((route, i) => (
-                                        <Route key={i} {...route} />
-                                    ))}
-                                </Switch>
-                            </ScrollContainer>
-                        </React.Fragment>
+                    <CssBaseline />
+                    <React.Fragment>
+                        <ScrollContainer>
+                            <Routes />
+                        </ScrollContainer>
+                    </React.Fragment>
                     </PersistGate>
                 </Provider>
             </MuiThemeProvider>

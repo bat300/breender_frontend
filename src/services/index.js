@@ -1,6 +1,8 @@
+import LocalStorageService from './LocalStorageService';
 import FirebaseService from './FirebaseService';
-import NotificationService from './NotificationService';
+import HttpService from './HttpService';
 import PetService from './PetService';
 import UserService from './UserService';
+import NotificationService from './NotificationService';
 
-export { FirebaseService, NotificationService, PetService, UserService };
+export { LocalStorageService, FirebaseService, HttpService, PetService, UserService, NotificationService };
