@@ -16,7 +16,7 @@ const PetFormInputs = {
     breed: 'breed',
 };
 
-const PetInformationForm = ({ nameProp, nicknameProp, sexProp, breedProp, speciesProp, priceProp, birthDateProp, mode }) => {
+const PetInformationForm = ({ nameProp, nicknameProp, sexProp, breedProp, speciesProp, priceProp, birthDateProp, ...props }) => {
     const classes = useStyles();
     const { name, setName } = nameProp;
     const { nickname, setNickname } = nicknameProp;
@@ -173,14 +173,14 @@ const PetInformationForm = ({ nameProp, nicknameProp, sexProp, breedProp, specie
                                     </FormControl>
                                 </Grid>
                                 <Grid item xs={12}>
-                                    <CompetitionsComponent mode={mode} />
+                                    <CompetitionsComponent mode={props.mode} />
                                 </Grid>
                                 <Grid item xs={12}>
                                     <Divider />
                                     <Grid>
                                         <label className={classes.label}>Upload Documents</label>
                                     </Grid>
-                                    <DocumentsUpload mode={mode} />
+                                    <DocumentsUpload mode={props.mode} />
                                 </Grid>
                                 <Grid item xs={12}>
                                     <TextField

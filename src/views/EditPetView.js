@@ -8,16 +8,30 @@ import { changePet, clearPetInfos, getPet, updateProfilePicture, updateSelectedP
 import { useUser } from 'helper/hooks/auth.hooks';
 import Loading from 'components/Loading';
 import { NotificationService, FirebaseService } from 'services';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 
 const EditPetView = (props) => {
     const classes = useStyles();
     const dispatch = useDispatch();
     const history = useHistory();
+    const location = useLocation();
 
-    const id = props.match.params.id;
+    const id = location.pathname.split('/edit/pet/')[1];
     const pet = usePet();
     const user = useUser();
+
+    useEffect(() => {
+        if(pet.officialName) {
+            setLoading(false);
+        } else {
+            const fetchPet = () => {
+                dispatch(getPet(id));
+                setLoading(false);
+            };
+            fetchPet();
+        }
+
+    }, [dispatch, id, pet.officialName]);
 
     const [loading, setLoading] = useState(true);
     const [formIsDisabled, setFormIsDisabled] = useState(false);
@@ -34,24 +48,6 @@ const EditPetView = (props) => {
         const disabled = isEmpty(name) || isEmpty(pet?.profilePicture?.path) || isEmpty(sex) || isEmpty(species) || isEmpty(breed);
         setFormIsDisabled(disabled);
     }, [name, sex, breed, species, pet?.profilePicture?.path]);
-
-    useEffect(() => {
-        if(pet.officialName) {
-            setLoading(false);
-        } else {
-            const fetchPet = async () => {
-                await dispatch(getPet(id));
-                await setLoading(false);
-            };
-            fetchPet();
-        }
-
-    }, [dispatch, id, pet.officialName]);
-
-    window.onbeforeunload = (event) => {
-        dispatch(clearPetInfos());
-        dispatch(updateProfilePicture({}));
-    };
 
     // get old profile picture to delete it later if it was updated
     const oldProfilePicture = useProfilePicture();
