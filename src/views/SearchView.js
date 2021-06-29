@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { connect, useSelector } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import { withRouter } from 'react-router-dom';
@@ -12,6 +12,7 @@ import Button from '@material-ui/core/Button';
 import { getPets } from '../redux/actions/petActions';
 import SearchResults from '../components/SearchResults';
 import { breeds } from 'helper/data/breeds';
+
 
 const useStyles = makeStyles((theme) => ({
     filters: {
@@ -35,33 +36,15 @@ const useStyles = makeStyles((theme) => ({
 function SearchView(props) {
     const classes = useStyles();
     var pets = useSelector((state) => state.entities.pets);
-    const [requestSent, setRequestSent] = React.useState(false);
-
-    const loadPets = async () => {
-        // trigger the redux action getPets
-        setRequestSent(true);
-        pets = props.dispatch(getPets(chosenSpecies, sex, breed, ageRange));
-    };
-
-    const sexes = ['female', 'male'];
 
     const [chosenSpecies, setSpecies] = React.useState('');
-
-    const handleSpeciesChange = (event) => {
-        setSpecies(event.target.value);
-    };
-
+    const [order, setOrder] = React.useState('descending');
     const [sex, setSex] = React.useState('');
-
-    const handleSexChange = (event) => {
-        setSex(event.target.value);
-    };
-
     const [breed, setBreed] = React.useState('');
+    const [ageRange, setAgeRange] = React.useState([1, 5]);
 
-    const handleBreedChange = (event) => {
-        setBreed(event.target.value);
-    };
+    const sexes = ['female', 'male'];
+    const orders = ['ascending price', 'descending price', 'newest'];
 
     const ageMarks = [
         {
@@ -78,10 +61,49 @@ function SearchView(props) {
         },
     ];
 
-    const [ageRange, setAgeRange] = React.useState([1, 5]);
+
+    const loadPets = async () => {
+        // trigger the redux action getPets
+        pets = props.dispatch(getPets(chosenSpecies, sex, breed, ageRange));
+    };
+
+    useEffect(() => {
+        // load pets when the page is loaded or the pets were filtered.
+        if (!pets) {
+            loadPets();
+        }
+    }, [pets]);
+
+    const updateFilters = async () => {
+        setSpecies('');
+        setSex('');
+        setBreed('');
+        setAgeRange([1, 10]);
+        pets = props.dispatch(getPets('', '', '', [1, 10])); //change parameters manually because values remain constant inside render and are not updated immediately
+    };
+
+    const resetFilters = async () => {
+        updateFilters().then(() => loadPets());
+    };
+
+    const handleSpeciesChange = (event) => {
+        setSpecies(event.target.value);
+    };
+
+    const handleSexChange = (event) => {
+        setSex(event.target.value);
+    };
+
+    const handleBreedChange = (event) => {
+        setBreed(event.target.value);
+    };
 
     const handleAgeRangeChange = (event, newRange) => {
         setAgeRange(newRange);
+    };
+
+    const handleOrderChange = (event) => {
+        setOrder(event.target.value);
     };
 
     function agetext(age) {
@@ -123,6 +145,16 @@ function SearchView(props) {
                         ))}
                     </Select>
                 </FormControl>
+                <FormControl className={classes.formControl}>
+                    <InputLabel id="breed-select-label">Sort by</InputLabel>
+                    <Select labelId="breed-select-label" id="sort-select" value={order} onChange={handleOrderChange}>
+                        {orders.map((order) => (
+                            <MenuItem key={order} value={order}>
+                                {order}
+                            </MenuItem>
+                        ))}
+                    </Select>
+                </FormControl>
 
                 <div className={classes.ageSlider}>
                     <Typography>Age Range</Typography>
@@ -142,8 +174,11 @@ function SearchView(props) {
                 <Button className={classes.button} variant="contained" color="secondary" onClick={loadPets}>
                     Apply
                 </Button>
+                <Button className={classes.button} variant="contained" color="secondary" onClick={resetFilters}>
+                    Reset filters
+                </Button>
             </div>
-            <SearchResults pets={pets} requestSent={requestSent} />
+            <SearchResults pets={pets} order={order} />
         </div>
     );
 }
