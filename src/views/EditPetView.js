@@ -21,6 +21,9 @@ const EditPetView = (props) => {
     const user = useUser();
 
     useEffect(() => {
+        // remove old profile picture
+        dispatch(updateProfilePicture({}))
+
         if(pet.officialName) {
             setLoading(false);
         } else {
@@ -43,11 +46,12 @@ const EditPetView = (props) => {
     const [breed, setBreed] = useState(pet.breed);
     const [price, setPrice] = useState(pet.price);
 
+    const isEmpty = (str) => str === '' || str === undefined;
+
     useEffect(() => {
-        const isEmpty = (str) => str === '' || str === undefined;
-        const disabled = isEmpty(name) || isEmpty(pet?.profilePicture?.path) || isEmpty(sex) || isEmpty(species) || isEmpty(breed);
+        const disabled = isEmpty(name) || isEmpty(sex) || isEmpty(species) || isEmpty(breed);
         setFormIsDisabled(disabled);
-    }, [name, sex, breed, species, pet?.profilePicture?.path]);
+    }, [name, sex, breed, species]);
 
     // get old profile picture to delete it later if it was updated
     const oldProfilePicture = useProfilePicture();
@@ -119,7 +123,7 @@ const EditPetView = (props) => {
 
     const uploadProfilePicture = async () => {
         // update profile picture only if new was uploaded
-        if (oldProfilePicture) {
+        if (oldProfilePicture.src && oldProfilePicture.src !== '') {
             // delete old one
             await FirebaseService.remove(oldProfilePicture.path);
 
@@ -140,42 +144,50 @@ const EditPetView = (props) => {
     };
 
     const updatePet = async () => {
-        setLoading(true);
+        if (pet.profilePicture.path) {
+            
+            setLoading(true);
 
-        // upload documents and pics to firebase first
-        await uploadDocuments();
-        await uploadCompetitions();
-        await uploadPictures();
-        await uploadProfilePicture();
-
-        // combine all information about a pet
-        let petToUpload = {
-            id: id,
-            ownerId: user.id,
-            officialName: name,
-            nickname: nickname,
-            birthDate: birthDate,
-            sex: sex,
-            price: price,
-            profilePicture: pet.profilePicture,
-            pictures: pet.pictures,
-            breed: breed,
-            species: species,
-            competitions: pet.competitions,
-            documents: pet.documents,
-        };
-
-        const onSuccess = () => {
-            NotificationService.notify('success', 'Success', 'Your four-legged friend was successfully updated!');
-            history.push('/');
-        };
-
-        const onError = () => {
-            NotificationService.notify('error', 'Error', 'There was a problem updating your pet.');
-        };
-
-        dispatch(changePet(petToUpload, onSuccess, onError));
-        setLoading(false);
+            // upload documents and pics to firebase first
+            await uploadDocuments();
+            await uploadCompetitions();
+            await uploadPictures();
+            await uploadProfilePicture();
+    
+            const dateCreated = Date.now();
+            // combine all information about a pet
+            let petToUpload = {
+                id: id,
+                ownerId: user.id,
+                officialName: name,
+                nickname: nickname,
+                birthDate: birthDate,
+                sex: sex,
+                price: price,
+                profilePicture: pet.profilePicture,
+                pictures: pet.pictures,
+                dateCreated: dateCreated,
+                breed: breed,
+                species: species,
+                competitions: pet.competitions,
+                documents: pet.documents,
+            };
+    
+            const onSuccess = () => {
+                NotificationService.notify('success', 'Success', 'Your four-legged friend was successfully updated!');
+                history.push('/');
+            };
+    
+            const onError = () => {
+                NotificationService.notify('error', 'Error', 'There was a problem updating your pet.');
+            };
+    
+            dispatch(changePet(petToUpload, onSuccess, onError));
+            setLoading(false);
+        } else {
+            NotificationService.notify('error', 'Upload Error', 'Upload of the pet profile picture is required!');
+        }
+        
     };
 
     // on canceling the view

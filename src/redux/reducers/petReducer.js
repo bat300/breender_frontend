@@ -5,7 +5,6 @@ const initialState = {
         pictures: [],
         documents: [],
         competitions: [],
-        profilePictureToRemove: undefined,
     },
 };
 
