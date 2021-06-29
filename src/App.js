@@ -6,7 +6,6 @@ import thunkMiddleware from 'redux-thunk';
 import { MuiThemeProvider, createMuiTheme, makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import ScrollContainer from './components/ScrollContainer';
-import { composeWithDevTools } from 'redux-devtools-extension';
 
 import reducers from './redux/reducers';
 import routes from './routes';
@@ -34,13 +33,7 @@ function App() {
     }, []);
 
     // create store for redux
-    const store = createStore(
-        reducers,
-        composeWithDevTools(
-            applyMiddleware(thunkMiddleware)
-            // other store enhancers if any
-        )
-    );
+    const store = createStore(reducers, applyMiddleware(thunkMiddleware));
 
     // theme for app
     const [theme, setTheme] = React.useState(AppTheme.LIGHT);
