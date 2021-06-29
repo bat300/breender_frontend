@@ -3,8 +3,10 @@ import UserLoginView from './views/UserLoginView';
 import SignUpView from './views/SignUpView';
 import MovieDetailsView from './views/MovieDetailsView';
 import AddPetView from './views/AddPetView';
-import PetProfileView from "./views/PetProfileView";
+import PetProfileView from './views/PetProfileView';
 import EmailConfirmationView from './views/EmailConfirmationView';
+import MessengerView from './views/MessengerView';
+
 import Search from './components/Search';
 
 // routes within the movie database example app
@@ -33,13 +35,17 @@ const routes = [
         component: MovieDetailsView,
     },
     {
-      path: "/pet/:id",
-      component: PetProfileView,
+        path: '/pet/:id',
+        component: PetProfileView,
     },
     /** @TODO added for the test, maybe need to deleted later */
     {
         path: '/add-pet',
         component: AddPetView,
+    },
+    {
+        path: '/messenger',
+        component: MessengerView,
     },
 ];
 
