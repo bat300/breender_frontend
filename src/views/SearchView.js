@@ -40,7 +40,7 @@ function SearchView(props) {
     const [order, setOrder] = React.useState('descending');
     const [sex, setSex] = React.useState('');
     const [breed, setBreed] = React.useState('');
-    const [ageRange, setAgeRange] = React.useState([1, 10]);
+    const [ageRange, setAgeRange] = React.useState([1, 5]);
 
     const sexes = ['female', 'male'];
     const orders = ['ascending price', 'descending price', 'newest'];
@@ -78,7 +78,7 @@ function SearchView(props) {
         setSex('');
         setBreed('');
         setAgeRange([1, 10]);
-        pets = props.dispatch(getPets('', '', '', [1, 10])); //change parameters manually because values remain constant inside render and are not updated immediately
+        pets = props.dispatch(getPets('', '', '', [1, 5])); //change parameters manually because values remain constant inside render and are not updated immediately
     };
 
     const resetFilters = async () => {
