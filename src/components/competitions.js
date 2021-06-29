@@ -111,7 +111,7 @@ const CompetitionsComponent = (props) => {
 
     const [count, setCount] = useState(0);
     const [isModalVisible, setIsModalVisible] = useState(false);
-    const [competitions, setCompetitions] = useState(pet ? prepareCompetitions(pet.competitions) : []);
+    const [competitions, setCompetitions] = useState(mode === 'add' ? [] : prepareCompetitions(pet.competitions));
     const [editedCompetitions, setEditedCompetitions] = useState(mode === 'add' ? [] : prepareCompetitions(pet.competitions));
 
     const columnsData = [
@@ -128,7 +128,7 @@ const CompetitionsComponent = (props) => {
             title: 'Date',
             dataIndex: 'date',
             editable: false,
-            render: (_, record) => (competitions.length >= 1 ? <Text type="secondary">{new Date(record.date).toLocaleDateString("de-DE")}</Text> : null),
+            render: (_, record) => (competitions.length >= 1 ? <Text type="secondary">{new Date(record.date).toLocaleDateString('de-DE')}</Text> : null),
         },
         {
             title: 'Category',
@@ -167,9 +167,7 @@ const CompetitionsComponent = (props) => {
             dataIndex: 'date',
             editable: false,
             render: (_, record) =>
-                competitions.length >= 1 ? (
-                    <DatePicker value={moment(record.date, DATE_FORMAT)} bordered={false} onChange={(date) => changeDate(date, record)} format={DATE_FORMAT} />
-                ) : null,
+                competitions.length >= 1 ? <DatePicker value={moment(record.date, DATE_FORMAT)} bordered={false} onChange={(date) => changeDate(date, record)} format={DATE_FORMAT} /> : null,
         },
         {
             title: 'Category',
@@ -308,18 +306,18 @@ const CompetitionsComponent = (props) => {
             <Table dataSource={editedCompetitions} columns={columnsData} />
             <Modal visible={isModalVisible} onOk={hideModal} onCancel={hideModal} className={classes.modal}>
                 <Grid container alignItems="flex-end" justify="flex-end">
-                        <Button
-                            onClick={handleAdd}
-                            variant="outlined"
-                            color="primary"
-                            style={{
-                                margin: 20,
-                            }}
-                        >
-                            Add a row
-                        </Button>
+                    <Button
+                        onClick={handleAdd}
+                        variant="outlined"
+                        color="primary"
+                        style={{
+                            margin: 20,
+                        }}
+                    >
+                        Add a row
+                    </Button>
                 </Grid>
-                <Table components={components} rowClassName={() => 'editable-row'} bordered dataSource={competitions} columns={columns} />
+                <Table components={components} rowClassName={() => 'editable-row'} bordered dataSource={competitions} columns={columns} style={{ display: 'block' }} />
             </Modal>
         </div>
     );
@@ -342,8 +340,7 @@ const useStyles = makeStyles((theme) => ({
         alignSelf: 'flex-end',
     },
     modal: {
-        display: 'flex',
-        minWidth: '80vw',
+        width: '80vw',
         margin: '0 auto',
         marginTop: 100,
     },
