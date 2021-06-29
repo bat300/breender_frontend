@@ -9,7 +9,6 @@ const ConversationTypes = {
 };
 
 export const getConversations = (userId) => {
-    console.log('FETCHING CALLED');
     // when the backend call was successfull and the conversations are retrieved
     // in the dispatcher the conversations will be added to the global state
     function onSuccess(conversations) {
@@ -26,8 +25,6 @@ export const getConversations = (userId) => {
             // ask for the conversations in the backend
             let conversations = await ConversationService.getConversations(userId);
             // call onSuccess in context of redux
-            console.log('HUEHUE');
-            console.log(JSON.stringify(conversations));
             dispatch(onSuccess(conversations));
         } catch (e) {
             onFailure(e);

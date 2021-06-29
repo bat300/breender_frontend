@@ -10,8 +10,6 @@ function MessengerView(props) {
     const loadedConversations = useSelector((state) => state.conversations.conversations);
 
     useEffect(() => {
-        console.log('AFFECTING');
-
         // load movies when the page is loaded or the movies have changed.
         if (!loadedConversations) {
             console.log(user.id);
