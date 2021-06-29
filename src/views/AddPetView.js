@@ -100,7 +100,8 @@ const AddPetView = (props) => {
         await uploadCompetitions();
         await uploadPictures();
         await uploadProfilePicture();
-
+        
+        const dateCreated = Date.now();
         // combine all information about a pet
         let pet = {
             ownerId: user.id,
@@ -109,6 +110,7 @@ const AddPetView = (props) => {
             birthDate: birthDate,
             sex: sex,
             price: price,
+            dateCreated: dateCreated,
             profilePicture: profilePicture,
             pictures: pictures,
             breed: breed,
