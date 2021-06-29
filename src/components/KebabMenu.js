@@ -45,6 +45,10 @@ function KebabMenu(props) {
         props.history.push("/");
     };
 
+    const onClickGoToUserProfile = () => {
+        props.history.push("/user");
+    };
+
     return (
         <Menu
             open={props.open}
@@ -58,32 +62,32 @@ function KebabMenu(props) {
         >
             {user.user
                 ? [
-                      <MenuItem key="user" className={classes.menuitem}>
-                          <Avatar className={classes.avatar}>
-                              {user.user.username ? user.user.username[0] : ""}
-                          </Avatar>
-                          {user.user.username}
-                      </MenuItem>,
-                      <Divider key="divider" />,
-                      <MenuItem
-                          key="logout"
-                          onClick={onClickLogout}
-                          className={classes.menuitem}
-                      >
-                          <ExitToAppIcon className={classes.avatar} />
-                          Logout
-                      </MenuItem>,
-                  ]
+                    <MenuItem key="user" className={classes.menuitem} onClick={onClickGoToUserProfile}>
+                        <Avatar className={classes.avatar}>
+                            {user.user.username ? user.user.username[0] : ""}
+                        </Avatar>
+                        {user.user.username}
+                    </MenuItem>,
+                    <Divider key="divider" />,
+                    <MenuItem
+                        key="logout"
+                        onClick={onClickLogout}
+                        className={classes.menuitem}
+                    >
+                        <ExitToAppIcon className={classes.avatar} />
+                        Logout
+                    </MenuItem>,
+                ]
                 : [
-                      <MenuItem
-                          key="login"
-                          onClick={onClickLogin}
-                          className={classes.menuitem}
-                      >
-                          <VerifiedUserIcon className={classes.avatar} />
-                          Login
-                      </MenuItem>,
-                  ]}
+                    <MenuItem
+                        key="login"
+                        onClick={onClickLogin}
+                        className={classes.menuitem}
+                    >
+                        <VerifiedUserIcon className={classes.avatar} />
+                        Login
+                    </MenuItem>,
+                ]}
         </Menu>
     );
 }

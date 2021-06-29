@@ -53,4 +53,15 @@ export default class PetService {
         const { data } = await axios.post(`/pets/`, pet);
         return data;
     }
+
+    static getUserPets(ownerId) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const { data } = await axios.get(`/user/pets?ownerId=${ownerId}`);
+                resolve(data);
+            } catch (err) {
+                reject(err);
+            }
+        });
+    }
 }
