@@ -5,14 +5,21 @@ import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
 import Grid from '@material-ui/core/Grid';
-import StarIcon from '@material-ui/icons/StarBorder';
+import StarIcon from '@material-ui/icons/Star';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import CancelIcon from '@material-ui/icons/Cancel';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
+import { OmitProps } from 'antd/lib/transfer/ListBody';
 
 const useStyles = makeStyles((theme) => ({
+    rootChosen: {
+        minWidth: 275,
+        border: `4px solid green`,
+       
+      },
+    root: {},
     cardHeader: {
         backgroundColor: theme.palette.type === 'light' ? theme.palette.grey[200] : theme.palette.grey[700],
     },
@@ -29,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
         paddingBottom: theme.spacing(2),
         display: 'flex',
         flexWrap: 'nowrap',
-    },
+    }
 }));
 /**
  * For user login
@@ -41,13 +48,13 @@ function SubscriptionPlanCard(props) {
 
     return (
         <Grid item key={props.plan.title} xs={6}>
-            <Card>
+            <Card className={props.subscriptionPlan === props.plan.id? classes.rootChosen : classes.root}>
                 <CardHeader
                     title={props.plan.title}
                     subheader={props.plan.subheader}
                     titleTypographyProps={{ align: 'center' }}
                     subheaderTypographyProps={{ align: 'center' }}
-                    action={props.plan.id === 'premium' ? <StarIcon /> : null}
+                    action={props.plan.id === 'premium' ? <StarIcon style={{ fill: 'yellow'}}/> : null}
                     className={classes.cardHeader}
                 />
                 <CardContent>
@@ -62,7 +69,8 @@ function SubscriptionPlanCard(props) {
                     <div className={classes.cardContent}>
                         <ul>
                             {props.plan.included.map((line) => (
-                                <Typography component="li" variant="subtitle1" key={line}>
+    
+                                <Typography component="li" variant="subtitle1" key={`${line} + ${props.plan.id}`}>
                                     <div className={classes.features}>
                                         <CheckCircleIcon style={{ fill: 'green' ,marginRight: '7'}} />
                                         {line}
@@ -72,7 +80,7 @@ function SubscriptionPlanCard(props) {
                         </ul>
                         <ul>
                             {props.plan.excluded.map((line) => (
-                                <Typography component="li" variant="subtitle1" key={line}>
+                                <Typography component="li" variant="subtitle1" key={`${line} + ${props.plan.id}`}>
                                     <div className={classes.features}>
                                         <CancelIcon style={{ fill: 'red' , marginRight: '7'}} />
                                         {line}
@@ -83,8 +91,8 @@ function SubscriptionPlanCard(props) {
                     </div>
                 </CardContent>
                 <CardActions>
-                    <Button fullWidth variant={props.plan.buttonVariant} color="primary" onClick={props.onClick}>
-                        {props.plan.buttonText}
+                    <Button fullWidth variant="contained" color = {props.subscriptionPlan === props.plan.id? 'secondary' : 'primary'} onClick={props.onClick}>
+                    {  props.subscriptionPlan === props.plan.id? 'YOUR CHOICE' : 'CHOOSE'}
                     </Button>
                 </CardActions>
             </Card>
@@ -94,6 +102,8 @@ function SubscriptionPlanCard(props) {
 
 SubscriptionPlanCard.propTypes = {
     plan: PropTypes.object,
+    onClick: PropTypes.func,
+    subscriptionPlan: PropTypes.string
 };
 
 export default SubscriptionPlanCard;

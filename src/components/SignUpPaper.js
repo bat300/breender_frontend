@@ -11,7 +11,8 @@ function SignUpPaper(props) {
     const [province, setProvince] = React.useState('');
     const [city, setCity] = React.useState('');
     const [isAdmin, setIsAdmin] = React.useState(false);
-    const [subscriptionPlan, setSubscriptionPlan] = React.useState('');
+    // if user comes from premium page, set plan to selected; if from login , set plan to free
+    const [subscriptionPlan, setSubscriptionPlan] = React.useState(props.subscriptionPlan? props.subscriptionPlan : 'free');
 
     const [registerError, setRegisterError] = React.useState('');
 
@@ -59,7 +60,6 @@ function SignUpPaper(props) {
     };
 
     function onChangeSubscriptionPlan(v)  {
-        console.log(v);
         setSubscriptionPlan(v);
         setRegisterError('');
     };
@@ -92,7 +92,7 @@ function SignUpPaper(props) {
             case 1:
                 return <SignUpComponent nextStep={nextStep} handleChange={handleChange} values={values}/>;
             case 2:
-                return <SubscriptionStepComponent nextStep={nextStep} prevStep={prevStep} handleChange={onChangeSubscriptionPlan} values={values}/>;
+                return <SubscriptionStepComponent nextStep={nextStep} prevStep={prevStep} handleChange={onChangeSubscriptionPlan} subscriptionPlan={subscriptionPlan}/>;
             case 3:
             return <PaymentInformation
                     nextStep={nextStep}

@@ -46,8 +46,11 @@ const plans = [
 function SubscriptionPageView(props) {
     const classes = useStyles();
 
-    const onSignUp = () => {
-        props.history.push("/register");
+
+    const subscriptionPlan = '';
+    const onSignUp = (v) => {
+        //pass subscription plan to sign up page
+        props.history.push({pathname:"/register", subscriptionPlan: v});
     };
 
     return (
@@ -62,7 +65,7 @@ function SubscriptionPageView(props) {
             </Container>
             <Container maxWidth="md" component="main">
                 <Grid container spacing={5} alignItems="flex-end">
-                    <SubscriptionPlanComponent plans={plans} onClick={onSignUp} />
+                    <SubscriptionPlanComponent plans={plans} onClick={onSignUp} subscriptionPlan={subscriptionPlan}/>
                 </Grid>
             </Container>
         </Container>

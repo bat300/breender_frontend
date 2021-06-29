@@ -25,7 +25,7 @@ function SignUpView(props) {
         props.history.push('/');
     };
 
-    return <SignUpPaper user={user} onRegister={onRegister} onCancel={onCancel} />;
+    return <SignUpPaper user={user} onRegister={onRegister} onCancel={onCancel} subscriptionPlan={props.location.subscriptionPlan}/>;
 }
 
 export default connect()(withRouter(SignUpView));

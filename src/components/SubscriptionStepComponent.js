@@ -68,7 +68,7 @@ function SubscriptionStepComponent(props) {
                 </div>
                 <Container maxWidth="md" component="main">
                     <Grid container spacing={5} alignItems="flex-end">
-                        <SubscriptionPlanComponent onClick={onSelect} />
+                        <SubscriptionPlanComponent onClick={onSelect} subscriptionPlan={props.subscriptionPlan}/>
                     </Grid>
                 </Container>
                 <div className={classes.signUpRow + ' ' + classes.signUpButtons}>
