@@ -6,25 +6,28 @@ import Loading from '../components/Loading';
 import { useDispatch } from 'react-redux';
 
 function MessengerView(props) {
+    const dispatch = useDispatch();
     const user = useSelector((state) => state.user.user);
-    const loadedConversations = useSelector((state) => state.conversations.conversations);
 
     useEffect(() => {
-        // load movies when the page is loaded or the movies have changed.
-        if (!loadedConversations) {
-            console.log(user.id);
-            loadConversations();
+        let userId = user.id;
+
+        async function loadConversations(id) {
+            await dispatch(getConversations(id));
         }
-    }, [loadedConversations]);
 
-    const loadConversations = async () => {
-        // trigger the redux action getMovies
-        console.log(user.id);
-        props.dispatch(getConversations(user.id));
-    };
+        return loadConversations(userId);
+    }, [dispatch]);
 
-    console.log(JSON.stringify(loadedConversations));
-    return !loadedConversations ? <Loading /> : !Array.isArray(loadedConversations) ? <div>error</div> : loadedConversations ? <MessengerComponent conversations={loadedConversations} /> : null;
+    const loadedConversations = useSelector((state) => state.conversations);
+
+    return !loadedConversations.conversations ? (
+        <Loading />
+    ) : !Array.isArray(loadedConversations.conversations) ? (
+        <div>error</div>
+    ) : loadedConversations.conversations ? (
+        <MessengerComponent conversations={loadedConversations.conversations} />
+    ) : null;
 }
 
 // connect() establishes allows the usage of redux functionality

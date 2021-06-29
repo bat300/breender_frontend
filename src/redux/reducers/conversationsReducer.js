@@ -1,8 +1,3 @@
-const initialState = {
-    conversations: [],
-    conversation: {},
-};
-
 function conversations(state = {}, action) {
     switch (action.type) {
         case 'GET_CONVERSATIONS':

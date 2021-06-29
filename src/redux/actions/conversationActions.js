@@ -11,16 +11,16 @@ const ConversationTypes = {
 export const getConversations = (userId) => {
     // when the backend call was successfull and the conversations are retrieved
     // in the dispatcher the conversations will be added to the global state
-    function onSuccess(conversations) {
-        return { type: 'GETCONVERSATIONS_SUCCESS', conversations: conversations };
-    }
+    const onSuccess = (conversations) => {
+        return { type: ConversationTypes.GET_CONVERSATIONS, conversations: conversations };
+    };
     // when the backend call was failed
-    function onFailure(error) {
+    const onFailure = (error) => {
         // error handling
         console.log('failed to get the conversations', error);
-    }
+    };
 
-    return async (dispatch) => {
+    return async (dispatch, getState) => {
         try {
             // ask for the conversations in the backend
             let conversations = await ConversationService.getConversations(userId);
