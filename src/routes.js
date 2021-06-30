@@ -6,7 +6,7 @@ import SignUpView from './views/SignUpView';
 import AddPetView from './views/AddPetView';
 import PetProfileView from "./views/PetProfileView";
 import EmailConfirmationView from './views/EmailConfirmationView';
-import Search from './components/Search';
+import SearchView from './views/SearchView';
 // services
 import { LocalStorageService } from 'services';
 import Header from 'components/Header';
@@ -51,7 +51,7 @@ const Routes = () => {
             </DefaultRoute>
             <DefaultRoute exact path="/">
                 <DefaultHeader />
-                <Search />
+                <SearchView />
             </DefaultRoute>
             <PrivateRoute exact path="/pet/:id">
                 <PetProfileView />

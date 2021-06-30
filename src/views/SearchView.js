@@ -10,8 +10,8 @@ import Typography from '@material-ui/core/Typography';
 import Slider from '@material-ui/core/Slider';
 import Button from '@material-ui/core/Button';
 import { getPets } from '../redux/actions/petActions';
-import SearchResults from './SearchResults';
-
+import SearchResults from '../components/SearchResults';
+import { breeds } from 'helper/data/breeds';
 
 const useStyles = makeStyles((theme) => ({
     filters: {
@@ -32,67 +32,18 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-function Search(props) {
+function SearchView(props) {
     const classes = useStyles();
     var pets = useSelector((state) => state.entities.pets);
 
-    const loadPets = async () => {
-        // trigger the redux action getPets
-        pets = props.dispatch(getPets(chosenSpecies, sex, breed, ageRange));
-    };
-
-    const updateFilters = async () => {
-        setSpecies('');
-        setSex('');
-        setBreed('');
-        setAgeRange([1, 10]);
-        pets = props.dispatch(getPets('', '', '', [1, 10])); //change parameters manually because values remain constant inside render and are not updated immediately
-    };
-
-    const resetFilters = async () => {
-        updateFilters().then(() => loadPets());
-    };
-
-    useEffect(() => {
-        // load pets when the page is loaded or the pets were filtered.
-        if (!pets) {
-            loadPets();
-        }
-    }, [pets]);
-
-    const species = ['dog', 'cat', 'rabbit', 'mouse', 'hamster', 'horse'];
+    const [chosenSpecies, setSpecies] = React.useState('');
+    const [order, setOrder] = React.useState('descending');
+    const [sex, setSex] = React.useState('');
+    const [breed, setBreed] = React.useState('');
+    const [ageRange, setAgeRange] = React.useState([1, 5]);
 
     const sexes = ['female', 'male'];
-
-    const breeds = {
-        dog: ['Afador', 'Affenhuahua', 'Affenpinscher', 'Afghan Hound', 'Airedale Terrier', 'Akbash', 'Akita', 'Maltesa'],
-        cat: ['Abyssinian Cat', 'American Bobtail', 'American Curl', 'American Shorthair', 'American Wirehair', 'Balinese-Javanese', 'Bengal', 'Cornish Rex', 'Devon Rex'],
-        rabbit: ['American', 'Belgian Hare', 'Blanc de Hotot', 'Californian', 'Checkered Giant', 'Dutch', 'English Lop', 'English Spot', 'Flemish Giant'],
-        mouse: ['Field', 'House', 'Westerm Harvest', 'White-Footed'],
-        hamster: ['Dwarf Roborovski', "Campbell's Dwarf Russian", 'Syrian Golden'],
-        horse: ['American Quarter', 'Arabian', 'Thoroughbred', 'Appaloosa', 'Morgan', 'Warmbloods', 'Pony'],
-        '': [],
-    };
-
     const orders = ['ascending price', 'descending price', 'newest'];
-
-    const [chosenSpecies, setSpecies] = React.useState('');
-
-    const handleSpeciesChange = (event) => {
-        setSpecies(event.target.value);
-    };
-
-    const [sex, setSex] = React.useState('');
-
-    const handleSexChange = (event) => {
-        setSex(event.target.value);
-    };
-
-    const [breed, setBreed] = React.useState('');
-
-    const handleBreedChange = (event) => {
-        setBreed(event.target.value);
-    };
 
     const ageMarks = [
         {
@@ -107,26 +58,55 @@ function Search(props) {
             value: 10,
             label: '10 years',
         },
-        {
-            value: 15,
-            label: '15 years',
-        },
     ];
 
-    const [ageRange, setAgeRange] = React.useState([1, 10]);
+
+    const loadPets = async () => {
+        // trigger the redux action getPets
+        pets = props.dispatch(getPets(chosenSpecies, sex, breed, ageRange));
+    };
+
+    useEffect(() => {
+        // load pets when the page is loaded or the pets were filtered.
+        if (!pets) {
+            loadPets();
+        }
+    }, [pets]);
+
+    const updateFilters = async () => {
+        setSpecies('');
+        setSex('');
+        setBreed('');
+        setAgeRange([1, 10]);
+        pets = props.dispatch(getPets('', '', '', [1, 5])); //change parameters manually because values remain constant inside render and are not updated immediately
+    };
+
+    const resetFilters = async () => {
+        updateFilters();
+    };
+
+    const handleSpeciesChange = (event) => {
+        setSpecies(event.target.value);
+    };
+
+    const handleSexChange = (event) => {
+        setSex(event.target.value);
+    };
+
+    const handleBreedChange = (event) => {
+        setBreed(event.target.value);
+    };
 
     const handleAgeRangeChange = (event, newRange) => {
         setAgeRange(newRange);
     };
 
-    const [order, setOrder] = React.useState('descending');
-
     const handleOrderChange = (event) => {
         setOrder(event.target.value);
     };
 
-    function valuetext(value) {
-        return `${value} years old`;
+    function agetext(age) {
+        return `${age} years old`;
     }
 
     return (
@@ -135,7 +115,7 @@ function Search(props) {
                 <FormControl className={classes.formControl}>
                     <InputLabel id="species-select-label">Species</InputLabel>
                     <Select labelId="species-select-label" id="species-select" value={chosenSpecies} onChange={handleSpeciesChange}>
-                        {species.map((oneSpecies) => (
+                        {Object.keys(breeds).map((oneSpecies) => (
                             <MenuItem key={oneSpecies} value={oneSpecies}>
                                 {oneSpecies}
                             </MenuItem>
@@ -157,7 +137,7 @@ function Search(props) {
                 <FormControl className={classes.formControl}>
                     <InputLabel id="breed-select-label">Breed</InputLabel>
                     <Select labelId="breed-select-label" id="breed-select" value={breed} onChange={handleBreedChange}>
-                        {breeds[chosenSpecies].map((breed) => (
+                        {(breeds[chosenSpecies] ?? []).map((breed) => (
                             <MenuItem key={breed} value={breed}>
                                 {breed}
                             </MenuItem>
@@ -182,9 +162,9 @@ function Search(props) {
                         onChange={handleAgeRangeChange}
                         valueLabelDisplay="auto"
                         aria-labelledby="range-slider"
-                        getAriaValueText={valuetext}
-                        min={1}
-                        max={15}
+                        getAriaValueText={agetext}
+                        min={0.5}
+                        max={10}
                         marks={ageMarks}
                         color="secondary"
                     />
@@ -202,4 +182,4 @@ function Search(props) {
     );
 }
 
-export default connect()(withRouter(Search));
+export default connect()(withRouter(SearchView));
