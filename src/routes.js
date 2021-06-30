@@ -6,6 +6,8 @@ import SignUpView from './views/SignUpView';
 import AddPetView from './views/AddPetView';
 import PetProfileView from "./views/PetProfileView";
 import EmailConfirmationView from './views/EmailConfirmationView';
+import EditPetView from './views/EditPetView';
+import NotFoundView from './views/NotFoundView';
 import SearchView from './views/SearchView';
 // services
 import { LocalStorageService } from 'services';
@@ -59,6 +61,12 @@ const Routes = () => {
             <PrivateRoute exact path="/add-pet">
                 <AddPetView />
             </PrivateRoute>
+            <PrivateRoute exact path="/edit/pet/:id">
+                <EditPetView />
+            </PrivateRoute>
+            <DefaultRoute path="*">
+                <NotFoundView />
+            </DefaultRoute>
         </Switch>
     );
 };

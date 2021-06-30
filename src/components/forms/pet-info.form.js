@@ -16,15 +16,15 @@ const PetFormInputs = {
     breed: 'breed',
 };
 
-const PetInformationForm = ({ nameProp, nicknameProp, sexProp, birthDateProp, speciesProp, breedProp, priceProp }) => {
+const PetInformationForm = ({ nameProp, nicknameProp, sexProp, breedProp, speciesProp, priceProp, birthDateProp, ...props }) => {
     const classes = useStyles();
     const { name, setName } = nameProp;
     const { nickname, setNickname } = nicknameProp;
     const { sex, setSex } = sexProp;
-    const { birthDate, setBirthDate } = birthDateProp;
-    const { species, setSpecies } = speciesProp;
     const { breed, setBreed } = breedProp;
+    const { species, setSpecies } = speciesProp;
     const { price, setPrice } = priceProp;
+    const { birthDate, setBirthDate } = birthDateProp;
     const [errors, setErrors] = useState({ name: false, nickname: false, sex: false, species: false, breed: false });
 
     const validationErrors = {
@@ -173,14 +173,14 @@ const PetInformationForm = ({ nameProp, nicknameProp, sexProp, birthDateProp, sp
                                     </FormControl>
                                 </Grid>
                                 <Grid item xs={12}>
-                                    <CompetitionsComponent />
+                                    <CompetitionsComponent mode={props.mode} />
                                 </Grid>
                                 <Grid item xs={12}>
                                     <Divider />
                                     <Grid>
                                         <label className={classes.label}>Upload Documents</label>
                                     </Grid>
-                                    <DocumentsUpload />
+                                    <DocumentsUpload mode={props.mode} />
                                 </Grid>
                                 <Grid item xs={12}>
                                     <TextField
