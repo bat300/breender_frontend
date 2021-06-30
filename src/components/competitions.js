@@ -56,7 +56,7 @@ const EditableCell = ({ title, focused, editable, children, dataIndex, record, h
             const values = await form.validateFields();
             toggleEdit();
             handleSave({ ...record, ...values });
-        } catch (errInfo) {}
+        } catch (errInfo) { }
     };
 
     let childNode = children;
@@ -294,7 +294,7 @@ const CompetitionsComponent = (props) => {
                     <Button
                         onClick={showModal}
                         variant="outlined"
-                        color="primary"
+                        color="secondary"
                         style={{
                             margin: 10,
                         }}

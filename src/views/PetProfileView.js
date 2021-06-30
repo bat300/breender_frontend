@@ -19,12 +19,13 @@ function PetProfileView(props) {
 
     useEffect(() => {
         // get id of pet from URL
+
         async function loadPet(id) {
             await dispatch(getPet(id));
         }
 
         return loadPet(petId);
-    }, [dispatch]);
+    }, [dispatch, petId]);
 
     const selectedPet = useSelector((state) => state.selectedPet);
 

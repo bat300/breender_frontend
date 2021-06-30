@@ -181,7 +181,7 @@ const AddPetView = (props) => {
                 />
             </div>
             <div className={classes.button}>
-                <Button disabled={formIsDisabled} onClick={createPet} type="submit" variant="contained" color="primary" size="large">
+                <Button disabled={formIsDisabled} onClick={createPet} type="submit" variant="contained" color="secondary" size="large">
                     {loading ? <CircularProgress size={20} color="white" style={{ marginRight: 10 }} /> : ''} Save
                 </Button>
             </div>
