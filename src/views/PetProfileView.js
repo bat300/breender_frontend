@@ -38,7 +38,7 @@ function PetProfileView(props) {
             id={petId}
             officialName={selectedPet.pet.officialName}
             nickname={selectedPet.pet.nickname}
-            age={calculateAge(selectedPet.pet.birthDate)}
+            age={selectedPet.pet.age}
             sex={selectedPet.pet.sex}
             price={selectedPet.pet.price}
             profilePicture={selectedPet.pet.profilePicture}
@@ -50,13 +50,6 @@ function PetProfileView(props) {
             ownerId={selectedPet.pet.ownerId}
         />
     ) : null;
-}
-
-function calculateAge(birthDate) {
-    var ageDifMs = Date.now() - new Date(birthDate).getTime();
-    var ageDate = new Date(ageDifMs); // miliseconds from epoch
-    var result = Math.abs(ageDate.getUTCFullYear() - 1970);
-    return result ? result : 0;
 }
 
 function getAlbumWithProfilePicture(selectedPet) {

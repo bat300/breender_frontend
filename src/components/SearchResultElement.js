@@ -7,6 +7,7 @@ import Button from '@material-ui/core/Button';
 import PropTypes from 'prop-types';
 import Image from 'material-ui-image';
 import { useHistory } from 'react-router-dom';
+import { getAgeString } from 'helper/helpers';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -65,7 +66,7 @@ export default function SearchResultElement(props) {
                                     </Grid>
                                     <Grid item xs>
                                         <Typography variant="body2" gutterBottom>
-                                            {props.pet.age} years old
+                                            {getAgeString(props.pet.age)}
                                         </Typography>
                                     </Grid>
                                 </Grid>
