@@ -103,7 +103,7 @@ export default function SearchResultElement(props) {
                                     </Grid>
                                     <Grid item xs>
                                         <Typography variant="body2" gutterBottom>
-                                            {props.pet.competitions.length == 0 ? 'no' : 'yes'}
+                                            {props.pet.competitions.length === 0 ? 'no' : 'yes'}
                                         </Typography>
                                     </Grid>
                                 </Grid>
@@ -115,7 +115,7 @@ export default function SearchResultElement(props) {
                             </Grid>
                         </Grid>
                         <Grid item>
-                            <Typography className={classes.accentText} gutterBottom variant="h6" style={{ fontWeight: 600 }}>{props.pet.price ? props.pet.price : 0}€</Typography>
+                            <Typography className={classes.accentText} gutterBottom variant="h6" style={{ fontWeight: 600 }}>{props.pet.price === 0 ? 'Free' : `${props.pet.price} €`}</Typography>
                         </Grid>
                     </Grid>
                 </Grid>

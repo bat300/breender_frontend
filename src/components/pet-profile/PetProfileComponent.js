@@ -74,7 +74,7 @@ function PetProfileComponent(props) {
                                     {props.officialName}
                                 </Typography>
                                 <PetPhotos pictures={props.pictures} profilePicture={props.profilePicture} />
-                                {props.price && props.price > 0 && <PaymentButton price={props.price} />}
+                                <PaymentButton price={props.price} />
                             </Grid>
                             <Divider variant="middle" />
                             <Grid xs={7} direction="column">

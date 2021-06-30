@@ -14,11 +14,12 @@ const useStyles = makeStyles((theme) => ({
 
 function PaymentButton(props) {
     const classes = useStyles();
+    const price = props.price;
 
     //TODO: The button needs to have payment funcitonality
     return (
         <Button variant="contained" color="secondary" className={classes.button} endIcon={<ShoppingCartIcon />}>
-            € {props.price}
+           {price === 0 ? 'Free' : `${price} €`}
         </Button>
     );
 }
