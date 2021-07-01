@@ -1,10 +1,6 @@
 import React, { useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
-import Select from '@material-ui/core/Select';
-import Grid from '@material-ui/core/Grid';
-import { Paper, Button, TextField, Typography } from '@material-ui/core';
+import { InputLabel, MenuItem, Select, Grid, Paper, Button, TextField, Typography, FormControlLabel, Checkbox } from '@material-ui/core';
 import { checkIfUserExists } from '../redux/actions';
 import { connect, useSelector } from 'react-redux';
 
@@ -142,7 +138,7 @@ function SignUpComponent(props) {
                         type="password"
                     />
                 </div>
-                <Grid container spacing={2}>
+                <Grid container spacing={2} style={{ paddingTop: 20}}>
                     <Grid item xs={6}>
                         <div className={classes.signUpRow}>
                             <InputLabel>State/Province</InputLabel>
@@ -163,6 +159,9 @@ function SignUpComponent(props) {
                         </div>
                     </Grid>
                 </Grid>
+                <div className={classes.signUpRow}>
+                    <FormControlLabel control={<Checkbox checked={values.isAdmin} onChange={(e) => props.handleChange('isAdmin', e)} color="primary" />} label="Is Admin" />
+                </div>
                 {passwordError !== '' ? (
                     <div className={classes.signUpRow}>
                         <Typography color="error">{passwordError}</Typography>

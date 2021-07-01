@@ -16,7 +16,7 @@ function SignUpPaper(props) {
 
     const [emailError, setEmailError] = React.useState('');
     const [usernameError, setUsernameError] = React.useState('');
-
+    //registration step
     const [step, setStep] = React.useState(1);
 
     const values = { username, password, password2, email, province, city, isAdmin, subscriptionPlan };
@@ -40,23 +40,6 @@ function SignUpPaper(props) {
         setUsernameError('');
         setUsername(v);
 
-    };
-
-    const onChangePassword = (v) => {
-        setPassword(v);
-
-    };
-
-    const onChangePassword2 = (v) => {
-        setPassword2(v);
-    };
-
-    const onChangeCity = (v) => {
-        setCity(v);
-    };
-
-    const onChangeProvince = (v) => {
-        setProvince(v);
     };
 
     function onChangeSubscriptionPlan(v)  {
@@ -83,6 +66,9 @@ function SignUpPaper(props) {
             case 'city':
                 setCity(event.target.value);
                 break;
+            case 'isAdmin':
+                setIsAdmin(event.target.checked);
+                break;
             case 'emailError':
                 setEmailError(event);
                 break;
@@ -95,7 +81,7 @@ function SignUpPaper(props) {
     function chooseStep() {
         switch (step) {
             case 1:
-                return <SignUpComponent nextStep={nextStep} handleChange={handleChange} values={values} errors={errors}/>;
+                return <SignUpComponent nextStep={nextStep} handleChange={handleChange} onCancel={props.onCancel} values={values} errors={errors}/>;
             case 2:
                 return <SubscriptionStepComponent nextStep={nextStep} prevStep={prevStep} handleChange={onChangeSubscriptionPlan} subscriptionPlan={subscriptionPlan}/>;
             case 3:

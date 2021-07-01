@@ -36,10 +36,6 @@ const useStyles = makeStyles((theme) => ({
 function SignUpComponent(props) {
     const classes = useStyles();
 
-    const saveAndContinue = (e) => {
-        e.preventDefault();
-        props.nextStep();
-    };
 
     const [registerError, setRegisterError] = React.useState('');
 
@@ -50,21 +46,6 @@ function SignUpComponent(props) {
     const onRegister = (e) => {
         e.preventDefault();
         props.onRegister(values.email, values.username, values.password, values.city, values.isAdmin, values.subscriptionPlan);
-    };
-
-    const onNext = (e) => {
-        // e.preventDefault();
-        // props.history.push({pathname: '/register', state: user});
-    };
-
-    const onBlurPassword = (e) => {
-        if (values.password !== '' && values.password2 !== '') {
-            if (values.password !== values.password2) {
-                setRegisterError('Passwords do not match.');
-            } else {
-                setRegisterError('');
-            }
-        }
     };
 
     return (
