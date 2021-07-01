@@ -68,11 +68,10 @@ function SubscriptionPlanCard(props) {
                         <ul>
                             {props.plan.included.map((line) => (
                                 <div key={`${line}_${props.plan.id}div`}>
-                                    {' '}
                                     <Typography component="li" variant="subtitle1" key={`${line}_${props.plan.id}`}>
                                         <div className={classes.features}>
                                             <CheckCircleIcon style={{ fill: 'green', marginRight: '7' }} />
-                                            {`${line}_${props.plan.id}`}
+                                            {line}
                                         </div>
                                     </Typography>
                                 </div>
@@ -84,7 +83,7 @@ function SubscriptionPlanCard(props) {
                                     <Typography component="li" variant="subtitle1" key={`${line}_${props.plan.id}`}>
                                         <div className={classes.features}>
                                             <CancelIcon style={{ fill: 'red', marginRight: '7' }} />
-                                            {`${line}_${props.plan.id}`}
+                                            {line}
                                         </div>
                                     </Typography>
                                 </div>
