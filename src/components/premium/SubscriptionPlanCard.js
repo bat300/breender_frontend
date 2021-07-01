@@ -17,8 +17,7 @@ const useStyles = makeStyles((theme) => ({
     rootChosen: {
         minWidth: 275,
         border: `4px solid green`,
-       
-      },
+    },
     root: {},
     cardHeader: {
         backgroundColor: theme.palette.type === 'light' ? theme.palette.grey[200] : theme.palette.grey[700],
@@ -36,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
         paddingBottom: theme.spacing(2),
         display: 'flex',
         flexWrap: 'nowrap',
-    }
+    },
 }));
 /**
  * For user login
@@ -45,16 +44,15 @@ const useStyles = makeStyles((theme) => ({
 function SubscriptionPlanCard(props) {
     const classes = useStyles();
 
-
     return (
         <Grid item key={props.plan.title} xs={6}>
-            <Card className={props.subscriptionPlan === props.plan.id? classes.rootChosen : classes.root}>
+            <Card className={props.subscriptionPlan === props.plan.id ? classes.rootChosen : classes.root}>
                 <CardHeader
                     title={props.plan.title}
                     subheader={props.plan.subheader}
                     titleTypographyProps={{ align: 'center' }}
                     subheaderTypographyProps={{ align: 'center' }}
-                    action={props.plan.id === 'premium' ? <StarIcon style={{ fill: 'yellow'}}/> : null}
+                    action={props.plan.id === 'premium' ? <StarIcon style={{ fill: 'yellow' }} /> : null}
                     className={classes.cardHeader}
                 />
                 <CardContent>
@@ -69,30 +67,34 @@ function SubscriptionPlanCard(props) {
                     <div className={classes.cardContent}>
                         <ul>
                             {props.plan.included.map((line) => (
-    
-                                <Typography component="li" variant="subtitle1" key={`${line} + ${props.plan.id}`}>
-                                    <div className={classes.features}>
-                                        <CheckCircleIcon style={{ fill: 'green' ,marginRight: '7'}} />
-                                        {line}
-                                    </div>
-                                </Typography>
+                                <div key={`${line}_${props.plan.id}div`}>
+                                    {' '}
+                                    <Typography component="li" variant="subtitle1" key={`${line}_${props.plan.id}`}>
+                                        <div className={classes.features}>
+                                            <CheckCircleIcon style={{ fill: 'green', marginRight: '7' }} />
+                                            {`${line}_${props.plan.id}`}
+                                        </div>
+                                    </Typography>
+                                </div>
                             ))}
                         </ul>
                         <ul>
                             {props.plan.excluded.map((line) => (
-                                <Typography component="li" variant="subtitle1" key={`${line} + ${props.plan.id}`}>
-                                    <div className={classes.features}>
-                                        <CancelIcon style={{ fill: 'red' , marginRight: '7'}} />
-                                        {line}
-                                    </div>
-                                </Typography>
+                                <div key={`${line}_${props.plan.id}div`}>
+                                    <Typography component="li" variant="subtitle1" key={`${line}_${props.plan.id}`}>
+                                        <div className={classes.features}>
+                                            <CancelIcon style={{ fill: 'red', marginRight: '7' }} />
+                                            {`${line}_${props.plan.id}`}
+                                        </div>
+                                    </Typography>
+                                </div>
                             ))}
                         </ul>
                     </div>
                 </CardContent>
                 <CardActions>
-                    <Button fullWidth variant="contained" color = {props.subscriptionPlan === props.plan.id? 'secondary' : 'primary'} onClick={props.onClick}>
-                    {  props.subscriptionPlan === props.plan.id? 'YOUR CHOICE' : 'CHOOSE'}
+                    <Button fullWidth variant="contained" color={props.subscriptionPlan === props.plan.id ? 'secondary' : 'primary'} onClick={props.onClick}>
+                        {props.subscriptionPlan === props.plan.id ? 'YOUR CHOICE' : 'CHOOSE'}
                     </Button>
                 </CardActions>
             </Card>
@@ -103,7 +105,7 @@ function SubscriptionPlanCard(props) {
 SubscriptionPlanCard.propTypes = {
     plan: PropTypes.object,
     onClick: PropTypes.func,
-    subscriptionPlan: PropTypes.string
+    subscriptionPlan: PropTypes.string,
 };
 
 export default SubscriptionPlanCard;
