@@ -14,11 +14,13 @@ function SignUpPaper(props) {
     // if user comes from premium page, set plan to selected; if from login , set plan to free
     const [subscriptionPlan, setSubscriptionPlan] = React.useState(props.subscriptionPlan? props.subscriptionPlan : 'free');
 
-    const [registerError, setRegisterError] = React.useState('');
+    const [emailError, setEmailError] = React.useState('');
+    const [usernameError, setUsernameError] = React.useState('');
 
     const [step, setStep] = React.useState(1);
 
     const values = { username, password, password2, email, province, city, isAdmin, subscriptionPlan };
+    const errors = {emailError, usernameError};
 
     const nextStep = () => {
         setStep(step + 1);
@@ -30,41 +32,38 @@ function SignUpPaper(props) {
 
 
     const onChangeEmail = (v) => {
+        setEmailError('');
         setEmail(v);
-        setRegisterError('');
     };
 
     const onChangeUsername = (v) => {
+        setUsernameError('');
         setUsername(v);
-        setRegisterError('');
+
     };
 
     const onChangePassword = (v) => {
         setPassword(v);
-        setRegisterError('');
+
     };
 
     const onChangePassword2 = (v) => {
         setPassword2(v);
-        setRegisterError('');
     };
 
     const onChangeCity = (v) => {
         setCity(v);
-        setRegisterError('');
     };
 
     const onChangeProvince = (v) => {
         setProvince(v);
-        setRegisterError('');
     };
 
     function onChangeSubscriptionPlan(v)  {
         setSubscriptionPlan(v);
-        setRegisterError('');
     };
 
-    const handleChange = (input) => (event) => {
+    function handleChange  (input,event) {
         switch (input) {
             case 'email':
                 onChangeEmail(event.target.value);
@@ -73,16 +72,22 @@ function SignUpPaper(props) {
                 onChangeUsername(event.target.value);
                 break;
             case 'password':
-                onChangePassword(event.target.value);
+                setPassword(event.target.value);
                 break;
             case 'password2':
-                onChangePassword2(event.target.value);
+                setPassword2(event.target.value);
                 break;
             case 'province':
-                onChangeProvince(event.target.value);
+                setProvince(event.target.value);
                 break;
             case 'city':
-                onChangeCity(event.target.value);
+                setCity(event.target.value);
+                break;
+            case 'emailError':
+                setEmailError(event);
+                break;
+            case 'usernameError':
+                setUsernameError(event);
                 break;
     };
 }
@@ -90,7 +95,7 @@ function SignUpPaper(props) {
     function chooseStep() {
         switch (step) {
             case 1:
-                return <SignUpComponent nextStep={nextStep} handleChange={handleChange} values={values}/>;
+                return <SignUpComponent nextStep={nextStep} handleChange={handleChange} values={values} errors={errors}/>;
             case 2:
                 return <SubscriptionStepComponent nextStep={nextStep} prevStep={prevStep} handleChange={onChangeSubscriptionPlan} subscriptionPlan={subscriptionPlan}/>;
             case 3:

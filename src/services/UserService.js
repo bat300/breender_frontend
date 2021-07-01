@@ -28,6 +28,20 @@ export default class UserService {
         });
     }
 
+    static checkIfUserExists(email, username) {
+        return new Promise((resolve, reject) => {
+            HttpService.get(
+                `${UserService.baseURL()}/userExists/${email}/${username}`,          
+                function (data) {
+                    resolve(data);
+                },
+                function (textStatus) {
+                    reject(textStatus);
+                }
+            );
+        });
+    }
+
     static confirmEmail(email, token) {
         return new Promise((resolve, reject) => {
             HttpService.get(

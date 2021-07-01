@@ -36,6 +36,24 @@ export function confirmEmail(email, token) {
     };
 }
 
+export function checkIfUserExists(email, username) {
+    function onSuccess() {
+        return { type: 'USER_UNIQUE_SUCCESS' };
+    }
+    function onFailure(error) {
+        return { type: 'USER_UNIQUE_FAILURE', error: error };
+    }
+
+    return async (dispatch) => {
+        try {
+             let resp = await UserService.checkIfUserExists(email, username);
+            dispatch(onSuccess());
+        } catch (e) {
+            dispatch(onFailure(e));
+        }
+    };
+}
+
 export function logout() {
     UserService.logout();
     return { type: 'LOGOUT' };
