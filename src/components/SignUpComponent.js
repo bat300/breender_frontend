@@ -56,7 +56,7 @@ function SignUpComponent(props) {
     };
 
     function checkUser() {
-        props.dispatch(checkIfUserExists(values.email, values.username));
+        emailIsValid(values.email) ? props.dispatch(checkIfUserExists(values.email, values.username)) : props.handleChange('emailError', 'Invalid email format.');
         setErrorMessage(true);
     }
 
@@ -86,6 +86,11 @@ function SignUpComponent(props) {
         ));
     }
 
+    function emailIsValid(email) {
+        let regex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return regex.test(email);
+    }
+
     const onBlurPassword = (e) => {
         if (values.password !== '' && values.password2 !== '') {
             if (values.password !== values.password2) {
@@ -112,6 +117,7 @@ function SignUpComponent(props) {
                         onChange={(e) => props.handleChange('email', e)}
                         error={errors.emailError !== ''}
                         helperText={errors.emailError !== '' ? errors.emailError : null}
+                        type="email"
                     />
                 </div>
                 <div className={classes.signUpRow}>
@@ -138,7 +144,7 @@ function SignUpComponent(props) {
                         type="password"
                     />
                 </div>
-                <Grid container spacing={2} style={{ paddingTop: 20}}>
+                <Grid container spacing={2} style={{ paddingTop: 20 }}>
                     <Grid item xs={6}>
                         <div className={classes.signUpRow}>
                             <InputLabel>State/Province</InputLabel>
