@@ -73,7 +73,6 @@ export function register(email, username, password, city, isAdmin, subscriptionP
 
     return async (dispatch) => {
         try {
-            console.log(subscriptionPlan);
             let resp = await UserService.register(email, username, password, city, isAdmin, subscriptionPlan);
             dispatch(onSuccess(resp.user));
         } catch (e) {

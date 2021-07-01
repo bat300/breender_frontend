@@ -40,8 +40,6 @@ const useStyles = makeStyles((theme) => ({
 function SubscriptionStepComponent(props) {
     const classes = useStyles();
 
-    const [registerError, setRegisterError] = React.useState('');
-
     const saveAndContinue = (e) => {
         e.preventDefault();
         props.nextStep();
