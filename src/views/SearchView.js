@@ -12,12 +12,16 @@ import Button from '@material-ui/core/Button';
 import { getPets } from '../redux/actions/petActions';
 import SearchResults from '../components/SearchResults';
 import { breeds } from 'helper/data/breeds';
+import HomeLogo from 'images/home.svg';
+import { Grid } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
     filters: {
         display: 'flex',
+        flex: 1,
         flexDirection: 'row',
         alignItems: 'baseline',
+        justifyContent: 'center'
     },
     formControl: {
         margin: theme.spacing(1),
@@ -29,6 +33,13 @@ const useStyles = makeStyles((theme) => ({
     ageSlider: {
         margin: theme.spacing(4),
         width: 200,
+    },
+    homeLogo: {
+        display: 'flex',
+        justifyContent: 'flex-end',
+        alignItems: 'flex-end',
+        margin: 50,
+        marginRight: 150,
     },
 }));
 
@@ -59,7 +70,6 @@ function SearchView(props) {
             label: '10 years',
         },
     ];
-
 
     const loadPets = async () => {
         // trigger the redux action getPets
@@ -111,6 +121,26 @@ function SearchView(props) {
 
     return (
         <div>
+            <Grid container direction="row" justify="center">
+                <Grid container spacing={3} xs={6} justify="center" alignItems="flex-end" direction="column">
+                    <Grid item justify="flex-start" alignItems="center">
+                        <Typography style={{ fontSize: 24 }}>Find the best partner for your pet</Typography>
+                    </Grid>
+                    <Grid item>
+                        <Button variant="contained" color="primary" style={{ marginRight: 20 }}>
+                            Search for a pet
+                        </Button>
+                        <Button variant="contained" color="primary">
+                            Subscribe
+                        </Button>
+                    </Grid>
+                </Grid>
+                <Grid item xs={6} justify="flex-end" alignItems="center">
+                    <div className={classes.homeLogo}>
+                        <img alt="home" src={HomeLogo} style={{ width: '25vw', height: 'auto' }} />
+                    </div>
+                </Grid>
+            </Grid>
             <div className={classes.filters}>
                 <FormControl className={classes.formControl}>
                     <InputLabel id="species-select-label">Species</InputLabel>
