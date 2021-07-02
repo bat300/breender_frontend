@@ -14,6 +14,7 @@ import AppThemeOptions from './theming/themes';
 import AxiosConfiguration from './helper/axios';
 import { PersistGate } from 'redux-persist/integration/react';
 import Routes from './routes';
+import DataFetcher from 'datafetcher';
 
 const useStyles = makeStyles((theme) => ({
     appRoot: {
@@ -30,7 +31,7 @@ const persistConfig = {
 
 function App() {
     const classes = useStyles();
-
+    
     useEffect(() => AxiosConfiguration.setupInterceptors(), []);
 
     // set document title
@@ -51,12 +52,13 @@ function App() {
             <MuiThemeProvider theme={createMuiTheme(AppThemeOptions[theme])}>
                 <Provider store={store}>
                     <PersistGate loading={null} persistor={persistor}>
-                    <CssBaseline />
-                    <React.Fragment>
-                        <ScrollContainer>
-                            <Routes />
-                        </ScrollContainer>
-                    </React.Fragment>
+                        <CssBaseline />
+                        <React.Fragment>
+                            <ScrollContainer>
+                                <DataFetcher />
+                                <Routes />
+                            </ScrollContainer>
+                        </React.Fragment>
                     </PersistGate>
                 </Provider>
             </MuiThemeProvider>
