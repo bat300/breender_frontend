@@ -40,7 +40,7 @@ function KebabMenu(props) {
         // close this menu
         props.onClose();
         // navigate to the home page
-        props.history.push('/');
+        props.history.push('/login');
     };
 
     return (
