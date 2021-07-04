@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
 import user from './userReducer';
-import userExists from './userExistsReducer';
+import checkUser from './checkUserReducer';
 import entities from './entitiesReducer';
 import selectedMovie from './selectedMovieReducer';
 import selectedPet from './selectedPetReducer';
@@ -9,7 +9,7 @@ import confirmation from './confirmationReducer';
 
 const reducers = combineReducers({
     user,
-    userExists,
+    checkUser,
     entities,
     selectedMovie,
     selectedPet,

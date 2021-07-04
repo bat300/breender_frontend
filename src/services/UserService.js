@@ -28,10 +28,10 @@ export default class UserService {
         });
     }
 
-    static checkIfUserExists(email, username) {
+    static checkUser(email, username) {
         return new Promise((resolve, reject) => {
             HttpService.get(
-                `${UserService.baseURL()}/userExists/${email}/${username}`,          
+                `${UserService.baseURL()}/checkUser/${email}/${username}`,          
                 function (data) {
                     resolve(data);
                 },

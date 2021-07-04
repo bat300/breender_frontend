@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { InputLabel, MenuItem, Select, Grid, Paper, Button, TextField, Typography, FormControlLabel, Checkbox } from '@material-ui/core';
-import { checkIfUserExists } from '../redux/actions';
+import { checkUser } from '../redux/actions';
 import { connect, useSelector } from 'react-redux';
 
 const useStyles = makeStyles((theme) => ({
@@ -47,34 +47,34 @@ function SignUpComponent(props) {
     const values = props.values;
     const errors = props.errors;
     const [passwordError, setPasswordError] = React.useState('');
-    const [newErrorMessage, setErrorMessage] = React.useState(false); //set to false when loading the page in order to get valid error message and not the one from previous request
-    const userExists = useSelector((state) => state.userExists);
+    const [next, setNext] = React.useState(false); //set to false when there are errors and disable next step
+    const isValid = useSelector((state) => state.checkUser);
 
     const saveAndContinue = (e) => {
         e.preventDefault();
-        checkUser();
+        checkIfUserIsValid();
     };
 
-    function checkUser() {
-        emailIsValid(values.email) ? props.dispatch(checkIfUserExists(values.email, values.username)) : props.handleChange('emailError', 'Invalid email format.');
-        setErrorMessage(true);
+    function checkIfUserIsValid() {
+        props.dispatch(checkUser(values.email, values.username));
+        setNext(true);
     }
 
     useEffect(() => {
-        if (userExists.error) {
-            if (newErrorMessage) {
-                if (userExists.error.type === 'username') {
-                    props.handleChange('usernameError', userExists.error.message);
+        if (isValid.error) {
+       
+                if (isValid.error.type === 'username') {
+                    props.handleChange('usernameError', isValid.error.message);
                 } else {
-                    props.handleChange('emailError', userExists.error.message);
+                    props.handleChange('emailError', isValid.error.message);
                 }
-            }
+            
         } else {
-            if (newErrorMessage) {
-                props.nextStep();
-            }
+            if(next) {props.nextStep();}
+ 
         }
-    }, [userExists]);
+
+    }, [isValid]);
 
     let options = null;
 
@@ -84,11 +84,6 @@ function SignUpComponent(props) {
                 {elem}
             </MenuItem>
         ));
-    }
-
-    function emailIsValid(email) {
-        let regex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        return regex.test(email);
     }
 
     const onBlurPassword = (e) => {

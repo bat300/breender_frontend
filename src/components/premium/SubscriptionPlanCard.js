@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
@@ -11,7 +11,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import CancelIcon from '@material-ui/icons/Cancel';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
-import { OmitProps } from 'antd/lib/transfer/ListBody';
 
 const useStyles = makeStyles((theme) => ({
     rootChosen: {
@@ -38,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 /**
- * For user login
+ * For choosing and presenting subscription plan 
  * @param {props} props
  */
 function SubscriptionPlanCard(props) {
@@ -49,7 +48,6 @@ function SubscriptionPlanCard(props) {
             <Card className={props.subscriptionPlan === props.plan.id ? classes.rootChosen : classes.root}>
                 <CardHeader
                     title={props.plan.title}
-                    subheader={props.plan.subheader}
                     titleTypographyProps={{ align: 'center' }}
                     subheaderTypographyProps={{ align: 'center' }}
                     action={props.plan.id === 'premium' ? <StarIcon style={{ fill: 'yellow' }} /> : null}
@@ -68,19 +66,17 @@ function SubscriptionPlanCard(props) {
                         <ul>
                             {props.plan.included.map((line) => (
                                 <div key={`${line}_${props.plan.id}div`}>
-                                    <Typography component="li" variant="subtitle1" key={`${line}_${props.plan.id}`}>
+                                    <Typography variant="subtitle1" key={`${line}_${props.plan.id}`}>
                                         <div className={classes.features}>
                                             <CheckCircleIcon style={{ fill: 'green', marginRight: '7' }} />
                                             {line}
                                         </div>
                                     </Typography>
                                 </div>
-                            ))}
-                        </ul>
-                        <ul>
+                            ))}      
                             {props.plan.excluded.map((line) => (
                                 <div key={`${line}_${props.plan.id}div`}>
-                                    <Typography component="li" variant="subtitle1" key={`${line}_${props.plan.id}`}>
+                                    <Typography variant="subtitle1" key={`${line}_${props.plan.id}`}>
                                         <div className={classes.features}>
                                             <CancelIcon style={{ fill: 'red', marginRight: '7' }} />
                                             {line}

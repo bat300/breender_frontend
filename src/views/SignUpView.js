@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect, useSelector } from 'react-redux';
-import { register } from '../redux/actions';
+import { register, resetError } from '../redux/actions';
 import SignUpPaper from '../components/SignUpPaper';
 
 /**
@@ -15,6 +15,11 @@ function SignUpView(props) {
         if (user.user) {
             props.history.push('/');
         }
+        //reset errors when functional component unmounts
+        return () => {
+            props.dispatch(resetError());
+        }
+        
     }, [user, props.history]);
 
     const onRegister = (email, username, password, city, isAdmin, subscriptionPlan) => {

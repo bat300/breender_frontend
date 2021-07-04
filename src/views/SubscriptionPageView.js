@@ -7,41 +7,10 @@ import Container from '@material-ui/core/Container';
 import SubscriptionPlanComponent from '../components/premium/SubscriptionPlanComponent';
 
 const useStyles = makeStyles((theme) => ({
-    '@global': {
-        ul: {
-            margin: 0,
-            padding: 0,
-            listStyle: 'none',
-        },
-    },
     premiumDescription: {
         padding: theme.spacing(8, 0, 6),
     },
-
 }));
-
-const plans = [
-    {
-        id: 'free',
-        title: 'Free',
-        price: '0.00',
-        included: ['View all applications', 'Phone & Email support'],
-        excluded: ['Contact pet owners', ' Pay no transaction fees', 'Verify pet documents', 'Higher position in results', 'No advertisement banners'],
-        buttonText: 'Sign up for free',
-        buttonVariant: 'contained',
-    },
-    {
-        id: 'premium',
-        title: 'Premium',
-        subheader: 'Most popular',
-        price: '9.00',
-        included: ['View all applications', 'Phone & Email support', 'Contact pet owners', 'Pay no transaction fees', 'Verify pet documents', 'Higher position in results', 'No advertisement banners'],
-        excluded: [],
-        buttonText: 'Get started',
-        buttonVariant: 'contained',
-    },
-    
-];
 
 function SubscriptionPageView(props) {
     const classes = useStyles();
@@ -65,7 +34,7 @@ function SubscriptionPageView(props) {
             </Container>
             <Container maxWidth="md" component="main">
                 <Grid container spacing={5} alignItems="flex-end">
-                    <SubscriptionPlanComponent plans={plans} onClick={onSignUp} subscriptionPlan={subscriptionPlan}/>
+                    <SubscriptionPlanComponent onClick={onSignUp} subscriptionPlan={subscriptionPlan}/>
                 </Grid>
             </Container>
         </Container>

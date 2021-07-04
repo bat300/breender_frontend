@@ -1,5 +1,11 @@
 import UserService from '../../services/UserService';
 
+export function resetError()  {
+    return {
+        type: 'RESET_ERROR'
+    }
+}
+
 export function login(username, password) {
     function onSuccess(user) {
         return { type: 'LOGIN_SUCCESS', user: user };
@@ -36,7 +42,7 @@ export function confirmEmail(email, token) {
     };
 }
 
-export function checkIfUserExists(email, username) {
+export function checkUser(email, username) {
     function onSuccess() {
         return { type: 'USER_UNIQUE_SUCCESS' };
     }
@@ -46,7 +52,7 @@ export function checkIfUserExists(email, username) {
 
     return async (dispatch) => {
         try {
-             let resp = await UserService.checkIfUserExists(email, username);
+             let resp = await UserService.checkUser(email, username);
             dispatch(onSuccess());
         } catch (e) {
             dispatch(onFailure(e));

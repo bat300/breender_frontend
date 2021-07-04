@@ -3,7 +3,7 @@ import { connect} from 'react-redux';
 import SubscriptionPlanCard from "./SubscriptionPlanCard";
 
 /**
- * For user login
+ * For choosing subscription plan
  * @param {props} props
  */
 function SubscriptionPlanComponent(props) {
@@ -27,7 +27,6 @@ function SubscriptionPlanComponent(props) {
         {
             id: 'premium',
             title: 'Premium',
-            subheader: 'Most popular',
             price: '9.00',
             included: ['View all applications', 'Phone & Email support', 'Contact pet owners', 'Pay no transaction fees', 'Verify pet documents', 'Higher position in results', 'No advertisement banners'],
             excluded: [],

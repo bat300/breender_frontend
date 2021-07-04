@@ -46,6 +46,7 @@ function SignUpPaper(props) {
         setSubscriptionPlan(v);
     };
 
+    //change state dependent on the input value
     function handleChange  (input,event) {
         switch (input) {
             case 'email':
@@ -77,7 +78,7 @@ function SignUpPaper(props) {
                 break;
     };
 }
-
+    //choose registration step
     function chooseStep() {
         switch (step) {
             case 1:

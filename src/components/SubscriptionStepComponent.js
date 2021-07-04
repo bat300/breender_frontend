@@ -1,6 +1,5 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-
 import Grid from '@material-ui/core/Grid';
 import { Paper, Button, Typography } from '@material-ui/core';
 import Container from '@material-ui/core/Container';
@@ -34,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 /**
- * For register new users
+ * For presenting and choosing subscription plan
  * @param {props} props
  */
 function SubscriptionStepComponent(props) {
@@ -49,8 +48,6 @@ function SubscriptionStepComponent(props) {
         e.preventDefault();
         props.prevStep();
     };
-
-    const values = props.values;
 
     function onSelect(v) {
         props.handleChange(v);
