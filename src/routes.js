@@ -56,6 +56,9 @@ const Routes = () => {
                 <DefaultHeader />
                 <SearchView />
             </DefaultRoute>
+            <PrivateRoute exact path="/user">
+                <UserProfileView />
+            </PrivateRoute>
             <PrivateRoute exact path="/pet/:id">
                 <PetProfileView />
             </PrivateRoute>
@@ -68,9 +71,6 @@ const Routes = () => {
             <DefaultRoute path="*">
                 <NotFoundView />
             </DefaultRoute>
-            <PrivateRoute exact path="/user">
-                <UserProfileView />
-            </PrivateRoute>
         </Switch>
     );
 };
