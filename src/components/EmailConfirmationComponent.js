@@ -14,7 +14,7 @@ function EmailConfirmationComponent(props) {
                 {props.confirmation.confirmation ? (
                     <div>
                         <h1>{props.confirmation.confirmation.message}</h1>
-                        <Button variant="contained" onClick={props.onMove}>
+                        <Button variant="contained" color="secondary" onClick={props.onMove}>
                             Go to Home Page
                         </Button>
                     </div>

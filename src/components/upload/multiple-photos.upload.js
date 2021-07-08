@@ -4,19 +4,33 @@ import { Upload, Modal } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { sha256 } from 'js-sha256';
 import { useDispatch } from 'react-redux';
-import { updatePictures } from 'redux/actions';
-import { usePictures } from 'helper/hooks/pets.hooks';
+import { updateSelectedPet } from 'redux/actions';
+import { usePet } from 'helper/hooks/pets.hooks';
 import { useUser } from 'helper/hooks/auth.hooks';
+
+const prepareFileList = (pet) => {
+    let petList = [];
+    pet.pictures.forEach((value, index) => {
+        petList.push({
+            uid: index,
+            name: value.title,
+            status: 'done',
+            url: value.src,
+        });
+    });
+    return petList;
+};
 
 const MultiplePhotosUpload = (props) => {
     const dispatch = useDispatch();
+    const { mode } = props;
+    const pet = usePet();
 
     const [previewVisible, setPreviewVisible] = useState(false);
     const [previewImage, setPreviewImage] = useState('');
     const [previewTitle, setPreviewTitle] = useState('');
-    const [fileList, setFileList] = useState([]);
+    const [fileList, setFileList] = useState(mode === 'add' ? [] : prepareFileList(pet));
 
-    const pictures = usePictures();
     const user = useUser();
 
     // get base64 format of the uploaded picture
@@ -57,30 +71,40 @@ const MultiplePhotosUpload = (props) => {
 
         const imgPath = `users/${user.id}/pets/images/${imageName}`;
 
+        // set status upload to upload it later to firebase
         const newData = {
             title: data.file.name,
             path: imgPath,
             src: undefined,
             description: '',
+            status: 'upload',
             data: data,
         };
-        // setUploadedImages([...uploadedImages, newData]);
+
+        let petData = pet;
+        let pics = [...pet.pictures, newData];
+        petData.pictures = pics;
 
         // set global state
-        let pics = [...pictures, newData];
-        dispatch(updatePictures(pics));
+        dispatch(updateSelectedPet(petData));
 
         data.onSuccess(null);
     };
 
     // remove the image from firebase
     const handleRemove = async (file) => {
-
-        let picTemp = [...pictures];
-        let pics = picTemp.filter((value) => value.title !== file.name);
-
-        dispatch(updatePictures(pics));            
-
+        let petData = pet;
+        let picTemp = [...pet.pictures];
+        if (file.url) {
+            // set status delete to remove it later onSave from firebase
+            picTemp.map((value) => (value.title === file.name ? (value.status = 'delete') : value));
+            petData.pictures = picTemp;
+            dispatch(updateSelectedPet(petData));
+        } else {
+            let pics = picTemp.filter((value) => value.title !== file.name);
+            petData.pictures = pics;
+            dispatch(updateSelectedPet(petData));
+        }
     };
 
     return (

@@ -1,10 +1,11 @@
 const initialState = {
     pets: [],
-    pet: {},
-    profilePicture: {},
-    pictures: [],
-    documents: [],
-    competitions: [],
+    pet: {
+        profilePicture: undefined,
+        pictures: [],
+        documents: [],
+        competitions: [],
+    },
 };
 
 const pets = (state = initialState, action) => {
@@ -19,14 +20,12 @@ const pets = (state = initialState, action) => {
             return { ...state, pet: action.pet };
         case 'GET_PET':
             return { ...state, pet: action.pet };
+        case 'UPDATE_SELECTED_PET':
+            return { ...state, pet: action.pet };
         case 'UPDATE_PROFILE_PICTURE':
-            return { ...state, profilePicture: action.profilePicture };
-        case 'UPDATE_PICTURES':
-            return { ...state, pictures: action.pictures };
-        case 'UPDATE_DOCUMENTS':
-            return { ...state, documents: action.documents };
-        case 'UPDATE_COMPETITIONS':
-            return { ...state, competitions: action.competitions };
+            return { ...state, profilePictureToRemove: action.profilePictureToRemove };
+        case 'CLEAR_PET':
+            return { ...initialState };
         default:
             return state;
     }

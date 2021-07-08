@@ -10,11 +10,11 @@ function PetPhotosForm(props) {
             <div className={classes.layout}>
                 <Paper className={classes.paper}>
                     <Grid container alignItems="center" justify="center" direction="column">
-                        <AvatarUpload />
+                        <AvatarUpload mode={props.mode} />
                         <label className={classes.label}>Add more photos</label>
                     </Grid>
                     <Grid style={{ marginLeft: 20 }}>
-                        <MultiplePhotosUpload />
+                        <MultiplePhotosUpload mode={props.mode} />
                     </Grid>
                 </Paper>
             </div>

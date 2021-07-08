@@ -5,27 +5,57 @@ import { UploadOutlined } from '@ant-design/icons';
 import { sha256 } from 'js-sha256';
 import { Button } from '@material-ui/core';
 import { useDispatch } from 'react-redux';
-import { useCompetitions, useDocuments } from 'helper/hooks/pets.hooks';
-import { updateCompetitions, updateDocuments } from 'redux/actions';
+import { usePet } from 'helper/hooks/pets.hooks';
 import { useUser } from 'helper/hooks/auth.hooks';
+import { updateSelectedPet } from 'redux/actions';
+
+
+const prepareDocumentsFileList = (pet) => {
+    let petList = [];
+    pet.documents.forEach((value, index) => {
+        petList.push({
+            uid: index,
+            name: value.name,
+            status: 'done',
+            url: value.url,
+        });
+    });
+    return petList;
+};
+
+const prepareCompetitionsFileList = (pet) => {
+    let petList = [];
+    pet.competitions.forEach((value, index) => {
+        if(value.certificate) {
+            petList.push({
+                uid: index,
+                name: value.certificate.name,
+                status: 'done',
+                url: value.certificate.url,
+            });
+        }
+    });
+    return petList;
+};
 
 /**
  *
  * @param  props
  * @returns Component to upload pet documents or certificates
  */
+
 const DocumentsUpload = (props) => {
     const dispatch = useDispatch();
+    const { mode } = props;
 
     // get global states
-    const documents = useDocuments();
     const user = useUser();
-    const competitions = useCompetitions();
-
-    const [fileList, setFileList] = useState([]);
-    //const [uploadedDocs, setUploadedDocs] = useState([]);
-
+    const pet = usePet();
+    
     const isCompetition = props.type === 'competitions' || false;
+
+    const [fileList, setFileList] = useState(mode === 'add' ? [] : isCompetition ? prepareCompetitionsFileList(pet) : prepareDocumentsFileList(pet));
+
     const keyFolder = isCompetition ? 'competitions' : 'documents';
     const pathPrefix = `users/${user.id}/pets/documents`;
     let key = isCompetition && props.competitionId;
@@ -54,10 +84,13 @@ const DocumentsUpload = (props) => {
             uploadDate: new Date(),
             verified: false,
             data: data,
+            status: 'upload',
         };
 
+        let petData = pet;
+
         if (isCompetition) {
-            let competitionData = [...competitions];
+            let competitionData = [...pet.competitions];
             competitionData.map((item, index) => {
                 if (index === key) {
                     item.certificate = newData;
@@ -65,10 +98,12 @@ const DocumentsUpload = (props) => {
                 }
                 return item;
             });
-            dispatch(updateCompetitions(competitionData));
+            petData.competitions = competitionData
+            dispatch(updateSelectedPet(petData));
         } else {
-            let docs = [...documents, newData];
-            dispatch(updateDocuments(docs));
+            let docs = [...pet.documents, newData];
+            petData.documents = docs
+            dispatch(updateSelectedPet(petData));
         }
 
         data.onSuccess(null);
@@ -76,10 +111,10 @@ const DocumentsUpload = (props) => {
 
     // remove document
     const handleRemove = async (file) => {
-
+        let petData = pet;
         // remove competition
         if (isCompetition) {
-            let competitionData = [...competitions];
+            let competitionData = [...pet.competitions];
             competitionData.map((item, index) => {
                 if (index === key) {
                     item.certificate = {};
@@ -88,13 +123,23 @@ const DocumentsUpload = (props) => {
                 return item;
             });
 
-            dispatch(updateCompetitions(competitionData));
+            petData.competitions = competitionData
+            dispatch(updateSelectedPet(petData));
             // remove document
         } else {
-            let docTemp = [...documents];
-            let docObj = docTemp.filter((value) => value.name !== file.name);
+            let petData = pet;
+            let docData = [...pet.documents];
 
-            dispatch(updateDocuments(docObj));
+            if (file.url) {
+                // set status delete to remove it later onSave from firebase
+                docData.map((value) => (value.name === file.name ? (value.status = 'delete') : value));
+                petData.documents = docData;
+                dispatch(updateSelectedPet(petData));
+            } else {
+                let docObj = docData.filter((value) => value.name !== file.name);
+                petData.documents = docObj
+                dispatch(updateSelectedPet(petData));
+            }
         }
     };
 
@@ -102,7 +147,7 @@ const DocumentsUpload = (props) => {
         <div>
             <Upload listType="text" fileList={fileList} onChange={handleChange} customRequest={customUpload} onRemove={handleRemove}>
                 {fileList.length >= maxFileNumber ? null : (
-                    <Button size={props.size || 'medium'} variant="contained" color="primary" startIcon={<UploadOutlined />}>
+                    <Button size={props.size || 'medium'} variant="contained" color="secondary" startIcon={<UploadOutlined />}>
                         Upload
                     </Button>
                 )}
