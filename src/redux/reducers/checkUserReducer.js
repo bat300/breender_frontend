@@ -1,5 +1,4 @@
 export default function checkUser(state = {}, action) {
-    console.log(action.type);
     switch (action.type) {
         case 'USER_UNIQUE_SUCCESS':
             return {};

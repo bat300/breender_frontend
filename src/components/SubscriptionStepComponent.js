@@ -38,9 +38,11 @@ const useStyles = makeStyles((theme) => ({
  */
 function SubscriptionStepComponent(props) {
     const classes = useStyles();
+    const values = props.values;
 
     const saveAndContinue = (e) => {
         e.preventDefault();
+        props.subscriptionPlan === "free"? props.onRegister( values.email, values.username, values.password, values.city, values.province, values.isAdmin, values.subscriptionPlan) : 
         props.nextStep();
     };
 
@@ -71,7 +73,7 @@ function SubscriptionStepComponent(props) {
                         back
                     </Button>
                     <Button className={classes.signUpButton} variant="contained" color="primary" onClick={saveAndContinue}>
-                        Next
+                    {props.subscriptionPlan === 'free' ? 'SUBMIT' : 'NEXT'}
                     </Button>
                 </div>
             </Paper>

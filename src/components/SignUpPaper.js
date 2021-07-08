@@ -1,7 +1,7 @@
 import React from 'react';
 import SignUpComponent from './SignUpComponent';
 import SubscriptionStepComponent from './SubscriptionStepComponent';
-import PaymentInformation from './PaymentInformation';
+import PaymentInformationComponent from './PaymentInformation';
 
 function SignUpPaper(props) {
     const [username, setUsername] = React.useState('');
@@ -19,7 +19,16 @@ function SignUpPaper(props) {
     //registration step
     const [step, setStep] = React.useState(1);
 
-    const values = { username, password, password2, email, province, city, isAdmin, subscriptionPlan };
+
+    const payments = [
+        { price: '4.99 €/mo', renewalFrequency: '1mo', plan_id: 'P-5CE276523D561035MMDTPVSY' },
+        { price: '12,99 €/3mo', renewalFrequency: '3mo', plan_id: 'P-8VR66594BC768200LMDTPT2A' },
+        { price: '22,99 €/6mo', renewalFrequency: '6mo', plan_id: 'P-9GV20034R8618241EMDTPUSI' },
+        { price: '35,99 €/yr', renewalFrequency: '1yr', plan_id: 'P-7HH647296G2018315MDTPWEY' },
+    ];
+
+    const [chosenPayment, setChosenPayment] = React.useState('P-5CE276523D561035MMDTPVSY');
+    const values = { username, password, password2, email, province, city, isAdmin, subscriptionPlan, chosenPayment};
     const errors = {emailError, usernameError};
 
     const nextStep = () => {
@@ -76,6 +85,8 @@ function SignUpPaper(props) {
             case 'usernameError':
                 setUsernameError(event);
                 break;
+            case 'chosenPayment':
+                setChosenPayment(event.target.value);
     };
 }
     //choose registration step
@@ -84,18 +95,17 @@ function SignUpPaper(props) {
             case 1:
                 return <SignUpComponent nextStep={nextStep} handleChange={handleChange} onCancel={props.onCancel} values={values} errors={errors}/>;
             case 2:
-                return <SubscriptionStepComponent nextStep={nextStep} prevStep={prevStep} handleChange={onChangeSubscriptionPlan} subscriptionPlan={subscriptionPlan}/>;
+                return <SubscriptionStepComponent onRegister={props.onRegister} nextStep={nextStep} prevStep={prevStep} handleChange={onChangeSubscriptionPlan} values={values} subscriptionPlan={subscriptionPlan}/>;
             case 3:
-            return <PaymentInformation
+            return <PaymentInformationComponent
                     nextStep={nextStep}
                     prevStep={prevStep}
                     values={values}
                     handleChange={handleChange}
-                    user={props.user}
+                    payments={payments}
                     onRegister={props.onRegister}
+                    user={props.user}
                     />
-            case 4:
-                return <SignUpComponent nextStep={nextStep} handleChange={onChangeSubscriptionPlan} values={values}/>;
         }
     }
 
