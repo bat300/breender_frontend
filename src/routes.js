@@ -1,16 +1,16 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 // views
 import UserLoginView from './views/UserLoginView';
 import SignUpView from './views/SignUpView';
 import AddPetView from './views/AddPetView';
-import PetProfileView from "./views/PetProfileView";
+import PetProfileView from './views/PetProfileView';
 import EmailConfirmationView from './views/EmailConfirmationView';
 import EditPetView from './views/EditPetView';
 import NotFoundView from './views/NotFoundView';
 import SearchView from './views/SearchView';
 // services
-import { LocalStorageService } from 'services';
+import { LocalStorageService, NotificationService } from 'services';
 import Header from 'components/Header';
 import AppTheme from 'theming/themetypes';
 
@@ -27,13 +27,20 @@ const DefaultHeader = () => {
 
 // used for routing
 export const PrivateRoute = (props) => {
-    return LocalStorageService.isAuthorized() ? (
+    const isAuthorized = LocalStorageService.isAuthorized();
+    useEffect(() => {
+        if (!isAuthorized) {
+            NotificationService.notify('warning', 'Warning', 'You have to be logged in to view this page')
+        }
+    }, [isAuthorized]);
+    
+    return isAuthorized ? (
         <Route {...props}>
             <DefaultHeader />
             {props.children}
         </Route>
     ) : (
-        <Redirect to={{ pathname: '/login', state: { from: props.location } }} />
+        <Redirect to={{}} />
     );
 };
 
