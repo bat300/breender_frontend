@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { connect, useSelector } from 'react-redux';
+import { connect, useDispatch, useSelector } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import { withRouter } from 'react-router-dom';
 import FormControl from '@material-ui/core/FormControl';
@@ -14,6 +14,7 @@ import SearchResults from '../components/SearchResults';
 import { breeds } from 'helper/data/breeds';
 import HomeLogo from 'images/home.svg';
 import { Grid } from '@material-ui/core';
+import { useUser } from 'helper/hooks/auth.hooks';
 
 const useStyles = makeStyles((theme) => ({
     filters: {
@@ -21,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
         flex: 1,
         flexDirection: 'row',
         alignItems: 'baseline',
-        justifyContent: 'center'
+        justifyContent: 'center',
     },
     formControl: {
         margin: theme.spacing(1),
@@ -36,8 +37,8 @@ const useStyles = makeStyles((theme) => ({
     },
     homeLogo: {
         display: 'flex',
-        justifyContent: 'flex-end',
-        alignItems: 'flex-end',
+        justifyContent: 'center',
+        alignItems: 'center',
         margin: 50,
         marginRight: 150,
     },
@@ -45,8 +46,11 @@ const useStyles = makeStyles((theme) => ({
 
 function SearchView(props) {
     const classes = useStyles();
-    var pets = useSelector((state) => state.entities.pets);
+    const dispatch = useDispatch();
+    let pets = useSelector((state) => state.entities.pets);
+    let user = useUser();
 
+    const [isLoading, setIsLoading] = React.useState(true);
     const [chosenSpecies, setSpecies] = React.useState('');
     const [order, setOrder] = React.useState('descending');
     const [sex, setSex] = React.useState('');
@@ -73,13 +77,14 @@ function SearchView(props) {
 
     const loadPets = async () => {
         // trigger the redux action getPets
-        pets = props.dispatch(getPets(chosenSpecies, sex, breed, ageRange));
+        pets = props.dispatch(getPets(chosenSpecies, sex, breed, ageRange, false, user));
     };
 
     useEffect(() => {
         // load pets when the page is loaded or the pets were filtered.
-        if (!pets) {
+        if (!pets || isLoading) {
             loadPets();
+            setIsLoading(false)
         }
     }, [pets]);
 
@@ -88,7 +93,7 @@ function SearchView(props) {
         setSex('');
         setBreed('');
         setAgeRange([1, 10]);
-        pets = props.dispatch(getPets('', '', '', [0.5, 10])); //change parameters manually because values remain constant inside render and are not updated immediately
+        pets = props.dispatch(getPets('', '', '', [0.5, 10], false, user)); //change parameters manually because values remain constant inside render and are not updated immediately
     };
 
     const resetFilters = async () => {
