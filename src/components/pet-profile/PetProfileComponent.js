@@ -13,44 +13,8 @@ import { useHistory, withRouter } from 'react-router-dom';
 
 /**
  * Manages the process of getting pet details data
- * @param {props} props
+ * @param props
  */
-
-const useStyles = makeStyles((theme) => ({
-    layout: {
-        width: '80%',
-        alignSelf: 'center',
-    },
-    maxWidth: {
-        width: '100%',
-    },
-    paper: {
-        padding: theme.spacing(2),
-        [theme.breakpoints.up(600 + theme.spacing(3) * 2)]: {
-            marginTop: theme.spacing(6),
-            marginBottom: theme.spacing(6),
-            padding: theme.spacing(3),
-        },
-    },
-    cards: {
-        margin: theme.spacing(2),
-    },
-    leftTypography: {
-        width: '100%',
-        alignItems: 'start',
-        marginBottom: theme.spacing(1),
-        marginLeft: theme.spacing(4),
-    },
-    gridMargin: {
-        marginTop: theme.spacing(2),
-    },
-    buttonGrid: {
-        marginBottom: 100,
-        display: 'flex',
-        justifyContent: 'flex-end',
-        alignItems: 'flex-end',
-    },
-}));
 
 function PetProfileComponent(props) {
     const classes = useStyles();
@@ -58,9 +22,10 @@ function PetProfileComponent(props) {
     const history = useHistory();
 
     const id = props.id;
+
     const fetchPet = async () => {
         await dispatch(getPet(id));
-        history.push(`/edit/pet/${id}`)
+        history.push(`/edit/pet/${id}`);
     };
 
     return (
@@ -97,8 +62,7 @@ function PetProfileComponent(props) {
                                 </Grid>
                             </Grid>
                         </Grid>
-                        <Divider variant="middle" />
-
+                        {props.documents.length === 0 && props.competitions.length === 0 ? null : <Divider variant="middle" />}
                         <PetOptionalInformation ownerId={props.ownerId} documents={props.documents} competitions={props.competitions} />
                     </Paper>
                 </Grid>
@@ -149,3 +113,39 @@ function Documents(props) {
 }
 
 export default withRouter(PetProfileComponent);
+
+const useStyles = makeStyles((theme) => ({
+    layout: {
+        width: '80%',
+        alignSelf: 'center',
+    },
+    maxWidth: {
+        width: '100%',
+    },
+    paper: {
+        padding: theme.spacing(2),
+        [theme.breakpoints.up(600 + theme.spacing(3) * 2)]: {
+            marginTop: theme.spacing(6),
+            marginBottom: theme.spacing(6),
+            padding: theme.spacing(3),
+        },
+    },
+    cards: {
+        margin: theme.spacing(2),
+    },
+    leftTypography: {
+        width: '100%',
+        alignItems: 'start',
+        marginBottom: theme.spacing(1),
+        marginLeft: theme.spacing(4),
+    },
+    gridMargin: {
+        marginTop: theme.spacing(2),
+    },
+    buttonGrid: {
+        marginBottom: 100,
+        display: 'flex',
+        justifyContent: 'flex-end',
+        alignItems: 'flex-end',
+    },
+}));
