@@ -5,6 +5,7 @@ import selectedMovie from './selectedMovieReducer';
 import selectedPet from './selectedPetReducer';
 import pets from './petReducer';
 import confirmation from './confirmationReducer';
+import fetcher from './fetcherReducer';
 
 const reducers = combineReducers({
     user,
@@ -13,6 +14,7 @@ const reducers = combineReducers({
     selectedPet,
     pets,
     confirmation,
+    fetcher,
 });
 
 export default reducers;
