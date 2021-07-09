@@ -28,7 +28,7 @@ const DataFetcher = React.memo(() => {
         return () => {
             fetch = false;
         };
-    }, [isAuthenticated]);
+    }, [isAuthenticated, dispatch, isLoading]);
 
     return <React.Fragment />;
 });
