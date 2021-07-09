@@ -1,8 +1,10 @@
+import { getUser } from 'helper/helpers';
+import { NotificationService } from 'services';
 import UserService from '../../services/UserService';
 
 export function login(username, password) {
     function onSuccess(user) {
-        return { type: 'LOGIN_SUCCESS', user: user };
+        return { type: 'LOGIN_SUCCESS', user: user, isAuthenticated: true };
     }
     function onFailure(error) {
         return { type: 'LOGIN_FAILURE', error: error };
@@ -14,6 +16,7 @@ export function login(username, password) {
             dispatch(onSuccess(resp.user));
         } catch (e) {
             dispatch(onFailure(e));
+            NotificationService.notify('error', 'Login Error', 'During login occurred an error. Please try again.');
         }
     };
 }
@@ -31,6 +34,7 @@ export function confirmEmail(email, token) {
             let resp = await UserService.confirmEmail(email, token);
             dispatch(onSuccess(resp));
         } catch (e) {
+            NotificationService.notify('error', 'Error', 'During email confirmation occurred an error. Please try again.');
             dispatch(onFailure(e));
         }
     };
@@ -42,7 +46,13 @@ export function logout() {
 }
 
 export function loginReset() {
-    return { type: 'LOGIN_RESET' };
+    function onSuccess(user, isAuthenticated) {
+        return { type: 'LOGIN_RESET', user: user, isAuthenticated: isAuthenticated };
+    }
+    return (dispatch) => {
+        let { isAuthenticated, user } = getUser();
+        dispatch(onSuccess(user, isAuthenticated));
+    };
 }
 
 export function register(email, username, password, city, isAdmin) {
@@ -59,6 +69,7 @@ export function register(email, username, password, city, isAdmin) {
             dispatch(onSuccess(resp.user));
         } catch (e) {
             dispatch(onFailure(e));
+            NotificationService.notify('error', 'Registration Error', 'During registration occurred an error. Please try again.');
         }
     };
 }
