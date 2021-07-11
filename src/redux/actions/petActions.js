@@ -6,10 +6,9 @@ const PetTypes = {
     UPDATE_PET: 'UPDATE_PET',
     ADD_PET: 'ADD_PET',
     GET_PET: 'GET_PET',
+    UPDATE_SELECTED_PET: 'UPDATE_SELECTED_PET',
     UPDATE_PROFILE_PICTURE: 'UPDATE_PROFILE_PICTURE',
-    UPDATE_PICTURES: 'UPDATE_PICTURES',
-    UPDATE_DOCUMENTS: 'UPDATE_DOCUMENTS',
-    UPDATE_COMPETITIONS: 'UPDATE_COMPETITIONS',
+    CLEAR_PET: 'CLEAR_PET',
 };
 
 export const getPets = (species, sex, breed, age) => {
@@ -55,7 +54,7 @@ export const deletePet = (id) => {
     };
 };
 
-export const addPet = (pet, onSuccess, onError) => {
+export const addPet = (pet, onSuccess=() => null, onError=(err) => null) => {
     const addPetAction = () => {
         onSuccess();
         return { type: PetTypes.ADD_PET };
@@ -75,12 +74,14 @@ export const addPet = (pet, onSuccess, onError) => {
     };
 };
 
-export const changePet = (changedPet) => {
+export const changePet = (changedPet,  onSuccess=() => null, onError=(err) => null) => {
     const changePetAction = (pet) => {
+        onSuccess();
         return { type: PetTypes.UPDATE_PET, pet: pet };
     };
 
     const onFailure = (error) => {
+        onError();
         console.log('Error while changing a pet', error);
     };
 
@@ -112,9 +113,28 @@ export const getPet = (id) => {
     };
 };
 
+export const updateSelectedPet = (pet) => {
+    const updatePetAction = (pet) => {
+        
+        return { type: PetTypes.UPDATE_SELECTED_PET, pet: pet };
+    };
+    const onFailure = (error) => {
+        console.log('Failed to update pet', error);
+    };
+
+    return async (dispatch, getState) => {
+        try {
+            dispatch(updatePetAction(pet));
+        } catch (e) {
+            onFailure(e);
+        }
+    };
+};
+
 export const updateProfilePicture = (profilePicture) => {
     const updateProfilePictureAction = (picture) => {
-        return { type: PetTypes.UPDATE_PROFILE_PICTURE, profilePicture: picture };
+
+        return { type: PetTypes.UPDATE_PROFILE_PICTURE, profilePictureToRemove: picture };
     };
     const onFailure = (error) => {
         console.log('Failed to save profile picture', error);
@@ -129,51 +149,17 @@ export const updateProfilePicture = (profilePicture) => {
     };
 };
 
-export const updatePictures = (pictures) => {
-    const updatePicturesAction = (pictures) => {
-        return { type: PetTypes.UPDATE_PICTURES, pictures: pictures };
+export const clearPetInfos = () => {
+    const clearPetAction = () => {
+        return { type: PetTypes.CLEAR_PET };
     };
     const onFailure = (error) => {
-        console.log('Failed to save pictures', error);
+        console.log('Failed to clear pet', error);
     };
 
     return async (dispatch, getState) => {
         try {
-            dispatch(updatePicturesAction(pictures));
-        } catch (e) {
-            onFailure(e);
-        }
-    };
-};
-
-export const updateDocuments = (documents) => {
-    const updateDocsAction = (documents) => {
-        return { type: PetTypes.UPDATE_DOCUMENTS, documents: documents };
-    };
-    const onFailure = (error) => {
-        console.log('Failed to save documents', error);
-    };
-
-    return async (dispatch, getState) => {
-        try {
-            dispatch(updateDocsAction(documents));
-        } catch (e) {
-            onFailure(e);
-        }
-    };
-};
-
-export const updateCompetitions = (competitions) => {
-    const updateCompetitionAction = (competitions) => {
-        return { type: PetTypes.UPDATE_COMPETITIONS, competitions: competitions };
-    };
-    const onFailure = (error) => {
-        console.log('Failed to save competitions', error);
-    };
-
-    return async (dispatch, getState) => {
-        try {
-            dispatch(updateCompetitionAction(competitions));
+            dispatch(clearPetAction());
         } catch (e) {
             onFailure(e);
         }

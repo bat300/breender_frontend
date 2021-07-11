@@ -1,15 +1,19 @@
 import React, { createContext, useContext, useEffect, useRef, useState } from 'react';
 // antd imports
 import 'antd/dist/antd.css';
-import { DatePicker, Table } from 'antd';
+import { DatePicker, Modal, Table, Typography } from 'antd';
 // material-ui imports
 import { makeStyles } from '@material-ui/core/styles';
-import { Button, Grid } from '@material-ui/core';
+import { Button, Grid, IconButton } from '@material-ui/core';
 import { Input, Form } from 'antd';
 import DocumentsUpload from './upload/documents.upload';
 import moment from 'moment';
 import { useDispatch } from 'react-redux';
-import { updateCompetitions } from 'redux/actions';
+import { usePet } from 'helper/hooks/pets.hooks';
+import { updateSelectedPet } from 'redux/actions';
+import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
+
+const { Text, Link } = Typography;
 
 const EditableContext = createContext(null);
 const DATE_FORMAT = 'DD.MM.YYYY';
@@ -52,7 +56,7 @@ const EditableCell = ({ title, focused, editable, children, dataIndex, record, h
             const values = await form.validateFields();
             toggleEdit();
             handleSave({ ...record, ...values });
-        } catch (errInfo) {}
+        } catch (errInfo) { }
     };
 
     let childNode = children;
@@ -89,12 +93,26 @@ const EditableCell = ({ title, focused, editable, children, dataIndex, record, h
     return <td {...restProps}>{childNode}</td>;
 };
 
+const prepareCompetitions = (competitions) => {
+    let arr = competitions;
+    arr.map((value) => {
+        value.date = new Date(value.date);
+        return value;
+    });
+    return arr;
+};
+
 const CompetitionsComponent = (props) => {
     const classes = useStyles();
     const dispatch = useDispatch();
+    const { mode } = props;
+
+    const pet = usePet();
 
     const [count, setCount] = useState(0);
-    const [competitions, setCompetitions] = useState([]);
+    const [isModalVisible, setIsModalVisible] = useState(false);
+    const [competitions, setCompetitions] = useState(mode === 'add' ? [] : prepareCompetitions(pet.competitions));
+    const [editedCompetitions, setEditedCompetitions] = useState(mode === 'add' ? [] : prepareCompetitions(pet.competitions));
 
     const columnsData = [
         {
@@ -102,7 +120,45 @@ const CompetitionsComponent = (props) => {
             dataIndex: 'name',
             key: 'name',
             fixed: 'left',
-            width: 200,
+            width: 'auto',
+            editable: true,
+            render: (_, record) => (competitions.length >= 1 ? <Text type="secondary">{record.name}</Text> : null),
+        },
+        {
+            title: 'Date',
+            dataIndex: 'date',
+            editable: false,
+            render: (_, record) => (competitions.length >= 1 ? <Text type="secondary">{new Date(record.date).toLocaleDateString('de-DE')}</Text> : null),
+        },
+        {
+            title: 'Category',
+            dataIndex: 'category',
+            key: 'category',
+            editable: true,
+            render: (_, record) => (competitions.length >= 1 ? <Text type="secondary">{record.category}</Text> : null),
+        },
+        {
+            title: 'Prize',
+            dataIndex: 'prize',
+            key: 'prize',
+            editable: true,
+            render: (_, record) => (competitions.length >= 1 ? <Text type="secondary">{record.prize}</Text> : null),
+        },
+        {
+            title: 'Certificate',
+            dataIndex: 'certificate',
+            key: 'certificate',
+            render: (_, record) => (competitions.length >= 1 ? <Text type="secondary">{record.certificate ? record.certificate.name : ' No File Uploaded'}</Text> : null),
+        },
+    ];
+
+    const columnsModalData = [
+        {
+            title: 'Name',
+            dataIndex: 'name',
+            key: 'name',
+            fixed: 'left',
+            width: 'auto',
             editable: true,
             render: (_, record) => (competitions.length >= 1 ? <Input bordered={false} value={record.name} /> : null),
         },
@@ -139,9 +195,9 @@ const CompetitionsComponent = (props) => {
             key: 'remove',
             render: (_, record) =>
                 competitions.length >= 1 ? (
-                    <Button size="small" variant="text" color="primary" onClick={() => handleDelete(record.key)}>
-                        Remove
-                    </Button>
+                    <IconButton onClick={() => handleDelete(record.key)}>
+                        <DeleteOutlinedIcon color="error" />
+                    </IconButton>
                 ) : null,
         },
     ];
@@ -153,7 +209,7 @@ const CompetitionsComponent = (props) => {
         },
     };
 
-    const columns = columnsData.map((col) => {
+    const columns = columnsModalData.map((col) => {
         if (!col.editable) {
             return col;
         }
@@ -166,18 +222,20 @@ const CompetitionsComponent = (props) => {
                 dataIndex: col.dataIndex,
                 title: col.title,
                 handleSave: handleSave,
-                focused: col.key === 'name' ? true : false,
+                focused: col.key === 'name' && record.name === '' ? true : false,
             }),
         };
     });
 
     // add new row
     const handleAdd = () => {
-        const newData = { key: count, name: '', date: new Date(), category: '', prize: '', certificate: {} };
+        const newData = { key: count, name: '', date: new Date(), category: '', prize: '', certificate: undefined };
         setCompetitions([...competitions, newData]);
         setCount(count + 1);
 
-        dispatch(updateCompetitions(newData));
+        let petData = pet;
+        petData.competitions.push(newData);
+        dispatch(updateSelectedPet(petData));
     };
 
     // delete row
@@ -186,7 +244,9 @@ const CompetitionsComponent = (props) => {
         setCompetitions(newData);
         setCount(count - 1);
 
-        dispatch(updateCompetitions(newData));
+        let petData = pet;
+        petData.competitions = newData;
+        dispatch(updateSelectedPet(petData));
     };
 
     // save competitions data
@@ -197,7 +257,9 @@ const CompetitionsComponent = (props) => {
         newData.splice(index, 1, { ...item, ...row });
         setCompetitions(newData);
 
-        dispatch(updateCompetitions(newData));
+        let petData = pet;
+        petData.competitions = newData;
+        dispatch(updateSelectedPet(petData));
     };
 
     // handle change of the competition date
@@ -210,7 +272,16 @@ const CompetitionsComponent = (props) => {
             return item;
         });
         setCompetitions(newData);
-        dispatch(updateCompetitions(newData));
+
+        let petData = pet;
+        petData.competitions = newData;
+        dispatch(updateSelectedPet(petData));
+    };
+
+    const showModal = () => setIsModalVisible(true);
+    const hideModal = () => {
+        setEditedCompetitions(competitions);
+        setIsModalVisible(false);
     };
 
     return (
@@ -221,19 +292,33 @@ const CompetitionsComponent = (props) => {
                 </Grid>
                 <Grid item xs={12} sm={6} className={classes.grid}>
                     <Button
+                        onClick={showModal}
+                        variant="outlined"
+                        color="secondary"
+                        style={{
+                            margin: 10,
+                        }}
+                    >
+                        Edit Table
+                    </Button>
+                </Grid>
+            </Grid>
+            <Table dataSource={editedCompetitions} columns={columnsData} />
+            <Modal visible={isModalVisible} onOk={hideModal} onCancel={hideModal} className={classes.modal}>
+                <Grid container alignItems="flex-end" justify="flex-end">
+                    <Button
                         onClick={handleAdd}
                         variant="outlined"
                         color="primary"
                         style={{
-                            margin: 10,
+                            margin: 20,
                         }}
                     >
                         Add a row
                     </Button>
                 </Grid>
-            </Grid>
-            {/* make table scrollbar */}
-            <Table components={components} rowClassName={() => 'editable-row'} bordered dataSource={competitions} columns={columns} scroll={{ x: 1300 }} />
+                <Table components={components} rowClassName={() => 'editable-row'} bordered dataSource={competitions} columns={columns} style={{ display: 'block' }} />
+            </Modal>
         </div>
     );
 };
@@ -253,6 +338,11 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         justifyContent: 'flex-end',
         alignSelf: 'flex-end',
+    },
+    modal: {
+        width: '80vw',
+        margin: '0 auto',
+        marginTop: 100,
     },
 }));
 

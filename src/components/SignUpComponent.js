@@ -13,6 +13,8 @@ const useStyles = makeStyles((theme) => ({
         padding: theme.spacing(2),
     },
     signUpRow: {
+        display: 'flex',
+        flexDirection: 'column',
         paddingTop: theme.spacing(1),
         paddingBottom: theme.spacing(1),
         '&:last-child': {
