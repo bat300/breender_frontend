@@ -62,3 +62,47 @@ export function register(email, username, password, city, isAdmin) {
         }
     };
 }
+
+export const getUsersInfo = (id) => {
+    const getUsersInfoAction = (user) => {
+        return { type: 'GET_USER_INFO', user: user };
+    };
+    const onFailure = (error) => {
+        console.log('Failed to load a user', error);
+    };
+
+    return async (dispatch, getState) => {
+        try {
+            const user = await UserService.getUsersInfo(id);
+            dispatch(getUsersInfoAction(user));
+        } catch (e) {
+            onFailure(e);
+        }
+    };
+};
+
+export const getUserPets = (ownerId) => {
+    // when the backend call was successfull and the pets are retrieved
+    // in the dispatcher the pets will be added to the global state
+    const onSuccess = (pets) => {
+        return { type: 'GET_USER_PETS', pets: pets };
+    };
+    // when the backend call was failed
+    const onFailure = (error) => {
+        // error handling
+        console.log('failed to get the pets', error);
+    };
+
+    return async (dispatch, getState) => {
+        try {
+            console.log('I am in actions')
+            // ask for the pets in the backend
+            const pets = await UserService.getUserPets(ownerId);
+            console.log('The pets are in the actions: ', pets)
+            // call onSuccess in context of redux
+            dispatch(onSuccess(pets));
+        } catch (e) {
+            onFailure(e);
+        }
+    };
+};

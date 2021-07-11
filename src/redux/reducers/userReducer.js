@@ -31,6 +31,10 @@ export default function user(state = getUser(), action) {
             return {};
         case "LOGOUT":
             return {};
+        case "GET_USER_INFO":
+            return { ...state, userInfo: action.user };
+        case "GET_USER_PETS":
+            return { ...state, pets: action.pets };
         default:
             return state;
     }

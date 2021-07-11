@@ -8,12 +8,12 @@ const PetTypes = {
     GET_PET: 'GET_PET',
     UPDATE_SELECTED_PET: 'UPDATE_SELECTED_PET',
     UPDATE_PROFILE_PICTURE: 'UPDATE_PROFILE_PICTURE',
-    CLEAR_PET: 'CLEAR_PET',
+    CLEAR_PET: 'CLEAR_PET'
 };
 
 export const getPets = (species, sex, breed, age) => {
-    // when the backend call was successfull and the movies are retrieved
-    // in the dispatcher the movies will be added to the global state
+    // when the backend call was successfull and the pets are retrieved
+    // in the dispatcher the pets will be added to the global state
     function onSuccess(pets) {
         return { type: 'GETPETS_SUCCESS', pets: pets };
     }
@@ -54,7 +54,7 @@ export const deletePet = (id) => {
     };
 };
 
-export const addPet = (pet, onSuccess=() => null, onError=(err) => null) => {
+export const addPet = (pet, onSuccess = () => null, onError = (err) => null) => {
     const addPetAction = () => {
         onSuccess();
         return { type: PetTypes.ADD_PET };
@@ -74,7 +74,7 @@ export const addPet = (pet, onSuccess=() => null, onError=(err) => null) => {
     };
 };
 
-export const changePet = (changedPet,  onSuccess=() => null, onError=(err) => null) => {
+export const changePet = (changedPet, onSuccess = () => null, onError = (err) => null) => {
     const changePetAction = (pet) => {
         onSuccess();
         return { type: PetTypes.UPDATE_PET, pet: pet };
@@ -115,7 +115,7 @@ export const getPet = (id) => {
 
 export const updateSelectedPet = (pet) => {
     const updatePetAction = (pet) => {
-        
+
         return { type: PetTypes.UPDATE_SELECTED_PET, pet: pet };
     };
     const onFailure = (error) => {

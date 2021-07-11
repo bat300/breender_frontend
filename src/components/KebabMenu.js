@@ -58,13 +58,13 @@ function KebabMenu(props) {
                 horizontal: 'right',
             }}
         >
-            {user.user
+            {user
                 ? [
                     <MenuItem key="user" className={classes.menuitem} onClick={onClickGoToUserProfile}>
                         <Avatar className={classes.avatar}>
-                            {user.user.username ? user.user.username[0] : ""}
+                            {user.username ? user.username[0] : ""}
                         </Avatar>
-                        {user.user.username}
+                        {user.username}
                     </MenuItem>,
                     <Divider key="divider" />,
                     <MenuItem
