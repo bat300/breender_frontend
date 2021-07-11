@@ -12,11 +12,13 @@ const useStyles = makeStyles((theme) => ({
 function MessageComponent(props) {
     const classes = useStyles();
 
+    // TODO: Get timestamp
     return (
         <div className={classes.message}>
             <div className={classes.messageTop}>
                 <Avatar src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1f/Woman_1.jpg/768px-Woman_1.jpg" />
-                <p className={classes.messageText}>Hello this is a message!</p>
+                <p className={classes.messageText}>{props.message.sender}</p>
+                <p className={classes.messageText}>{props.message.text}</p>
             </div>
             <div className={classes.messageBottom}>1 hour ago</div>
         </div>

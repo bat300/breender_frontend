@@ -44,6 +44,7 @@ function PetProfileView(props) {
             documents={selectedPet.pet.documents}
             competitions={selectedPet.pet.competitions}
             ownerId={selectedPet.pet.ownerId}
+            petId={props.match.params.id}
         />
     ) : null;
 }

@@ -6,7 +6,7 @@ import AddPetView from './views/AddPetView';
 import PetProfileView from './views/PetProfileView';
 import EmailConfirmationView from './views/EmailConfirmationView';
 import MessengerView from './views/MessengerView';
-
+import MessengerNewContactView from './views/MessengerNewContactView';
 import Search from './components/Search';
 
 // routes within the movie database example app
@@ -42,6 +42,10 @@ const routes = [
     {
         path: '/add-pet',
         component: AddPetView,
+    },
+    {
+        path: '/messenger/:breederId/:petId',
+        component: MessengerNewContactView,
     },
     {
         path: '/messenger',

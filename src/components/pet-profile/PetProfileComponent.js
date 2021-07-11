@@ -1,11 +1,11 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Grid, Paper, Divider, Typography } from '@material-ui/core';
+import { Button, Grid, Paper, Divider, Typography } from '@material-ui/core';
 import PetPhotos from './PetPhotos';
 import PetInformation from './PetInformation';
 import PetCompetitionsList from './PetCompetitionsList';
 import PetDocumentsList from './PetDocumentsList';
-import PaymentButton from '../../components/PaymentButton';
+import { PaymentButton, ContactButton } from '../Button';
 
 /**
  * Manages the process of getting pet details data
@@ -56,6 +56,7 @@ function PetProfileComponent(props) {
                                     {props.officialName}
                                 </Typography>
                                 <PetPhotos pictures={props.pictures} profilePicture={props.profilePicture} />
+                                <ContactButton breederId={props.ownerId} petId={props.petId} />
                                 {props.price && props.price > 0 && <PaymentButton price={props.price} />}
                             </Grid>
                             <Divider variant="middle" />
