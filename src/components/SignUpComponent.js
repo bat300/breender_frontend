@@ -51,6 +51,8 @@ function SignUpComponent(props) {
     const [passwordError, setPasswordError] = React.useState('');
     const [next, setNext] = React.useState(false); //set to false when there are errors and disable next step
     const isValid = useSelector((state) => state.checkUser);
+    //set to false when component is rendered for the first time in order to skip error message from previous registration
+    const [rendered, setRendered ] = React.useState(false);
 
     const saveAndContinue = (e) => {
         e.preventDefault();
@@ -58,19 +60,20 @@ function SignUpComponent(props) {
     };
 
     function checkIfUserIsValid() {
-        props.dispatch(checkUser(values.email, values.username));
+        props.dispatch(checkUser(values.email, values.username, values.isAdmin));
+        setRendered(true);
         setNext(true);
     }
 
     useEffect(() => {
         if (isValid.error) {
-       
+            if(rendered) {
                 if (isValid.error.type === 'username') {
                     props.handleChange('usernameError', isValid.error.message);
                 } else {
                     props.handleChange('emailError', isValid.error.message);
                 }
-            
+            }
         } else {
             if(next) {props.nextStep();}
  

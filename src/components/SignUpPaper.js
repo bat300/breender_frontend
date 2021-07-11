@@ -21,13 +21,13 @@ function SignUpPaper(props) {
 
 
     const payments = [
-        { price: '4.99 €/mo', renewalFrequency: '1mo', plan_id: 'P-5CE276523D561035MMDTPVSY' },
-        { price: '12,99 €/3mo', renewalFrequency: '3mo', plan_id: 'P-8VR66594BC768200LMDTPT2A' },
-        { price: '22,99 €/6mo', renewalFrequency: '6mo', plan_id: 'P-9GV20034R8618241EMDTPUSI' },
-        { price: '35,99 €/yr', renewalFrequency: '1yr', plan_id: 'P-7HH647296G2018315MDTPWEY' },
+        { description: '4.99€ for 1 month', plan: '1mo', price: '4.99' },
+        { description: '12,99€ for 3 months', plan: '3mo', price: '12.99' },
+        { description: '22,99€ for 6 months', plan: '6mo', price: '22.99' },
+        { description: '34,99€ for 1 year', plan: '1yr', price: '34.99' },
     ];
 
-    const [chosenPayment, setChosenPayment] = React.useState('P-5CE276523D561035MMDTPVSY');
+    const [chosenPayment, setChosenPayment] = React.useState('4.99');
     const values = { username, password, password2, email, province, city, isAdmin, subscriptionPlan, chosenPayment};
     const errors = {emailError, usernameError};
 
@@ -50,6 +50,13 @@ function SignUpPaper(props) {
         setUsername(v);
 
     };
+
+    const onChangeIsAdmin = (v) => {
+        if(emailError.indexOf('admin') >= 0 && !v) {
+            setEmailError('');
+        }
+        setIsAdmin(v);
+    }
 
     function onChangeSubscriptionPlan(v)  {
         setSubscriptionPlan(v);
@@ -77,7 +84,7 @@ function SignUpPaper(props) {
                 setCity(event.target.value);
                 break;
             case 'isAdmin':
-                setIsAdmin(event.target.checked);
+                onChangeIsAdmin(event.target.checked);
                 break;
             case 'emailError':
                 setEmailError(event);

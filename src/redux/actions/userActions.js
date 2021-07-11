@@ -42,7 +42,7 @@ export function confirmEmail(email, token) {
     };
 }
 
-export function checkUser(email, username) {
+export function checkUser(email, username, isAdmin) {
     function onSuccess() {
         return { type: 'USER_UNIQUE_SUCCESS' };
     }
@@ -52,7 +52,7 @@ export function checkUser(email, username) {
 
     return async (dispatch) => {
         try {
-             let resp = await UserService.checkUser(email, username);
+             let resp = await UserService.checkUser(email, username, isAdmin);
             dispatch(onSuccess());
         } catch (e) {
             dispatch(onFailure(e));
@@ -69,7 +69,7 @@ export function loginReset() {
     return { type: 'LOGIN_RESET' };
 }
 
-export function register(email, username, password, city, province, isAdmin, subscriptionPlan, renewalFrequency, paymentMethod) {
+export function register(email, username, password, city, province, isAdmin, subscriptionPlan, paymentPlan) {
     function onSuccess(user) {
         return { type: 'LOGIN_SUCCESS', user: user };
     }
@@ -79,9 +79,9 @@ export function register(email, username, password, city, province, isAdmin, sub
 
     return async (dispatch) => {
         try {
-            console.log(email, username, password, city, province, isAdmin, subscriptionPlan, renewalFrequency, paymentMethod);
+            console.log(email, username, password, city, province, isAdmin, subscriptionPlan, paymentPlan);
             
-            let resp = await UserService.register(email, username, password, city, province, isAdmin, subscriptionPlan, renewalFrequency, paymentMethod);
+            let resp = await UserService.register(email, username, password, city, province, isAdmin, subscriptionPlan, paymentPlan);
             dispatch(onSuccess(resp.user));
         } catch (e) {
             dispatch(onFailure(e));

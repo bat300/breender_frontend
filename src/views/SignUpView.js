@@ -26,8 +26,8 @@ function SignUpView(props) {
         }
     }, [user, props.history]);
 
-    const onRegister = (email, username, password, city, province, isAdmin, subscriptionPlan, renewalFrequency, paymentMethod) => {
-        props.dispatch(register(email, username, password, city, province, isAdmin, subscriptionPlan, renewalFrequency, paymentMethod));
+    const onRegister = (email, username, password, city, province, isAdmin, subscriptionPlan, paymentPlan) => {
+        props.dispatch(register(email, username, password, city, province, isAdmin, subscriptionPlan, paymentPlan));
     };
 
     const onCancel = () => {

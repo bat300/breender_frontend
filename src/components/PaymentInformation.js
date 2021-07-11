@@ -4,7 +4,6 @@ import { Paper, FormControl, RadioGroup, FormControlLabel, Radio, Typography } f
 import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js';
 import { connect } from 'react-redux';
 import NotificationService from 'services/NotificationService';
-import { Button } from 'antd';
 
 const useStyles = makeStyles((theme) => ({
     usersignUpRoot: {
@@ -44,31 +43,18 @@ function PaymentInformationComponent(props) {
         'client-id': 'AU51gVXV29PQQgKgUCipVcv_d6ZEVCHUJH0AwBCBb3ey5faoUa-NdJ8eqWdl-aZysrDrCmf3Dy3EPsdX',
         locale: 'en_US', //set default language to english
         currency: 'EUR',
-        intent: 'subscription',
-        vault: true,
+        intent: 'capture',
     };
 
     const values = props.values;
-
-    const [requestSent, setRequestSent] = React.useState(false);
-
-    const subscribe = (data, actions) => {
-        return actions.subscription.create({
-            plan_id: props.values.chosenPayment, // Creates the subscription
-        });
-    }
 
     const onError = (err) => {
         NotificationService.notify('error', 'Error', 'There was an error in paypal payment. Plwase try again.');
     }
 
     function onRegister() {
-        const paymentPlan = props.payments.find( x => x.plan_id === props.values.chosenPayment);
-        const paymentMethod = {
-            type: 'paypal',
-            details: paymentPlan.price,
-        };
-        props.onRegister(values.email, values.username, values.password, values.city, values.province, values.isAdmin, values.subscriptionPlan, paymentPlan.renewalFrequency, paymentMethod);
+        const paymentPlan = props.payments.find( x => x.price === props.values.chosenPayment);
+        props.onRegister(values.email, values.username, values.password, values.city, values.province, values.isAdmin, values.subscriptionPlan, paymentPlan.plan);
     }
 
     return (
@@ -83,7 +69,7 @@ function PaymentInformationComponent(props) {
                     <FormControl component="fieldset">
                         <RadioGroup aria-label="plan" value={props.values.chosenPayment} onChange={(e) => props.handleChange('chosenPayment', e)} id="payment">
                             {props.payments.map((payment) => (
-                                <FormControlLabel value={payment.plan_id} control={<Radio />} label={payment.price} key={payment.plan_id}/>
+                                <FormControlLabel value={payment.price} control={<Radio />} label={payment.description} key={payment.price}/>
                             ))}
                         </RadioGroup>
                     </FormControl>
@@ -92,7 +78,15 @@ function PaymentInformationComponent(props) {
                     <PayPalScriptProvider options={options}>
                         <PayPalButtons forceReRender={[props.values.chosenPayment]} //rerender paypal button every time payment plan changes: ensures that plan_id is correct
                             style={{ layout: 'horizontal' }}
-                            createSubscription={subscribe}
+                            createOrder={(data, actions) => {
+                                return actions.order.create({
+                                    purchase_units: [{
+                                      amount: {
+                                        value: props.values.chosenPayment
+                                      }
+                                    }]
+                                  });
+                            }}
                             onApprove={async (data, actions) => {
                                 onRegister();
                             }}
