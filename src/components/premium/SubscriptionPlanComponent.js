@@ -22,13 +22,13 @@ function SubscriptionPlanComponent(props) {
             title: 'Free',
             price: '0.00',
             included: ['View all applications', 'Phone & Email support'],
-            excluded: ['Contact pet owners', ' Pay no transaction fees', 'Verify pet documents', 'Higher position in results', 'No advertisement banners'],
+            excluded: ['Contact pet owners', ' Pay no transaction fees', 'Get pet documents verified', 'Higher position in results', 'No advertisement banners'],
         },
         {
             id: 'premium',
             title: 'Premium',
             price: '9.00',
-            included: ['View all applications', 'Phone & Email support', 'Contact pet owners', 'Pay no transaction fees', 'Verify pet documents', 'Higher position in results', 'No advertisement banners'],
+            included: ['View all applications', 'Phone & Email support', 'Contact pet owners', 'Pay no transaction fees', 'Get pet documents verified', 'Higher position in results', 'No advertisement banners'],
             excluded: [],
         },
         

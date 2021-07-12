@@ -1,6 +1,6 @@
 import React, {useEffect }from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Paper, FormControl, RadioGroup, FormControlLabel, Radio, Typography } from '@material-ui/core';
+import { Paper, FormControl, RadioGroup, FormControlLabel, Radio, Typography, Button } from '@material-ui/core';
 import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js';
 import { connect } from 'react-redux';
 import NotificationService from 'services/NotificationService';
@@ -47,7 +47,7 @@ function PaymentInformationComponent(props) {
     const values = props.values;
 
     const onError = (err) => {
-        NotificationService.notify('error', 'Error', 'There was an error in paypal payment. Plwase try again.');
+        NotificationService.notify('error', 'Error', 'There was an error in PayPal payment. Please try again.');
     }
 
     function onRegister(paymentMethod) {
@@ -98,6 +98,11 @@ function PaymentInformationComponent(props) {
                             onError={onError}
                         />
                     </PayPalScriptProvider>
+                </div>
+                <div className={classes.signUpRow + ' ' + classes.signUpButtons}>
+                    <Button className={classes.signUpButton} onClick={props.prevStep}>
+                        Back
+                    </Button>
                 </div>
             </Paper>
         </div>

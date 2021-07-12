@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
         marginBottom: theme.spacing(2),
     },
     cardContent: {
-        paddingLeft: theme.spacing(13),
+        paddingLeft: theme.spacing(8),
     },
     features: {
         paddingBottom: theme.spacing(2),
