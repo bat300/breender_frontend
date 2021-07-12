@@ -1,5 +1,6 @@
 import { combineReducers } from 'redux';
 import user from './userReducer';
+import fetchedUser from './fetchedUserReducer';
 import entities from './entitiesReducer';
 import selectedMovie from './selectedMovieReducer';
 import selectedPet from './selectedPetReducer';
@@ -10,6 +11,7 @@ import messages from './messageReducer';
 
 const reducers = combineReducers({
     user,
+    fetchedUser,
     entities,
     selectedMovie,
     selectedPet,

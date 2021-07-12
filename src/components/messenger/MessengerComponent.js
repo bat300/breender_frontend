@@ -100,6 +100,7 @@ function MessengerComponent(props) {
                 <List>
                     {menuProps.conversations.map((c) => (
                         <div
+                            key={c.id}
                             onClick={() => {
                                 setCurrentChat(c);
                             }}

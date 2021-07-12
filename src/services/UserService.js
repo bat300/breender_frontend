@@ -1,8 +1,20 @@
 import HttpService from './HttpService';
+import axios from 'axios';
 
 export default class UserService {
     static baseURL() {
         return 'http://localhost:4000/auth';
+    }
+
+    static getUser(id) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const { data } = await axios.get(`/users/${id}`);
+                resolve(data);
+            } catch (err) {
+                reject(err);
+            }
+        });
     }
 
     static register(email, user, pass, city, isAdmin) {
