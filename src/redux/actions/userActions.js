@@ -69,7 +69,7 @@ export function loginReset() {
     return { type: 'LOGIN_RESET' };
 }
 
-export function register(email, username, password, city, province, isAdmin, subscriptionPlan, paymentPlan) {
+export function register(email, username, password, city, province, isAdmin, subscriptionPlan, paymentPlan, paymentMethod) {
     function onSuccess(user) {
         return { type: 'LOGIN_SUCCESS', user: user };
     }
@@ -79,9 +79,8 @@ export function register(email, username, password, city, province, isAdmin, sub
 
     return async (dispatch) => {
         try {
-            console.log(email, username, password, city, province, isAdmin, subscriptionPlan, paymentPlan);
             
-            let resp = await UserService.register(email, username, password, city, province, isAdmin, subscriptionPlan, paymentPlan);
+            let resp = await UserService.register(email, username, password, city, province, isAdmin, subscriptionPlan, paymentPlan, paymentMethod);
             dispatch(onSuccess(resp.user));
         } catch (e) {
             dispatch(onFailure(e));

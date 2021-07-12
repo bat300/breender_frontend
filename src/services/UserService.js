@@ -5,7 +5,7 @@ export default class UserService {
         return 'http://localhost:4000/auth';
     }
 
-    static register(email, user, pass, city, province, isAdmin, subscriptionPlan, paymentPlan) {
+    static register(email, user, pass, city, province, isAdmin, subscriptionPlan, paymentPlan, paymentMethod) {
         return new Promise((resolve, reject) => {
             HttpService.post(
                 `${UserService.baseURL()}/register`,
@@ -17,7 +17,8 @@ export default class UserService {
                     city: city,
                     province: province,
                     subscriptionPlan: subscriptionPlan,
-                    paymentPlan: paymentPlan
+                    paymentPlan: paymentPlan,
+                    paymentMethod: paymentMethod
 
                 },
                 function (data) {

@@ -41,9 +41,7 @@ function PaymentInformationComponent(props) {
 
     const options = {
         'client-id': 'AU51gVXV29PQQgKgUCipVcv_d6ZEVCHUJH0AwBCBb3ey5faoUa-NdJ8eqWdl-aZysrDrCmf3Dy3EPsdX',
-        locale: 'en_US', //set default language to english
         currency: 'EUR',
-        intent: 'capture',
     };
 
     const values = props.values;
@@ -52,9 +50,9 @@ function PaymentInformationComponent(props) {
         NotificationService.notify('error', 'Error', 'There was an error in paypal payment. Plwase try again.');
     }
 
-    function onRegister() {
+    function onRegister(paymentMethod) {
         const paymentPlan = props.payments.find( x => x.price === props.values.chosenPayment);
-        props.onRegister(values.email, values.username, values.password, values.city, values.province, values.isAdmin, values.subscriptionPlan, paymentPlan.plan);
+        props.onRegister(values.email, values.username, values.password, values.city, values.province, values.isAdmin, values.subscriptionPlan, paymentPlan.plan, paymentMethod);
     }
 
     return (
@@ -81,6 +79,7 @@ function PaymentInformationComponent(props) {
                             createOrder={(data, actions) => {
                                 return actions.order.create({
                                     purchase_units: [{
+                                      description: "Breender Premium Subscription",
                                       amount: {
                                         value: props.values.chosenPayment
                                       }
@@ -88,8 +87,14 @@ function PaymentInformationComponent(props) {
                                   });
                             }}
                             onApprove={async (data, actions) => {
-                                onRegister();
-                            }}
+                                actions.order.capture().then(details => {
+                                    const paymentMethod = {
+                                      type: "PayPal",
+                                      email: details.payer.email_address
+                                    };
+                                    onRegister(paymentMethod);
+                                
+                            })}}
                             onError={onError}
                         />
                     </PayPalScriptProvider>
