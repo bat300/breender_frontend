@@ -192,8 +192,6 @@ const EditPetView = (props) => {
 
     // on canceling the view
     const onCancel = async () => {
-        await dispatch(clearPetInfos());
-        await dispatch(updateProfilePicture({}));
         history.goBack();
     };
 
