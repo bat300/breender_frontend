@@ -22,9 +22,9 @@ const EditPetView = (props) => {
 
     useEffect(() => {
         // remove old profile picture
-        dispatch(updateProfilePicture({}))
+        dispatch(updateProfilePicture({}));
 
-        if(pet.officialName) {
+        if (pet.officialName) {
             setLoading(false);
         } else {
             const fetchPet = () => {
@@ -33,7 +33,6 @@ const EditPetView = (props) => {
             };
             fetchPet();
         }
-
     }, [dispatch, id, pet.officialName]);
 
     const [loading, setLoading] = useState(true);
@@ -52,6 +51,13 @@ const EditPetView = (props) => {
         const disabled = isEmpty(name) || isEmpty(sex) || isEmpty(species) || isEmpty(breed);
         setFormIsDisabled(disabled);
     }, [name, sex, breed, species]);
+
+    useEffect(() => {
+        if (pet.ownerId !== user.id) {
+            history.goBack();
+            NotificationService.notify('error', 'Navigation Error', 'This information is restricted');
+        }
+    }, [pet.ownerId, user.id, history]);
 
     // get old profile picture to delete it later if it was updated
     const oldProfilePicture = useProfilePicture();
@@ -145,7 +151,6 @@ const EditPetView = (props) => {
 
     const updatePet = async () => {
         if (pet.profilePicture.path) {
-            
             setLoading(true);
 
             // upload documents and pics to firebase first
@@ -153,7 +158,7 @@ const EditPetView = (props) => {
             await uploadCompetitions();
             await uploadPictures();
             await uploadProfilePicture();
-    
+
             const dateCreated = Date.now();
             // combine all information about a pet
             let petToUpload = {
@@ -172,22 +177,21 @@ const EditPetView = (props) => {
                 competitions: pet.competitions,
                 documents: pet.documents,
             };
-    
+
             const onSuccess = () => {
                 NotificationService.notify('success', 'Success', 'Your four-legged friend was successfully updated!');
                 history.push('/');
             };
-    
+
             const onError = () => {
                 NotificationService.notify('error', 'Error', 'There was a problem updating your pet.');
             };
-    
+
             dispatch(changePet(petToUpload, onSuccess, onError));
             setLoading(false);
         } else {
             NotificationService.notify('error', 'Upload Error', 'Upload of the pet profile picture is required!');
         }
-        
     };
 
     // on canceling the view

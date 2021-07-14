@@ -10,6 +10,7 @@ import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
 import { useDispatch } from 'react-redux';
 import { getPet } from 'redux/actions';
 import { useHistory, withRouter } from 'react-router-dom';
+import { useUser } from 'helper/hooks/auth.hooks';
 
 /**
  * Manages the process of getting pet details data
@@ -21,7 +22,9 @@ function PetProfileComponent(props) {
     const dispatch = useDispatch();
     const history = useHistory();
 
+    const loggedInUser = useUser();
     const id = props.id;
+    const myPet = loggedInUser.id === props.ownerId;
 
     const fetchPet = async () => {
         await dispatch(getPet(id));
@@ -43,11 +46,14 @@ function PetProfileComponent(props) {
                             </Grid>
                             <Divider variant="middle" />
                             <Grid xs={7} direction="column">
-                                <Grid item xs={12} className={classes.buttonGrid}>
-                                    <Button variant="contained" color="secondary" startIcon={<EditOutlinedIcon />} onClick={fetchPet}>
-                                        Edit
-                                    </Button>
-                                </Grid>
+                                {myPet ? (
+                                    <Grid item xs={12} className={classes.buttonGrid}>
+                                        <Button variant="contained" color="secondary" startIcon={<EditOutlinedIcon />} onClick={fetchPet}>
+                                            Edit
+                                        </Button>
+                                    </Grid>
+                                ) : null}
+
                                 <Grid item xs={12}>
                                     <PetInformation
                                         officialName={props.officialName}
