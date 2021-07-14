@@ -30,10 +30,10 @@ export const PrivateRoute = (props) => {
     const isAuthorized = LocalStorageService.isAuthorized();
     useEffect(() => {
         if (!isAuthorized) {
-            NotificationService.notify('warning', 'Warning', 'You have to be logged in to view this page')
+            NotificationService.notify('warning', 'Warning', 'You have to be logged in to view this page');
         }
     }, [isAuthorized]);
-    
+
     return isAuthorized ? (
         <Route {...props}>
             <DefaultHeader />
@@ -72,6 +72,7 @@ const Routes = () => {
                 <EditPetView />
             </PrivateRoute>
             <DefaultRoute path="*">
+                <DefaultHeader />
                 <NotFoundView />
             </DefaultRoute>
         </Switch>
