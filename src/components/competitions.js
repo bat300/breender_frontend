@@ -56,7 +56,7 @@ const EditableCell = ({ title, focused, editable, children, dataIndex, record, h
             const values = await form.validateFields();
             toggleEdit();
             handleSave({ ...record, ...values });
-        } catch (errInfo) { }
+        } catch (errInfo) {}
     };
 
     let childNode = children;
@@ -304,7 +304,7 @@ const CompetitionsComponent = (props) => {
                 </Grid>
             </Grid>
             <Table dataSource={editedCompetitions} columns={columnsData} />
-            <Modal visible={isModalVisible} onOk={hideModal} onCancel={hideModal} className={classes.modal}>
+            <Modal visible={isModalVisible} onOk={hideModal} onCancel={hideModal} className={classes.modal} width={'80vw'}>
                 <Grid container alignItems="flex-end" justify="flex-end">
                     <Button
                         onClick={handleAdd}
@@ -317,7 +317,7 @@ const CompetitionsComponent = (props) => {
                         Add a row
                     </Button>
                 </Grid>
-                <Table components={components} rowClassName={() => 'editable-row'} bordered dataSource={competitions} columns={columns} style={{ display: 'block' }} />
+                <Table components={components} rowClassName={() => 'editable-row'} bordered dataSource={competitions} columns={columns} />
             </Modal>
         </div>
     );
@@ -326,6 +326,7 @@ const CompetitionsComponent = (props) => {
 const useStyles = makeStyles((theme) => ({
     layout: {
         display: 'flex',
+        width: '100%',
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
@@ -340,8 +341,8 @@ const useStyles = makeStyles((theme) => ({
         alignSelf: 'flex-end',
     },
     modal: {
-        width: '80vw',
-        margin: '0 auto',
+        display: 'flex',
+        alignItems: 'stretch',
         marginTop: 100,
     },
 }));
