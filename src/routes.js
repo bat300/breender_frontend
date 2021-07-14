@@ -9,6 +9,7 @@ import EmailConfirmationView from './views/EmailConfirmationView';
 import EditPetView from './views/EditPetView';
 import NotFoundView from './views/NotFoundView';
 import SearchView from './views/SearchView';
+import TransactionsView from 'views/TransactionsView';
 // services
 import { LocalStorageService } from 'services';
 import Header from 'components/Header';
@@ -63,6 +64,9 @@ const Routes = () => {
             </PrivateRoute>
             <PrivateRoute exact path="/edit/pet/:id">
                 <EditPetView />
+            </PrivateRoute>
+            <PrivateRoute exact path="/transactions">
+                <TransactionsView />
             </PrivateRoute>
             <DefaultRoute path="*">
                 <NotFoundView />
