@@ -1,43 +1,125 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
 import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
 import StepConnector from '@material-ui/core/StepConnector';
 import { Check } from '@material-ui/icons';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
+import StepperInformation from './StepperInformation';
+import { useLoggedInUser } from 'helper/hooks/auth.hooks';
+import PaymentResultComponent from './PaymentResult';
+import { useDispatch, useSelector } from 'react-redux';
+import { changePet, createTransaction } from 'redux/actions';
+import { NotificationService } from 'services';
 
-const useStyles = makeStyles((theme) => ({
-    root: {
-        width: '100%',
-    },
-    button: {
-        marginRight: theme.spacing(1),
-    },
-}));
+const STATUS_TYPE = {
+    SUCCESS: 'success',
+    ERROR: 'error',
+};
 
-function getSteps() {
-    return ['Confirm general information', 'Confirm payment', 'Finish'];
-}
-
-const PaymentStepper = () => {
+const PaymentStepper = ({ pet, close }) => {
     const classes = useStyles();
-    const [activeStep, setActiveStep] = React.useState(0);
-    const steps = getSteps();
+    const dispatch = useDispatch();
 
+    const [paymentStatus, setPaymentStatus] = useState('none');
+    const transaction = useSelector((state) => state.transaction.transaction);
+
+    const [activeStep, setActiveStep] = useState(0);
+
+    const steps = ['Confirm general information', 'Confirm payment', 'Finish'];
+    const loggedInUser = useLoggedInUser();
+
+    const isFreeOfCharge = loggedInUser.subscriptionPlan === 'premium' && pet.price === 0; // premium user don't need to pay any fees for the free pet
+    const isButtonDisabled = activeStep === 1 && !isFreeOfCharge;
+
+    // helper functions for the transaction generation
+    const amountToPay = () => {
+        if (loggedInUser.subscriptionPlan === 'free') {
+            let fee = Math.min(pet.price * 0.05, 20); // 5% of the pet price or maximum 20€ as fee
+            fee = Math.max(fee, 1); // min 1€
+            return pet.price + fee;
+        }
+        return pet.price;
+    };
+    // generate order number for new transactions
+    const generateId = () => Math.floor(Math.random() * 10000000000).toString(16);
+    const transactionData = {
+        orderNr: generateId(),
+        senderId: loggedInUser._id,
+        receiverId: pet.ownerId,
+        pet: pet.id,
+        createdAt: new Date(),
+        senderResponse: 'pending',
+        receiverResponse: 'pending',
+        status: 'pending',
+        amount: amountToPay(),
+        processed: false,
+        reminderSent: false,
+    };
+
+    // handle next step
     const handleNext = () => {
+        if (activeStep === steps.length - 1) {
+            close();
+            setActiveStep(0);
+            return;
+        }
+        // skip payment and create transaction directly
+        if (isFreeOfCharge && activeStep === 1) {
+            onApprove();
+            return;
+        }
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
     };
 
+    // go one step back
     const handleBack = () => {
         setActiveStep((prevActiveStep) => prevActiveStep - 1);
     };
 
-    const handleReset = () => {
-        setActiveStep(0);
+    // main function for approval and transaction creation
+    const onApprove = async () => {
+        setActiveStep((prevActiveStep) => prevActiveStep + 1);
+
+        await dispatch(
+            createTransaction(
+                transactionData,
+                () => {
+                    NotificationService.notify('success', 'Transaction Created', 'Transaction was successfully created');
+                    setPaymentStatus(STATUS_TYPE.SUCCESS);
+
+                    // update pet status to purchased
+                    let newPet = { ...pet, purchased: true };
+                    dispatch(changePet(newPet));
+                },
+                () => {
+                    NotificationService.notify('error', 'Transaction Error', 'Error occurred during transaction creation');
+                    setPaymentStatus(STATUS_TYPE.ERROR);
+                }
+            )
+        );
+    };
+
+    // error handling
+    const onError = () => {
+        setActiveStep((prevActiveStep) => prevActiveStep + 1);
+        setPaymentStatus(STATUS_TYPE.ERROR);
+    };
+
+    const getStepContent = (stepIndex) => {
+        switch (stepIndex) {
+            case 0:
+                return <StepperInformation pet={pet} loggedInUser={loggedInUser} step={0} isFreeOfCharge={isFreeOfCharge} onApprove={onApprove} onError={onError} amount={amountToPay()} />;
+            case 1:
+                return <StepperInformation pet={pet} loggedInUser={loggedInUser} step={1} isFreeOfCharge={isFreeOfCharge} onApprove={onApprove} onError={onError} amount={amountToPay()} />;
+            case 2:
+                return <PaymentResultComponent status={paymentStatus} transaction={transaction} />;
+            default:
+                return 'Unknown stepIndex';
+        }
     };
 
     return (
@@ -56,20 +138,14 @@ const PaymentStepper = () => {
                 })}
             </Stepper>
             <div>
-                {activeStep === steps.length ? (
+                {activeStep === steps.length ? null : (
                     <div>
-                        <Typography className={classes.instructions}>All steps completed - you&apos;re finished</Typography>
-                        <Button onClick={handleReset} className={classes.button}>
-                            Reset
-                        </Button>
-                    </div>
-                ) : (
-                    <div>
+                        {getStepContent(activeStep)}
                         <div>
-                            <Button disabled={activeStep === 0} onClick={handleBack} className={classes.button}>
+                            <Button disabled={activeStep === 0 || activeStep === 2} onClick={handleBack} className={classes.button}>
                                 Back
                             </Button>
-                            <Button variant="contained" color="primary" onClick={handleNext} className={classes.button}>
+                            <Button disabled={isButtonDisabled} variant="contained" color="primary" onClick={handleNext} className={classes.button}>
                                 {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
                             </Button>
                         </div>
@@ -148,5 +224,15 @@ StepIcon.propTypes = {
     active: PropTypes.bool, // Whether this step is active.
     completed: PropTypes.bool, // Mark the step as completed. Is passed to child components.
 };
+
+const useStyles = makeStyles((theme) => ({
+    root: {
+        width: '100%',
+    },
+    button: {
+        marginTop: theme.spacing(5),
+        marginRight: theme.spacing(1),
+    },
+}));
 
 export default PaymentStepper;
