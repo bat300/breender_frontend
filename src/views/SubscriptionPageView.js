@@ -1,10 +1,11 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { connect, useSelector } from 'react-redux';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import SubscriptionPlanComponent from '../components/premium/SubscriptionPlanComponent';
+import { withRouter } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
     premiumDescription: {
@@ -15,8 +16,8 @@ const useStyles = makeStyles((theme) => ({
 function SubscriptionPageView(props) {
     const classes = useStyles();
 
+    const user = useSelector((state) => state.user);
 
-    const subscriptionPlan = '';
     const onSignUp = (v) => {
         //pass subscription plan to sign up page
         props.history.push({pathname:"/register", subscriptionPlan: v});
@@ -34,10 +35,10 @@ function SubscriptionPageView(props) {
             </Container>
             <Container maxWidth="md" component="main">
                 <Grid container spacing={5} alignItems="flex-end">
-                    <SubscriptionPlanComponent onClick={onSignUp} subscriptionPlan={subscriptionPlan}/>
+                    <SubscriptionPlanComponent onClick={user.user? () => {} : onSignUp} subscriptionPlan={user.user? user.user.subscriptionPlan : ''}/>
                 </Grid>
             </Container>
         </Container>
     );
 }
-export default connect()(SubscriptionPageView);
+export default connect()(withRouter(SubscriptionPageView));

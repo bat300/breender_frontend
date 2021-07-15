@@ -58,6 +58,7 @@ const Routes = () => {
                 <SearchView />
             </DefaultRoute>
             <DefaultRoute path="/premium">
+            <DefaultHeader />
                 <SubscriptionPageView />
             </DefaultRoute>
             <PrivateRoute exact path="/pet/:id">
