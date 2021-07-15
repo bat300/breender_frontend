@@ -72,9 +72,9 @@ const TransactionsOverviewTable = (props) => {
     const columns = [
         {
             title: 'ID',
-            dataIndex: '_id',
-            key: '_id',
-            render: (_, record) => <p>{record._id}</p>,
+            dataIndex: 'orderNr',
+            key: 'orderNr',
+            render: (id) => <p>{String(id).toUpperCase()}</p>,
         },
         {
             title: 'MATE',
