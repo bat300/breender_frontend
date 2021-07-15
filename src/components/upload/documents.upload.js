@@ -4,11 +4,10 @@ import { Upload } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import { sha256 } from 'js-sha256';
 import { Button } from '@material-ui/core';
-import { useDispatch } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 import { usePet } from 'helper/hooks/pets.hooks';
 import { useUser } from 'helper/hooks/auth.hooks';
 import { updateSelectedPet } from 'redux/actions';
-
 
 const prepareDocumentsFileList = (pet) => {
     let petList = [];
@@ -23,16 +22,18 @@ const prepareDocumentsFileList = (pet) => {
     return petList;
 };
 
-const prepareCompetitionsFileList = (pet) => {
+const prepareCompetitionsFileList = (pet, key) => {
     let petList = [];
     pet.competitions.forEach((value, index) => {
-        if(value.certificate) {
-            petList.push({
-                uid: index,
-                name: value.certificate.name,
-                status: 'done',
-                url: value.certificate.url,
-            });
+        if (value._id === key) {
+            if (value.certificate) {
+                petList.push({
+                    uid: index,
+                    name: value.certificate.name,
+                    status: 'done',
+                    url: value.certificate.url,
+                });
+            }
         }
     });
     return petList;
@@ -47,18 +48,19 @@ const prepareCompetitionsFileList = (pet) => {
 const DocumentsUpload = (props) => {
     const dispatch = useDispatch();
     const { mode } = props;
+    const isCompetition = props.type === 'competitions';
+    let key = isCompetition && props.competitionId;
 
     // get global states
     const user = useUser();
     const pet = usePet();
-    
-    const isCompetition = props.type === 'competitions' || false;
 
-    const [fileList, setFileList] = useState(mode === 'add' ? [] : isCompetition ? prepareCompetitionsFileList(pet) : prepareDocumentsFileList(pet));
+    console.log(key, pet)
+
+    const [fileList, setFileList] = useState(mode === 'add' ? [] : isCompetition ? prepareCompetitionsFileList(pet, key) : prepareDocumentsFileList(pet));
 
     const keyFolder = isCompetition ? 'competitions' : 'documents';
     const pathPrefix = `users/${user.id}/pets/documents`;
-    let key = isCompetition && props.competitionId;
     let maxFileNumber = props.maxFiles || 8;
 
     // update file list
@@ -92,17 +94,17 @@ const DocumentsUpload = (props) => {
         if (isCompetition) {
             let competitionData = [...pet.competitions];
             competitionData.map((item, index) => {
-                if (index === key) {
+                if (item._id === key) {
                     item.certificate = newData;
                     return item;
                 }
                 return item;
             });
-            petData.competitions = competitionData
+            petData.competitions = competitionData;
             dispatch(updateSelectedPet(petData));
         } else {
             let docs = [...pet.documents, newData];
-            petData.documents = docs
+            petData.documents = docs;
             dispatch(updateSelectedPet(petData));
         }
 
@@ -116,14 +118,14 @@ const DocumentsUpload = (props) => {
         if (isCompetition) {
             let competitionData = [...pet.competitions];
             competitionData.map((item, index) => {
-                if (index === key) {
+                if (item._id === key) {
                     item.certificate = {};
                     return item;
                 }
                 return item;
             });
 
-            petData.competitions = competitionData
+            petData.competitions = competitionData;
             dispatch(updateSelectedPet(petData));
             // remove document
         } else {
@@ -137,7 +139,7 @@ const DocumentsUpload = (props) => {
                 dispatch(updateSelectedPet(petData));
             } else {
                 let docObj = docData.filter((value) => value.name !== file.name);
-                petData.documents = docObj
+                petData.documents = docObj;
                 dispatch(updateSelectedPet(petData));
             }
         }
@@ -156,4 +158,4 @@ const DocumentsUpload = (props) => {
     );
 };
 
-export default DocumentsUpload;
+export default connect()(DocumentsUpload);

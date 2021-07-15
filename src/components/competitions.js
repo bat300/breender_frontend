@@ -8,7 +8,7 @@ import { Button, Grid, IconButton } from '@material-ui/core';
 import { Input, Form } from 'antd';
 import DocumentsUpload from './upload/documents.upload';
 import moment from 'moment';
-import { useDispatch } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 import { usePet } from 'helper/hooks/pets.hooks';
 import { updateSelectedPet } from 'redux/actions';
 import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
@@ -187,7 +187,7 @@ const CompetitionsComponent = (props) => {
             title: 'Certificate',
             dataIndex: 'certificate',
             key: 'certificate',
-            render: (_, record) => (competitions.length >= 1 ? <DocumentsUpload type="competitions" competitionId={record.key} maxFiles={1} size={'small'} /> : null),
+            render: (_, record) => (competitions.length >= 1 ? <DocumentsUpload type="competitions" competitionId={record._id} maxFiles={1} size={'small'} /> : null),
         },
         {
             title: 'Remove',
@@ -347,4 +347,4 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default CompetitionsComponent;
+export default connect()(CompetitionsComponent);
