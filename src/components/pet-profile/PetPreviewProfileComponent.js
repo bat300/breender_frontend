@@ -1,5 +1,5 @@
 import React from 'react';
-import { Avatar, Grid, makeStyles, Typography } from '@material-ui/core';
+import { Avatar, CardActionArea, Grid, makeStyles, Typography } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
 
 const PetPreviewProfileComponent = (props) => {
@@ -9,20 +9,20 @@ const PetPreviewProfileComponent = (props) => {
     const { pet, username } = props;
     const image = pet.profilePicture.src;
 
-    const redirectToPetPage = () => history.push(`/pet/${pet._id}`)
+    const redirectToPetPage = () => history.push(`/pet/${pet._id}`);
 
     return (
-        <div onClick={redirectToPetPage}>
-        <Grid container className={classes.layout} spacing={2}>
-            <Grid item>
-                <Avatar className={classes.picture} src={image} alt="Pet Profile Picture" />
+        <CardActionArea onClick={redirectToPetPage}>
+            <Grid container className={classes.layout} spacing={2}>
+                <Grid item>
+                    <Avatar className={classes.picture} src={image} alt="Pet Profile Picture" />
+                </Grid>
+                <Grid item direction="column" spacing={2} className={classes.textLayout}>
+                    <Typography variant="caption">{pet.officialName}</Typography>
+                    <Typography variant="caption">{username}</Typography>
+                </Grid>
             </Grid>
-            <Grid item direction="column" spacing={2} className={classes.textLayout}>
-                <Typography variant="caption">{pet.officialName}</Typography>
-                <Typography variant="caption">{username}</Typography>
-            </Grid>
-        </Grid>
-        </div>
+        </CardActionArea>
     );
 };
 
