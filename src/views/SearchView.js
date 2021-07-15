@@ -49,6 +49,8 @@ function SearchView(props) {
     const dispatch = useDispatch();
     let pets = useSelector((state) => state.entities.pets);
     let user = useUser();
+    // for scrolling to the search
+    const ref = React.useRef(null);
 
     const [isLoading, setIsLoading] = React.useState(true);
     const [chosenSpecies, setSpecies] = React.useState('');
@@ -84,7 +86,7 @@ function SearchView(props) {
         // load pets when the page is loaded or the pets were filtered.
         if (!pets || isLoading) {
             loadPets();
-            setIsLoading(false)
+            setIsLoading(false);
         }
     }, [pets]);
 
@@ -124,6 +126,10 @@ function SearchView(props) {
         return `${age} years old`;
     }
 
+    const onSubscribe = () => props.history.push('/premium');
+
+    const onSearchTrigger = () => ref.current.scrollIntoView({ behavior: 'smooth' });
+
     return (
         <div>
             <Grid container direction="row" justify="center">
@@ -132,10 +138,10 @@ function SearchView(props) {
                         <Typography style={{ fontSize: 24 }}>Find the best partner for your pet</Typography>
                     </Grid>
                     <Grid item>
-                        <Button variant="contained" color="primary" style={{ marginRight: 20 }}>
+                        <Button variant="contained" color="primary" style={{ marginRight: 20 }} onClick={onSearchTrigger}>
                             Search for a pet
                         </Button>
-                        <Button variant="contained" color="primary">
+                        <Button variant="contained" color="primary" onClick={onSubscribe}>
                             Subscribe
                         </Button>
                     </Grid>
@@ -146,7 +152,7 @@ function SearchView(props) {
                     </div>
                 </Grid>
             </Grid>
-            <div className={classes.filters}>
+            <div ref={ref} className={classes.filters}>
                 <FormControl className={classes.formControl}>
                     <InputLabel id="species-select-label">Species</InputLabel>
                     <Select labelId="species-select-label" id="species-select" value={chosenSpecies} onChange={handleSpeciesChange}>
