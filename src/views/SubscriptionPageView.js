@@ -5,6 +5,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import SubscriptionPlanComponent from '../components/premium/SubscriptionPlanComponent';
+import { withRouter } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
     premiumDescription: {
@@ -40,4 +41,4 @@ function SubscriptionPageView(props) {
         </Container>
     );
 }
-export default connect()(SubscriptionPageView);
+export default connect()(withRouter(SubscriptionPageView));
