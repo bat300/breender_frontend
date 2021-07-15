@@ -39,19 +39,6 @@ const StatusTag = (props) => {
         setResponse(STATUS_TYPE.PENDING);
     };
 
-    const handleTransactionStatus = (transaction) => {
-        let receiverStatus = transaction.receiverResponse;
-        let senderStatus = transaction.senderResponse;
-        if (receiverStatus === STATUS_TYPE.SUCCESS && senderStatus === STATUS_TYPE.SUCCESS) {
-            transaction.status = STATUS_TYPE.SUCCESS;
-        } else if (receiverStatus === STATUS_TYPE.FAIL || senderStatus === STATUS_TYPE.FAIL) {
-            transaction.status = STATUS_TYPE.FAIL;
-        } else {
-            transaction.status = STATUS_TYPE.PENDING;
-        }
-        return transaction.status;
-    };
-
     const handleConfirm = () => {
         let transactionCopy = transaction;
         if (isSender) {
@@ -59,7 +46,6 @@ const StatusTag = (props) => {
         } else {
             transactionCopy.receiverResponse = response;
         }
-        transactionCopy.status = handleTransactionStatus(transactionCopy);
         confirm(transactionCopy);
         setOpen(false);
     };
