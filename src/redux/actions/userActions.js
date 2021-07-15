@@ -87,3 +87,21 @@ export function register(email, username, password, city, province, isAdmin, sub
         }
     };
 }
+
+export function me(id) {
+    function onSuccess(user) {
+        return { type: 'GET_LOGGEDINUSER', loggedInUser: user };
+    }
+    function onFailure(error) {
+        return { type: 'LOGIN_RESET' };
+    }
+
+    return async (dispatch) => {
+        try {
+            let resp = await UserService.getLoggedInUser(id);
+            dispatch(onSuccess(resp));
+        } catch (e) {
+            dispatch(onFailure(e));
+        }
+    };
+}

@@ -1,8 +1,14 @@
 import HttpService from './HttpService';
+import axios from 'axios';
 
 export default class UserService {
     static baseURL() {
         return 'http://localhost:4000/auth';
+    }
+
+    static setToken() {
+        const token = localStorage.getItem('jwtToken');
+        axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
     }
 
     static register(email, user, pass, city, province, isAdmin, subscriptionPlan, paymentPlan, paymentMethod) {
@@ -18,8 +24,7 @@ export default class UserService {
                     province: province,
                     subscriptionPlan: subscriptionPlan,
                     paymentPlan: paymentPlan,
-                    paymentMethod: paymentMethod
-
+                    paymentMethod: paymentMethod,
                 },
                 function (data) {
                     resolve(data);
@@ -31,10 +36,10 @@ export default class UserService {
         });
     }
 
-    static checkUser(email, username,isAdmin) {
+    static checkUser(email, username, isAdmin) {
         return new Promise((resolve, reject) => {
             HttpService.get(
-                `${UserService.baseURL()}/checkUser/${email}/${username}/${isAdmin}`,          
+                `${UserService.baseURL()}/checkUser/${email}/${username}/${isAdmin}`,
                 function (data) {
                     resolve(data);
                 },
@@ -75,6 +80,12 @@ export default class UserService {
                 }
             );
         });
+    }
+
+    static async getLoggedInUser(id) {
+        this.setToken();
+        const { data } = await axios.get(`/auth/me/${id}`);
+        return data;
     }
 
     static logout() {
