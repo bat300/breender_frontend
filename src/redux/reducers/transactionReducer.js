@@ -18,7 +18,7 @@ const transaction = (state = initialState, action) => {
         case TransactionTypes.DELETE_TRANSACTION:
             return { ...state, transactions: action.transactions };
         case TransactionTypes.CREATE_TRANSACTION:
-            return { ...state };
+            return { ...state, transaction: action.transaction };
         case TransactionTypes.UPDATE_TRANSACTION:
             return { ...state, transaction: action.transaction };
         case TransactionTypes.GET_TRANSACTION:

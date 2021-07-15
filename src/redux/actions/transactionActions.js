@@ -53,7 +53,7 @@ export const deleteTransaction = (id, userId) => {
 export const createTransaction = (transaction, onSuccess = () => null, onError = (err) => null) => {
     const createTransactionAction = () => {
         onSuccess();
-        return { type: TransactionTypes.CREATE_TRANSACTION };
+        return { type: TransactionTypes.CREATE_TRANSACTION, transaction: transaction };
     };
     const onFailure = (err) => {
         onError(err);
