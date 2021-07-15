@@ -5,7 +5,7 @@ export default class UserService {
         return 'http://localhost:4000/auth';
     }
 
-    static register(email, user, pass, city, isAdmin) {
+    static register(email, user, pass, city, province, isAdmin, subscriptionPlan, paymentPlan, paymentMethod) {
         return new Promise((resolve, reject) => {
             HttpService.post(
                 `${UserService.baseURL()}/register`,
@@ -15,7 +15,26 @@ export default class UserService {
                     isAdmin: isAdmin,
                     email: email,
                     city: city,
+                    province: province,
+                    subscriptionPlan: subscriptionPlan,
+                    paymentPlan: paymentPlan,
+                    paymentMethod: paymentMethod
+
                 },
+                function (data) {
+                    resolve(data);
+                },
+                function (textStatus) {
+                    reject(textStatus);
+                }
+            );
+        });
+    }
+
+    static checkUser(email, username,isAdmin) {
+        return new Promise((resolve, reject) => {
+            HttpService.get(
+                `${UserService.baseURL()}/checkUser/${email}/${username}/${isAdmin}`,          
                 function (data) {
                     resolve(data);
                 },

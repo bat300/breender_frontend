@@ -1,11 +1,12 @@
+
 import React from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
-// views
 import UserLoginView from './views/UserLoginView';
 import SignUpView from './views/SignUpView';
 import AddPetView from './views/AddPetView';
 import PetProfileView from "./views/PetProfileView";
 import EmailConfirmationView from './views/EmailConfirmationView';
+import SubscriptionPageView from './views/SubscriptionPageView';
 import EditPetView from './views/EditPetView';
 import NotFoundView from './views/NotFoundView';
 import SearchView from './views/SearchView';
@@ -25,6 +26,7 @@ const DefaultHeader = () => {
     };
     return <Header darkmode={theme === AppTheme.DARK} toggletheme={toggleTheme} />;
 };
+
 
 // used for routing
 export const PrivateRoute = (props) => {
@@ -55,6 +57,9 @@ const Routes = () => {
             <DefaultRoute exact path="/">
                 <DefaultHeader />
                 <SearchView />
+            </DefaultRoute>
+            <DefaultRoute path="/premium">
+                <SubscriptionPageView />
             </DefaultRoute>
             <PrivateRoute exact path="/pet/:id">
                 <PetProfileView />

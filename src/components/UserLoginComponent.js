@@ -1,7 +1,8 @@
 import React, { useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { Paper, Button, TextField, Typography } from "@material-ui/core";
-
+import { connect } from "react-redux";
+import { withRouter } from "react-router-dom";
 const useStyles = makeStyles((theme) => ({
     userLoginRoot: {
         margin: "auto",
@@ -40,20 +41,24 @@ function LoginComponent(props) {
 
     const [username, setUsername] = React.useState("");
     const [password, setPassword] = React.useState("");
-
+    //set to false when component is rendered for the first time in order to skip error message from previous login
+    const [rendered, setRendered ] = React.useState(false);
     const [loginError, setLoginError] = React.useState("");
 
     useEffect(() => {
         if (props.user.error) {
-            setLoginError(props.user.error);
+            if(rendered) {//if component is rendered for the 2. or more times, show new error
+                setLoginError(props.user.error);
+            }  
         } else {
-            setLoginError("");
+            setLoginError("");      
         }
     }, [props.user]);
 
     const onLogin = (e) => {
         e.preventDefault();
         props.onLogin(username, password);
+        setRendered(true); //set to true when user tries to login for the first time
     };
 
     const onChangeUsername = (e) => {
@@ -121,4 +126,4 @@ function LoginComponent(props) {
     );
 }
 
-export default LoginComponent;
+export default connect()(withRouter(LoginComponent));;
