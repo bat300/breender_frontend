@@ -4,15 +4,18 @@ import { Redirect, Route, Switch } from 'react-router-dom';
 import UserLoginView from './views/UserLoginView';
 import SignUpView from './views/SignUpView';
 import AddPetView from './views/AddPetView';
-import PetProfileView from "./views/PetProfileView";
+import PetProfileView from './views/PetProfileView';
 import EmailConfirmationView from './views/EmailConfirmationView';
 import EditPetView from './views/EditPetView';
 import NotFoundView from './views/NotFoundView';
 import SearchView from './views/SearchView';
+import DocumentListView from './views/DocumentListView';
 // services
 import { LocalStorageService } from 'services';
 import Header from 'components/Header';
 import AppTheme from 'theming/themetypes';
+import { useSelector } from 'react-redux';
+
 
 const DefaultHeader = () => {
     // theme for app
@@ -37,6 +40,19 @@ export const PrivateRoute = (props) => {
     );
 };
 
+export const AdminRoute = (props) => {
+    const user = useSelector((state) => state.user);
+
+    return LocalStorageService.isAuthorized() && user.user.role === "admin"? (
+        <Route {...props}>
+            <DefaultHeader />
+            {props.children}
+        </Route>
+    ) : (
+        <Redirect to={{ pathname: '/', state: { from: props.location } }} />
+    );
+};
+
 export const DefaultRoute = (props) => <Route {...props}>{props.children}</Route>;
 
 const Routes = () => {
@@ -55,6 +71,9 @@ const Routes = () => {
                 <DefaultHeader />
                 <SearchView />
             </DefaultRoute>
+            <AdminRoute exact path="/documents">
+                <DocumentListView />
+            </AdminRoute>
             <PrivateRoute exact path="/pet/:id">
                 <PetProfileView />
             </PrivateRoute>

@@ -5,6 +5,7 @@ import selectedMovie from './selectedMovieReducer';
 import selectedPet from './selectedPetReducer';
 import pets from './petReducer';
 import confirmation from './confirmationReducer';
+import documents from './documentReducer';
 
 const reducers = combineReducers({
     user,
@@ -12,6 +13,7 @@ const reducers = combineReducers({
     selectedMovie,
     selectedPet,
     pets,
+    documents,
     confirmation,
 });
 

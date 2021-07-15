@@ -71,6 +71,7 @@ function SearchView(props) {
         if (!pets) {
             loadPets();
         }
+        console.log(pets);
     }, [pets]);
 
     const updateFilters = async () => {

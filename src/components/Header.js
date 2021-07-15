@@ -8,6 +8,7 @@ import SearchIcon from '@material-ui/icons/Search';
 import ChatBubbleOutlineIcon from '@material-ui/icons/ChatBubbleOutline';
 import PersonIcon from '@material-ui/icons/Person';
 import KebabMenu from './KebabMenu';
+import { useSelector } from 'react-redux';
 
 const useStyles = makeStyles((theme) => ({
     toolbar: {
@@ -32,6 +33,7 @@ const useStyles = makeStyles((theme) => ({
  */
 function Header(props) {
     const classes = useStyles();
+    const user = useSelector((state) => state.user);
 
     const [menuAnchor, setMenuAnchor] = React.useState(null);
 
@@ -61,6 +63,12 @@ function Header(props) {
                 <Typography className={classes.title} variant="h5" color="inherit" style={{ cursor: 'pointer' }}>
                     Premium
                 </Typography>
+                {user.user ? user.user.role === "admin" ? <div className={classes.title2}><Typography  variant="h5" color="inherit">
+                    |
+                </Typography>
+                <Typography className={classes.title2} variant="h5" color="inherit" style={{ cursor: 'pointer' }}>
+                    Documents
+                </Typography></div> : null : null}
                 <IconButton onClick={onClickLogo} color="inherit">
                     <SearchIcon />
                 </IconButton>
