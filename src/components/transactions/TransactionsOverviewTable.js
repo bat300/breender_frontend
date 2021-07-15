@@ -1,6 +1,7 @@
 import React from 'react';
 // antd imports
-import { Table, Tooltip } from 'antd';
+import { Table, Tag, Tooltip } from 'antd';
+import '../../theming/antd.css';
 // material-ui imports
 import { makeStyles } from '@material-ui/core/styles';
 import { useDispatch } from 'react-redux';
@@ -16,8 +17,9 @@ const TransactionsOverviewTable = (props) => {
     const dispatch = useDispatch();
     const { transactions } = props;
 
-    // redux states
+    // states
     const user = useUser();
+    const checkRequiresInvestigation = (t) => (t.senderResponse === 'fail' && t.receiverResponse === 'success') || (t.senderResponse === 'success' && t.receiverResponse === 'fail');
 
     // check if user is the sender or the receiver
     const checkUserIsSender = (transaction) => {
@@ -28,6 +30,7 @@ const TransactionsOverviewTable = (props) => {
         }
     };
 
+    // update transaction on confirming to change the transaction status
     const confirm = async (transaction) => {
         await dispatch(updateTransaction(transaction));
         await dispatch(getTransactions(user.id));
@@ -35,52 +38,67 @@ const TransactionsOverviewTable = (props) => {
 
     const checkUserStatusWasSet = (transaction) => {
         const isSender = checkUserIsSender(transaction);
-        if (isSender) return transaction.senderResponse === 'success' || transaction.senderResponse === 'fail';
-        else return transaction.receiverResponse === 'success' || transaction.receiverResponse === 'fail';
+        const { senderResponse, receiverResponse, status } = transaction;
+        const statusWasSet = status === 'fail' || status === 'success';
+        if (isSender) return senderResponse === 'success' || senderResponse === 'fail' || statusWasSet;
+        else return receiverResponse === 'success' || receiverResponse === 'fail' || statusWasSet;
     };
 
+    // get the owner of the pet
+    const getPetOwner = (transaction) => {
+        if (transaction.pet.ownerId === transaction.senderId._id) {
+            return transaction.senderId;
+        } else {
+            return transaction.receiverId;
+        }
+    };
+
+    // show tooltip on hovering over pending status row
     const getToolTipTitle = (transaction) => {
-        if (transaction.status === 'pending') {
-            if (transaction.senderResponse === 'pending' && transaction.receiverResponse === 'pending') {
+        const { status, senderResponse, receiverResponse } = transaction;
+        if (status === 'pending') {
+            if (senderResponse === 'pending' && receiverResponse === 'pending') {
                 return 'Both receiver and sender have not responded yet.';
-            } else if (transaction.senderResponse === 'pending') {
+            } else if (senderResponse === 'pending') {
                 return 'Sender have not responded yet.';
-            } else if (transaction.receiverResponse === 'pending') {
+            } else if (receiverResponse === 'pending') {
                 return 'Receiver have not responded yet.';
             }
+        } else if (status === 'fail' && ((senderResponse === 'fail' && receiverResponse === 'success') || (senderResponse === 'success' && receiverResponse === 'fail'))) {
+            return 'Transaction requires further investigation. Our employee will contact you soon.';
         } else return null;
     };
 
     const columns = [
         {
-            title: 'Id',
+            title: 'ID',
             dataIndex: '_id',
             key: '_id',
-            render: (text) => <p>{text}</p>,
+            render: (_, record) => <p>{record._id}</p>,
         },
         {
-            title: 'Mate',
+            title: 'MATE',
             dataIndex: 'pet',
             key: 'pet',
             align: 'center',
-            render: (_, record) => <PetPreviewProfileComponent username={record.receiverId.username} petsName={record.pet.officialName} image={record.pet.profilePicture.src} />,
+            render: (_, record) => <PetPreviewProfileComponent username={getPetOwner(record).username} pet={record.pet} />,
         },
         {
-            title: 'Amount',
+            title: 'AMOUNT',
             dataIndex: 'amount',
             key: 'amount',
             align: 'right',
             render: (_, record) => <PriceTag isSender={checkUserIsSender(record)} price={record.amount} />,
         },
         {
-            title: 'Deadline',
+            title: 'DEADLINE',
             dataIndex: 'deadline',
             key: 'deadline',
             align: 'center',
             render: (deadline) => <div>{String(moment(deadline).format('LLL'))}</div>,
         },
         {
-            title: 'Your response',
+            title: 'YOUR RESPONSE',
             key: 'response',
             dataIndex: 'response',
             render: (_, record) => (
@@ -94,7 +112,7 @@ const TransactionsOverviewTable = (props) => {
             ),
         },
         {
-            title: 'Status',
+            title: 'STATUS',
             key: 'status',
             dataIndex: 'status',
             align: 'center',
@@ -103,6 +121,11 @@ const TransactionsOverviewTable = (props) => {
                     <div>
                         <StatusTag status={record.status} isSelected={true} />
                     </div>
+                    {checkRequiresInvestigation(record) ? (
+                        <Tag className={classes.tags} color="gold">
+                            Requires Investigation
+                        </Tag>
+                    ) : null}
                 </Tooltip>
             ),
         },
@@ -130,6 +153,9 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         justifyContent: 'flex-end',
         alignSelf: 'flex-end',
+    },
+    tags: {
+        marginTop: 10,
     },
 }));
 
