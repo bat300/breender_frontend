@@ -1,7 +1,7 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
-import { AppBar, IconButton, Toolbar, Typography } from '@material-ui/core';
+import { AppBar, IconButton, Toolbar, Typography, Grid } from '@material-ui/core';
 
 import logo from '../images/breender.svg';
 import SearchIcon from '@material-ui/icons/Search';
@@ -11,12 +11,15 @@ import KebabMenu from './KebabMenu';
 import { useSelector } from 'react-redux';
 
 const useStyles = makeStyles((theme) => ({
+    root : {
+        display: 'flex',  justifyContent:'center', alignItems:'center', flexGrow: 1,
+    },
     toolbar: {
         flexGrow: 1,
     },
     title: {
         flexGrow: 1,
-        paddingLeft: theme.spacing(2),
+        paddingLeft: theme.spacing(4),
     },
     title2: {
         paddingLeft: theme.spacing(2),
@@ -41,6 +44,10 @@ function Header(props) {
         props.history.push('/');
     };
 
+    const onClickDocuments = () => {
+        props.history.push('/documents');
+    };
+
     return (
         <AppBar position="sticky">
             <KebabMenu open={Boolean(menuAnchor)} anchor={menuAnchor} onClose={() => setMenuAnchor(null)} />
@@ -48,6 +55,7 @@ function Header(props) {
                 <div onClick={onClickLogo} className={classes.logo}>
                     <img src={`${logo}#svgView(preserveAspectRatio(xMaxYMax))`} height="55px" style={{ cursor: 'pointer' }} />
                 </div>
+                <div className={classes.root}>
                 <Typography className={classes.title2} variant="h5" color="inherit" style={{ cursor: 'pointer' }}>
                     Find a mate
                 </Typography>
@@ -60,15 +68,15 @@ function Header(props) {
                 <Typography className={classes.title2} variant="h5" color="inherit">
                     |
                 </Typography>
-                <Typography className={classes.title} variant="h5" color="inherit" style={{ cursor: 'pointer' }}>
+                <Typography className={user.user ? user.user.role === "admin" ? classes.title2 : classes.title : classes.title} variant="h5" color="inherit" style={{ cursor: 'pointer' }}>
                     Premium
                 </Typography>
-                {user.user ? user.user.role === "admin" ? <div className={classes.title2}><Typography  variant="h5" color="inherit">
+                {user.user ? user.user.role === "admin" ? <Grid container  direction="row"><Typography className={classes.title2} variant="h5" color="inherit">
                     |
                 </Typography>
-                <Typography className={classes.title2} variant="h5" color="inherit" style={{ cursor: 'pointer' }}>
+                <Typography   className={classes.title2} variant="h5" color="inherit" style={{ cursor: 'pointer' }} onClick={onClickDocuments}>
                     Documents
-                </Typography></div> : null : null}
+                </Typography></Grid> : null : null}</div>
                 <IconButton onClick={onClickLogo} color="inherit">
                     <SearchIcon />
                 </IconButton>
