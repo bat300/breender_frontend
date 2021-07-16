@@ -11,18 +11,21 @@ import KebabMenu from './KebabMenu';
 import { useSelector } from 'react-redux';
 
 const useStyles = makeStyles((theme) => ({
-    root : {
-        display: 'flex',  justifyContent:'center', alignItems:'center', flexGrow: 1,
+    root: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        flexGrow: 1,
     },
     toolbar: {
         flexGrow: 1,
     },
     title: {
         flexGrow: 1,
-        paddingLeft: theme.spacing(4),
+        paddingLeft: theme.spacing(2),
     },
     title2: {
-        paddingLeft: theme.spacing(2),
+        paddingLeft: theme.spacing(),
     },
     logo: {
         flexGrow: 1,
@@ -56,27 +59,34 @@ function Header(props) {
                     <img src={`${logo}#svgView(preserveAspectRatio(xMaxYMax))`} height="55px" style={{ cursor: 'pointer' }} />
                 </div>
                 <div className={classes.root}>
-                <Typography className={classes.title2} variant="h5" color="inherit" style={{ cursor: 'pointer' }}>
-                    Find a mate
-                </Typography>
-                <Typography className={classes.title2} variant="h5" color="inherit">
-                    |
-                </Typography>
-                <Typography className={classes.title2} variant="h5" color="inherit" style={{ cursor: 'pointer' }}>
-                    Blog
-                </Typography>
-                <Typography className={classes.title2} variant="h5" color="inherit">
-                    |
-                </Typography>
-                <Typography className={user.user ? user.user.role === "admin" ? classes.title2 : classes.title : classes.title} variant="h5" color="inherit" style={{ cursor: 'pointer' }}>
-                    Premium
-                </Typography>
-                {user.user ? user.user.role === "admin" ? <Grid container  direction="row"><Typography className={classes.title2} variant="h5" color="inherit">
-                    |
-                </Typography>
-                <Typography   className={classes.title2} variant="h5" color="inherit" style={{ cursor: 'pointer' }} onClick={onClickDocuments}>
-                    Documents
-                </Typography></Grid> : null : null}</div>
+                    <Typography noWrap variant="h5" color="inherit" style={{ cursor: 'pointer', overflow:"visible"}}>
+                        Find a mate
+                    </Typography>
+                    <Typography className={classes.title2} variant="h5" color="inherit">
+                        |
+                    </Typography>
+                    <Typography className={classes.title2} variant="h5" color="inherit" style={{ cursor: 'pointer' }}>
+                        Blog
+                    </Typography>
+                    <Typography className={classes.title2} variant="h5" color="inherit">
+                        |
+                    </Typography>
+                    <Typography className={user.user ? (user.user.role === 'admin' ? classes.title2 : classes.title) : classes.title} variant="h5" color="inherit" style={{ cursor: 'pointer' }}>
+                        Premium
+                    </Typography>
+                    {user.user ? (
+                        user.user.role === 'admin' ? (
+                            <Grid container direction="row">
+                                <Typography className={classes.title2} variant="h5" color="inherit">
+                                    |
+                                </Typography>
+                                <Typography className={classes.title2} variant="h5" color="inherit" style={{ cursor: 'pointer' }} onClick={onClickDocuments}>
+                                    Documents
+                                </Typography>
+                            </Grid>
+                        ) : null
+                    ) : null}
+                </div>
                 <IconButton onClick={onClickLogo} color="inherit">
                     <SearchIcon />
                 </IconButton>
