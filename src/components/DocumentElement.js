@@ -1,19 +1,14 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
-import PropTypes from 'prop-types';
-import Image from 'material-ui-image';
-import { useHistory } from 'react-router-dom';
 import GetAppIcon from '@material-ui/icons/GetApp';
 import CheckIcon from '@material-ui/icons/Check';
 import AssignmentIcon from '@material-ui/icons/Assignment';
-import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { verifyDocument } from 'redux/actions/documentActions';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -56,7 +51,6 @@ const useStyles = makeStyles((theme) => ({
 
  function DocumentElement(props) {
     const classes = useStyles();
-    const history = useHistory();
 
     function verify() {
         props.document.certificate? props.openModalVerify(props.document.certificate._id, "comp") : props.openModalVerify(props.document._id, "doc");
