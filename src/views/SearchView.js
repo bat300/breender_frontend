@@ -10,7 +10,7 @@ import Typography from '@material-ui/core/Typography';
 import Slider from '@material-ui/core/Slider';
 import Button from '@material-ui/core/Button';
 import { getPets } from '../redux/actions/petActions';
-import SearchResults from '../components/SearchResults';
+import SearchResults from '../components/search/SearchResults';
 import { breeds } from 'helper/data/breeds';
 
 const useStyles = makeStyles((theme) => ({
