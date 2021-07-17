@@ -5,39 +5,12 @@ import { connect, useSelector } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { update } from 'redux/actions';
 import NotificationService from 'services/NotificationService';
-const useStyles = makeStyles((theme) => ({
-    usersignUpRoot: {
-        margin: 'auto',
-    },
-    signUpPaper: {
-        width: '1000px',
-        padding: theme.spacing(2),
-    },
-    signUpRow: {
-        paddingTop: theme.spacing(1),
-        paddingBottom: theme.spacing(1),
-        '&:last-child': {
-            paddingBottom: theme.spacing(0),
-        },
-        '&:first-child': {
-            paddingTop: theme.spacing(0),
-        },
-    },
-    signUpButtons: {
-        display: 'flex',
-        justifyContent: 'flex-end',
-    },
-    signUpButton: {
-        marginLeft: theme.spacing(1),
-    },
-}));
 
 /**
  * For presenting and choosing subscription plan and paying with PayPal
  * @param {props} props
  */
 function ChangeToPremiumView(props) {
-    const classes = useStyles();
     const user = useSelector((state) => state.user);
 
     const payments = [
