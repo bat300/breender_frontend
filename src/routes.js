@@ -10,6 +10,7 @@ import UserProfileView from "./views/UserProfileView";
 import EditPetView from './views/EditPetView';
 import NotFoundView from './views/NotFoundView';
 import SearchView from './views/SearchView';
+import SelectedUserProfileView from './views/SelectedUserProfileView';
 // services
 import { LocalStorageService } from 'services';
 import Header from 'components/Header';
@@ -56,6 +57,9 @@ const Routes = () => {
                 <DefaultHeader />
                 <SearchView />
             </DefaultRoute>
+            <PrivateRoute exact path="/user/:id">
+                <SelectedUserProfileView />
+            </PrivateRoute>
             <PrivateRoute exact path="/user">
                 <UserProfileView />
             </PrivateRoute>

@@ -1,0 +1,195 @@
+import React, { useState } from 'react';
+import { makeStyles } from '@material-ui/core/styles';
+import { FormControl, Grid, InputLabel, InputAdornment, MenuItem, Select, TextField, Paper, Divider, FormHelperText } from '@material-ui/core';
+
+const useStyles = makeStyles((theme) => ({
+    layout: {
+        flex: 1,
+        width: 'auto',
+        maxWidth: '80%',
+        marginLeft: '10%',
+        marginRight: '10%',
+    },
+    paper: {
+        marginTop: theme.spacing(6),
+        marginBottom: theme.spacing(6),
+        padding: theme.spacing(3),
+        [theme.breakpoints.down('sm')]: {
+            marginTop: theme.spacing(3),
+            marginBottom: theme.spacing(3),
+            padding: theme.spacing(2),
+        },
+    },
+    label: {
+        display: 'flex',
+        fontSize: 16,
+        fontWeight: 500,
+        marginBottom: 15,
+        marginTop: 15,
+    },
+    title: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        fontSize: 22,
+        fontWeight: 500,
+        marginBottom: 15,
+        marginTop: 15,
+    },
+}));
+
+// define types for error handling
+const UserFormInputs = {
+    username: 'username',
+    province: 'province',
+    city: 'city',
+    password: 'password',
+    password2: 'password2',
+};
+
+const provincesAndCities = {
+    bavaria: ['Munich', 'Nuremberg', 'Augsburg', 'Regensburg', 'Ingolstadt', 'Würzburg'],
+    'lower-saxony': ['Hanover', 'Braunschweig', 'Oldenburg', 'Osnabrück', 'Wolfsburg', 'Göttingen'],
+    'baden-wuerttemberg': ['Stuttgart', 'Karlsruhe', 'Mannheim', 'Freiburg im Breisgau', 'Heidelberg', 'Ulm'],
+    'north-rhine-westphalia': ['Cologne', 'Düsseldorf', 'Dortmund', 'Essen', 'Duisburg', 'Bochum'],
+};
+
+export default function UserForm({ usernameProp, emailProp, provinceProp, cityProp, passwordProp, password2Prop, ...props }) {
+    const classes = useStyles();
+    const { username, setUsername } = usernameProp;
+    const { email, setEmail } = emailProp;
+    const { province, setProvince } = provinceProp;
+    const { city, setCity } = cityProp;
+    const [errors, setErrors] = useState({ username: false, province: false, city: false });
+    const { password, setPassword } = passwordProp;
+    const { password2, setPassword2 } = password2Prop;
+
+    const validationErrors = {
+        username: 'Userame is required',
+        province: 'Province is required',
+        city: 'City is required',
+    };
+
+    let cityOptions = null;
+
+    if (province) {
+        cityOptions = provincesAndCities[province].map((elem) => (
+            <MenuItem key={elem} value={elem}>
+                {elem}
+            </MenuItem>
+        ));
+    }
+
+    // validate fields
+    const validate = (type, value) => {
+        let temp = { ...errors };
+        if (type !== UserFormInputs.password && type !== UserFormInputs.password2 && value === '') {
+            temp[type] = true;
+        } else {
+            temp[type] = false;
+        }
+
+        if (type === UserFormInputs.password2) {
+            if (value !== password) {
+                temp[type] = true;
+            }
+        }
+        setErrors({ ...temp });
+    };
+
+    // handle variable changes
+    const handleUsernameChange = (e) => {
+        validate(UserFormInputs.username, e.target.value);
+        setUsername(e.target.value);
+    };
+    const handleProvinceChange = (e) => {
+        validate(UserFormInputs.province, e.target.value);
+        setProvince(e.target.value);
+    };
+    const handleCityChange = (e) => {
+        validate(UserFormInputs.city, e.target.value);
+        setCity(e.target.value);
+    };
+
+    const handlePasswordChange = (e) => {
+        validate(UserFormInputs.password, e.target.value);
+        setPassword(e.target.value);
+    };
+
+    const handlePassword2Change = (e) => {
+        validate(UserFormInputs.password2, e.target.value);
+        setPassword2(e.target.value);
+    };
+
+
+    return (
+        <div className={classes.layout}>
+            <form autoComplete="off">
+                <React.Fragment>
+                    <Grid container spacing={3}>
+                        <Grid item xs={12}>
+                            <TextField
+                                size="small"
+                                required
+                                id="username"
+                                name="username"
+                                value={username}
+                                onChange={handleUsernameChange}
+                                onBlur={handleUsernameChange}
+                                label="Username"
+                                variant="outlined"
+                                fullWidth
+                                {...(errors[UserFormInputs.username] && { error: true, helperText: validationErrors[UserFormInputs.username] })}
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField
+                                size="small"
+                                disabled
+                                id="email"
+                                name="email"
+                                value={email}
+                                label="Email"
+                                variant="outlined"
+                                fullWidth
+                            />
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
+                            <FormControl required variant="outlined" size="small" fullWidth error={errors[UserFormInputs.province]}>
+                                <InputLabel>State/Province</InputLabel>
+                                <Select label="State/Province" value={province} onChange={handleProvinceChange}>
+                                    <MenuItem value={'bavaria'}>Bavaria</MenuItem>
+                                    <MenuItem value={'lower-saxony'}>Lower Saxony</MenuItem>
+                                    <MenuItem value={'baden-wuerttemberg'}>Baden-Württemberg</MenuItem>
+                                    <MenuItem value={'north-rhine-westphalia'}>North Rhine-Westphalia</MenuItem>
+                                </Select>
+                                <FormHelperText>{errors[UserFormInputs.province] && validationErrors[UserFormInputs.province]}</FormHelperText>
+                            </FormControl>
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
+                            <FormControl required variant="outlined" size="small" fullWidth error={errors[UserFormInputs.city]}>
+                                <InputLabel>City</InputLabel>
+                                <Select label="City" value={city} onChange={handleCityChange}>
+                                    {cityOptions}
+                                </Select>
+                                <FormHelperText>{errors[UserFormInputs.city] && validationErrors[UserFormInputs.city]}</FormHelperText>
+                            </FormControl>
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
+                            <FormControl required variant="outlined" size="small" fullWidth error={errors[UserFormInputs.province]}>
+                                <TextField size="small" label="New Password" fullWidth value={password} onChange={handlePasswordChange} type="password" variant="outlined" />
+                                <FormHelperText>{errors[UserFormInputs.password] && validationErrors[UserFormInputs.password]}</FormHelperText>
+                            </FormControl>
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
+                            <FormControl required variant="outlined" size="small" fullWidth error={errors[UserFormInputs.city]}>
+                                <TextField size="small" label="Repeat new Password" fullWidth value={password2} onChange={handlePassword2Change} type="password" variant="outlined" />
+                                <FormHelperText>{errors[UserFormInputs.password2] && validationErrors[UserFormInputs.password2]}</FormHelperText>
+                            </FormControl>
+                        </Grid>
+                    </Grid>
+                </React.Fragment>
+            </form>
+        </div>
+    );
+}

@@ -35,19 +35,20 @@ export const getPets = (species, sex, breed, age) => {
     };
 };
 
-export const deletePet = (id) => {
-    const deletePetAction = (pets) => {
-        return { type: PetTypes.DELETE_PET, pets: pets };
+export const deletePet = (id, onSuccess = () => null, onError = (err) => null) => {
+    const deletePetAction = () => {
+        onSuccess();
+        return { type: PetTypes.DELETE_PET };
     };
     const onFailure = (error) => {
+        onError();
         console.log('Error while deleting a pet', error);
     };
 
     return async (dispatch) => {
         try {
-            await PetService.deletePet(id);
-            let pets = await PetService.getPets();
-            dispatch(deletePetAction(pets));
+            let pet = await PetService.deletePet(id);
+            dispatch(deletePetAction());
         } catch (e) {
             onFailure(e);
         }

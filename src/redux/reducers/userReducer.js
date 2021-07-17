@@ -35,6 +35,12 @@ export default function user(state = getUser(), action) {
             return { ...state, userInfo: action.user };
         case "GET_USER_PETS":
             return { ...state, pets: action.pets };
+        case "UPDATE_USER":
+            return { ...state, user: action.user, userInfo: action.userInfo };
+        case "GET_SELECTED_USER":
+            return { ...state, selectedUser: action.user };
+        case "GET_SELECTED_USER_PETS":
+            return { ...state, selectedUserPets: action.pets };
         default:
             return state;
     }

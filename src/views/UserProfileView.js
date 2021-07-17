@@ -37,7 +37,7 @@ function UserProfileView(props) {
         }
     }, [pets]);
 
-    return <UserProfile user={usersInfo ? usersInfo : user} pets={pets} />
+    return <UserProfile user={usersInfo ? usersInfo : user} pets={pets} editable={true} />
 }
 
 export default connect()(UserProfileView);

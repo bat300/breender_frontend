@@ -1,20 +1,16 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import AccountCircleIcon from '@material-ui/icons/AccountCircle';
-import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-import Avatar from '@material-ui/core/Avatar';
-import AlternateEmailIcon from '@material-ui/icons/AlternateEmail';
-import LocationCityIcon from '@material-ui/icons/LocationCity';
-import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
-import EventIcon from '@material-ui/icons/Event';
-import VerificationIcon from '../VerificationIcon';
 import { Paper, Divider, Typography } from '@material-ui/core';
-import SearchResultElement from '../SearchResultElement';
+import PetInformationPaper from '../PetInformationPaper';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
+import UserInformation from './UserInformation';
+import UserForm from './UserForm';
+import { NotificationService } from 'services';
+import { useHistory } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { updateUser } from 'redux/actions';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -50,14 +46,6 @@ const useStyles = makeStyles((theme) => ({
     divider: {
         margin: theme.spacing(3),
     },
-    black: {
-        color: '#fff',
-        backgroundColor: '#787878',
-    },
-    listItem: {
-        paddingLeft: '15%',
-        paddingRight: '15%',
-    },
     button: {
         margin: theme.spacing(1),
     },
@@ -65,6 +53,49 @@ const useStyles = makeStyles((theme) => ({
 
 export default function UserProfile(props) {
     const classes = useStyles();
+    const history = useHistory();
+    const dispatch = useDispatch();
+
+    const [editingMode, setEditingMode] = React.useState(false);
+    const [username, setUsername] = React.useState(props.user.username);
+    const [email, setEmail] = React.useState(props.user.email);
+    const [province, setProvince] = React.useState('bavaria');//props.user.province;
+    const [city, setCity] = React.useState(props.user.city);
+    const [password, setPassword] = React.useState('');
+    const [password2, setPassword2] = React.useState('');
+
+    const handleModeChange = (event) => {
+        if (editingMode) {
+            updateUserOnSave();
+            setEditingMode(false);
+        } else {
+            setEditingMode(true);
+        }
+    };
+
+    const updateUserOnSave = async () => {
+
+        let userWithChanges = props.user;
+        userWithChanges.username = username;
+        userWithChanges.email = email;
+        userWithChanges.city = city;
+
+        if (password !== '' && password2 !== '' && password === password2) {
+            userWithChanges.password = password
+        }
+
+        const onSuccess = () => {
+            NotificationService.notify('success', 'Success', 'Your profile was successfully updated!');
+            history.push('/user');
+        };
+
+        const onError = () => {
+            NotificationService.notify('error', 'Error', 'There was a problem updating your profile.');
+        };
+
+        dispatch(updateUser(userWithChanges, onSuccess, onError));
+    };
+
 
     return (<div className={classes.root}>
         <Paper className={classes.paper} >
@@ -76,63 +107,20 @@ export default function UserProfile(props) {
                     </Typography>
                 </Grid>
                 <Grid item>
-                    <Button className={classes.button} variant="contained" color="secondary">
-                        Edit
-                    </Button>
+                    {props.editable ? <Button className={classes.button} variant="contained" color="secondary" onClick={handleModeChange}>
+                        {editingMode ? "Save" : "Edit"}
+                    </Button> : <div />}
+
                 </Grid>
             </Grid>
-            <List>
-                <ListItem className={classes.listItem}>
-                    <ListItemAvatar>
-                        <Avatar className={classes.black}>
-                            <AccountCircleIcon />
-                        </Avatar>
-                    </ListItemAvatar>
-                    <ListItemText primary={props.user.id} secondary="ID" />
-                </ListItem>
-                <ListItem className={classes.listItem}>
-                    <ListItemAvatar>
-                        <Avatar className={classes.black}>
-                            <AccountCircleIcon />
-                        </Avatar>
-                    </ListItemAvatar>
-                    <ListItemText primary={props.user.username} secondary="Username" />
-                </ListItem>
-                <ListItem className={classes.listItem}>
-                    <ListItemAvatar>
-                        <Avatar className={classes.black}>
-                            <AlternateEmailIcon />
-                        </Avatar>
-                    </ListItemAvatar>
-                    <ListItemText primary={props.user.email} secondary="Email" />
-                    <VerificationIcon verified={props.user.isVerified} />
-                </ListItem>
-                <ListItem className={classes.listItem}>
-                    <ListItemAvatar>
-                        <Avatar className={classes.black}>
-                            <LocationCityIcon />
-                        </Avatar>
-                    </ListItemAvatar>
-                    <ListItemText primary={props.user.city} secondary="City" />
-                </ListItem>
-                <ListItem className={classes.listItem}>
-                    <ListItemAvatar>
-                        <Avatar className={classes.black}>
-                            <AttachMoneyIcon />
-                        </Avatar>
-                    </ListItemAvatar>
-                    <ListItemText primary={props.user.subscriptionPlan} secondary="Subscription plan" />
-                </ListItem>
-                {props.user.subscriptionPlan === 'premium' &&
-                    <ListItem className={classes.listItem}>
-                        <ListItemAvatar>
-                            <Avatar className={classes.black}>
-                                <EventIcon />
-                            </Avatar>
-                        </ListItemAvatar>
-                        <ListItemText primary={props.user.nextRenewalDate} secondary="Next renewal date" />
-                    </ListItem>}
-            </List>
+            {editingMode ? <UserForm
+                usernameProp={{ username, setUsername }}
+                emailProp={{ email, setEmail }}
+                provinceProp={{ province, setProvince }}
+                cityProp={{ city, setCity }}
+                passwordProp={{ password, setPassword }}
+                password2Prop={{ password2, setPassword2 }} />
+                : <UserInformation user={props.user} />}
             <Divider variant="middle" className={classes.divider} />
             <Typography className={classes.typography} variant="h6" align="center" style={{ fontWeight: 600 }}>
                 Payment methods
@@ -148,7 +136,7 @@ export default function UserProfile(props) {
                 My pets
             </Typography>
             <List>
-                {props.pets && props.pets.length > 0 ? props.pets.map((pet) => <SearchResultElement pet={pet} key={pet._id} />) : <Typography className={classes.typographyNotifications} align="center"> No pets added yet</Typography>}
+                {props.pets && props.pets.length > 0 ? props.pets.map((pet) => <PetInformationPaper pet={pet} user={props.user} key={pet._id} editingMode={editingMode} />) : <Typography className={classes.typographyNotifications} align="center"> No pets added yet</Typography>}
             </List>
         </Paper>
     </div >)
