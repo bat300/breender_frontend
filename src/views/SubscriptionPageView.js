@@ -79,7 +79,6 @@ function SubscriptionPageView(props) {
         </DialogActions>
       </Dialog>
     </div>
-  );
 
         </Container>
     );

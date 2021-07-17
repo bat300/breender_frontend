@@ -49,26 +49,29 @@ function ChangeToPremiumView(props) {
 
     const [chosenPayment, setChosenPayment] = React.useState('4.99');
 
-    const values = {chosenPayment }
+    const values = { chosenPayment };
 
     function changeSubscriptionPlanToPremium(plan, paymentMethod) {
         const onSuccess = () => {
-            NotificationService.notify('success', 'Success', 'Your subscription plan was successfully changed!');
-            props.history.push('/');
-            props.dispatch(update(user.user.id,  "premium", plan, paymentMethod));
+            setTimeout(function () {
+                props.history.push('/login');
+                NotificationService.notify('success', 'Success', 'Your subscription plan was successfully changed! Please login.');
+            }, 1000);
         };
 
         const onError = () => {
-            NotificationService.notify('error', 'Error', 'There was a problem in changing your plan. Please try again later or contact our customer service.');
-            props.history.push('/');
+            setTimeout(function () {
+                props.history.push('/');
+                NotificationService.notify('error', 'Error', 'There was a problem in changing your plan. Please try again later or contact our customer service.');
+            }, 1000);
+            
         };
 
-        props.dispatch(update(user.user.id,  "premium", plan, paymentMethod, onSuccess, onError));
-
+        props.dispatch(update(user.user.id, 'premium', plan, paymentMethod, onSuccess, onError));
     }
 
     const prevStep = () => {
-        props.history.push("/premium");
+        props.history.push('/premium');
     };
 
     function handleChange(input, event) {
