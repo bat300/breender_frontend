@@ -80,4 +80,23 @@ export default class UserService {
     static logout() {
         window.localStorage.removeItem('jwtToken');
     }
+
+    static update(id, subscriptionPlan, paymentPlan, paymentMethod) {
+        return new Promise((resolve, reject) => {
+            HttpService.post(
+                `${UserService.baseURL()}/update`,
+                { id: id,
+                   subscriptionPlan: subscriptionPlan,
+                   paymentPlan: paymentPlan,
+                   paymentMethod: paymentMethod
+                },
+                function (data) {
+                    resolve(data);
+                },
+                function (textStatus) {
+                    reject(textStatus);
+                }
+            );
+        });
+    }
 }

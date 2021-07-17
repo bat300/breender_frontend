@@ -14,6 +14,7 @@ import SearchView from './views/SearchView';
 import { LocalStorageService } from 'services';
 import Header from 'components/Header';
 import AppTheme from 'theming/themetypes';
+import ChangeToPremiumView from 'views/ChangeToPremiumView';
 
 const DefaultHeader = () => {
     // theme for app
@@ -57,10 +58,13 @@ const Routes = () => {
                 <DefaultHeader />
                 <SearchView />
             </DefaultRoute>
-            <DefaultRoute path="/premium">
+            <DefaultRoute exact path="/premium">
             <DefaultHeader />
                 <SubscriptionPageView />
             </DefaultRoute>
+            <PrivateRoute exact path="/premium/changePlan">
+                <ChangeToPremiumView />
+            </PrivateRoute>
             <PrivateRoute exact path="/pet/:id">
                 <PetProfileView />
             </PrivateRoute>

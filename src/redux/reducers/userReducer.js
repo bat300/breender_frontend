@@ -28,6 +28,8 @@ export default function user(state = getUser(), action) {
             return { user: action.user };
         case "LOGIN_FAILURE":
             return { error: action.error };
+        case "UPDATE_SUCCESS":
+            return { user: action.user };
         case "LOGIN_RESET":
             return {};
         case "LOGOUT":

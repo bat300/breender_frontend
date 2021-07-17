@@ -1,9 +1,9 @@
 import UserService from '../../services/UserService';
 
-export function resetError()  {
+export function resetError() {
     return {
-        type: 'RESET_ERROR'
-    }
+        type: 'RESET_ERROR',
+    };
 }
 
 export function login(username, password) {
@@ -52,7 +52,7 @@ export function checkUser(email, username, isAdmin) {
 
     return async (dispatch) => {
         try {
-             let resp = await UserService.checkUser(email, username, isAdmin);
+            let resp = await UserService.checkUser(email, username, isAdmin);
             dispatch(onSuccess());
         } catch (e) {
             dispatch(onFailure(e));
@@ -79,11 +79,23 @@ export function register(email, username, password, city, province, isAdmin, sub
 
     return async (dispatch) => {
         try {
-            
             let resp = await UserService.register(email, username, password, city, province, isAdmin, subscriptionPlan, paymentPlan, paymentMethod);
             dispatch(onSuccess(resp.user));
         } catch (e) {
             dispatch(onFailure(e));
         }
+    };
+}
+export function update(id, subscriptionPlan, paymentPlan, paymentMethod,onSuccess=() => null, onError=(err) => null) {
+    const updateUserAction = (user) => {
+        onSuccess();
+        return { type: 'UPDATE_SUCCESS', user: user };
+    };
+
+    return async (dispatch) => {
+        await UserService.update(id, subscriptionPlan, paymentPlan, paymentMethod).then((resp) => dispatch(updateUserAction(resp.user))).catch((e) => {
+                onError(e);
+            });
+            
     };
 }

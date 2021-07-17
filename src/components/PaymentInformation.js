@@ -50,9 +50,9 @@ function PaymentInformationComponent(props) {
         NotificationService.notify('error', 'Error', 'There was an error in PayPal payment. Please try again.');
     }
 
-    function onRegister(paymentMethod) {
+    function onSuccess(paymentMethod) {
         const paymentPlan = props.payments.find( x => x.price === props.values.chosenPayment);
-        props.onRegister(values.email, values.username, values.password, values.city, values.province, values.isAdmin, values.subscriptionPlan, paymentPlan.plan, paymentMethod);
+        props.user.user ? props.onSuccess( paymentPlan.plan, paymentMethod): props.onSuccess(values.email, values.username, values.password, values.city, values.province, values.isAdmin, values.subscriptionPlan, paymentPlan.plan, paymentMethod);
     }
 
     return (
@@ -92,7 +92,7 @@ function PaymentInformationComponent(props) {
                                       type: "PayPal",
                                       email: details.payer.email_address
                                     };
-                                    onRegister(paymentMethod);
+                                    onSuccess(paymentMethod);
                                 
                             })}}
                             onError={onError}

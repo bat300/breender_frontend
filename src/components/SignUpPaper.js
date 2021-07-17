@@ -96,6 +96,12 @@ function SignUpPaper(props) {
                 setChosenPayment(event.target.value);
     };
 }
+
+function onRegister(paymentMethod) {
+    const paymentPlan = payments.find( x => x.price === chosenPayment);
+    props.onRegister(values.email, values.username, values.password, values.city, values.province, values.isAdmin, values.subscriptionPlan, paymentPlan.plan, paymentMethod);
+}
+
     //choose registration step
     function chooseStep() {
         switch (step) {
@@ -110,7 +116,7 @@ function SignUpPaper(props) {
                     values={values}
                     handleChange={handleChange}
                     payments={payments}
-                    onRegister={props.onRegister}
+                    onSuccess={props.onRegister}
                     user={props.user}
                     />
         }

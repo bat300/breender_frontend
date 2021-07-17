@@ -33,7 +33,7 @@ function SubscriptionPlanComponent(props) {
         },
         
     ];
-        return plans.map((planObject) => planObject.id === 'free'? <SubscriptionPlanCard plan={planObject} onClick={selectFreePlan} subscriptionPlan={props.subscriptionPlan}/> : <SubscriptionPlanCard plan={planObject} onClick={selectPremiumPlan} subscriptionPlan={props.subscriptionPlan}/>);
+        return plans.map((planObject) => planObject.id === 'free'? <SubscriptionPlanCard plan={planObject} onClick={selectFreePlan} subscriptionPlan={props.subscriptionPlan} user={props.user}/> : <SubscriptionPlanCard plan={planObject} onClick={selectPremiumPlan} subscriptionPlan={props.subscriptionPlan} user={props.user}/>);
    
 
 }
