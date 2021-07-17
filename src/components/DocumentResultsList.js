@@ -68,7 +68,7 @@ function DocumentResultsList(props) {
         ))}</ul>
     ) : (
         <Grid container spacing={2} justify="center">
-            <div style={{ fontSize: 30 }}>No documents to verify</div>
+            <div style={{ fontSize: 30, padding: 30 }}>No documents to verify</div>
         </Grid>
     );
 }
