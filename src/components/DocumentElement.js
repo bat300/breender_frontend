@@ -131,7 +131,7 @@ const useStyles = makeStyles((theme) => ({
                         component="a"
                         href={props.document.certificate ? props.document.certificate.url : props.document.url}
                     >
-                        Certificate
+                        Document
                     </Button>
                     <Button
                         variant="contained"
