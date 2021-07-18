@@ -7,6 +7,7 @@ export default class HttpService {
             id: userJson._id,
             username: userJson.username,
             role: userJson.role,
+            subscriptionPlan: userJson.subscriptionPlan
         };
     }
 
@@ -95,7 +96,8 @@ export default class HttpService {
             });
 
             if (this.checkIfUnauthorized(resp)) {
-                window.location = '/login';
+                //show error and do not redirect to login page when user tried to log in
+                url === 'http://localhost:4000/auth/login' ? onError('This password is incorrect. Please double-check it.') : (window.location = '/login');
                 return;
             } else {
                 resp = await resp.json();

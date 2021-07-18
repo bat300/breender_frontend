@@ -17,7 +17,7 @@ const appThemeOptions = {
                 main: '#81B29A',
             },
             ternary: {
-                main: 'E07A5F',
+                main: '#E07A5F',
             },
             background: {
                 paper: '#fff',

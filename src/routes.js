@@ -1,12 +1,13 @@
+
 import React from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
-// views
 import UserLoginView from './views/UserLoginView';
 import SignUpView from './views/SignUpView';
 import AddPetView from './views/AddPetView';
 import PetProfileView from "./views/PetProfileView";
 import EmailConfirmationView from './views/EmailConfirmationView';
 import UserProfileView from "./views/UserProfileView";
+import SubscriptionPageView from './views/SubscriptionPageView';
 import EditPetView from './views/EditPetView';
 import NotFoundView from './views/NotFoundView';
 import SearchView from './views/SearchView';
@@ -15,6 +16,7 @@ import SelectedUserProfileView from './views/SelectedUserProfileView';
 import { LocalStorageService } from 'services';
 import Header from 'components/Header';
 import AppTheme from 'theming/themetypes';
+import ChangeToPremiumView from 'views/ChangeToPremiumView';
 
 const DefaultHeader = () => {
     // theme for app
@@ -26,6 +28,7 @@ const DefaultHeader = () => {
     };
     return <Header darkmode={theme === AppTheme.DARK} toggletheme={toggleTheme} />;
 };
+
 
 // used for routing
 export const PrivateRoute = (props) => {
@@ -57,6 +60,13 @@ const Routes = () => {
                 <DefaultHeader />
                 <SearchView />
             </DefaultRoute>
+            <DefaultRoute exact path="/premium">
+                <DefaultHeader />
+                <SubscriptionPageView />
+            </DefaultRoute>
+            <PrivateRoute exact path="/premium/changePlan">
+                <ChangeToPremiumView />
+            </PrivateRoute>
             <PrivateRoute exact path="/user/:id">
                 <SelectedUserProfileView />
             </PrivateRoute>

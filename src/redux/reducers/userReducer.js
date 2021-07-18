@@ -15,6 +15,7 @@ const getUser = () => {
                 id: userJson._id,
                 username: userJson.username,
                 role: userJson.role,
+                subscriptionPlan: userJson.subscriptionPlan
             }
         };
     }
@@ -26,7 +27,9 @@ export default function user(state = getUser(), action) {
         case "LOGIN_SUCCESS":
             return { user: action.user };
         case "LOGIN_FAILURE":
-            return { error: "Password or username incorrect." };
+            return { error: action.error };
+        case "UPDATE_SUCCESS":
+            return { user: action.user };
         case "LOGIN_RESET":
             return {};
         case "LOGOUT":

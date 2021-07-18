@@ -8,7 +8,7 @@ export default class UserService {
         return 'http://localhost:4000/user';
     }
 
-    static register(email, user, pass, city, isAdmin) {
+    static register(email, user, pass, city, province, isAdmin, subscriptionPlan, paymentPlan, paymentMethod) {
         return new Promise((resolve, reject) => {
             HttpService.post(
                 `${UserService.baseURL()}/register`,
@@ -18,7 +18,26 @@ export default class UserService {
                     isAdmin: isAdmin,
                     email: email,
                     city: city,
+                    province: province,
+                    subscriptionPlan: subscriptionPlan,
+                    paymentPlan: paymentPlan,
+                    paymentMethod: paymentMethod
+
                 },
+                function (data) {
+                    resolve(data);
+                },
+                function (textStatus) {
+                    reject(textStatus);
+                }
+            );
+        });
+    }
+
+    static checkUser(email, username, isAdmin) {
+        return new Promise((resolve, reject) => {
+            HttpService.get(
+                `${UserService.baseURL()}/checkUser/${email}/${username}/${isAdmin}`,
                 function (data) {
                     resolve(data);
                 },
@@ -65,6 +84,26 @@ export default class UserService {
         window.localStorage.removeItem('jwtToken');
     }
 
+    static update(id, subscriptionPlan, paymentPlan, paymentMethod) {
+        return new Promise((resolve, reject) => {
+            HttpService.post(
+                `${UserService.baseURL()}/update`,
+                {
+                    id: id,
+                    subscriptionPlan: subscriptionPlan,
+                    paymentPlan: paymentPlan,
+                    paymentMethod: paymentMethod
+                },
+                function (data) {
+                    resolve(data);
+                },
+                function (textStatus) {
+                    reject(textStatus);
+                }
+            );
+        });
+    }
+
     static getUsersInfo(id) {
         return new Promise(async (resolve, reject) => {
             HttpService.get(
@@ -102,6 +141,20 @@ export default class UserService {
         return new Promise((resolve, reject) => {
             HttpService.get(
                 `${this.baseUserURL()}/pets/${ownerId}`,
+                function (data) {
+                    resolve(data);
+                },
+                function (textStatus) {
+                    reject(textStatus);
+                }
+            );
+        });
+    }
+
+    static getReviewsOnUser(id) {
+        return new Promise((resolve, reject) => {
+            HttpService.get(
+                `${this.baseUserURL()}/${id}/reviews`,
                 function (data) {
                     resolve(data);
                 },

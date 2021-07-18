@@ -1,5 +1,11 @@
 import UserService from '../../services/UserService';
 
+export function resetError() {
+    return {
+        type: 'RESET_ERROR',
+    };
+}
+
 export function login(username, password) {
     function onSuccess(user) {
         return { type: 'LOGIN_SUCCESS', user: user };
@@ -36,6 +42,24 @@ export function confirmEmail(email, token) {
     };
 }
 
+export function checkUser(email, username, isAdmin) {
+    function onSuccess() {
+        return { type: 'USER_UNIQUE_SUCCESS' };
+    }
+    function onFailure(error) {
+        return { type: 'USER_UNIQUE_FAILURE', error: error };
+    }
+
+    return async (dispatch) => {
+        try {
+            let resp = await UserService.checkUser(email, username, isAdmin);
+            dispatch(onSuccess());
+        } catch (e) {
+            dispatch(onFailure(e));
+        }
+    };
+}
+
 export function logout() {
     UserService.logout();
     return { type: 'LOGOUT' };
@@ -45,7 +69,7 @@ export function loginReset() {
     return { type: 'LOGIN_RESET' };
 }
 
-export function register(email, username, password, city, isAdmin) {
+export function register(email, username, password, city, province, isAdmin, subscriptionPlan, paymentPlan, paymentMethod) {
     function onSuccess(user) {
         return { type: 'LOGIN_SUCCESS', user: user };
     }
@@ -55,7 +79,7 @@ export function register(email, username, password, city, isAdmin) {
 
     return async (dispatch) => {
         try {
-            let resp = await UserService.register(email, username, password, city, isAdmin);
+            let resp = await UserService.register(email, username, password, city, province, isAdmin, subscriptionPlan, paymentPlan, paymentMethod);
             dispatch(onSuccess(resp.user));
         } catch (e) {
             dispatch(onFailure(e));
@@ -170,6 +194,72 @@ export const getSelectedUserPets = (ownerId) => {
             console.log('The pets are in the actions: ', pets)
             // call onSuccess in context of redux
             dispatch(onSuccess(pets));
+        } catch (e) {
+            onFailure(e);
+        }
+    };
+};
+
+export function update(id, subscriptionPlan, paymentPlan, paymentMethod, onSuccess = () => null, onError = (err) => null) {
+    const updateUserAction = (user) => {
+        onSuccess();
+        return { type: 'UPDATE_SUCCESS', user: user };
+    };
+
+    return async (dispatch) => {
+        await UserService.update(id, subscriptionPlan, paymentPlan, paymentMethod).then((resp) => dispatch(updateUserAction(resp.user))).catch((e) => {
+            onError(e);
+        });
+
+    };
+};
+
+export const getReviewsOnUser = (id) => {
+    // when the backend call was successfull and the reviews are retrieved
+    // in the dispatcher the reviews will be added to the global state
+    const onSuccess = (reviews) => {
+        return { type: 'GET_REVIEWS_ON_USER', reviews: reviews };
+    };
+    // when the backend call was failed
+    const onFailure = (error) => {
+        // error handling
+        console.log('failed to get the reviews', error);
+    };
+
+    return async (dispatch, getState) => {
+        try {
+            console.log('I am in actions')
+            // ask for the reviews in the backend
+            const reviews = await UserService.getReviewsOnUser(id);
+            console.log('The reviews are in the actions: ', reviews)
+            // call onSuccess in context of redux
+            dispatch(onSuccess(reviews));
+        } catch (e) {
+            onFailure(e);
+        }
+    };
+};
+
+export const getReviewsOnSelectedUser = (id) => {
+    // when the backend call was successfull and the reviews are retrieved
+    // in the dispatcher the reviews will be added to the global state
+    const onSuccess = (reviews) => {
+        return { type: 'GET_REVIEWS_ON_SELECTED_USER', reviews: reviews };
+    };
+    // when the backend call was failed
+    const onFailure = (error) => {
+        // error handling
+        console.log('failed to get the reviews', error);
+    };
+
+    return async (dispatch, getState) => {
+        try {
+            console.log('I am in actions')
+            // ask for the reviews in the backend
+            const reviews = await UserService.getReviewsOnUser(id);
+            console.log('The reviews are in the actions: ', reviews)
+            // call onSuccess in context of redux
+            dispatch(onSuccess(reviews));
         } catch (e) {
             onFailure(e);
         }
