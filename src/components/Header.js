@@ -81,7 +81,7 @@ function Header(props) {
                                     |
                                 </Typography>
                                 <Typography className={classes.title2} variant="h5" color="inherit" style={{ cursor: 'pointer' }} onClick={onClickDocuments}>
-                                    Documents
+                                    Admin Console
                                 </Typography>
                             </Grid>
                         ) : null

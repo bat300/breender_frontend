@@ -6,6 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import GetAppIcon from '@material-ui/icons/GetApp';
 import CheckIcon from '@material-ui/icons/Check';
+import ClearIcon from '@material-ui/icons/Clear';
 import AssignmentIcon from '@material-ui/icons/Assignment';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
@@ -147,7 +148,7 @@ const useStyles = makeStyles((theme) => ({
                         variant="contained"
                         color="secondary"
                         className={classes.button}
-                        startIcon={<CheckIcon />}
+                        startIcon={<ClearIcon />}
                         component="a"
                         onClick={decline}
                     >
