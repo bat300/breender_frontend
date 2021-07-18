@@ -3,29 +3,20 @@ import { useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Grid, Paper, Divider, Typography, ListItem, ListItemAvatar, ListItemText, Avatar } from '@material-ui/core';
 import { useSelector } from 'react-redux';
-import { getUser } from 'redux/actions/userActions';
 import { useDispatch } from 'react-redux';
 
 function ConversationComponent(props) {
-    const dispatch = useDispatch();
-    let friendId = props.conversation.members.find((m) => m !== props.currentUser.id);
+    let friend = props.conversation.members.find((m) => {
+        return m._id !== props.currentUser.id;
+    });
 
-    useEffect(() => {
-        async function loadFriend(id) {
-            await dispatch(getUser(id));
-        }
-
-        return loadFriend(friendId);
-    }, [dispatch]);
-
-    const friend = useSelector((state) => state.fetchedUser);
     // TODO: set friend avatar
-    return !friend?.user ? null : (
-        <ListItem button key={friendId}>
+    return !friend ? null : (
+        <ListItem button key={friend.username}>
             <ListItemAvatar>
-                <Avatar src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1f/Woman_1.jpg/768px-Woman_1.jpg" />
+                <Avatar />
             </ListItemAvatar>
-            <ListItemText primary={friend ? friend.user.username : 'Unknown'} />
+            <ListItemText primary={friend ? friend.username : 'Unknown'} />
         </ListItem>
     );
 }
