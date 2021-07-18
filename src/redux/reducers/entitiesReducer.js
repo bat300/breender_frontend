@@ -1,7 +1,7 @@
 export default function entities(state = {}, action) {
     switch (action.type) {
         case 'GETPETS_SUCCESS':
-            return { pets: action.pets };
+            return { pets: action.pets, totalPages: action.totalPages };
         case 'GETMOVIES_SUCCESS':
             return { movies: action.movies };
         case 'DELETEMOVIE_SUCCESS':

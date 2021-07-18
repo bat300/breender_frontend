@@ -11,11 +11,11 @@ const PetTypes = {
     CLEAR_PET: 'CLEAR_PET',
 };
 
-export const getPets = (species, sex, breed, age) => {
+export const getPets = (species, sex, breed, age, page) => {
     // when the backend call was successfull and the movies are retrieved
     // in the dispatcher the movies will be added to the global state
-    function onSuccess(pets) {
-        return { type: 'GETPETS_SUCCESS', pets: pets };
+    function onSuccess(pets, totalPages) {
+        return { type: 'GETPETS_SUCCESS', pets: pets, totalPages: totalPages };
     }
     // when the backend call was failed
     function onFailure(error) {
@@ -26,9 +26,9 @@ export const getPets = (species, sex, breed, age) => {
     return async (dispatch) => {
         try {
             // ask for the pets in the backend
-            let pets = await PetService.getPets(species, sex, breed, age);
+            let pets = await PetService.getPets(species, sex, breed, age, page);
             // call onSuccess in context of redux
-            dispatch(onSuccess(pets));
+            dispatch(onSuccess(pets.pets, pets.totalPages));
         } catch (e) {
             onFailure(e);
         }
@@ -54,7 +54,7 @@ export const deletePet = (id) => {
     };
 };
 
-export const addPet = (pet, onSuccess=() => null, onError=(err) => null) => {
+export const addPet = (pet, onSuccess = () => null, onError = (err) => null) => {
     const addPetAction = () => {
         onSuccess();
         return { type: PetTypes.ADD_PET };
@@ -74,7 +74,7 @@ export const addPet = (pet, onSuccess=() => null, onError=(err) => null) => {
     };
 };
 
-export const changePet = (changedPet,  onSuccess=() => null, onError=(err) => null) => {
+export const changePet = (changedPet, onSuccess = () => null, onError = (err) => null) => {
     const changePetAction = (pet) => {
         onSuccess();
         return { type: PetTypes.UPDATE_PET, pet: pet };
@@ -115,7 +115,6 @@ export const getPet = (id) => {
 
 export const updateSelectedPet = (pet) => {
     const updatePetAction = (pet) => {
-        
         return { type: PetTypes.UPDATE_SELECTED_PET, pet: pet };
     };
     const onFailure = (error) => {
@@ -133,7 +132,6 @@ export const updateSelectedPet = (pet) => {
 
 export const updateProfilePicture = (profilePicture) => {
     const updateProfilePictureAction = (picture) => {
-
         return { type: PetTypes.UPDATE_PROFILE_PICTURE, profilePictureToRemove: picture };
     };
     const onFailure = (error) => {

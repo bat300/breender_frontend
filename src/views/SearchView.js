@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect, useSelector } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import { withRouter } from 'react-router-dom';
@@ -9,6 +9,8 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Typography from '@material-ui/core/Typography';
 import Slider from '@material-ui/core/Slider';
 import Button from '@material-ui/core/Button';
+import Box from '@material-ui/core/Box';
+import Pagination from '@material-ui/lab/Pagination';
 import { getPets } from '../redux/actions/petActions';
 import SearchResults from '../components/SearchResults';
 import { breeds } from 'helper/data/breeds';
@@ -35,6 +37,7 @@ const useStyles = makeStyles((theme) => ({
 function SearchView(props) {
     const classes = useStyles();
     var pets = useSelector((state) => state.entities.pets);
+    var totalPages = useSelector((state) => state.entities.totalPages);
 
     const [chosenSpecies, setSpecies] = React.useState('');
     const [order, setOrder] = React.useState('descending');
@@ -60,16 +63,15 @@ function SearchView(props) {
         },
     ];
 
-
-    const loadPets = async () => {
+    const loadPets = async (pageValue) => {
         // trigger the redux action getPets
-        pets = props.dispatch(getPets(chosenSpecies, sex, breed, ageRange));
+        pets = props.dispatch(getPets(chosenSpecies, sex, breed, ageRange, pageValue));
     };
 
     useEffect(() => {
         // load pets when the page is loaded or the pets were filtered.
         if (!pets) {
-            loadPets();
+            loadPets(0);
         }
     }, [pets]);
 
@@ -78,7 +80,7 @@ function SearchView(props) {
         setSex('');
         setBreed('');
         setAgeRange([1, 10]);
-        pets = props.dispatch(getPets('', '', '', [1, 5])); //change parameters manually because values remain constant inside render and are not updated immediately
+        pets = props.dispatch(getPets('', '', '', [1, 5], 0)); //change parameters manually because values remain constant inside render and are not updated immediately
     };
 
     const resetFilters = async () => {
@@ -108,6 +110,10 @@ function SearchView(props) {
     function agetext(age) {
         return `${age} years old`;
     }
+
+    const handleChange = async (event, value) => {
+        loadPets(value - 1);
+    };
 
     return (
         <div>
@@ -178,6 +184,10 @@ function SearchView(props) {
                 </Button>
             </div>
             <SearchResults pets={pets} order={order} />
+
+            <Box my={2} display="flex" justifyContent="center">
+                <Pagination count={totalPages} variant="outlined" shape="rounded" onChange={handleChange} />
+            </Box>
         </div>
     );
 }
