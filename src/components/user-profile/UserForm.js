@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
-import { FormControl, Grid, InputLabel, Button, MenuItem, Select, TextField, FormHelperText } from '@material-ui/core';
+import { FormControl, Grid, InputLabel, Button, MenuItem, Select, TextField, FormHelperText, Divider, Typography } from '@material-ui/core';
+import CloseIcon from '@material-ui/icons/Close';
 
 const useStyles = makeStyles((theme) => ({
     layout: {
@@ -37,6 +38,17 @@ const useStyles = makeStyles((theme) => ({
         marginBottom: 15,
         marginTop: 15,
     },
+    typography: {
+        margin: theme.spacing(2),
+        marginTop: theme.spacing(6),
+    },
+    divider: {
+        margin: theme.spacing(3),
+    },
+    typographyNotifications: {
+        padding: theme.spacing(2),
+        margin: 'auto',
+    },
 }));
 
 // define types for error handling
@@ -55,7 +67,7 @@ const provincesAndCities = {
     'north-rhine-westphalia': ['Cologne', 'Düsseldorf', 'Dortmund', 'Essen', 'Duisburg', 'Bochum'],
 };
 
-export default function UserForm({ usernameProp, emailProp, provinceProp, cityProp, passwordProp, password2Prop, ...props }) {
+export default function UserForm({ usernameProp, emailProp, provinceProp, cityProp, passwordProp, password2Prop, paymentMethodProp, ...props }) {
     const classes = useStyles();
     const history = useHistory();
     const { username, setUsername } = usernameProp;
@@ -65,6 +77,7 @@ export default function UserForm({ usernameProp, emailProp, provinceProp, cityPr
     const [errors, setErrors] = useState({ username: false, province: false, city: false });
     const { password, setPassword } = passwordProp;
     const { password2, setPassword2 } = password2Prop;
+    const { paymentMethod, setpaymentMethod } = paymentMethodProp;
 
     const validationErrors = {
         username: 'Userame is required',
@@ -211,6 +224,42 @@ export default function UserForm({ usernameProp, emailProp, provinceProp, cityPr
                             </Button>
                         </Grid>
                     </Grid>
+                    <Divider variant="middle" className={classes.divider} />
+                    <Typography className={classes.typography} variant="h6" align="center" style={{ fontWeight: 600 }}>
+                        Payment method
+                    </Typography>
+                    {paymentMethod ?
+                        <Grid container spacing={3}>
+                            <Grid item xs={12} sm={6}>
+                                <TextField
+                                    size="small"
+                                    disabled
+                                    id="plan"
+                                    name="plan"
+                                    value={paymentMethod.email}
+                                    label={paymentMethod.type}
+                                    variant="outlined"
+                                    fullWidth
+                                />
+                            </Grid>
+                            <Grid container xs={12} sm={6} justify="space-around" alignItems="center" spacing={3}>
+                                <Grid item xs={12} sm={6}>
+                                    <Button variant="contained" style={{ width: '230px' }} color="secondary" onClick={handleAddPet}>
+                                        Adjust payment method
+                                    </Button>
+                                </Grid>
+                                <Grid item xs={1} sm={1}>
+                                    <Button onClick={handleAddPet}>
+                                        <CloseIcon />
+                                    </Button>
+                                </Grid>
+                            </Grid>
+
+                        </Grid> :
+                        <Button style={{ margin: '0 auto', display: "flex" }} variant="contained" color="secondary" >
+                            Add payment method
+                        </Button>}
+
                 </React.Fragment>
             </form>
         </div>

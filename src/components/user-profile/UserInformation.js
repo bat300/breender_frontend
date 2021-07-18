@@ -11,6 +11,9 @@ import LocationCityIcon from '@material-ui/icons/LocationCity';
 import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 import EventIcon from '@material-ui/icons/Event';
 import VerificationIcon from '../VerificationIcon';
+import LandscapeIcon from '@material-ui/icons/Landscape';
+import PaymentIcon from '@material-ui/icons/Payment';
+import { Divider, Typography } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
     black: {
@@ -21,10 +24,25 @@ const useStyles = makeStyles((theme) => ({
         paddingLeft: '15%',
         paddingRight: '15%',
     },
+    typography: {
+        margin: theme.spacing(2),
+        marginTop: theme.spacing(6),
+    },
+    divider: {
+        margin: theme.spacing(3),
+    },
+    typographyNotifications: {
+        padding: theme.spacing(2),
+        margin: 'auto',
+    },
 }));
 
 export default function UserInformation(props) {
     const classes = useStyles();
+
+    function capitalizeFirstLetter(string) {
+        return string.charAt(0).toUpperCase() + string.slice(1);
+    }
 
     return props.profileOfLoggedInUser ? (<List>
         <ListItem className={classes.listItem}>
@@ -47,10 +65,18 @@ export default function UserInformation(props) {
         <ListItem className={classes.listItem}>
             <ListItemAvatar>
                 <Avatar className={classes.black}>
+                    <LandscapeIcon />
+                </Avatar>
+            </ListItemAvatar>
+            <ListItemText primary={capitalizeFirstLetter(props.user.province)} secondary="Province" />
+        </ListItem>
+        <ListItem className={classes.listItem}>
+            <ListItemAvatar>
+                <Avatar className={classes.black}>
                     <LocationCityIcon />
                 </Avatar>
             </ListItemAvatar>
-            <ListItemText primary={props.user.city} secondary="City" />
+            <ListItemText primary={capitalizeFirstLetter(props.user.city)} secondary="City" />
         </ListItem>
         <ListItem className={classes.listItem}>
             <ListItemAvatar>
@@ -58,7 +84,7 @@ export default function UserInformation(props) {
                     <AttachMoneyIcon />
                 </Avatar>
             </ListItemAvatar>
-            <ListItemText primary={props.user.subscriptionPlan} secondary="Subscription plan" />
+            <ListItemText primary={capitalizeFirstLetter(props.user.subscriptionPlan)} secondary="Subscription plan" />
         </ListItem>
         {props.user.subscriptionPlan === 'premium' &&
             <ListItem className={classes.listItem}>
@@ -67,8 +93,24 @@ export default function UserInformation(props) {
                         <EventIcon />
                     </Avatar>
                 </ListItemAvatar>
-                <ListItemText primary={props.user.nextRenewalDate} secondary="Next renewal date" />
+                <ListItemText primary={props.user.nextRenewalDate} secondary="Premium subscription untill" />
             </ListItem>}
+        <Divider variant="middle" className={classes.divider} />
+        <Typography className={classes.typography} variant="h6" align="center" style={{ fontWeight: 600 }}>
+            Payment method
+        </Typography>
+        {props.user.paymentMethod ?
+            <ListItem className={classes.listItem}>
+                <ListItemAvatar>
+                    <Avatar className={classes.black}>
+                        <PaymentIcon />
+                    </Avatar>
+                </ListItemAvatar>
+                <ListItemText primary={props.user.paymentMethod.email} secondary={props.user.paymentMethod.type} />
+            </ListItem>
+            : <Typography className={classes.typographyNotifications}>
+                No payment methods added yet
+            </Typography>}
     </List>)
         : (<List>
             <ListItem className={classes.listItem}>

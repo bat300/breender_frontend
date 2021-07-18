@@ -1,6 +1,11 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import ListItemAvatar from '@material-ui/core/ListItemAvatar';
+import Avatar from '@material-ui/core/Avatar';
 import { Paper, Divider, Typography } from '@material-ui/core';
 import PetInformationPaper from '../PetInformationPaper';
 import Grid from '@material-ui/core/Grid';
@@ -11,6 +16,7 @@ import { NotificationService } from 'services';
 import { useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { updateUser } from 'redux/actions';
+import PaymentIcon from '@material-ui/icons/Payment';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -26,9 +32,9 @@ const useStyles = makeStyles((theme) => ({
         maxWidth: '85%',
     },
     paperSmall: {
-        padding: theme.spacing(2),
+        padding: theme.spacing(3),
         margin: 'auto',
-        maxWidth: 100,
+        maxWidth: '75%',
     },
     flexContainer: {
         display: 'flex',
@@ -49,10 +55,14 @@ const useStyles = makeStyles((theme) => ({
     button: {
         margin: theme.spacing(1),
     },
-    middleButton: {
-        margin: theme.spacing(1),
-        display: "flex"
-    }
+    black: {
+        color: '#fff',
+        backgroundColor: '#787878',
+    },
+    listItem: {
+        paddingLeft: '15%',
+        paddingRight: '15%',
+    },
 }));
 
 export default function UserProfile(props) {
@@ -63,10 +73,11 @@ export default function UserProfile(props) {
     const [editingMode, setEditingMode] = React.useState(false);
     const [username, setUsername] = React.useState(props.user.username);
     const [email, setEmail] = React.useState(props.user.email);
-    const [province, setProvince] = React.useState('bavaria');//props.user.province;
+    const [province, setProvince] = React.useState(props.user.province);
     const [city, setCity] = React.useState(props.user.city);
     const [password, setPassword] = React.useState('');
     const [password2, setPassword2] = React.useState('');
+    const [paymentMethod, setpaymentMethod] = React.useState(props.user.paymentMethod);
 
     const handleModeChange = (event) => {
         if (editingMode) {
@@ -82,6 +93,7 @@ export default function UserProfile(props) {
         let userWithChanges = props.user;
         userWithChanges.username = username;
         userWithChanges.email = email;
+        userWithChanges.province = province;
         userWithChanges.city = city;
 
         if (password !== '' && password2 !== '' && password === password2) {
@@ -129,29 +141,9 @@ export default function UserProfile(props) {
                     cityProp={{ city, setCity }}
                     passwordProp={{ password, setPassword }}
                     password2Prop={{ password2, setPassword2 }}
+                    paymentMethodProp={{ paymentMethod, setpaymentMethod }}
                     subscriptionPlan={props.user.subscriptionPlan} />
                 : <UserInformation user={props.user} profileOfLoggedInUser={props.profileOfLoggedInUser} />}
-            {props.profileOfLoggedInUser ?
-                <div>
-                    <Divider variant="middle" className={classes.divider} />
-                    <Typography className={classes.typography} variant="h6" align="center" style={{ fontWeight: 600 }}>
-                        Payment methods
-                    </Typography>
-                    <List className={classes.flexContainer}>
-                        {(props.user.paymentMethods && props.user.paymentMethods > 0) ?
-                            props.user.paymentMethods.map((method) => <Paper className={classes.paperSmall}>
-                                <Typography variant='h6'> Type: {method.type} </Typography>
-                                <Typography> Details: {method.details}</Typography>
-                            </Paper>)
-                            : (editingMode ?
-                                <Button style={{ margin: '0 auto', display: "flex" }} variant="contained" color="secondary" >
-                                    Add payment method
-                                </Button>
-                                : <Typography className={classes.typographyNotifications}>
-                                    No payment methods added yet
-                                </Typography>)}
-                    </List >
-                </div> : <div />}
             <Divider variant="middle" className={classes.divider} />
             <Typography className={classes.typography} variant="h6" align="center" style={{ fontWeight: 600 }}>
                 {props.profileOfLoggedInUser ? "My pets" : "Pets"}
