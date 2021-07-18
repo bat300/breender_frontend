@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
-import { FormControl, Grid, InputLabel, InputAdornment, MenuItem, Select, TextField, Paper, Divider, FormHelperText } from '@material-ui/core';
+import { FormControl, Grid, InputLabel, Button, MenuItem, Select, TextField, FormHelperText } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
     layout: {
@@ -56,6 +57,7 @@ const provincesAndCities = {
 
 export default function UserForm({ usernameProp, emailProp, provinceProp, cityProp, passwordProp, password2Prop, ...props }) {
     const classes = useStyles();
+    const history = useHistory();
     const { username, setUsername } = usernameProp;
     const { email, setEmail } = emailProp;
     const { province, setProvince } = provinceProp;
@@ -119,6 +121,10 @@ export default function UserForm({ usernameProp, emailProp, provinceProp, cityPr
     const handlePassword2Change = (e) => {
         validate(UserFormInputs.password2, e.target.value);
         setPassword2(e.target.value);
+    };
+
+    const handleAddPet = (e) => {
+        history.push('/premium');
     };
 
 
@@ -186,6 +192,23 @@ export default function UserForm({ usernameProp, emailProp, provinceProp, cityPr
                                 <TextField size="small" label="Repeat new Password" fullWidth value={password2} onChange={handlePassword2Change} type="password" variant="outlined" />
                                 <FormHelperText>{errors[UserFormInputs.password2] && validationErrors[UserFormInputs.password2]}</FormHelperText>
                             </FormControl>
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
+                            <TextField
+                                size="small"
+                                disabled
+                                id="plan"
+                                name="plan"
+                                value={props.subscriptionPlan}
+                                label="Subscription plan"
+                                variant="outlined"
+                                fullWidth
+                            />
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
+                            <Button style={{ margin: '0 auto', display: "flex" }} variant="contained" color="secondary" onClick={handleAddPet}>
+                                Adjust subscription plan
+                            </Button>
                         </Grid>
                     </Grid>
                 </React.Fragment>

@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
 export default function UserInformation(props) {
     const classes = useStyles();
 
-    return (<List>
+    return props.profileOfLoggedInUser ? (<List>
         <ListItem className={classes.listItem}>
             <ListItemAvatar>
                 <Avatar className={classes.black}>
@@ -70,4 +70,15 @@ export default function UserInformation(props) {
                 <ListItemText primary={props.user.nextRenewalDate} secondary="Next renewal date" />
             </ListItem>}
     </List>)
+        : (<List>
+            <ListItem className={classes.listItem}>
+                <ListItemAvatar>
+                    <Avatar className={classes.black}>
+                        <LocationCityIcon />
+                    </Avatar>
+                </ListItemAvatar>
+                <ListItemText primary={props.user.city} secondary="City" />
+            </ListItem>
+        </List>)
+
 }

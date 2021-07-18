@@ -10,7 +10,7 @@ import { useHistory } from 'react-router-dom';
 import CloseIcon from '@material-ui/icons/Close';
 import { NotificationService } from 'services';
 import { useDispatch } from 'react-redux';
-import { deletePet, getUserPets } from 'redux/actions';
+import { deletePet, getUserPets, getPets } from 'redux/actions';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -57,6 +57,7 @@ export default function PetInformationPaper(props) {
         const onSuccess = () => {
             NotificationService.notify('success', 'Success', 'Your pet was successfully deleted!');
             dispatch(getUserPets(props.user._id));
+            dispatch(getPets('', '', '', ''));
             history.push('/user');
         };
 

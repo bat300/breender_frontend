@@ -49,6 +49,10 @@ const useStyles = makeStyles((theme) => ({
     button: {
         margin: theme.spacing(1),
     },
+    middleButton: {
+        margin: theme.spacing(1),
+        display: "flex"
+    }
 }));
 
 export default function UserProfile(props) {
@@ -96,6 +100,10 @@ export default function UserProfile(props) {
         dispatch(updateUser(userWithChanges, onSuccess, onError));
     };
 
+    const handleAddPet = (event) => {
+        history.push('/add-pet');
+    };
+
 
     return (<div className={classes.root}>
         <Paper className={classes.paper} >
@@ -103,40 +111,61 @@ export default function UserProfile(props) {
                 <Grid item />
                 <Grid item >
                     <Typography variant="h6" align="center" style={{ fontWeight: 600 }}>
-                        Account information
+                        {props.profileOfLoggedInUser ? "Account information" : username.toUpperCase()}
                     </Typography>
                 </Grid>
                 <Grid item>
-                    {props.editable ? <Button className={classes.button} variant="contained" color="secondary" onClick={handleModeChange}>
+                    {props.profileOfLoggedInUser ? <Button className={classes.button} variant="contained" color="secondary" onClick={handleModeChange}>
                         {editingMode ? "Save" : "Edit"}
                     </Button> : <div />}
 
                 </Grid>
             </Grid>
-            {editingMode ? <UserForm
-                usernameProp={{ username, setUsername }}
-                emailProp={{ email, setEmail }}
-                provinceProp={{ province, setProvince }}
-                cityProp={{ city, setCity }}
-                passwordProp={{ password, setPassword }}
-                password2Prop={{ password2, setPassword2 }} />
-                : <UserInformation user={props.user} />}
+            {editingMode ?
+                <UserForm
+                    usernameProp={{ username, setUsername }}
+                    emailProp={{ email, setEmail }}
+                    provinceProp={{ province, setProvince }}
+                    cityProp={{ city, setCity }}
+                    passwordProp={{ password, setPassword }}
+                    password2Prop={{ password2, setPassword2 }}
+                    subscriptionPlan={props.user.subscriptionPlan} />
+                : <UserInformation user={props.user} profileOfLoggedInUser={props.profileOfLoggedInUser} />}
+            {props.profileOfLoggedInUser ?
+                <div>
+                    <Divider variant="middle" className={classes.divider} />
+                    <Typography className={classes.typography} variant="h6" align="center" style={{ fontWeight: 600 }}>
+                        Payment methods
+                    </Typography>
+                    <List className={classes.flexContainer}>
+                        {(props.user.paymentMethods && props.user.paymentMethods > 0) ?
+                            props.user.paymentMethods.map((method) => <Paper className={classes.paperSmall}>
+                                <Typography variant='h6'> Type: {method.type} </Typography>
+                                <Typography> Details: {method.details}</Typography>
+                            </Paper>)
+                            : (editingMode ?
+                                <Button style={{ margin: '0 auto', display: "flex" }} variant="contained" color="secondary" >
+                                    Add payment method
+                                </Button>
+                                : <Typography className={classes.typographyNotifications}>
+                                    No payment methods added yet
+                                </Typography>)}
+                    </List >
+                </div> : <div />}
             <Divider variant="middle" className={classes.divider} />
             <Typography className={classes.typography} variant="h6" align="center" style={{ fontWeight: 600 }}>
-                Payment methods
-            </Typography>
-            <List className={classes.flexContainer}>
-                {(props.user.paymentMethods && props.user.paymentMethods > 0) ? props.user.paymentMethods.map((method) => <Paper className={classes.paperSmall}>
-                    <Typography variant='h6'> Type: {method.type} </Typography>
-                    <Typography> Details: {method.details}</Typography>
-                </Paper>) : <Typography className={classes.typographyNotifications}> No payment methods added yet</Typography>}
-            </List >
-            <Divider variant="middle" className={classes.divider} />
-            <Typography className={classes.typography} variant="h6" align="center" style={{ fontWeight: 600 }}>
-                My pets
+                {props.profileOfLoggedInUser ? "My pets" : "Pets"}
             </Typography>
             <List>
-                {props.pets && props.pets.length > 0 ? props.pets.map((pet) => <PetInformationPaper pet={pet} user={props.user} key={pet._id} editingMode={editingMode} />) : <Typography className={classes.typographyNotifications} align="center"> No pets added yet</Typography>}
+                {props.pets && props.pets.length > 0 ?
+                    props.pets.map((pet) => <PetInformationPaper pet={pet} user={props.user} key={pet._id} editingMode={editingMode} />)
+                    : (editingMode ?
+                        <Button style={{ margin: '0 auto', display: "flex" }} variant="contained" color="secondary" onClick={handleAddPet}>
+                            Add pet
+                        </Button>
+                        : <Typography className={classes.typographyNotifications} align="center">
+                            No pets added yet
+                        </Typography>)}
             </List>
         </Paper>
     </div >)
