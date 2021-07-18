@@ -71,6 +71,10 @@ function MessengerComponent(props) {
         socket.current.emit('addUser', userId);
     }, [userId]);
 
+    useEffect(() => {
+        console.log(JSON.stringify(props.conversations));
+    });
+
     return (
         <div className={classes.layout}>
             <Grid container component={Paper} className={classes.chatSection}>
@@ -100,12 +104,11 @@ function MessengerComponent(props) {
                 <List>
                     {menuProps.conversations.map((c) => (
                         <div
-                            key={c.id}
                             onClick={() => {
                                 setCurrentChat(c);
                             }}
                         >
-                            <ConversationComponent className={classes.bonker} key={c.id} conversation={c} currentUser={menuProps.currentUser} />
+                            <ConversationComponent className={classes.bonker} conversation={c} currentUser={menuProps.currentUser} />
                         </div>
                     ))}
                 </List>

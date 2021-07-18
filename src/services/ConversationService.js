@@ -31,4 +31,21 @@ export default class ConversationService {
         const { data } = await axios.post(`/conversations/`, conversation);
         return data;
     }
+
+    static async getOrCreateConversation(id1, id2) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const { data } = await axios.get(`/conversations/find/${id1}&${id2}`);
+                console.log(JSON.stringify(data));
+                resolve(data);
+            } catch (err) {
+                console.log('Creating now....');
+                let conversation = {
+                    members: [id1, id2],
+                };
+                const { data } = await axios.post(`/conversations/`, conversation);
+                resolve(data);
+            }
+        });
+    }
 }

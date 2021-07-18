@@ -1,5 +1,6 @@
 import React from 'react';
 import { Button } from '@material-ui/core';
+import { useSelector } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import { useHistory } from 'react-router-dom';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
@@ -29,13 +30,13 @@ function ContactButton(contactProps) {
     const classes = useStyles();
     const history = useHistory();
 
+    const user = useSelector((state) => state.user);
     const handleContact = (id) => {
-        // Navigate to details of the selected conversation
         history.push('/messenger/' + contactProps.breederId + '/' + contactProps.petId);
     };
 
     return (
-        <Button variant="contained" color="secondary" className={classes.button} endIcon={<SendIcon />} onClick={() => handleContact()}>
+        <Button variant="contained" color="secondary" className={classes.button} endIcon={<SendIcon />} onClick={() => handleContact()} disabled={user.user.subscriptionPlan !== 'free'}>
             Contact Breeder
         </Button>
     );

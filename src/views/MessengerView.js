@@ -7,6 +7,7 @@ import { useDispatch } from 'react-redux';
 
 function MessengerView(props) {
     const dispatch = useDispatch();
+
     const user = useSelector((state) => state.user.user);
 
     useEffect(() => {
@@ -26,7 +27,7 @@ function MessengerView(props) {
     ) : !Array.isArray(loadedConversations.conversations) ? (
         <div>error</div>
     ) : loadedConversations.conversations ? (
-        <MessengerComponent conversations={loadedConversations.conversations} currentUser={user} />
+        <MessengerComponent conversations={loadedConversations.conversations} currentUser={user} currentConversation={props.currentConversation} />
     ) : null;
 }
 

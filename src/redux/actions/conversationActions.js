@@ -1,3 +1,4 @@
+import { version } from 'react';
 import ConversationService from '../../services/ConversationService';
 
 const ConversationTypes = {
@@ -67,6 +68,32 @@ export const getConversation = (id1, id2) => {
         try {
             // ask for the conversation in the backend
             let conversation = await ConversationService.getConversation(id1, id2);
+            // call onSuccess in context of redux
+            dispatch(onSuccess(conversation));
+        } catch (e) {
+            onFailure(e);
+        }
+    };
+};
+
+export const getOrAddConversation = (id1, id2) => {
+    // when the backend call was successfull and the conversations are retrieved
+    // in the dispatcher the conversations will be added to the global state
+    const onSuccess = (conversation) => {
+        return { type: ConversationTypes.GET_CONVERSATION, conversation: conversation };
+    };
+    // when the backend call was failed
+    const onFailure = (error) => {
+        // error handling
+        console.log('failed to get the conversation', error);
+    };
+
+    return async (dispatch, getState) => {
+        try {
+            // ask for the conversations in the backend
+            console.log('Starting...');
+            let conversation = await ConversationService.getOrCreateConversation(id1, id2);
+            console.log('Fetched...');
             // call onSuccess in context of redux
             dispatch(onSuccess(conversation));
         } catch (e) {

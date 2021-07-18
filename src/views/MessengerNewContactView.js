@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { connect, useSelector, dispatch } from 'react-redux';
-import { getConversation, addConversation } from '../redux/actions/conversationActions';
+import { getOrAddConversation } from '../redux/actions/conversationActions';
 import MessengerComponent from '../components/messenger/MessengerComponent';
+import MessengerView from './MessengerView';
 import Loading from '../components/Loading';
 import { useDispatch } from 'react-redux';
 
@@ -15,22 +16,15 @@ function MessengerNewContactView(props) {
         let userId = user.id;
 
         async function loadConversation(id1, id2) {
-            await dispatch(getConversation(id1, id2));
+            console.log('Checking conversations and creating if needed...');
+            await dispatch(getOrAddConversation(id1, id2));
         }
-        return loadConversation(userId, breederId).then(() => handleConversation());
+        return loadConversation(userId, breederId);
     }, [dispatch]);
 
-    const loadedConversation = useSelector((state) => state.conversation);
+    const loadedConversation = useSelector((state) => state.conversations.conversation);
 
-    const handleConversation = () => {
-        if (!loadedConversation) {
-            console.log('CREATE');
-        } else {
-            console.log('NOT CREATE');
-        }
-    };
-
-    return !loadedConversation ? <Loading /> : loadedConversation ? <MessengerComponent currentConversation={loadedConversation} currentUser={user} /> : null;
+    return !loadedConversation ? <Loading /> : loadedConversation ? <MessengerView currentConversation={loadedConversation} /> : null;
 }
 
 // connect() establishes allows the usage of redux functionality
