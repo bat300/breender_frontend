@@ -6,19 +6,25 @@ import Grid from '@material-ui/core/Grid';
 
 function sortByNewest() {
     return function (a, b) {
-        return a.dateCreated < b.dateCreated? 1 : -1;
+        return a.dateCreated < b.dateCreated && a.ownerId.subscriptionPlan < b.ownerId.subscriptionPlan ? 1 : -1;
     };
 }
 
 function sortByDescendingPrice() {
     return function (a, b) {
-        return a.price < b.price ? 1 : -1;
+        return a.price < b.price && a.ownerId.subscriptionPlan < b.ownerId.subscriptionPlan ? 1 : -1;
     };
 }
 
 function sortByAscendingPrice() {
     return function (a, b) {
-        return a.price > b.price ? 1 : -1;
+        return a.price > b.price && a.ownerId.subscriptionPlan < b.ownerId.subscriptionPlan ? 1 : -1;
+    };
+}
+
+function sortBySubscription() {
+    return function (a, b) {
+        return a.ownerId.subscriptionPlan < b.ownerId.subscriptionPlan ? 1 : -1;
     };
 }
 
@@ -31,7 +37,7 @@ function getResult(pets, order) {
         case 'newest':
             return pets.sort(sortByNewest());
         default:
-            return pets;
+            return pets.sort(sortBySubscription());
     }
 }
 

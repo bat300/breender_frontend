@@ -35,6 +35,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function SearchView(props) {
+    const searchRef = React.createRef();
     const classes = useStyles();
     var pets = useSelector((state) => state.entities.pets);
     var totalPages = useSelector((state) => state.entities.totalPages);
@@ -113,10 +114,11 @@ function SearchView(props) {
 
     const handleChange = async (event, value) => {
         loadPets(value - 1);
+        searchRef.current.scrollTop = 0;
     };
 
     return (
-        <div>
+        <div ref={searchRef}>
             <div className={classes.filters}>
                 <FormControl className={classes.formControl}>
                     <InputLabel id="species-select-label">Species</InputLabel>
