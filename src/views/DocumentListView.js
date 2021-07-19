@@ -74,11 +74,11 @@ const DocumentListView = (props) => {
     };
 
     useEffect(() => {
-        // load docs when the page is loaded or the docs were filtered.
-        if (!documents) {
+        // load docs when the page is loaded or the docs were verified/declined.
+
             loadDocuments();
-        }
-    }, [documents]);
+        
+    }, []);
 
     return (
         <div>
