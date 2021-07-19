@@ -71,9 +71,9 @@ function MessengerComponent(props) {
         socket.current.emit('addUser', userId);
     }, [userId]);
 
-    useEffect(() => {
-        console.log(JSON.stringify(props.conversations));
-    });
+    // useEffect(() => {
+    //     console.log(JSON.stringify(props.conversations));
+    // });
 
     return (
         <div className={classes.layout}>
@@ -145,11 +145,10 @@ function MessengerComponent(props) {
                 conversationId: chatProps.conversation._id,
             };
 
-            const receiverId = currentChat.members.find((member) => member !== userId);
-
+            const receiverId = currentChat.members.find((member) => member._id !== userId)._id;
             socket.current.emit('sendMessage', {
                 senderId: userId,
-                receiverId,
+                receiverId: receiverId,
                 text: newMessage,
             });
 
