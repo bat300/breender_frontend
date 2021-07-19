@@ -5,7 +5,13 @@ export default class PetService {
         return 'http://localhost:4000/pets';
     }
 
+    static setToken() {
+        const token = localStorage.getItem('jwtToken');
+        axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
+    }
+
     static getPets(species, sex, breed, age) {
+        this.setToken();
         return new Promise(async (resolve, reject) => {
             try {
                 const { data } = await axios.get(`/pets/search?species=${species}&sex=${sex}&breed=${breed}&age[]=${age}`);
@@ -17,6 +23,7 @@ export default class PetService {
     }
 
     static getPet(id) {
+        this.setToken();
         return new Promise(async (resolve, reject) => {
             try {
                 const { data } = await axios.get(`/pets/${id}`);
@@ -28,6 +35,7 @@ export default class PetService {
     }
 
     static deletePet(id) {
+        this.setToken();
         return new Promise(async (resolve, reject) => {
             try {
                 const { data } = await axios.delete(`/pets/${id}`);
@@ -38,18 +46,14 @@ export default class PetService {
         });
     }
 
-    static updatePet(pet) {
-        return new Promise(async (resolve, reject) => {
-            try {
-                const { data } = await axios.put(`/pets/${pet._id}`, pet);
-                resolve(data);
-            } catch (err) {
-                reject(err);
-            }
-        });
+    static async updatePet(pet) {
+        this.setToken();
+        const { data } = await axios.put(`/pets/${pet.id}`, pet);
+        return data;
     }
 
     static async createPet(pet) {
+        this.setToken();
         const { data } = await axios.post(`/pets/`, pet);
         return data;
     }

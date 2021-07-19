@@ -6,6 +6,10 @@ import PetInformation from './PetInformation';
 import PetCompetitionsList from './PetCompetitionsList';
 import PetDocumentsList from './PetDocumentsList';
 import { PaymentButton, ContactButton } from '../Button';
+import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
+import { useDispatch } from 'react-redux';
+import { getPet } from 'redux/actions';
+import { useHistory, withRouter } from 'react-router-dom';
 
 /**
  * Manages the process of getting pet details data
@@ -40,37 +44,58 @@ const useStyles = makeStyles((theme) => ({
     gridMargin: {
         marginTop: theme.spacing(2),
     },
+    buttonGrid: {
+        marginBottom: 100,
+        display: 'flex',
+        justifyContent: 'flex-end',
+        alignItems: 'flex-end',
+    },
 }));
 
 function PetProfileComponent(props) {
     const classes = useStyles();
+    const dispatch = useDispatch();
+    const history = useHistory();
+
+    const id = props.id;
+    const fetchPet = async () => {
+        await dispatch(getPet(id));
+        history.push(`/edit/pet/${id}`);
+    };
 
     return (
         <div className={classes.layout}>
             <Grid container>
                 <Grid item className={classes.maxWidth}>
                     <Paper className={classes.paper}>
-                        <Grid container alignItems="center" align="center" justify="center" direction="row" className={classes.gridMargin} spacing={2}>
+                        <Grid container alignItems="stretch" align="center" justify="center" direction="row" className={classes.gridMargin} spacing={2}>
                             <Grid item xs={4}>
                                 <Typography variant="h4" align="center">
                                     {props.officialName}
                                 </Typography>
                                 <PetPhotos pictures={props.pictures} profilePicture={props.profilePicture} />
-                                <ContactButton breederId={props.ownerId} petId={props.petId} />
-                                {props.price && props.price > 0 && <PaymentButton price={props.price} />}
+                                <ContactButton breederId={props.ownerId} petId={id} />
+                                {props.price && props.price > 0 && <PaymentButton pet={props} price={props.price} />}
                             </Grid>
                             <Divider variant="middle" />
-                            <Grid item xs={7}>
-                                <PetInformation
-                                    officialName={props.officialName}
-                                    nickname={props.nickname}
-                                    age={props.age}
-                                    sex={props.sex}
-                                    price={props.price}
-                                    breed={props.breed}
-                                    species={props.species}
-                                    ownerId={props.ownerId}
-                                />
+                            <Grid xs={7} direction="column">
+                                <Grid item xs={12} className={classes.buttonGrid}>
+                                    <Button variant="contained" color="secondary" startIcon={<EditOutlinedIcon />} onClick={fetchPet}>
+                                        Edit
+                                    </Button>
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <PetInformation
+                                        officialName={props.officialName}
+                                        nickname={props.nickname}
+                                        age={props.age}
+                                        sex={props.sex}
+                                        price={props.price}
+                                        breed={props.breed}
+                                        species={props.species}
+                                        ownerId={props.ownerId}
+                                    />
+                                </Grid>
                             </Grid>
                         </Grid>
                         <Divider variant="middle" />
@@ -124,4 +149,4 @@ function Documents(props) {
     );
 }
 
-export default PetProfileComponent;
+export default withRouter(PetProfileComponent);

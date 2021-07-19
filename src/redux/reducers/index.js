@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
 import user from './userReducer';
-import fetchedUser from './fetchedUserReducer';
+import checkUser from './checkUserReducer';
 import entities from './entitiesReducer';
 import selectedMovie from './selectedMovieReducer';
 import selectedPet from './selectedPetReducer';
@@ -8,10 +8,11 @@ import pets from './petReducer';
 import confirmation from './confirmationReducer';
 import conversations from './conversationReducer';
 import messages from './messageReducer';
+import transaction from './transactionReducer';
 
 const reducers = combineReducers({
     user,
-    fetchedUser,
+    checkUser,
     entities,
     selectedMovie,
     selectedPet,
@@ -19,6 +20,17 @@ const reducers = combineReducers({
     confirmation,
     conversations,
     messages,
+    transaction,
 });
 
-export default reducers;
+const rootReducer = (state, action) => {
+    // empty global state on logout
+    if (action.type === 'LOGOUT') {
+        window.localStorage.removeItem('persist:root')
+
+        return reducers(undefined, action);
+    }
+    return reducers(state, action);
+};
+
+export default rootReducer;

@@ -1,56 +1,106 @@
-import MovieListView from './views/MovieListView';
+import React from 'react';
+import { Redirect, Route, Switch } from 'react-router-dom';
 import UserLoginView from './views/UserLoginView';
 import SignUpView from './views/SignUpView';
-import MovieDetailsView from './views/MovieDetailsView';
 import AddPetView from './views/AddPetView';
 import PetProfileView from './views/PetProfileView';
 import EmailConfirmationView from './views/EmailConfirmationView';
+import UserProfileView from './views/UserProfileView';
+import SubscriptionPageView from './views/SubscriptionPageView';
+import EditPetView from './views/EditPetView';
+import NotFoundView from './views/NotFoundView';
+import SearchView from './views/SearchView';
+import SelectedUserProfileView from './views/SelectedUserProfileView';
+import TransactionsView from 'views/TransactionsView';
 import MessengerView from './views/MessengerView';
 import MessengerNewContactView from './views/MessengerNewContactView';
-import Search from './components/Search';
+// services
+import { LocalStorageService } from 'services';
+import Header from 'components/Header';
+import AppTheme from 'theming/themetypes';
+import ChangeToPremiumView from 'views/ChangeToPremiumView';
+import AddReview from 'components/user-profile/AddReview';
 
-// routes within the movie database example app
+const DefaultHeader = () => {
+    // theme for app
+    const [theme, setTheme] = React.useState(AppTheme.LIGHT);
+
+    // toggle theme
+    const toggleTheme = () => {
+        setTheme(theme === AppTheme.LIGHT ? AppTheme.DARK : AppTheme.LIGHT);
+    };
+    return <Header darkmode={theme === AppTheme.DARK} toggletheme={toggleTheme} />;
+};
+
 // used for routing
+export const PrivateRoute = (props) => {
+    return LocalStorageService.isAuthorized() ? (
+        <Route {...props}>
+            <DefaultHeader />
+            {props.children}
+        </Route>
+    ) : (
+        <Redirect to={{ pathname: '/login', state: { from: props.location } }} />
+    );
+};
 
-const routes = [
-    {
-        path: '/',
-        component: Search,
-        exact: true,
-    },
-    {
-        path: '/login',
-        component: UserLoginView,
-    },
-    {
-        path: '/register',
-        component: SignUpView,
-    },
-    {
-        path: '/confirmation/:email/:token',
-        component: EmailConfirmationView,
-    },
-    {
-        path: '/movie/:id',
-        component: MovieDetailsView,
-    },
-    {
-        path: '/pet/:id',
-        component: PetProfileView,
-    },
-    /** @TODO added for the test, maybe need to deleted later */
-    {
-        path: '/add-pet',
-        component: AddPetView,
-    },
-    {
-        path: '/messenger/:breederId/:petId',
-        component: MessengerNewContactView,
-    },
-    {
-        path: '/messenger',
-        component: MessengerView,
-    },
-];
+export const DefaultRoute = (props) => <Route {...props}>{props.children}</Route>;
 
-export default routes;
+const Routes = () => {
+    return (
+        <Switch>
+            <DefaultRoute exact path="/login">
+                <UserLoginView />
+            </DefaultRoute>
+            <DefaultRoute path="/register">
+                <SignUpView />
+            </DefaultRoute>
+            <DefaultRoute path="/confirmation/:email/:token">
+                <EmailConfirmationView />
+            </DefaultRoute>
+            <DefaultRoute exact path="/">
+                <DefaultHeader />
+                <SearchView />
+            </DefaultRoute>
+            <DefaultRoute exact path="/premium">
+                <DefaultHeader />
+                <SubscriptionPageView />
+            </DefaultRoute>
+            <PrivateRoute exact path="/premium/changePlan">
+                <ChangeToPremiumView />
+            </PrivateRoute>
+            <PrivateRoute exact path="/user/:id">
+                <SelectedUserProfileView />
+            </PrivateRoute>
+            <PrivateRoute exact path="/user">
+                <UserProfileView />
+            </PrivateRoute>
+            <PrivateRoute exact path="/pet/:id">
+                <PetProfileView />
+            </PrivateRoute>
+            <PrivateRoute exact path="/add-pet">
+                <AddPetView />
+            </PrivateRoute>
+            <PrivateRoute exact path="/edit/pet/:id">
+                <EditPetView />
+            </PrivateRoute>
+            <PrivateRoute exact path="/add-review">
+                <AddReview />
+            </PrivateRoute>
+            <PrivateRoute exact path="/transactions">
+                <TransactionsView />
+            </PrivateRoute>
+            <PrivateRoute exact path="/messenger/:breederId/:petId">
+                <MessengerNewContactView />
+            </PrivateRoute>
+            <PrivateRoute exact path="/messenger">
+                <MessengerView />
+            </PrivateRoute>
+            <DefaultRoute path="*">
+                <NotFoundView />
+            </DefaultRoute>
+        </Switch>
+    );
+};
+
+export default Routes;

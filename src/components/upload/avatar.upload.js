@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 // antd imports
 import 'antd/dist/antd.css';
-import { Upload } from 'antd';
+import { Upload, Image } from 'antd';
 import { LoadingOutlined } from '@ant-design/icons';
 // material-ui imports
 import { makeStyles } from '@material-ui/core/styles';
@@ -11,18 +11,21 @@ import PetsIcon from '@material-ui/icons/Pets';
 import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
 import { sha256 } from 'js-sha256';
 import { useDispatch } from 'react-redux';
-import { updateProfilePicture } from 'redux/actions';
+import { updateProfilePicture, updateSelectedPet } from 'redux/actions';
 import { useUser } from 'helper/hooks/auth.hooks';
+import { usePet } from 'helper/hooks/pets.hooks';
 
 const AvatarUpload = (props) => {
     const classes = useStyles();
     const dispatch = useDispatch();
+    const { mode } = props;
+    const pet = usePet();
 
     const [loading, setLoading] = useState(false);
     const [openAlert, setOpenAlert] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
-    const [imageUrl, setImageUrl] = useState('');
-
+    const [imageUrl, setImageUrl] = useState(mode === 'add' ? '' : pet.profilePicture.src);
+ 
     const user = useUser();
 
     const getBase64 = (img, callback) => {
@@ -86,25 +89,36 @@ const AvatarUpload = (props) => {
             data: data,
         };
 
+        let petData = pet;
+        petData.profilePicture = newData;
+
         // update in global state
-        dispatch(updateProfilePicture(newData));
+        dispatch(updateSelectedPet(petData));
 
         data.onSuccess(null);
     };
 
     // remove the image from firebase
     const handleRemove = async (file) => {
-        
         setImageUrl('');
+
+        const image = pet.profilePicture;
+
+        if(image.src !== '') {
+            await dispatch(updateProfilePicture(image));
+        }
+
+        let petData = pet;
+        petData.profilePicture = {};
     
         // update in global state
-        dispatch(updateProfilePicture({}));
+        await dispatch(updateSelectedPet(petData));
     };
 
     return (
         <div>
             <div className={classes.box}>
-                {imageUrl ? <img src={imageUrl} alt="avatar" style={{ width: '100%' }} /> : <div>{loading ? <LoadingOutlined /> : <PetsIcon fontSize="large" htmlColor={'#ced2de'} />}</div>}
+                {imageUrl ? <Image src={imageUrl} alt="avatar" style={{ width: 200, height: 200, objectFit: 'cover' }} /> : <div>{loading ? <LoadingOutlined /> : <PetsIcon fontSize="large" htmlColor={'#ced2de'} />}</div>}
             </div>
             <div className={classes.layout}>
                 {imageUrl ? (
@@ -119,7 +133,7 @@ const AvatarUpload = (props) => {
                     </div>
                 )}
                 <Upload accept="image/*" name="avatar" listType="picture" showUploadList={false} beforeUpload={beforeUpload} onChange={handleChange} customRequest={customUpload}>
-                    <Button variant="contained" color="primary" style={{ margin: 30 }}>
+                    <Button variant="contained" color="secondary" style={{ margin: 30 }}>
                         Choose Photo
                     </Button>
                 </Upload>

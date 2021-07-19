@@ -16,15 +16,15 @@ const PetFormInputs = {
     breed: 'breed',
 };
 
-const PetInformationForm = ({ nameProp, nicknameProp, sexProp, birthDateProp, speciesProp, breedProp, priceProp }) => {
+const PetInformationForm = ({ nameProp, nicknameProp, sexProp, breedProp, speciesProp, priceProp, birthDateProp, ...props }) => {
     const classes = useStyles();
     const { name, setName } = nameProp;
     const { nickname, setNickname } = nicknameProp;
     const { sex, setSex } = sexProp;
-    const { birthDate, setBirthDate } = birthDateProp;
-    const { species, setSpecies } = speciesProp;
     const { breed, setBreed } = breedProp;
+    const { species, setSpecies } = speciesProp;
     const { price, setPrice } = priceProp;
+    const { birthDate, setBirthDate } = birthDateProp;
     const [errors, setErrors] = useState({ name: false, nickname: false, sex: false, species: false, breed: false });
 
     const validationErrors = {
@@ -52,7 +52,7 @@ const PetInformationForm = ({ nameProp, nicknameProp, sexProp, birthDateProp, sp
         setName(e.target.value);
     };
     const handleNicknameChange = (e) => setNickname(e.target.value);
-    
+
     const handleSexChange = (e) => {
         validate(PetFormInputs.sex, e.target.value);
         setSex(e.target.value);
@@ -145,7 +145,7 @@ const PetInformationForm = ({ nameProp, nicknameProp, sexProp, birthDateProp, sp
                                         <InputLabel id="species-label">Species</InputLabel>
                                         <Select label="Species" id="species" value={species} onChange={handleSpeciesChange} onBlur={handleSpeciesChange}>
                                             {Object.keys(breeds).map((value) => {
-                                                return <MenuItem value={value}>{value}</MenuItem>
+                                                return <MenuItem key={value} value={value}>{value}</MenuItem>
                                             })}
                                         </Select>
                                         <FormHelperText>{errors[PetFormInputs.species] && validationErrors[PetFormInputs.species]}</FormHelperText>
@@ -157,30 +157,30 @@ const PetInformationForm = ({ nameProp, nicknameProp, sexProp, birthDateProp, sp
                                         <Select label="Breed" id="breed" value={breed} onChange={handleBreedChange} onBlur={handleBreedChange}>
                                             {species === 'dog'
                                                 ? sortedDogBreeds.map((breed) => {
-                                                      return <MenuItem value={breed}>{breed}</MenuItem>;
-                                                  })
+                                                    return <MenuItem key={breed} value={breed}>{breed}</MenuItem>;
+                                                })
                                                 : species === 'cat'
-                                                ? sortedCatBreeds.map((breed) => {
-                                                      return <MenuItem value={breed}>{breed}</MenuItem>;
-                                                  })
-                                                : species === 'horse'
-                                                ? sortedHorseBreeds.map((breed) => {
-                                                      return <MenuItem value={breed}>{breed}</MenuItem>;
-                                                  })
-                                                : null}
+                                                    ? sortedCatBreeds.map((breed) => {
+                                                        return <MenuItem key={breed} value={breed}>{breed}</MenuItem>;
+                                                    })
+                                                    : species === 'horse'
+                                                        ? sortedHorseBreeds.map((breed) => {
+                                                            return <MenuItem key={breed} value={breed}>{breed}</MenuItem>;
+                                                        })
+                                                        : null}
                                         </Select>
                                         <FormHelperText>{errors[PetFormInputs.breed] && validationErrors[PetFormInputs.breed]}</FormHelperText>
                                     </FormControl>
                                 </Grid>
                                 <Grid item xs={12}>
-                                    <CompetitionsComponent />
+                                    <CompetitionsComponent mode={props.mode} />
                                 </Grid>
                                 <Grid item xs={12}>
                                     <Divider />
                                     <Grid>
                                         <label className={classes.label}>Upload Documents</label>
                                     </Grid>
-                                    <DocumentsUpload />
+                                    <DocumentsUpload mode={props.mode} />
                                 </Grid>
                                 <Grid item xs={12}>
                                     <TextField

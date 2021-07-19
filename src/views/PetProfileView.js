@@ -4,6 +4,7 @@ import { getPet } from '../redux/actions/petActions';
 import PetProfileComponent from '../components/pet-profile/PetProfileComponent';
 import Loading from '../components/Loading';
 import { useDispatch } from 'react-redux';
+import { useLocation } from 'react-router-dom';
 
 /**
  * Manages the process of getting pet details data
@@ -12,19 +13,21 @@ import { useDispatch } from 'react-redux';
 
 function PetProfileView(props) {
     const dispatch = useDispatch();
+    const location = useLocation();
+
+    const petId = location.pathname.split('/pet/')[1];
 
     useEffect(() => {
         // get id of pet from URL
-        let petId = props.match.params.id;
 
         async function loadPet(id) {
             await dispatch(getPet(id));
         }
 
         return loadPet(petId);
-    }, [dispatch, props.match.params.id]);
+    }, [dispatch, petId]);
 
-    const selectedPet = useSelector((state) => state.selectedPet);
+    const selectedPet = useSelector((state) => state.pets);
 
     return !selectedPet.pet && !selectedPet.error ? (
         <Loading />
@@ -32,6 +35,7 @@ function PetProfileView(props) {
         <div>error</div>
     ) : selectedPet.pet ? (
         <PetProfileComponent
+            id={petId}
             officialName={selectedPet.pet.officialName}
             nickname={selectedPet.pet.nickname}
             age={calculateAge(selectedPet.pet.birthDate)}
@@ -44,7 +48,7 @@ function PetProfileView(props) {
             documents={selectedPet.pet.documents}
             competitions={selectedPet.pet.competitions}
             ownerId={selectedPet.pet.ownerId}
-            petId={props.match.params.id}
+            purchased={selectedPet.pet.purchased}
         />
     ) : null;
 }
