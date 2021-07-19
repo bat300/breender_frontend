@@ -48,8 +48,6 @@ function KebabMenu(props) {
         props.history.push('/transactions');
     };
 
-    console.log(user);
-
     return (
         <Menu
             open={props.open}
@@ -71,7 +69,7 @@ function KebabMenu(props) {
                       <MenuItem key="transactions" onClick={() => onClickMyTransactions(user.id)} className={classes.menuitem}>
                           My transactions
                       </MenuItem>,
-                      <Divider key="divider" />,
+                      <Divider key="divider2" />,
                       <MenuItem key="logout" onClick={onClickLogout} className={classes.menuitem}>
                           <ExitToAppIcon className={classes.avatar} />
                           Logout
