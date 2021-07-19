@@ -54,7 +54,7 @@ const TransactionsView = (props) => {
         <Loading />
     ) : (
         <>
-            {loggedInUser.subscriptionPlan === 'free' ? <PremiumBanner /> : null}
+            {!loggedInUser || loggedInUser.subscriptionPlan === 'free' ? <PremiumBanner /> : null}
             <div className={classes.layout}>
                 <Typography variant="h6" align="left">
                     Transactions

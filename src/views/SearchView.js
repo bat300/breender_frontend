@@ -114,7 +114,7 @@ function SearchView(props) {
 
     return (
         <div>
-            {loggedInUser.subscriptionPlan === 'free' ? <PremiumBanner /> : null}
+            {!loggedInUser || loggedInUser.subscriptionPlan === 'free' ? <PremiumBanner /> : null}
             <div className={classes.filters}>
                 <FormControl className={classes.formControl}>
                     <InputLabel id="species-select-label">Species</InputLabel>
