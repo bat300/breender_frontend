@@ -81,7 +81,7 @@ export default function ReviewComponent(props) {
                                     horizontal: 'center',
                                 }}
                             >
-                                <Typography>{props.review.verifiedTransaction ? "The transaction of reviewer is verified." : "The transaction of reviewer is NOT verified."}</Typography>
+                                <Typography>{props.review.verifiedTransaction ? "The transaction of reviewer is processed." : "The transaction of reviewer is NOT processed."}</Typography>
                             </Popover>
                         </Grid>
                     </Grid>

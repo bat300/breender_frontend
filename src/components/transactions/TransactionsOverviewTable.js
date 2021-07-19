@@ -1,6 +1,6 @@
 import React from 'react';
 // antd imports
-import { Table, Tag, Tooltip } from 'antd';
+import { Table, Tag, Tooltip, Modal } from 'antd';
 import '../../theming/antd.css';
 // material-ui imports
 import { makeStyles } from '@material-ui/core/styles';
@@ -11,6 +11,11 @@ import { useUser } from 'helper/hooks/auth.hooks';
 import PriceTag from 'components/PriceTag';
 import { getTransactions, updateTransaction } from 'redux/actions';
 import moment from 'moment';
+import { Button } from '@material-ui/core';
+import AddBoxIcon from '@material-ui/icons/AddBox';
+import { NotificationService } from 'services';
+import { addReview } from 'redux/actions';
+import AddReviewComponent from 'components/user-profile/AddReview';
 
 const TransactionsOverviewTable = (props) => {
     const classes = useStyles();
@@ -20,6 +25,51 @@ const TransactionsOverviewTable = (props) => {
     // states
     const user = useUser();
     const checkRequiresInvestigation = (t) => (t.senderResponse === 'fail' && t.receiverResponse === 'success') || (t.senderResponse === 'success' && t.receiverResponse === 'fail');
+    const [isModalVisible, setIsModalVisible] = React.useState(false);
+    const [rating, setRating] = React.useState(0);
+    const [review, setReview] = React.useState('');
+    const [transactionId, setTransactionId] = React.useState('');
+    const [processedTransaction, setProcessedTransaction] = React.useState(false);
+    const [name, setName] = React.useState(false);
+    const [revieweeId, setRevieweeId] = React.useState('');
+
+    const showModal = (record) => {
+        console.log(record);
+        setTransactionId(record.orderNr);
+        let petOwner = getPetOwner(record)
+        setName(petOwner.username);
+        setRevieweeId(petOwner._id)
+        setProcessedTransaction(record.processed);
+        setIsModalVisible(true);
+    };
+
+    const hideModal = () => {
+        saveReview();
+        setIsModalVisible(false);
+    };
+
+    const saveReview = async () => {
+        const onSuccess = () => {
+            NotificationService.notify('success', 'Success', 'Your review was successfully added!');
+        };
+
+        const onError = () => {
+            NotificationService.notify('error', 'Error', 'There was a problem adding your review.');
+        };
+        console.log("Rating is", rating)
+        console.log("Date is ", new Date().toLocaleDateString('de-DE'))
+
+        let reviewToUpload = {
+            reviewerId: user.id,
+            revieweeId: revieweeId,
+            review: review,
+            rating: rating,
+            processedTransaction: processedTransaction,
+            transactionNr: transactionId
+        };
+
+        dispatch(addReview(reviewToUpload, onSuccess, onError));
+    };
 
     // check if user is the sender or the receiver
     const checkUserIsSender = (transaction) => {
@@ -129,11 +179,21 @@ const TransactionsOverviewTable = (props) => {
                 </Tooltip>
             ),
         },
+        {
+            title: 'REVIEW',
+            dataIndex: 'review',
+            key: 'review',
+            align: 'center',
+            render: (_, record) => <Button> <AddBoxIcon onClick={function () { showModal(record); }} /> </Button>,
+        },
     ];
 
     return (
         <div>
             <Table columns={columns} dataSource={transactions} />
+            <Modal visible={isModalVisible} onOk={hideModal} onCancel={hideModal} className={classes.modal}>
+                <AddReviewComponent ratingProp={{ rating, setRating }} reviewProp={{ review, setReview }} name={name} />
+            </Modal>
         </div>
     );
 };
@@ -156,6 +216,11 @@ const useStyles = makeStyles((theme) => ({
     },
     tags: {
         marginTop: 10,
+    },
+    modal: {
+        width: '80vw',
+        margin: '0 auto',
+        marginTop: 100,
     },
 }));
 
