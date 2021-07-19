@@ -5,32 +5,33 @@ import { UploadOutlined } from '@ant-design/icons';
 import { sha256 } from 'js-sha256';
 import { Button } from '@material-ui/core';
 import { connect, useDispatch } from 'react-redux';
-import { usePet } from 'helper/hooks/pets.hooks';
+import { usePet, usePetCompetitions, usePetDocuments } from 'helper/hooks/pets.hooks';
 import { useUser } from 'helper/hooks/auth.hooks';
-import { updateSelectedPet } from 'redux/actions';
+import { updateCompetitionsToUpload, updateDocumentsToUpload } from 'redux/actions';
+import { UPLOAD_STATUS } from 'helper/types';
 
-const prepareDocumentsFileList = (pet) => {
+const prepareDocumentsFileList = (petDocuments) => {
     let petList = [];
-    pet.documents.forEach((value, index) => {
+    petDocuments.forEach((value, index) => {
         petList.push({
             uid: index,
             name: value.name,
-            status: 'done',
+            status: UPLOAD_STATUS.DONE,
             url: value.url,
         });
     });
     return petList;
 };
 
-const prepareCompetitionsFileList = (pet, key) => {
+const prepareCompetitionsFileList = (petCompetitions, key) => {
     let petList = [];
-    pet.competitions.forEach((value, index) => {
+    petCompetitions.forEach((value, index) => {
         if (value._id === key) {
             if (value.certificate) {
                 petList.push({
                     uid: index,
                     name: value.certificate.name,
-                    status: 'done',
+                    status: UPLOAD_STATUS.DONE,
                     url: value.certificate.url,
                 });
             }
@@ -53,13 +54,11 @@ const DocumentsUpload = (props) => {
 
     // get global states
     const user = useUser();
-    const pet = usePet();
+    const petDocuments = usePetDocuments();
+    const petCompetitions = usePetCompetitions();
 
-    console.log(key, pet)
+    const [fileList, setFileList] = useState(mode === 'add' ? [] : isCompetition ? prepareCompetitionsFileList(petCompetitions, key) : prepareDocumentsFileList(petDocuments));
 
-    const [fileList, setFileList] = useState(mode === 'add' ? [] : isCompetition ? prepareCompetitionsFileList(pet, key) : prepareDocumentsFileList(pet));
-
-    const keyFolder = isCompetition ? 'competitions' : 'documents';
     const pathPrefix = `users/${user.id}/pets/documents`;
     let maxFileNumber = props.maxFiles || 8;
 
@@ -86,13 +85,11 @@ const DocumentsUpload = (props) => {
             uploadDate: new Date(),
             verified: false,
             data: data,
-            status: 'upload',
+            status: UPLOAD_STATUS.UPLOAD,
         };
 
-        let petData = pet;
-
         if (isCompetition) {
-            let competitionData = [...pet.competitions];
+            let competitionData = [...petCompetitions];
             competitionData.map((item, index) => {
                 if (item._id === key) {
                     item.certificate = newData;
@@ -100,12 +97,10 @@ const DocumentsUpload = (props) => {
                 }
                 return item;
             });
-            petData.competitions = competitionData;
-            dispatch(updateSelectedPet(petData));
+            dispatch(updateCompetitionsToUpload(competitionData));
         } else {
-            let docs = [...pet.documents, newData];
-            petData.documents = docs;
-            dispatch(updateSelectedPet(petData));
+            let docs = [...petDocuments, newData];
+            dispatch(updateDocumentsToUpload(docs));
         }
 
         data.onSuccess(null);
@@ -113,34 +108,29 @@ const DocumentsUpload = (props) => {
 
     // remove document
     const handleRemove = async (file) => {
-        let petData = pet;
         // remove competition
         if (isCompetition) {
-            let competitionData = [...pet.competitions];
+            let competitionData = [...petCompetitions];
             competitionData.map((item, index) => {
                 if (item._id === key) {
-                    item.certificate = {};
+                    item.certificate = undefined;
                     return item;
                 }
                 return item;
             });
 
-            petData.competitions = competitionData;
-            dispatch(updateSelectedPet(petData));
+            dispatch(updateCompetitionsToUpload(competitionData));
             // remove document
         } else {
-            let petData = pet;
-            let docData = [...pet.documents];
+            let docData = [...petDocuments];
 
             if (file.url) {
                 // set status delete to remove it later onSave from firebase
-                docData.map((value) => (value.name === file.name ? (value.status = 'delete') : value));
-                petData.documents = docData;
-                dispatch(updateSelectedPet(petData));
+                docData.map((value) => (value.name === file.name ? (value.status = UPLOAD_STATUS.DELETE) : value));
+                dispatch(updateDocumentsToUpload(docData));
             } else {
                 let docObj = docData.filter((value) => value.name !== file.name);
-                petData.documents = docObj;
-                dispatch(updateSelectedPet(petData));
+                dispatch(updateDocumentsToUpload(docObj));
             }
         }
     };
