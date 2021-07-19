@@ -27,6 +27,7 @@ const useStyles = makeStyles((theme) => ({
 const persistConfig = {
     key: 'root',
     storage,
+    blacklist: ['upload'],
 };
 
 function App() {
