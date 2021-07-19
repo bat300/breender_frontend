@@ -7,9 +7,7 @@ const PetTypes = {
     UPDATE_PET: 'UPDATE_PET',
     ADD_PET: 'ADD_PET',
     GET_PET: 'GET_PET',
-    UPDATE_SELECTED_PET: 'UPDATE_SELECTED_PET',
-    UPDATE_PROFILE_PICTURE: 'UPDATE_PROFILE_PICTURE',
-    CLEAR_PET: 'CLEAR_PET',
+    CLEAR_PET: 'CLEAT_PET',
 };
 
 export const getPets = (species, sex, breed, age, showOwn = false, user) => {
@@ -118,48 +116,12 @@ export const getPet = (id) => {
     };
 };
 
-export const updateSelectedPet = (pet) => {
-    const updatePetAction = (pet) => {
-        
-        return { type: PetTypes.UPDATE_SELECTED_PET, pet: pet };
-    };
-    const onFailure = (error) => {
-        console.log('Failed to update pet', error);
-    };
-
-    return async (dispatch, getState) => {
-        try {
-            dispatch(updatePetAction(pet));
-        } catch (e) {
-            onFailure(e);
-        }
-    };
-};
-
-export const updateProfilePicture = (profilePicture) => {
-    const updateProfilePictureAction = (picture) => {
-
-        return { type: PetTypes.UPDATE_PROFILE_PICTURE, profilePictureToRemove: picture };
-    };
-    const onFailure = (error) => {
-        console.log('Failed to save profile picture', error);
-    };
-
-    return async (dispatch, getState) => {
-        try {
-            dispatch(updateProfilePictureAction(profilePicture));
-        } catch (e) {
-            onFailure(e);
-        }
-    };
-};
-
-export const clearPetInfos = () => {
+export const clearPet = () => {
     const clearPetAction = () => {
-        return { type: PetTypes.CLEAR_PET };
+        return { type: PetTypes.CLEAR_PET, pet: {} };
     };
     const onFailure = (error) => {
-        console.log('Failed to clear pet', error);
+        console.log('Failed to clear a pet', error);
     };
 
     return async (dispatch, getState) => {
@@ -167,6 +129,7 @@ export const clearPetInfos = () => {
             dispatch(clearPetAction());
         } catch (e) {
             onFailure(e);
+            NotificationService.notify('error', 'Error', 'Failed to clear a pet. Please try again.')
         }
     };
 };
