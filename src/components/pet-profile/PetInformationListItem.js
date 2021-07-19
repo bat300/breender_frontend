@@ -7,8 +7,9 @@ import CancelIcon from '@material-ui/icons/Cancel';
 
 function PetInformationListItem(props) {
     if (props.primary) {
+        const urlForOwner = "http://localhost:3000/user/".concat(props.primary)
         return (
-            <ListItem button={isButton(props.itemType)} component={isButton(props.itemType) ? 'a' : null} href={props.itemType === 'document' ? props.url : null}>
+            <ListItem button={isButton(props.itemType)} component={isButton(props.itemType) ? 'a' : null} href={props.itemType === 'document' ? props.url : (props.itemType === 'owner' ? urlForOwner : null)}>
                 <Icon itemType={props.itemType} avatar={props.avatar} />
                 <ListItemText primary={props.primary} secondary={props.secondary} />
                 {props.itemType === 'document' ? props.declined? <CancelIcon style={{fill: 'red'}}/> : <VerificationIcon verified={props.verified}/> : null}

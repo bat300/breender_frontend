@@ -49,6 +49,8 @@ function Header(props) {
 
     const onClickAdminConsole = () => {
         props.history.push('/admin-console');
+    const onClickPremium = () => {
+        props.history.push('/premium');
     };
 
     return (
@@ -71,7 +73,7 @@ function Header(props) {
                     <Typography className={classes.title2} variant="h5" color="inherit">
                         |
                     </Typography>
-                    <Typography className={user.user ? (user.user.role === 'admin' ? classes.title2 : classes.title) : classes.title} variant="h5" color="inherit" style={{ cursor: 'pointer' }}>
+                    <Typography className={user.user ? (user.user.role === 'admin' ? classes.title2 : classes.title) : classes.title} variant="h5" color="inherit" style={{ cursor: 'pointer' }} onClick={onClickPremium}>
                         Premium
                     </Typography>
                     {user.user ? (

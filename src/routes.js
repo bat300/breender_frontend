@@ -1,21 +1,27 @@
+
 import React from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
-// views
 import UserLoginView from './views/UserLoginView';
 import SignUpView from './views/SignUpView';
 import AddPetView from './views/AddPetView';
 import PetProfileView from './views/PetProfileView';
 import EmailConfirmationView from './views/EmailConfirmationView';
+import UserProfileView from "./views/UserProfileView";
+import SubscriptionPageView from './views/SubscriptionPageView';
 import EditPetView from './views/EditPetView';
 import NotFoundView from './views/NotFoundView';
 import SearchView from './views/SearchView';
 import DocumentListView from './views/DocumentListView';
+import SelectedUserProfileView from './views/SelectedUserProfileView';
+import TransactionsView from 'views/TransactionsView';
 // services
 import { LocalStorageService } from 'services';
 import Header from 'components/Header';
 import AppTheme from 'theming/themetypes';
 import { useSelector } from 'react-redux';
 
+import ChangeToPremiumView from 'views/ChangeToPremiumView';
+import AddReview from 'components/user-profile/AddReview';
 
 const DefaultHeader = () => {
     // theme for app
@@ -27,6 +33,7 @@ const DefaultHeader = () => {
     };
     return <Header darkmode={theme === AppTheme.DARK} toggletheme={toggleTheme} />;
 };
+
 
 // used for routing
 export const PrivateRoute = (props) => {
@@ -74,6 +81,19 @@ const Routes = () => {
             <AdminRoute exact path="/admin-console">
                 <DocumentListView />
             </AdminRoute>
+            <DefaultRoute exact path="/premium">
+                <DefaultHeader />
+                <SubscriptionPageView />
+            </DefaultRoute>
+            <PrivateRoute exact path="/premium/changePlan">
+                <ChangeToPremiumView />
+            </PrivateRoute>
+            <PrivateRoute exact path="/user/:id">
+                <SelectedUserProfileView />
+            </PrivateRoute>
+            <PrivateRoute exact path="/user">
+                <UserProfileView />
+            </PrivateRoute>
             <PrivateRoute exact path="/pet/:id">
                 <PetProfileView />
             </PrivateRoute>
@@ -82,6 +102,12 @@ const Routes = () => {
             </PrivateRoute>
             <PrivateRoute exact path="/edit/pet/:id">
                 <EditPetView />
+            </PrivateRoute>
+            <PrivateRoute exact path="/add-review">
+                <AddReview />
+            </PrivateRoute>
+            <PrivateRoute exact path="/transactions">
+                <TransactionsView />
             </PrivateRoute>
             <DefaultRoute path="*">
                 <NotFoundView />

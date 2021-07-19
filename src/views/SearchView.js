@@ -10,8 +10,10 @@ import Typography from '@material-ui/core/Typography';
 import Slider from '@material-ui/core/Slider';
 import Button from '@material-ui/core/Button';
 import { getPets } from '../redux/actions/petActions';
-import SearchResults from '../components/SearchResults';
+import SearchResults from '../components/search/SearchResults';
 import { breeds } from 'helper/data/breeds';
+import { useLoggedInUser } from 'helper/hooks/auth.hooks';
+import PremiumBanner from 'components/PremiumBanner';
 
 const useStyles = makeStyles((theme) => ({
     filters: {
@@ -34,7 +36,9 @@ const useStyles = makeStyles((theme) => ({
 
 function SearchView(props) {
     const classes = useStyles();
+    // get pets from redux store
     var pets = useSelector((state) => state.entities.pets);
+    const loggedInUser = useLoggedInUser();
 
     const [chosenSpecies, setSpecies] = React.useState('');
     const [order, setOrder] = React.useState('descending');
@@ -59,7 +63,6 @@ function SearchView(props) {
             label: '10 years',
         },
     ];
-
 
     const loadPets = async () => {
         // trigger the redux action getPets
@@ -111,6 +114,7 @@ function SearchView(props) {
 
     return (
         <div>
+            {loggedInUser.subscriptionPlan === 'free' ? <PremiumBanner /> : null}
             <div className={classes.filters}>
                 <FormControl className={classes.formControl}>
                     <InputLabel id="species-select-label">Species</InputLabel>

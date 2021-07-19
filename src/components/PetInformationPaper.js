@@ -7,6 +7,10 @@ import Button from '@material-ui/core/Button';
 import PropTypes from 'prop-types';
 import Image from 'material-ui-image';
 import { useHistory } from 'react-router-dom';
+import CloseIcon from '@material-ui/icons/Close';
+import { NotificationService } from 'services';
+import { useDispatch } from 'react-redux';
+import { deletePet, getUserPets, getPets } from 'redux/actions';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -36,13 +40,33 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function SearchResultElement(props) {
+export default function PetInformationPaper(props) {
     const classes = useStyles();
     const history = useHistory();
+    const dispatch = useDispatch();
 
     function goToPetProfile() {
-        history.push("/pet/" + props.pet._id);
-    }
+        if (props.editingMode) {
+            history.push("/edit/pet/" + props.pet._id);
+        } else {
+            history.push("/pet/" + props.pet._id);
+        }
+    };
+
+    const deletePetOnClick = async () => {
+        const onSuccess = () => {
+            NotificationService.notify('success', 'Success', 'Your pet was successfully deleted!');
+            dispatch(getUserPets(props.user._id));
+            dispatch(getPets('', '', '', ''));
+            history.push('/user');
+        };
+
+        const onError = () => {
+            NotificationService.notify('error', 'Error', 'There was a problem deleting your pet.');
+        };
+
+        dispatch(deletePet(props.pet._id, onSuccess, onError));
+    };
 
     return (
         <div className={classes.root}>
@@ -108,13 +132,13 @@ export default function SearchResultElement(props) {
                                 </Grid>
                                 <Grid container justify="flex-end" spacing={2}>
                                     <Button className={classes.button} variant="contained" color="secondary" onClick={goToPetProfile}>
-                                        View profile
+                                        {props.editingMode ? 'Edit pet' : 'View profile'}
                                     </Button>
                                 </Grid>
                             </Grid>
                         </Grid>
                         <Grid item>
-                            <Typography className={classes.accentText} gutterBottom variant="h6" style={{ fontWeight: 600 }}>{props.pet.price ? props.pet.price : 0}€</Typography>
+                            {props.editingMode ? <Button onClick={deletePetOnClick}><CloseIcon /></Button> : <Typography className={classes.accentText} gutterBottom variant="h6" style={{ fontWeight: 600 }}>{props.pet.price ? props.pet.price : 0}€</Typography>}
                         </Grid>
                     </Grid>
                 </Grid>
@@ -124,6 +148,6 @@ export default function SearchResultElement(props) {
 }
 
 // attributes of props and their type
-SearchResultElement.propTypes = {
+PetInformationPaper.propTypes = {
     pet: PropTypes.object,
 };
