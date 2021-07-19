@@ -1,10 +1,9 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
 import PaymentInformationComponent from '../components/PaymentInformation';
 import { connect, useSelector } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { update } from 'redux/actions';
 import NotificationService from 'services/NotificationService';
+import { update } from 'redux/actions';
 
 /**
  * For presenting and choosing subscription plan and paying with PayPal
