@@ -47,7 +47,7 @@ function Header(props) {
         props.history.push('/');
     };
 
-    const onClickDocuments = () => {
+    const onClickAdminConsole = () => {
         props.history.push('/documents');
     };
 
