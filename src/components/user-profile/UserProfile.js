@@ -72,7 +72,8 @@ export default function UserProfile(props) {
     const [city, setCity] = React.useState(props.user.city);
     const [password, setPassword] = React.useState('');
     const [password2, setPassword2] = React.useState('');
-    const [paymentMethod, setpaymentMethod] = React.useState(props.user.paymentMethod);
+    const [paymentMethod, setPaymentMethod] = React.useState(props.user.paymentMethod);
+    const [disableSave, setDisableSave] = React.useState(false);
 
     const handleModeChange = (event) => {
         if (editingMode) {
@@ -90,6 +91,7 @@ export default function UserProfile(props) {
         userWithChanges.email = email;
         userWithChanges.province = province;
         userWithChanges.city = city;
+        userWithChanges.paymentMethod = paymentMethod;
 
         if (password !== '' && password2 !== '' && password === password2) {
             userWithChanges.password = password
@@ -97,6 +99,7 @@ export default function UserProfile(props) {
 
         const onSuccess = () => {
             NotificationService.notify('success', 'Success', 'Your profile was successfully updated!');
+            setDisableSave(false);
             history.push('/user');
         };
 
@@ -122,7 +125,7 @@ export default function UserProfile(props) {
                     </Typography>
                 </Grid>
                 <Grid item>
-                    {props.profileOfLoggedInUser ? <Button className={classes.button} variant="contained" color="secondary" onClick={handleModeChange}>
+                    {props.profileOfLoggedInUser ? <Button className={classes.button} variant="contained" color="secondary" onClick={handleModeChange} disabled={disableSave}>
                         {editingMode ? "Save" : "Edit"}
                     </Button> : <div />}
 
@@ -136,7 +139,8 @@ export default function UserProfile(props) {
                     cityProp={{ city, setCity }}
                     passwordProp={{ password, setPassword }}
                     password2Prop={{ password2, setPassword2 }}
-                    paymentMethodProp={{ paymentMethod, setpaymentMethod }}
+                    paymentMethodProp={{ paymentMethod, setPaymentMethod }}
+                    disableSaveProp={{ disableSave, setDisableSave }}
                     subscriptionPlan={props.user.subscriptionPlan} />
                 : <UserInformation user={props.user} profileOfLoggedInUser={props.profileOfLoggedInUser} />}
             <Divider variant="middle" className={classes.divider} />
@@ -147,9 +151,13 @@ export default function UserProfile(props) {
                 {props.pets && props.pets.length > 0 ?
                     props.pets.map((pet) => <PetInformationPaper pet={pet} user={props.user} key={pet._id} editingMode={editingMode} />)
                     : (editingMode ?
-                        <Button style={{ margin: '0 auto', display: "flex" }} variant="contained" color="secondary" onClick={handleAddPet}>
-                            Add pet
-                        </Button>
+                        (props.user.isVerified ?
+                            <Button style={{ margin: '0 auto', display: "flex" }} variant="contained" color="secondary" onClick={handleAddPet}>
+                                Add pet
+                            </Button>
+                            : <Typography className={classes.typographyNotifications} align="center">
+                                Please verify your email to add a pet
+                            </Typography>)
                         : <Typography className={classes.typographyNotifications} align="center">
                             No pets added yet
                         </Typography>)}

@@ -111,7 +111,7 @@ export default function UserInformation(props) {
                 </ListItemAvatar>
                 <ListItemText primary={props.user.paymentMethod.email} secondary={props.user.paymentMethod.type} />
             </ListItem>
-            : <Typography className={classes.typographyNotifications}>
+            : <Typography className={classes.typographyNotifications} align="center">
                 No payment methods added yet
             </Typography>}
     </List>)
