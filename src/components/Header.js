@@ -80,7 +80,7 @@ function Header(props) {
                                 <Typography className={classes.title2} variant="h5" color="inherit">
                                     |
                                 </Typography>
-                                <Typography className={classes.title2} variant="h5" color="inherit" style={{ cursor: 'pointer' }} onClick={onClickDocuments}>
+                                <Typography className={classes.title2} variant="h5" color="inherit" style={{ cursor: 'pointer' }} onClick={onClickAdminConsole}>
                                     Admin Console
                                 </Typography>
                             </Grid>
