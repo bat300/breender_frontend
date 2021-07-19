@@ -9,7 +9,7 @@ export default class PetService {
         const token = localStorage.getItem('jwtToken');
         axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
     }
-        
+
     static getPets(species, sex, breed, age) {
         this.setToken();
         return new Promise(async (resolve, reject) => {
