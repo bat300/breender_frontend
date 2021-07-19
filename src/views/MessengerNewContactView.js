@@ -14,9 +14,6 @@ function MessengerNewContactView(props) {
     let url = location.pathname.split('/messenger/')[1];
     let breederId = url.split('/')[0];
     let petId = url.split('/')[1];
-    console.log(url);
-    console.log(breederId);
-    console.log(petId);
 
     useEffect(() => {
         let userId = user.id;
