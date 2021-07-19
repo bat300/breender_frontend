@@ -9,7 +9,7 @@ function conversations(state = {}, action) {
         case 'UPDATE_CONVERSATION':
             return { ...state, conversation: action.conversation };
         case 'GET_CONVERSATION':
-            return { ...state, conversation: action.conversation };
+            return { ...state, conversations: [...state.conversations, action.conversation], conversation: action.conversation };
         default:
             return state;
     }
