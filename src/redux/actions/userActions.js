@@ -265,3 +265,25 @@ export const getReviewsOnSelectedUser = (id) => {
         }
     };
 };
+
+export const addReview = (review, onSuccess = () => null, onError = (err) => null) => {
+    const addReviewAction = () => {
+        onSuccess();
+        return { type: "ADD_REVIEW" };
+    };
+    const onFailure = (err) => {
+        onError();
+        console.log('failed to save the review', err);
+    };
+
+    return async (dispatch, getState) => {
+        try {
+            // save the review in the backend
+            await UserService.addReview(review);
+            // call onSuccess in context of redux
+            dispatch(addReviewAction());
+        } catch (e) {
+            onFailure(e);
+        }
+    };
+};

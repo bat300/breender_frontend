@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { connect, useSelector } from "react-redux";
 import UserProfile from "../components/user-profile/UserProfile";
-import { getUser, getSelectedUserPets } from 'redux/actions';
+import { getUser, getSelectedUserPets, getReviewsOnSelectedUser } from 'redux/actions';
 import { useDispatch } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import Loading from '../components/Loading';
@@ -12,24 +12,29 @@ function SelectedUserProfileView(props) {
     const location = useLocation();
 
     const userId = location.pathname.split('/user/')[1];
-    //get selectedUser and pets from Redux store
+    //get selectedUser, pets and reviews from Redux store
     var selectedUser = useSelector((state) => state.user.selectedUser);
     var pets = useSelector((state) => state.user.selectedUserPets);
+    var reviews = useSelector((state) => state.user.reviewsOnSelectedUser);
 
     const loadUser = async (id) => {
-        console.log('I am in the load user')
-        // trigger the redux action getSelectedUserPets
+        // trigger the redux action getUser
         selectedUser = props.dispatch(getUser(id));
-        console.log('user: ', selectedUser)
+    };
+
+    const loadUserPets = async () => {
+        // trigger the redux action getSelectedUserPets
+        pets = props.dispatch(getSelectedUserPets(userId));
+    };
+
+    const loadReviews = async () => {
+        // trigger the redux action getReviewsOnSelectedUser
+        reviews = props.dispatch(getReviewsOnSelectedUser(userId));
     };
 
     useEffect(() => {
-        console.log('I will check user now');
-        console.log('Id is ', userId)
-        console.log(selectedUser);
         // load user when the page is loaded
         if (!selectedUser || (selectedUser && selectedUser._id !== userId)) {
-            console.log('Loading user');
             loadUser(userId);
         }
     }, [selectedUser]);
@@ -41,18 +46,16 @@ function SelectedUserProfileView(props) {
         }
     }, [pets]);
 
-
-
-    const loadUserPets = async () => {
-        console.log('I am in the load users pets')
-        // trigger the redux action getSelectedUserPets
-        pets = props.dispatch(getSelectedUserPets(userId));
-        console.log('pets: ', pets)
-    };
+    useEffect(() => {
+        // load reviews on a user when the page is loaded
+        if (!reviews || (reviews && reviews.length > 0 && reviews[0].revieweeId !== userId)) {
+            loadReviews();
+        }
+    }, [pets]);
 
     return !selectedUser ? (
         <Loading />
-    ) : <UserProfile user={selectedUser} pets={pets} profileOfLoggedInUser={false} />
+    ) : <UserProfile user={selectedUser} pets={pets} profileOfLoggedInUser={false} reviews={reviews} />
 }
 
 export default connect()(SelectedUserProfileView);

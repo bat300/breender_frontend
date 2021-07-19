@@ -17,6 +17,8 @@ import { LocalStorageService } from 'services';
 import Header from 'components/Header';
 import AppTheme from 'theming/themetypes';
 import ChangeToPremiumView from 'views/ChangeToPremiumView';
+import ReviewComponent from 'components/user-profile/ReviewComponent';
+import AddReview from 'components/user-profile/AddReview';
 
 const DefaultHeader = () => {
     // theme for app
@@ -81,6 +83,12 @@ const Routes = () => {
             </PrivateRoute>
             <PrivateRoute exact path="/edit/pet/:id">
                 <EditPetView />
+            </PrivateRoute>
+            <PrivateRoute exact path="/review">
+                <ReviewComponent review={{ reviewerId: 12345, revieweeId: 1234, review: "Everything was awsome. The user is very friendly, the dog is the best.dfvdhsbfjsfidsfhjdfhjsfsdfkjweifhjdakfjgr8uehfafghjfdgh  udhdisd  udhdhf udhg sudhfudfhh ud  iidjghoeuhfdfgdfdfzeuhr  dfdjgheuwhskjdisjdi", rating: 4, reviewDate: "2020-22-01", verifiedTransaction: false }} />
+            </PrivateRoute>
+            <PrivateRoute exact path="/add-review">
+                <AddReview />
             </PrivateRoute>
             <DefaultRoute path="*">
                 <NotFoundView />

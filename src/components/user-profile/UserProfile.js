@@ -16,7 +16,7 @@ import { NotificationService } from 'services';
 import { useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { updateUser } from 'redux/actions';
-import PaymentIcon from '@material-ui/icons/Payment';
+import ReviewComponent from './ReviewComponent';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -159,6 +159,21 @@ export default function UserProfile(props) {
                             No pets added yet
                         </Typography>)}
             </List>
+            {editingMode ? <div />
+                :
+                <div>
+                    <Divider variant="middle" className={classes.divider} />
+                    <Typography className={classes.typography} variant="h6" align="center" style={{ fontWeight: 600 }}>
+                        {props.profileOfLoggedInUser ? "Reviews from other users" : "Reviews"}
+                    </Typography>
+                    <List>
+                        {props.reviews && props.reviews.length > 0 ?
+                            props.reviews.map((review) => <ReviewComponent review={review} />)
+                            : <Typography className={classes.typographyNotifications} align="center">
+                                No reviews added yet
+                            </Typography>}
+                    </List>
+                </div>}
         </Paper>
     </div >)
 }

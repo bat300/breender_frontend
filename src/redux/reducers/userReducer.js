@@ -48,6 +48,8 @@ export default function user(state = getUser(), action) {
             return { ...state, reviews: action.reviews };
         case "GET_REVIEWS_ON_SELECTED_USER":
             return { ...state, reviewsOnSelectedUser: action.reviews };
+        case "ADD_REVIEW":
+            return { ...state }
         default:
             return state;
     }
