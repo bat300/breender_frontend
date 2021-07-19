@@ -41,6 +41,9 @@ export default function UserInformation(props) {
     const classes = useStyles();
 
     function capitalizeFirstLetter(string) {
+        if (typeof string === 'undefined' || typeof string !== 'undefined' && string.length < 2) {
+            return string
+        }
         return string.charAt(0).toUpperCase() + string.slice(1);
     }
 
