@@ -38,7 +38,7 @@ function PetProfileView(props) {
         <div>error</div>
     ) : selectedPet.pet ? (
         <>
-            {loggedInUser.subscriptionPlan === 'free' ? <PremiumBanner /> : null}
+            {!loggedInUser || loggedInUser.subscriptionPlan === 'free' ? <PremiumBanner /> : null}
             <PetProfileComponent
                 id={petId}
                 officialName={selectedPet.pet.officialName}
