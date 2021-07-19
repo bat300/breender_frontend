@@ -34,6 +34,7 @@ const useStyles = makeStyles((theme) => ({
 
 function SearchView(props) {
     const classes = useStyles();
+    // get pets from redux store
     var pets = useSelector((state) => state.entities.pets);
 
     const [chosenSpecies, setSpecies] = React.useState('');
