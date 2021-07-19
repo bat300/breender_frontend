@@ -1,8 +1,8 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
-import { logout } from '../redux/actions';
+import { getTransactions, logout } from '../redux/actions';
 import { Menu, MenuItem, Avatar, Divider } from '@material-ui/core';
 import { connect } from 'react-redux';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
@@ -47,6 +47,11 @@ function KebabMenu(props) {
         props.history.push("/user");
     };
 
+    const onClickMyTransactions = (id) => {
+        props.dispatch(getTransactions(id));
+        props.history.push('/transactions');
+    };
+
     return (
         <Menu
             open={props.open}
@@ -67,11 +72,11 @@ function KebabMenu(props) {
                         {user.username}
                     </MenuItem>,
                     <Divider key="divider" />,
-                    <MenuItem
-                        key="logout"
-                        onClick={onClickLogout}
-                        className={classes.menuitem}
-                    >
+                    <MenuItem key="transactions" onClick={() => onClickMyTransactions(user.id)} className={classes.menuitem}>
+                        My transactions
+                    </MenuItem>,
+                    <Divider key="divider2" />,
+                    <MenuItem key="logout" onClick={onClickLogout} className={classes.menuitem}>
                         <ExitToAppIcon className={classes.avatar} />
                         Logout
                     </MenuItem>,

@@ -3,7 +3,7 @@ import { withRouter } from "react-router-dom";
 import { connect, useSelector } from "react-redux";
 import LoginComponent from "../components/UserLoginComponent";
 import NotificationService from "services/NotificationService";
-import { login, loginReset } from "../redux/actions";
+import { login, loginReset, me } from "../redux/actions";
 
 /**
  * For user login
@@ -13,11 +13,12 @@ function UserLoginView(props) {
     const user = useSelector((state) => state.user);
 
     useEffect(() => {
-        if (user.user) {
+        if (user.user?.id) {
             NotificationService.notify('success', 'Success', 'Sucessfully signed in.');
             props.history.push("/");
+            props.dispatch(me(user.user.id))
         }
-    }, [user, props.history]);
+    }, [user, props]);
 
     const onLogin = (username, password) => {
         props.dispatch(login(username, password));

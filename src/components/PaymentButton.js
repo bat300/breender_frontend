@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
+import PaymentStepper from './transactions/PaymentStepper';
+import { Modal } from 'antd';
+import { useLoggedInUser } from 'helper/hooks/auth.hooks';
 
 const useStyles = makeStyles((theme) => ({
     button: {
@@ -10,16 +13,35 @@ const useStyles = makeStyles((theme) => ({
         paddingLeft: theme.spacing(6),
         paddingRight: theme.spacing(6),
     },
+    modal: {
+        minWidth: '60vw',
+        maxWidth: '80vw',
+        width: 'auto',
+    },
 }));
 
-function PaymentButton(props) {
+function PaymentButton({ pet }) {
     const classes = useStyles();
+    const price = pet.price;
+    const loggedInUser = useLoggedInUser();
 
-    //TODO: The button needs to have payment funcitonality
+    const [isModalOpened, setIsModalOpened] = useState(false);
+
+    const myPet = loggedInUser._id === pet.ownerId;
+    const wasPurchased = pet.purchased === true;
+
+    const openStepper = () => setIsModalOpened(true);
+    const closeModal = () => setIsModalOpened(false);
+
     return (
-        <Button variant="contained" color="secondary" className={classes.button} endIcon={<ShoppingCartIcon />}>
-            € {props.price}
-        </Button>
+        <>
+            <Button disabled={myPet || wasPurchased} variant="contained" color="secondary" className={classes.button} endIcon={<ShoppingCartIcon />} onClick={openStepper}>
+                {wasPurchased ? 'Was Purchased' : price === 0 ? 'Free' : `${price} €` }
+            </Button>
+            <Modal title="Payment Confirmation" visible={isModalOpened} onCancel={closeModal} className={classes.modal} footer={null}>
+                <PaymentStepper pet={pet} close={closeModal} />
+            </Modal>
+        </>
     );
 }
 

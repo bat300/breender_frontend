@@ -6,6 +6,7 @@ import selectedMovie from './selectedMovieReducer';
 import selectedPet from './selectedPetReducer';
 import pets from './petReducer';
 import confirmation from './confirmationReducer';
+import transaction from './transactionReducer';
 
 const reducers = combineReducers({
     user,
@@ -15,6 +16,17 @@ const reducers = combineReducers({
     selectedPet,
     pets,
     confirmation,
+    transaction,
 });
 
-export default reducers;
+const rootReducer = (state, action) => {
+    // empty global state on logout
+    if (action.type === 'LOGOUT') {
+        window.localStorage.removeItem('persist:root')
+
+        return reducers(undefined, action);
+    }
+    return reducers(state, action);
+};
+
+export default rootReducer;

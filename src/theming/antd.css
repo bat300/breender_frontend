@@ -1,0 +1,10 @@
+.ant-table-thead > tr > th {
+    background-color: #3E4059;
+    color: white;
+    font-weight: 500;
+    font-size: medium;
+}
+
+.ant-table-tbody > tr.ant-table-row:hover > td {
+    background-color: rgba(62, 64, 89, 0.05);
+}
