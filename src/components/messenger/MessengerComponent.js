@@ -178,11 +178,17 @@ function MessengerComponent(props) {
         return (
             <div>
                 <List className={classes.messageArea}>
-                    {Array.isArray(loadedMessages) ? (
+                    {Array.isArray(loadedMessages) && loadedMessages.length !== 0 ? (
                         loadedMessages.map((m) => <MessageComponent message={m} />)
                     ) : (
                         <Typography variant="h5" className="header-message" className={classes.padding10}>
-                            Send a message to start a conversation...
+                            Send a message to start a conversation with{' '}
+                            {
+                                currentChat.members.find((m) => {
+                                    return m._id !== props.currentUser.id;
+                                }).username
+                            }
+                            ...
                         </Typography>
                     )}
                 </List>

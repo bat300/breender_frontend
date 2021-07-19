@@ -27,7 +27,7 @@ function MessengerView(props) {
     ) : !Array.isArray(loadedConversations.conversations) ? (
         <div>error</div>
     ) : loadedConversations.conversations ? (
-        <MessengerComponent conversations={loadedConversations.conversations} currentUser={user} currentConversation={props.currentConversation} />
+        <MessengerComponent conversations={loadedConversations.conversations} currentUser={user} currentConversation={props.currentConversation} petId={props.petId} />
     ) : null;
 }
 
