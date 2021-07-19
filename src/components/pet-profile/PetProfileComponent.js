@@ -1,16 +1,18 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Grid, Paper, Divider, Typography, Button } from '@material-ui/core';
+import { useDispatch } from 'react-redux';
+import { useHistory, withRouter } from 'react-router-dom';
+// components import
 import PetPhotos from './PetPhotos';
 import PetInformation from './PetInformation';
 import PetCompetitionsList from './PetCompetitionsList';
 import PetDocumentsList from './PetDocumentsList';
 import PaymentButton from '../../components/PaymentButton';
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
-import { useDispatch } from 'react-redux';
+// state imports
 import { getPet } from 'redux/actions';
-import { useHistory, withRouter } from 'react-router-dom';
-import { useUser } from 'helper/hooks/auth.hooks';
+import { useUser } from 'helper/hooks';
 
 /**
  * Manages the process of getting pet details data
@@ -103,7 +105,7 @@ function Competitions(props) {
         <Grid item className={classes.maxWidth}>
             <LeftTypography text="Competitions:" />
             <PetCompetitionsList competitions={props.competitions} ownerId={props.ownerId} />
-            <Divider variant="middle" className={classes.spacedDivider} />
+            <Divider variant="middle" />
         </Grid>
     );
 }
