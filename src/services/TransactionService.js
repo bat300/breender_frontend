@@ -1,8 +1,8 @@
 import axios from 'axios';
 
-export default class PetService {
+export default class TransactionService {
     static URL() {
-        return 'http://localhost:4000/pets';
+        return 'http://localhost:4000/transaction';
     }
 
     static setToken() {
@@ -10,11 +10,11 @@ export default class PetService {
         axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
     }
 
-    static getPets(species, sex, breed, age) {
+    static getTransactions(userId) {
         this.setToken();
         return new Promise(async (resolve, reject) => {
             try {
-                const { data } = await axios.get(`/pets/search?species=${species}&sex=${sex}&breed=${breed}&age[]=${age}`);
+                const { data } = await axios.get(`/transaction/`, { params: { userId } });
                 resolve(data);
             } catch (err) {
                 reject(err);
@@ -22,11 +22,11 @@ export default class PetService {
         });
     }
 
-    static getPet(id) {
+    static getTransaction(id) {
         this.setToken();
         return new Promise(async (resolve, reject) => {
             try {
-                const { data } = await axios.get(`/pets/${id}`);
+                const { data } = await axios.get(`/transaction/${id}`);
                 resolve(data);
             } catch (err) {
                 reject(err);
@@ -34,11 +34,11 @@ export default class PetService {
         });
     }
 
-    static deletePet(id) {
+    static deleteTransaction(id) {
         this.setToken();
         return new Promise(async (resolve, reject) => {
             try {
-                const { data } = await axios.delete(`/pets/${id}`);
+                const { data } = await axios.delete(`/transaction/${id}`);
                 resolve(data);
             } catch (err) {
                 reject(err);
@@ -46,15 +46,15 @@ export default class PetService {
         });
     }
 
-    static async updatePet(pet) {
+    static async updateTransaction(transaction) {
         this.setToken();
-        const { data } = await axios.put(`/pets/${pet.id}`, pet);
+        const { data } = await axios.put(`/transaction/${transaction.id}`, transaction);
         return data;
     }
 
-    static async createPet(pet) {
+    static async createTransaction(transaction) {
         this.setToken();
-        const { data } = await axios.post(`/pets/`, pet);
+        const { data } = await axios.post(`/transaction/`, transaction);
         return data;
     }
 }

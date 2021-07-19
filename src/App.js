@@ -8,7 +8,7 @@ import { MuiThemeProvider, createMuiTheme, makeStyles } from '@material-ui/core/
 import CssBaseline from '@material-ui/core/CssBaseline';
 import ScrollContainer from './components/ScrollContainer';
 import { composeWithDevTools } from 'redux-devtools-extension';
-import reducers from './redux/reducers';
+import rootReducer from './redux/reducers';
 import AppTheme from './theming/themetypes';
 import AppThemeOptions from './theming/themes';
 import AxiosConfiguration from './helper/axios';
@@ -39,7 +39,7 @@ function App() {
     }, []);
 
     // create store for redux
-    const persistedReducer = persistReducer(persistConfig, reducers);
+    const persistedReducer = persistReducer(persistConfig, rootReducer);
     const store = createStore(persistedReducer, composeWithDevTools(applyMiddleware(thunkMiddleware)));
     const persistor = persistStore(store);
 

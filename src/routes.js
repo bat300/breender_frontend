@@ -6,15 +6,19 @@ import SignUpView from './views/SignUpView';
 import AddPetView from './views/AddPetView';
 import PetProfileView from "./views/PetProfileView";
 import EmailConfirmationView from './views/EmailConfirmationView';
+import UserProfileView from "./views/UserProfileView";
 import SubscriptionPageView from './views/SubscriptionPageView';
 import EditPetView from './views/EditPetView';
 import NotFoundView from './views/NotFoundView';
 import SearchView from './views/SearchView';
+import SelectedUserProfileView from './views/SelectedUserProfileView';
+import TransactionsView from 'views/TransactionsView';
 // services
 import { LocalStorageService } from 'services';
 import Header from 'components/Header';
 import AppTheme from 'theming/themetypes';
 import ChangeToPremiumView from 'views/ChangeToPremiumView';
+import AddReview from 'components/user-profile/AddReview';
 
 const DefaultHeader = () => {
     // theme for app
@@ -59,11 +63,17 @@ const Routes = () => {
                 <SearchView />
             </DefaultRoute>
             <DefaultRoute exact path="/premium">
-            <DefaultHeader />
+                <DefaultHeader />
                 <SubscriptionPageView />
             </DefaultRoute>
             <PrivateRoute exact path="/premium/changePlan">
                 <ChangeToPremiumView />
+            </PrivateRoute>
+            <PrivateRoute exact path="/user/:id">
+                <SelectedUserProfileView />
+            </PrivateRoute>
+            <PrivateRoute exact path="/user">
+                <UserProfileView />
             </PrivateRoute>
             <PrivateRoute exact path="/pet/:id">
                 <PetProfileView />
@@ -73,6 +83,12 @@ const Routes = () => {
             </PrivateRoute>
             <PrivateRoute exact path="/edit/pet/:id">
                 <EditPetView />
+            </PrivateRoute>
+            <PrivateRoute exact path="/add-review">
+                <AddReview />
+            </PrivateRoute>
+            <PrivateRoute exact path="/transactions">
+                <TransactionsView />
             </PrivateRoute>
             <DefaultRoute path="*">
                 <NotFoundView />
