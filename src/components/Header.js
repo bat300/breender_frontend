@@ -49,6 +49,7 @@ function Header(props) {
 
     const onClickAdminConsole = () => {
         props.history.push('/admin-console');
+    };
     const onClickPremium = () => {
         props.history.push('/premium');
     };
@@ -61,7 +62,7 @@ function Header(props) {
                     <img src={`${logo}#svgView(preserveAspectRatio(xMaxYMax))`} height="55px" style={{ cursor: 'pointer' }} />
                 </div>
                 <div className={classes.root}>
-                    <Typography noWrap variant="h5" color="inherit" style={{ cursor: 'pointer', overflow:"visible"}}>
+                    <Typography noWrap variant="h5" color="inherit" style={{ cursor: 'pointer', overflow: 'visible' }}>
                         Find a mate
                     </Typography>
                     <Typography className={classes.title2} variant="h5" color="inherit">
@@ -73,7 +74,13 @@ function Header(props) {
                     <Typography className={classes.title2} variant="h5" color="inherit">
                         |
                     </Typography>
-                    <Typography className={user.user ? (user.user.role === 'admin' ? classes.title2 : classes.title) : classes.title} variant="h5" color="inherit" style={{ cursor: 'pointer' }} onClick={onClickPremium}>
+                    <Typography
+                        className={user.user ? (user.user.role === 'admin' ? classes.title2 : classes.title) : classes.title}
+                        variant="h5"
+                        color="inherit"
+                        style={{ cursor: 'pointer' }}
+                        onClick={onClickPremium}
+                    >
                         Premium
                     </Typography>
                     {user.user ? (
