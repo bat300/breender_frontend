@@ -14,9 +14,10 @@ const PetFormInputs = {
     sex: 'sex',
     species: 'species',
     breed: 'breed',
+    price: 'price'
 };
 
-const PetInformationForm = ({ nameProp, nicknameProp, sexProp, breedProp, speciesProp, priceProp, birthDateProp, ...props }) => {
+const PetInformationForm = ({ nameProp, nicknameProp, sexProp, breedProp, speciesProp, priceProp, birthDateProp, disabledProp, ...props }) => {
     const classes = useStyles();
     const { name, setName } = nameProp;
     const { nickname, setNickname } = nicknameProp;
@@ -25,7 +26,8 @@ const PetInformationForm = ({ nameProp, nicknameProp, sexProp, breedProp, specie
     const { species, setSpecies } = speciesProp;
     const { price, setPrice } = priceProp;
     const { birthDate, setBirthDate } = birthDateProp;
-    const [errors, setErrors] = useState({ name: false, nickname: false, sex: false, species: false, breed: false });
+    const [errors, setErrors] = useState({ name: false, nickname: false, sex: false, species: false, breed: false, price: false });
+    const { formIsDisabled, setFormIsDisabled } = disabledProp;
 
     const validationErrors = {
         name: 'Name is required',
@@ -33,15 +35,35 @@ const PetInformationForm = ({ nameProp, nicknameProp, sexProp, breedProp, specie
         sex: 'Sex is required',
         species: 'Species is required',
         breed: 'Breed is required',
+        price: 'Please add payment method to your account to add a price tag!'
     };
 
     // validate fields
     const validate = (type, value) => {
         let temp = { ...errors };
-        if (value === '') {
+        if (type !== PetFormInputs.price && value === '') {
             temp[type] = true;
         } else {
             temp[type] = false;
+        }
+
+
+        if (type == PetFormInputs.price && (typeof props.user.paymentMethod === 'undefined' || (typeof props.user.paymentMethod !== 'undefined' && props.user.paymentMethod === null))) {
+            if (value > 0) {
+                temp[type] = true;
+            } else {
+                temp[type] = false;
+            }
+        }
+
+        let values = Object.keys(temp).map(function (key) {
+            return temp[key];
+        });
+
+        if (values.every(element => element === false)) {
+            setFormIsDisabled(false);
+        } else {
+            setFormIsDisabled(true);
         }
         setErrors({ ...temp });
     };
@@ -57,7 +79,10 @@ const PetInformationForm = ({ nameProp, nicknameProp, sexProp, breedProp, specie
         validate(PetFormInputs.sex, e.target.value);
         setSex(e.target.value);
     };
-    const handlePriceChange = (e) => setPrice(e.target.value);
+    const handlePriceChange = (e) => {
+        validate(PetFormInputs.price, e.target.value);
+        setPrice(e.target.value);
+    }
 
     const handleDateChange = (date) => setBirthDate(date);
 
@@ -200,6 +225,7 @@ const PetInformationForm = ({ nameProp, nicknameProp, sexProp, breedProp, specie
                                                 min: 0,
                                             },
                                         }}
+                                        {...(errors[PetFormInputs.price] && { error: true, helperText: validationErrors[PetFormInputs.price] })}
                                     />
                                 </Grid>
                             </Grid>

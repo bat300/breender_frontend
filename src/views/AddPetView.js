@@ -10,6 +10,7 @@ import { useHistory } from 'react-router-dom';
 import FirebaseService from 'services/FirebaseService';
 import NotificationService from 'services/NotificationService';
 import Loading from 'components/Loading';
+import { useLoggedInUser } from 'helper/hooks/auth.hooks';
 
 const AddPetView = (props) => {
     const classes = useStyles();
@@ -18,6 +19,7 @@ const AddPetView = (props) => {
 
     const pet = usePet();
     const user = useUser();
+    const loggedInUser = useLoggedInUser();
 
     const [loading, setLoading] = useState(true);
     const [formIsDisabled, setFormIsDisabled] = useState(false);
@@ -27,7 +29,7 @@ const AddPetView = (props) => {
     const [birthDate, setBirthDate] = useState(new Date());
     const [species, setSpecies] = useState('');
     const [breed, setBreed] = useState('');
-    const [price, setPrice] = useState('');
+    const [price, setPrice] = useState(0);
 
     useEffect(() => {
         const isEmpty = (str) => str === '' || str === undefined;
@@ -130,7 +132,7 @@ const AddPetView = (props) => {
         await uploadCompetitions();
         await uploadPictures();
         await uploadProfilePicture();
-        
+
         const dateCreated = Date.now();
         // combine all information about a pet
         let petToUpload = {
@@ -168,7 +170,7 @@ const AddPetView = (props) => {
     ) : (
         <div>
             <div className={classes.layout}>
-                <PetPhotosForm mode="add"/>
+                <PetPhotosForm mode="add" />
                 <PetInformationForm
                     mode="add"
                     nameProp={{ name, setName }}
@@ -178,6 +180,8 @@ const AddPetView = (props) => {
                     speciesProp={{ species, setSpecies }}
                     breedProp={{ breed, setBreed }}
                     priceProp={{ price, setPrice }}
+                    disabledProp={{ formIsDisabled, setFormIsDisabled }}
+                    user={loggedInUser}
                 />
             </div>
             <div className={classes.button}>

@@ -9,6 +9,7 @@ import { useUser } from 'helper/hooks/auth.hooks';
 import Loading from 'components/Loading';
 import { NotificationService, FirebaseService } from 'services';
 import { useHistory, useLocation } from 'react-router-dom';
+import { useLoggedInUser } from 'helper/hooks/auth.hooks';
 
 const EditPetView = (props) => {
     const classes = useStyles();
@@ -19,12 +20,13 @@ const EditPetView = (props) => {
     const id = location.pathname.split('/edit/pet/')[1];
     const pet = usePet();
     const user = useUser();
+    const loggedInUser = useLoggedInUser();
 
     useEffect(() => {
         // remove old profile picture
         dispatch(updateProfilePicture({}))
 
-        if(pet.officialName) {
+        if (pet.officialName) {
             setLoading(false);
         } else {
             const fetchPet = () => {
@@ -145,7 +147,7 @@ const EditPetView = (props) => {
 
     const updatePet = async () => {
         if (pet.profilePicture.path) {
-            
+
             setLoading(true);
 
             // upload documents and pics to firebase first
@@ -153,7 +155,7 @@ const EditPetView = (props) => {
             await uploadCompetitions();
             await uploadPictures();
             await uploadProfilePicture();
-    
+
             const dateCreated = Date.now();
             // combine all information about a pet
             let petToUpload = {
@@ -172,22 +174,22 @@ const EditPetView = (props) => {
                 competitions: pet.competitions,
                 documents: pet.documents,
             };
-    
+
             const onSuccess = () => {
                 NotificationService.notify('success', 'Success', 'Your four-legged friend was successfully updated!');
                 history.push('/');
             };
-    
+
             const onError = () => {
                 NotificationService.notify('error', 'Error', 'There was a problem updating your pet.');
             };
-    
+
             dispatch(changePet(petToUpload, onSuccess, onError));
             setLoading(false);
         } else {
             NotificationService.notify('error', 'Upload Error', 'Upload of the pet profile picture is required!');
         }
-        
+
     };
 
     // on canceling the view
@@ -209,6 +211,8 @@ const EditPetView = (props) => {
                     speciesProp={{ species, setSpecies }}
                     breedProp={{ breed, setBreed }}
                     priceProp={{ price, setPrice }}
+                    disabledProp={{ formIsDisabled, setFormIsDisabled }}
+                    user={loggedInUser}
                 />
             </div>
             <div className={classes.button}>
