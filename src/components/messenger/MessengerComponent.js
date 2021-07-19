@@ -95,22 +95,36 @@ function MessengerComponent(props) {
     // TODO: Add search functionality
     function ChatMenuComponent(menuProps) {
         const classes = useStyles();
+
+        const [searchName, setSearchName] = useState('');
+
+        const handleSearchChange = (e) => {
+            setSearchName(e.target.value);
+        };
+
         return (
             <Grid item xs={3} className={classes.borderRight500}>
                 <Grid item xs={12} className={classes.padding10}>
-                    <TextField id="outlined-basic" variant="outlined" label="Search for breeders..." fullWidth />
+                    <TextField id="outlined-basic" variant="outlined" label="Search for breeders..." onChange={handleSearchChange} fullWidth />
                 </Grid>
                 <Divider />
                 <List>
-                    {menuProps.conversations.map((c) => (
-                        <div
-                            onClick={() => {
-                                setCurrentChat(c);
-                            }}
-                        >
-                            <ConversationComponent className={classes.bonker} conversation={c} currentUser={menuProps.currentUser} />
-                        </div>
-                    ))}
+                    {menuProps.conversations
+                        .filter((c) => {
+                            let friend = c.members.find((m) => {
+                                return m._id !== props.currentUser.id;
+                            });
+                            return friend.username.includes(searchName);
+                        })
+                        .map((c) => (
+                            <div
+                                onClick={() => {
+                                    setCurrentChat(c);
+                                }}
+                            >
+                                <ConversationComponent className={classes.bonker} conversation={c} currentUser={menuProps.currentUser} />
+                            </div>
+                        ))}
                 </List>
             </Grid>
         );
