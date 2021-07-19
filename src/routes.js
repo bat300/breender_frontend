@@ -71,7 +71,7 @@ const Routes = () => {
                 <DefaultHeader />
                 <SearchView />
             </DefaultRoute>
-            <AdminRoute exact path="/documents">
+            <AdminRoute exact path="/admin-console">
                 <DocumentListView />
             </AdminRoute>
             <PrivateRoute exact path="/pet/:id">
