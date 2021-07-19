@@ -36,7 +36,7 @@ function ContactButton(contactProps) {
     };
 
     return (
-        <Button variant="contained" color="secondary" className={classes.button} endIcon={<SendIcon />} onClick={() => handleContact()} disabled={user.user.subscriptionPlan !== 'free'}>
+        <Button variant="contained" color="secondary" className={classes.button} endIcon={<SendIcon />} onClick={() => handleContact()} disabled={user.user.subscriptionPlan === 'free'}>
             Contact Breeder
         </Button>
     );

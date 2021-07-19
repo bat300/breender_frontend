@@ -91,9 +91,7 @@ export const getOrAddConversation = (id1, id2) => {
     return async (dispatch, getState) => {
         try {
             // ask for the conversations in the backend
-            console.log('Starting...');
             let conversation = await ConversationService.getOrCreateConversation(id1, id2);
-            console.log('Fetched...');
             // call onSuccess in context of redux
             dispatch(onSuccess(conversation));
         } catch (e) {

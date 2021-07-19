@@ -71,9 +71,11 @@ function MessengerComponent(props) {
         socket.current.emit('addUser', userId);
     }, [userId]);
 
-    // useEffect(() => {
-    //     console.log(JSON.stringify(props.conversations));
-    // });
+    useEffect(() => {
+        if (props.currentConversation) {
+            setCurrentChat(props.currentConversation);
+        }
+    }, [props.currentConversation]);
 
     return (
         <div className={classes.layout}>
@@ -152,7 +154,9 @@ function MessengerComponent(props) {
 
         const handleSubmit = async (e) => {
             // Prevents refreshing of page on click
-            e.preventDefault();
+            if (e) {
+                e.preventDefault();
+            }
             const message = {
                 sender: userId,
                 text: newMessage,
