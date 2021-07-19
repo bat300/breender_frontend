@@ -56,3 +56,5 @@ export  const getUser = () => {
     }
     return {};
 };
+
+export const isObjEmpty = (obj) => obj === undefined || obj === null || Object.keys(obj).length === 0;
