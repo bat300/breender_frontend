@@ -28,7 +28,7 @@ export const getPets = (species, sex, breed, age, page) => {
             // ask for the pets in the backend
             let pets = await PetService.getPets(species, sex, breed, age, page);
             // call onSuccess in context of redux
-            dispatch(onSuccess(pets.pets, pets.totalPages));
+            dispatch(onSuccess(pets, pets.totalPages));
         } catch (e) {
             onFailure(e);
         }
