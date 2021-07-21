@@ -32,7 +32,7 @@ function PetProfileView(props) {
 
     const selectedPet = useSelector((state) => state.pets);
 
-    return !selectedPet.pet && !selectedPet.error ? (
+    return (!selectedPet.pet && !selectedPet.error) || !selectedPet ? (
         <Loading />
     ) : selectedPet.error ? (
         <div>error</div>
