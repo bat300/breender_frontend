@@ -15,7 +15,7 @@ import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 const useStyles = makeStyles((theme) => ({
     rootChosen: {
         minWidth: 275,
-        border: `4px solid green`,
+        border: `4px solid ${theme.palette.secondary.main}`,
     },
     root: {},
     cardHeader: {

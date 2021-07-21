@@ -11,27 +11,7 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DocumentResultsList from 'components/DocumentResultsList';
 
-const useStyles = makeStyles((theme) => ({
-    filters: {
-        display: 'flex',
-        flexDirection: 'row',
-        alignItems: 'baseline',
-    },
-    formControl: {
-        margin: theme.spacing(1),
-        minWidth: 120,
-    },
-    button: {
-        margin: theme.spacing(3),
-    },
-    ageSlider: {
-        margin: theme.spacing(4),
-        width: 200,
-    },
-}));
-
 const VerifyDocumentList = (props) => {
-    const classes = useStyles();
     var documents = useSelector((state) => state.entities.documents);
     const [openVerify, setOpenVerify] = React.useState(false); //for modal to verify doc
     const [openDecline, setOpenDecline] = React.useState(false); //for modal to decline doc
@@ -75,7 +55,9 @@ const VerifyDocumentList = (props) => {
 
     useEffect(() => {
         // load docs when the page is loaded or the docs were verified/declined.
+
         props.dispatch(getDocuments());
+        
     }, [props]);
 
     return (
