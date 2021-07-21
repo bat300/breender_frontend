@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { connect, useDispatch, useSelector } from 'react-redux';
+import { connect, useSelector } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import { withRouter } from 'react-router-dom';
 import FormControl from '@material-ui/core/FormControl';
@@ -17,6 +17,7 @@ import { Grid } from '@material-ui/core';
 import { useUser } from 'helper/hooks/auth.hooks';
 import { useLoggedInUser } from 'helper/hooks/auth.hooks';
 import PremiumBanner from 'components/PremiumBanner';
+import { showPremiumBanner } from 'helper/helper';
 
 const useStyles = makeStyles((theme) => ({
     filters: {
@@ -48,8 +49,7 @@ const useStyles = makeStyles((theme) => ({
 
 function SearchView(props) {
     const classes = useStyles();
-    const dispatch = useDispatch();
-    let pets = useSelector((state) => state.entities.pets);    // get pets from redux store
+    let pets = useSelector((state) => state.entities.pets); // get pets from redux store
     let user = useUser();
     // for scrolling to the search
     const ref = React.useRef(null);
@@ -135,7 +135,7 @@ function SearchView(props) {
 
     return (
         <div>
-             {!loggedInUser || loggedInUser.subscriptionPlan === 'free' ? <PremiumBanner /> : null}
+            {showPremiumBanner(loggedInUser) ? <PremiumBanner /> : null}
             <Grid container direction="row" justify="center">
                 <Grid container spacing={3} xs={6} justify="center" alignItems="flex-end" direction="column">
                     <Grid item justify="flex-start" alignItems="center">

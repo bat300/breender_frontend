@@ -11,15 +11,15 @@ import SubscriptionPageView from './views/SubscriptionPageView';
 import EditPetView from './views/EditPetView';
 import NotFoundView from './views/NotFoundView';
 import SearchView from './views/SearchView';
-import DocumentListView from './views/DocumentListView';
 import SelectedUserProfileView from './views/SelectedUserProfileView';
 import TransactionsView from 'views/TransactionsView';
+import ChangeToPremiumView from 'views/ChangeToPremiumView';
+import AdminConsoleView from 'views/AdminConsoleView';
 // services
 import { LocalStorageService, NotificationService } from 'services';
 import Header from 'components/Header';
 import AppTheme from 'theming/themetypes';
 import { useSelector } from 'react-redux';
-import ChangeToPremiumView from 'views/ChangeToPremiumView';
 
 const DefaultHeader = () => {
     // theme for app
@@ -83,7 +83,7 @@ const Routes = () => {
                 <SearchView />
             </DefaultRoute>
             <AdminRoute exact path="/admin-console">
-                <DocumentListView />
+                <AdminConsoleView />
             </AdminRoute>
             <DefaultRoute exact path="/premium">
                 <DefaultHeader />

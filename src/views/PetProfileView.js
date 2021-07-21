@@ -11,6 +11,7 @@ import { isObjEmpty } from 'helper/helpers';
 import { usePet } from 'helper/hooks';
 import PremiumBanner from 'components/PremiumBanner';
 import { useLoggedInUser } from 'helper/hooks/auth.hooks';
+import { showPremiumBanner } from 'helper/helper';
 
 /**
  * Manages the process of getting pet details data
@@ -46,7 +47,7 @@ function PetProfileView(props) {
         <Loading />
     ) : selectedPet ? (
         <>
-        {!loggedInUser || loggedInUser.subscriptionPlan === 'free' ? <PremiumBanner /> : null}
+        {showPremiumBanner(loggedInUser) ? <PremiumBanner /> : null}
         <PetProfileComponent
             id={petId}
             officialName={selectedPet.officialName}

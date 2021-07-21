@@ -7,6 +7,7 @@ import { useLoggedInUser, useUser } from 'helper/hooks/auth.hooks';
 import Loading from 'components/Loading';
 import TransactionsOverviewTable from 'components/transactions/TransactionsOverviewTable';
 import PremiumBanner from 'components/PremiumBanner';
+import { showPremiumBanner } from 'helper/helper';
 
 /**
  * Overview for all transactions
@@ -47,7 +48,7 @@ const TransactionsView = (props) => {
         <Loading />
     ) : (
         <>
-            {!loggedInUser || loggedInUser.subscriptionPlan === 'free' ? <PremiumBanner /> : null}
+            {showPremiumBanner(loggedInUser) ? <PremiumBanner /> : null}
             <div className={classes.layout}>
                 <Typography variant="h6" align="left">
                     Transactions

@@ -21,8 +21,30 @@ export const getTransactions = (userId) => {
 
     return async (dispatch) => {
         try {
-            // ask for the pets in the backend
+            // retrieve transactions
             let transactions = await TransactionService.getTransactions(userId);
+            // call onSuccess in context of redux
+            dispatch(getTransactionsAction(transactions));
+        } catch (e) {
+            onFailure(e);
+        }
+    };
+};
+
+export const getAdminTransactions = (userId) => {
+    function getTransactionsAction(transactions) {
+        return { type: TransactionTypes.GET_TRANSACTIONS, transactions: transactions };
+    }
+    // when the backend call was failed
+    function onFailure(error) {
+        // error handling
+        NotificationService.notify('error', 'Transactions Error', 'Error while retrieving the transactions.' +  error);
+    }
+
+    return async (dispatch) => {
+        try {
+            // retrieve transactions
+            let transactions = await TransactionService.getAdminTransactions(userId);
             // call onSuccess in context of redux
             dispatch(getTransactionsAction(transactions));
         } catch (e) {
