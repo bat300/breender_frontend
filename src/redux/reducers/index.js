@@ -8,6 +8,8 @@ import pets from './petReducer';
 import confirmation from './confirmationReducer';
 import conversations from './conversationReducer';
 import messages from './messageReducer';
+import documents from './documentReducer';
+
 import transaction from './transactionReducer';
 
 const reducers = combineReducers({
@@ -17,6 +19,7 @@ const reducers = combineReducers({
     selectedMovie,
     selectedPet,
     pets,
+    documents,
     confirmation,
     conversations,
     messages,
@@ -26,7 +29,7 @@ const reducers = combineReducers({
 const rootReducer = (state, action) => {
     // empty global state on logout
     if (action.type === 'LOGOUT') {
-        window.localStorage.removeItem('persist:root')
+        window.localStorage.removeItem('persist:root');
 
         return reducers(undefined, action);
     }

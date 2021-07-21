@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button } from '@material-ui/core';
 import { useSelector } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
@@ -29,17 +29,22 @@ function PaymentButton({ pet }) {
     const loggedInUser = useLoggedInUser();
 
     const [isModalOpened, setIsModalOpened] = useState(false);
-
-    const myPet = loggedInUser._id === pet.ownerId;
+    const [isMyPet, setIsMyPet] = useState(false);
     const wasPurchased = pet.purchased === true;
+
+    useEffect(() => {
+        if(loggedInUser) {
+            setIsMyPet(loggedInUser._id === pet.ownerId)
+        }
+    }, []);
 
     const openStepper = () => setIsModalOpened(true);
     const closeModal = () => setIsModalOpened(false);
 
     return (
         <>
-            <Button disabled={myPet || wasPurchased} variant="contained" color="secondary" className={classes.button} endIcon={<ShoppingCartIcon />} onClick={openStepper}>
-                {wasPurchased ? 'Was Purchased' : price === 0 ? 'Free' : `${price} €`}
+            <Button disabled={isMyPet || wasPurchased} variant="contained" color="secondary" className={classes.button} endIcon={<ShoppingCartIcon />} onClick={openStepper}>
+                {wasPurchased ? 'Was Purchased' : price === 0 ? 'Free' : `${price} €` }
             </Button>
             <Modal title="Payment Confirmation" visible={isModalOpened} onCancel={closeModal} className={classes.modal} footer={null}>
                 <PaymentStepper pet={pet} close={closeModal} />
