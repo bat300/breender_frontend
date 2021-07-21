@@ -18,17 +18,12 @@ function PetProfileView(props) {
     const location = useLocation();
     const loggedInUser = useLoggedInUser();
 
+    // get id of pet from URL
     const petId = location.pathname.split('/pet/')[1];
 
     useEffect(() => {
-        // get id of pet from URL
-
-        async function loadPet(id) {
-            await dispatch(getPet(id));
-        }
-
-        return loadPet(petId);
-    }, [dispatch, petId]);
+        props.dispatch(getPet(petId));
+    }, [petId]);
 
     const selectedPet = useSelector((state) => state.pets);
 
