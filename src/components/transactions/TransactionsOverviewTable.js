@@ -29,7 +29,6 @@ const TransactionsOverviewTable = (props) => {
     const [rating, setRating] = React.useState(0);
     const [review, setReview] = React.useState('');
     const [transactionId, setTransactionId] = React.useState('');
-    const [processedTransaction, setProcessedTransaction] = React.useState(false);
     const [name, setName] = React.useState(false);
     const [revieweeId, setRevieweeId] = React.useState('');
 
@@ -39,7 +38,6 @@ const TransactionsOverviewTable = (props) => {
         let petOwner = getPetOwner(record)
         setName(petOwner.username);
         setRevieweeId(petOwner._id)
-        setProcessedTransaction(record.processed);
         setIsModalVisible(true);
     };
 
@@ -64,7 +62,6 @@ const TransactionsOverviewTable = (props) => {
             revieweeId: revieweeId,
             review: review,
             rating: rating,
-            processedTransaction: processedTransaction,
             transactionNr: transactionId
         };
 

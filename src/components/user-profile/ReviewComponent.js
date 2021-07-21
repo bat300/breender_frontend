@@ -62,7 +62,7 @@ export default function ReviewComponent(props) {
                         </Grid>
                         <Grid item>
                             <div aria-owns={open ? 'mouse-over-popover' : undefined} aria-haspopup="true" onClick={handlePopoverOpen} onMouseEnter={handlePopoverOpen}>
-                                <VerificationIcon verified={props.review.verifiedTransaction} />
+                                <VerificationIcon verified={props.review.transaction.processed} />
                             </div>
                             <Popover
                                 id='mouse-over-popover'
@@ -81,7 +81,7 @@ export default function ReviewComponent(props) {
                                     horizontal: 'center',
                                 }}
                             >
-                                <Typography>{props.review.verifiedTransaction ? "The transaction of reviewer is processed." : "The transaction of reviewer is NOT processed."}</Typography>
+                                <Typography>{props.review.transaction.processed ? "The transaction of reviewer is processed." : "The transaction of reviewer is NOT processed."}</Typography>
                             </Popover>
                         </Grid>
                     </Grid>
