@@ -177,9 +177,8 @@ function MessengerComponent(props) {
                 receiverId: receiverId,
                 text: newMessage,
             });
-
-            dispatch(addMessage(message));
             setMessages([...messages, message]);
+            dispatch(addMessage(message));
             setNewMessage('');
         };
 
