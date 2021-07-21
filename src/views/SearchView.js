@@ -14,6 +14,7 @@ import SearchResults from '../components/search/SearchResults';
 import { breeds } from 'helper/data/breeds';
 import { useLoggedInUser } from 'helper/hooks/auth.hooks';
 import PremiumBanner from 'components/PremiumBanner';
+import { showPremiumBanner } from 'helper/helper';
 
 const useStyles = makeStyles((theme) => ({
     filters: {
@@ -114,7 +115,7 @@ function SearchView(props) {
 
     return (
         <div>
-            {!loggedInUser || loggedInUser.subscriptionPlan === 'free' ? <PremiumBanner /> : null}
+            {showPremiumBanner(loggedInUser) ? <PremiumBanner /> : null}
             <div className={classes.filters}>
                 <FormControl className={classes.formControl}>
                     <InputLabel id="species-select-label">Species</InputLabel>
