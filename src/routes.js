@@ -4,19 +4,22 @@ import { Redirect, Route, Switch } from 'react-router-dom';
 import UserLoginView from './views/UserLoginView';
 import SignUpView from './views/SignUpView';
 import AddPetView from './views/AddPetView';
-import PetProfileView from "./views/PetProfileView";
+import PetProfileView from './views/PetProfileView';
 import EmailConfirmationView from './views/EmailConfirmationView';
 import UserProfileView from "./views/UserProfileView";
 import SubscriptionPageView from './views/SubscriptionPageView';
 import EditPetView from './views/EditPetView';
 import NotFoundView from './views/NotFoundView';
 import SearchView from './views/SearchView';
+import DocumentListView from './views/DocumentListView';
 import SelectedUserProfileView from './views/SelectedUserProfileView';
 import TransactionsView from 'views/TransactionsView';
 // services
 import { LocalStorageService } from 'services';
 import Header from 'components/Header';
 import AppTheme from 'theming/themetypes';
+import { useSelector } from 'react-redux';
+
 import ChangeToPremiumView from 'views/ChangeToPremiumView';
 import AddReview from 'components/user-profile/AddReview';
 
@@ -44,6 +47,19 @@ export const PrivateRoute = (props) => {
     );
 };
 
+export const AdminRoute = (props) => {
+    const user = useSelector((state) => state.user);
+
+    return LocalStorageService.isAuthorized() && user.user.role === "admin"? (
+        <Route {...props}>
+            <DefaultHeader />
+            {props.children}
+        </Route>
+    ) : (
+        <Redirect to={{ pathname: '/', state: { from: props.location } }} />
+    );
+};
+
 export const DefaultRoute = (props) => <Route {...props}>{props.children}</Route>;
 
 const Routes = () => {
@@ -62,6 +78,9 @@ const Routes = () => {
                 <DefaultHeader />
                 <SearchView />
             </DefaultRoute>
+            <AdminRoute exact path="/admin-console">
+                <DocumentListView />
+            </AdminRoute>
             <DefaultRoute exact path="/premium">
                 <DefaultHeader />
                 <SubscriptionPageView />

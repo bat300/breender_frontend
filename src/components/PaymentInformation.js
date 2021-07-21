@@ -11,10 +11,11 @@ const useStyles = makeStyles((theme) => ({
     },
     signUpPaper: {
         width: '1000px',
+        height: '425px',
         padding: theme.spacing(2),
     },
     signUpRow: {
-        paddingTop: theme.spacing(1),
+        paddingTop: theme.spacing(1.5),
         paddingBottom: theme.spacing(1),
         '&:last-child': {
             paddingBottom: theme.spacing(0),
