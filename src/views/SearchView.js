@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { connect, useSelector } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import { withRouter } from 'react-router-dom';
@@ -37,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function SearchView(props) {
-    const searchRef = React.createRef();
+    const searchRef = useRef();
     const classes = useStyles();
     // get pets from redux store
     var pets = useSelector((state) => state.entities.pets);
@@ -118,13 +118,13 @@ function SearchView(props) {
 
     const handleChange = async (event, value) => {
         loadPets(value - 1);
-        searchRef.current.scrollTop = 0;
+        searchRef.current?.scrollIntoView({ behavior: 'smooth' });
     };
 
     return (
-        <div ref={searchRef}>
+        <div>
             {!loggedInUser || loggedInUser.subscriptionPlan === 'free' ? <PremiumBanner /> : null}
-            <div className={classes.filters}>
+            <div className={classes.filters} ref={searchRef}>
                 <FormControl className={classes.formControl}>
                     <InputLabel id="species-select-label">Species</InputLabel>
                     <Select labelId="species-select-label" id="species-select" value={chosenSpecies} onChange={handleSpeciesChange}>
