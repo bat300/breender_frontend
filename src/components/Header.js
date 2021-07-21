@@ -39,6 +39,10 @@ function Header(props) {
         props.history.push('/');
     };
 
+    const onClickPremium = () => {
+        props.history.push('/premium');
+    };
+
     return (
         <AppBar position="sticky">
             <KebabMenu open={Boolean(menuAnchor)} anchor={menuAnchor} onClose={() => setMenuAnchor(null)} />
@@ -58,7 +62,7 @@ function Header(props) {
                 <Typography className={classes.title2} variant="h5" color="inherit">
                     |
                 </Typography>
-                <Typography className={classes.title} variant="h5" color="inherit" style={{ cursor: 'pointer' }}>
+                <Typography className={classes.title} variant="h5" color="inherit" style={{ cursor: 'pointer' }} onClick={onClickPremium}>
                     Premium
                 </Typography>
                 <IconButton onClick={onClickLogo} color="inherit">

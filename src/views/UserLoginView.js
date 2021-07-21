@@ -2,8 +2,8 @@ import React, { useEffect } from "react";
 import { withRouter } from "react-router-dom";
 import { connect, useSelector } from "react-redux";
 import LoginComponent from "../components/UserLoginComponent";
-
-import { login } from "../redux/actions";
+import NotificationService from "services/NotificationService";
+import { login, loginReset, me } from "../redux/actions";
 
 /**
  * For user login
@@ -13,10 +13,12 @@ function UserLoginView(props) {
     const user = useSelector((state) => state.user);
 
     useEffect(() => {
-        if (user.user) {
+        if (user.user?.id) {
+            NotificationService.notify('success', 'Success', 'Sucessfully signed in.');
             props.history.push("/");
+            props.dispatch(me(user.user.id))
         }
-    }, [user, props.history]);
+    }, [user, props]);
 
     const onLogin = (username, password) => {
         props.dispatch(login(username, password));
@@ -27,6 +29,7 @@ function UserLoginView(props) {
     };
 
     const onSignUp = () => {
+        props.dispatch(loginReset());
         props.history.push("/register");
     };
 

@@ -12,8 +12,10 @@ import Button from '@material-ui/core/Button';
 import Box from '@material-ui/core/Box';
 import Pagination from '@material-ui/lab/Pagination';
 import { getPets } from '../redux/actions/petActions';
-import SearchResults from '../components/SearchResults';
+import SearchResults from '../components/search/SearchResults';
 import { breeds } from 'helper/data/breeds';
+import { useLoggedInUser } from 'helper/hooks/auth.hooks';
+import PremiumBanner from 'components/PremiumBanner';
 
 const useStyles = makeStyles((theme) => ({
     filters: {
@@ -37,7 +39,9 @@ const useStyles = makeStyles((theme) => ({
 function SearchView(props) {
     const searchRef = React.createRef();
     const classes = useStyles();
+    // get pets from redux store
     var pets = useSelector((state) => state.entities.pets);
+    const loggedInUser = useLoggedInUser();
     var totalPages = useSelector((state) => state.entities.totalPages);
 
     const [chosenSpecies, setSpecies] = React.useState('');
@@ -118,7 +122,8 @@ function SearchView(props) {
     };
 
     return (
-        <div ref={searchRef}>
+        <div>
+            {!loggedInUser || loggedInUser.subscriptionPlan === 'free' ? <PremiumBanner /> : null}
             <div className={classes.filters}>
                 <FormControl className={classes.formControl}>
                     <InputLabel id="species-select-label">Species</InputLabel>

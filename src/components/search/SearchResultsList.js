@@ -1,12 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import SearchResultElement from './SearchResultElement';
+import PetInformationPaper from '../PetInformationPaper';
 import Grid from '@material-ui/core/Grid';
 
 function sortByNewest() {
     return function (a, b) {
-        return a.dateCreated < b.dateCreated && a.ownerId.subscriptionPlan < b.ownerId.subscriptionPlan ? 1 : -1;
+        return a.dateCreated < b.dateCreated ? 1 : -1;
     };
 }
 
@@ -43,7 +43,7 @@ function getResult(pets, order) {
 
 function SearchResultsList(props) {
     return props.pets.length > 0 ? (
-        getResult(props.pets, props.order).map((petObject) => <SearchResultElement pet={petObject} key={petObject._id} />)
+        getResult(props.pets, props.order).map((petObject) => <PetInformationPaper pet={petObject} key={petObject._id} editingMode={false} />)
     ) : (
         <Grid container spacing={2} justify="center">
             <div style={{ fontSize: 30 }}>No results found</div>
