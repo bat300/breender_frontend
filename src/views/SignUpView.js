@@ -2,8 +2,8 @@ import React, { useEffect } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect, useSelector } from 'react-redux';
 import { register, resetError } from '../redux/actions';
-import SignUpPaper from '../components/SignUpPaper';
 import NotificationService from 'services/NotificationService';
+import SignUpComponent from 'components/SignUpComponent';
 
 /**
  * For register new users
@@ -31,10 +31,16 @@ function SignUpView(props) {
     };
 
     const onCancel = () => {
-        props.history.push('/');
+        props.history.push("/");
     };
 
-    return <SignUpPaper user={user} onRegister={onRegister} onCancel={onCancel} subscriptionPlan={props.location.subscriptionPlan}/>;
+    return (
+        <SignUpComponent
+            user={user}
+            onRegister={onRegister}
+            onCancel={onCancel}
+        />
+    );
 }
 
 export default connect()(withRouter(SignUpView));

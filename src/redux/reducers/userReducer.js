@@ -24,13 +24,11 @@ const getUser = () => {
 export default function user(state = getUser(), action) {
     switch (action.type) {
         case 'LOGIN_SUCCESS':
-            return { ...state, user: action.user };
+            return { user: action.user, isAuthenticated: true };
         case 'LOGIN_FAILURE':
-            return { error: action.error };
-        case "UPDATE_SUCCESS":
-            return { user: action.user };
-        case "LOGIN_RESET":
-            return {};
+            return { error: 'Password or username incorrect.' };
+        case 'LOGIN_RESET':
+            return { user: action.user, isAuthenticated: action.isAuthenticated };
         case 'LOGOUT':
             return {};
         case "GET_USER_INFO":

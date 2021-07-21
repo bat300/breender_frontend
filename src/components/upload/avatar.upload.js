@@ -11,9 +11,9 @@ import PetsIcon from '@material-ui/icons/Pets';
 import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
 import { sha256 } from 'js-sha256';
 import { useDispatch } from 'react-redux';
-import { updateProfilePicture, updateSelectedPet } from 'redux/actions';
 import { useUser } from 'helper/hooks/auth.hooks';
-import { usePet } from 'helper/hooks/pets.hooks';
+import { usePet, usePetProfilePictureToRemove } from 'helper/hooks/pets.hooks';
+import { updateProfilePicture } from 'redux/actions';
 
 const AvatarUpload = (props) => {
     const classes = useStyles();
@@ -27,6 +27,7 @@ const AvatarUpload = (props) => {
     const [imageUrl, setImageUrl] = useState(mode === 'add' ? '' : pet.profilePicture.src);
  
     const user = useUser();
+    const petProfilePictureToRemove = usePetProfilePictureToRemove();
 
     const getBase64 = (img, callback) => {
         const reader = new FileReader();
@@ -69,6 +70,7 @@ const AvatarUpload = (props) => {
         }
     };
 
+    // update image url in the store
     const customUpload = async (data) => {
         const imageName = sha256(data.file.name); //a unique name for the image
 
@@ -89,30 +91,25 @@ const AvatarUpload = (props) => {
             data: data,
         };
 
-        let petData = pet;
-        petData.profilePicture = newData;
-
         // update in global state
-        dispatch(updateSelectedPet(petData));
+        dispatch(updateProfilePicture(newData, petProfilePictureToRemove));
 
         data.onSuccess(null);
     };
 
-    // remove the image from firebase
+    // remove the image from store, to later remove it from firebase
     const handleRemove = async (file) => {
         setImageUrl('');
 
         const image = pet.profilePicture;
+        let imageToDelete = petProfilePictureToRemove;
 
-        if(image.src !== '') {
-            await dispatch(updateProfilePicture(image));
+        if(image && image?.src !== '' && Object.keys(petProfilePictureToRemove).length === 0) {
+            imageToDelete = image;
         }
-
-        let petData = pet;
-        petData.profilePicture = {};
     
         // update in global state
-        await dispatch(updateSelectedPet(petData));
+         await dispatch(updateProfilePicture({}, imageToDelete));
     };
 
     return (
