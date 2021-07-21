@@ -30,11 +30,11 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const DocumentListView = (props) => {
+const VerifyDocumentList = (props) => {
     const classes = useStyles();
     var documents = useSelector((state) => state.entities.documents);
     const [openVerify, setOpenVerify] = React.useState(false); //for modal to verify doc
-    const [openDecline, setOpenDecline] = React.useState(false);//for modal to decline doc
+    const [openDecline, setOpenDecline] = React.useState(false); //for modal to decline doc
     const [id, setId] = React.useState('');
     const [type, setType] = React.useState('');
 
@@ -75,10 +75,8 @@ const DocumentListView = (props) => {
 
     useEffect(() => {
         // load docs when the page is loaded or the docs were verified/declined.
-
-            loadDocuments();
-        
-    }, []);
+        props.dispatch(getDocuments());
+    }, [props]);
 
     return (
         <div>
@@ -115,4 +113,4 @@ const DocumentListView = (props) => {
     );
 };
 
-export default connect()(withRouter(DocumentListView));
+export default connect()(withRouter(VerifyDocumentList));
