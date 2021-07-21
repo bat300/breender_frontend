@@ -76,7 +76,7 @@ function SearchView(props) {
     useEffect(() => {
         // load pets when the page is loaded or the pets were filtered.
         if (!pets) {
-            loadPets(0);
+            loadPets(1);
         }
     }, [pets]);
 
@@ -85,7 +85,7 @@ function SearchView(props) {
         setSex('');
         setBreed('');
         setAgeRange([1, 10]);
-        pets = props.dispatch(getPets('', '', '', [1, 5], 0)); //change parameters manually because values remain constant inside render and are not updated immediately
+        pets = props.dispatch(getPets('', '', '', [1, 5], 1)); //change parameters manually because values remain constant inside render and are not updated immediately
     };
 
     const resetFilters = async () => {
