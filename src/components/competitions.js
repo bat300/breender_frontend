@@ -175,7 +175,7 @@ const CompetitionsComponent = (props) => {
             dataIndex: 'date',
             editable: false,
             render: (_, record) =>
-                competitions.length >= 1 ? <DatePicker value={moment(record.date, DATE_FORMAT)} bordered={false} onChange={(date) => changeDate(date, record)} format={DATE_FORMAT} /> : null,
+                competitions.length >= 1 ? <DatePicker defaultValue={moment(new Date(), DATE_FORMAT)} value={moment(record.date, DATE_FORMAT)} bordered={false} onChange={(date) => changeDate(date, record)} format={DATE_FORMAT} /> : null,
         },
         {
             title: 'Category',
@@ -195,7 +195,7 @@ const CompetitionsComponent = (props) => {
             title: 'Certificate',
             dataIndex: 'certificate',
             key: 'certificate',
-            render: (_, record) => (competitions.length >= 1 ? <DocumentsUpload type="competitions" competitionId={record._id} maxFiles={1} size={'small'} /> : null),
+            render: (_, record) => (competitions.length >= 1 ? <DocumentsUpload type="competitions" competitionId={record.key} maxFiles={1} size={'small'} /> : null),
         },
         {
             title: 'Remove',
@@ -268,11 +268,17 @@ const CompetitionsComponent = (props) => {
         const newData = [...competitions];
         newData.map((item) => {
             if (record.key === item.key) {
-                item.date = new Date(date);
+                if (date === null) {
+                    item.date = new Date();
+                } else {
+                    item.date = new Date(date);
+                }
             }
             return item;
         });
         setCompetitions(newData);
+
+        dispatch(updateCompetitionsToUpload(newData));
     };
 
     const showModal = () => setIsModalVisible(true);

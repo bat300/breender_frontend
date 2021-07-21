@@ -5,10 +5,21 @@ import { UploadOutlined } from '@ant-design/icons';
 import { sha256 } from 'js-sha256';
 import { Button } from '@material-ui/core';
 import { connect, useDispatch } from 'react-redux';
-import { usePet, usePetCompetitions, usePetDocuments } from 'helper/hooks/pets.hooks';
+import { usePetCompetitions, usePetDocuments } from 'helper/hooks/pets.hooks';
 import { useUser } from 'helper/hooks/auth.hooks';
 import { updateCompetitionsToUpload, updateDocumentsToUpload } from 'redux/actions';
 import { UPLOAD_STATUS } from 'helper/types';
+
+const prepareCompetitions = (competitions) => {
+    let arr = competitions;
+    arr.map((value, index) => {
+        value.key = index;
+        value.date = new Date(value.date);
+        return value;
+    });
+    return arr;
+};
+
 
 const prepareDocumentsFileList = (petDocuments) => {
     let petList = [];
@@ -24,9 +35,10 @@ const prepareDocumentsFileList = (petDocuments) => {
 };
 
 const prepareCompetitionsFileList = (petCompetitions, key) => {
+    const competitions = prepareCompetitions(petCompetitions);
     let petList = [];
-    petCompetitions.forEach((value, index) => {
-        if (value._id === key) {
+    competitions.forEach((value, index) => {
+        if (value.key === key) {
             if (value.certificate) {
                 petList.push({
                     uid: index,
@@ -50,7 +62,7 @@ const DocumentsUpload = (props) => {
     const dispatch = useDispatch();
     const { mode } = props;
     const isCompetition = props.type === 'competitions';
-    let key = isCompetition && props.competitionId;
+    let key = isCompetition ? props.competitionId : null;
 
     // get global states
     const user = useUser();
@@ -91,7 +103,7 @@ const DocumentsUpload = (props) => {
         if (isCompetition) {
             let competitionData = [...petCompetitions];
             competitionData.map((item, index) => {
-                if (item._id === key) {
+                if (item.key === key) {
                     item.certificate = newData;
                     return item;
                 }
