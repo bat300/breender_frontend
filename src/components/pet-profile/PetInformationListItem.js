@@ -6,7 +6,7 @@ import VerificationIcon from '../../components/VerificationIcon';
 
 function PetInformationListItem(props) {
     if (props.primary) {
-        const urlForOwner = "http://localhost:3000/user/".concat(props.primary)
+        const urlForOwner = "http://localhost:3000/user/".concat(props.id)
         return (
             <ListItem button={isButton(props.itemType)} component={isButton(props.itemType) ? 'a' : null} href={props.itemType === 'document' ? props.url : (props.itemType === 'owner' ? urlForOwner : null)}>
                 <Icon itemType={props.itemType} avatar={props.avatar} />

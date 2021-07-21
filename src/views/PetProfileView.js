@@ -5,6 +5,7 @@ import PetProfileComponent from '../components/pet-profile/PetProfileComponent';
 import Loading from '../components/Loading';
 import { useDispatch } from 'react-redux';
 import { useLocation } from 'react-router-dom';
+import { getUser } from 'redux/actions';
 
 /**
  * Manages the process of getting pet details data
@@ -16,6 +17,8 @@ function PetProfileView(props) {
     const location = useLocation();
 
     const petId = location.pathname.split('/pet/')[1];
+    const selectedPet = useSelector((state) => state.pets);
+    const selectedUser = useSelector((state) => state.user.selectedUser)
 
     useEffect(() => {
         // get id of pet from URL
@@ -27,7 +30,11 @@ function PetProfileView(props) {
         return loadPet(petId);
     }, [dispatch, petId]);
 
-    const selectedPet = useSelector((state) => state.pets);
+    useEffect(() => {
+        if(selectedPet.pet) {
+            dispatch(getUser(selectedPet.pet.ownerId))
+        }
+    }, [dispatch, selectedPet.pet])
 
     return !selectedPet.pet && !selectedPet.error ? (
         <Loading />
@@ -47,7 +54,7 @@ function PetProfileView(props) {
             species={selectedPet.pet.species}
             documents={selectedPet.pet.documents}
             competitions={selectedPet.pet.competitions}
-            ownerId={selectedPet.pet.ownerId}
+            owner={selectedUser}
             purchased={selectedPet.pet.purchased}
         />
     ) : null;

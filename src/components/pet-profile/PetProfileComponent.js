@@ -92,14 +92,14 @@ function PetProfileComponent(props) {
                                         price={props.price}
                                         breed={props.breed}
                                         species={props.species}
-                                        ownerId={props.ownerId}
+                                        owner={props.owner}
                                     />
                                 </Grid>
                             </Grid>
                         </Grid>
                         <Divider variant="middle" />
 
-                        <PetOptionalInformation ownerId={props.ownerId} documents={props.documents} competitions={props.competitions} />
+                        <PetOptionalInformation ownerId={props.owner?._id} documents={props.documents} competitions={props.competitions} />
                     </Paper>
                 </Grid>
             </Grid>
