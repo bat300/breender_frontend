@@ -7,6 +7,7 @@ import { useDispatch } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import PremiumBanner from 'components/PremiumBanner';
 import { useLoggedInUser } from 'helper/hooks/auth.hooks';
+import { showPremiumBanner } from 'helper/helper';
 
 /**
  * Manages the process of getting pet details data
@@ -38,7 +39,7 @@ function PetProfileView(props) {
         <div>error</div>
     ) : selectedPet.pet ? (
         <>
-            {!loggedInUser || loggedInUser.subscriptionPlan === 'free' ? <PremiumBanner /> : null}
+            {showPremiumBanner(loggedInUser) ? <PremiumBanner /> : null}
             <PetProfileComponent
                 id={petId}
                 officialName={selectedPet.pet.officialName}
