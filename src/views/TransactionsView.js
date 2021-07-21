@@ -3,21 +3,23 @@ import { connect, useDispatch, useSelector } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import { Typography } from '@material-ui/core';
 import { clearPetInfos, getTransactions, updateProfilePicture } from 'redux/actions';
-import { useUser } from 'helper/hooks/auth.hooks';
+import { useLoggedInUser, useUser } from 'helper/hooks/auth.hooks';
 import { useHistory } from 'react-router-dom';
 import Loading from 'components/Loading';
 import TransactionsOverviewTable from 'components/transactions/TransactionsOverviewTable';
+import PremiumBanner from 'components/PremiumBanner';
 
 /**
  * Overview for all transactions
- * @param {*} props 
- * @returns 
+ * @param {*} props
+ * @returns
  */
 
 const TransactionsView = (props) => {
     const classes = useStyles();
     const dispatch = useDispatch();
     const history = useHistory();
+    const loggedInUser = useLoggedInUser();
 
     const user = useUser();
     const transactions = useSelector((state) => state.transaction.transactions);
@@ -51,10 +53,15 @@ const TransactionsView = (props) => {
     return loading ? (
         <Loading />
     ) : (
-        <div className={classes.layout}>
-            <Typography variant="h6" align="left">Transactions</Typography>
-            <TransactionsOverviewTable transactions={transactions} />
-        </div>
+        <>
+            {!loggedInUser || loggedInUser.subscriptionPlan === 'free' ? <PremiumBanner /> : null}
+            <div className={classes.layout}>
+                <Typography variant="h6" align="left">
+                    Transactions
+                </Typography>
+                <TransactionsOverviewTable transactions={transactions} />
+            </div>
+        </>
     );
 };
 

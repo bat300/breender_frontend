@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { connect, useSelector } from 'react-redux';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
@@ -6,6 +6,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import {Button, Container,Dialog, DialogActions, DialogContent, DialogTitle } from '@material-ui/core';
 import SubscriptionPlanComponent from '../components/premium/SubscriptionPlanComponent';
 import { withRouter } from 'react-router-dom';
+import { getUsersInfo } from 'redux/actions';
 
 const useStyles = makeStyles((theme) => ({
     premiumDescription: {
@@ -18,7 +19,17 @@ function SubscriptionPageView(props) {
 
 
     const user = useSelector((state) => state.user);
+    const userInfo = useSelector((state) => state.user.userInfo);
     const [open, setOpen] = React.useState(false);
+
+    const loadUser = async () => {
+        // trigger the redux action getUsersInfo
+         props.dispatch(getUsersInfo(user.user.id));
+    };
+
+    useEffect(() => {
+        if(user.user) loadUser();
+    }, []);
 
     const handleOpen = () => {
       setOpen(true);
@@ -37,10 +48,10 @@ function SubscriptionPageView(props) {
 
     const onChangePlan = (v) => {
         //pass subscription plan to sign up page
-            if(user.user.subscriptionPlan === "free" && v === "premium"){
+            if(userInfo.subscriptionPlan === "free" && v === "premium"){
                 console.log("want to change");
                 props.history.push("/premium/changePlan");
-            } else if(user.user.subscriptionPlan === "premium" && v === "free") {
+            } else if(userInfo.subscriptionPlan === "premium" && v === "free") {
                 handleOpen();
             }
 
@@ -58,7 +69,7 @@ function SubscriptionPageView(props) {
             </Container>
             <Container maxWidth="md" component="main">
                 <Grid container spacing={5} alignItems="flex-end">
-                    <SubscriptionPlanComponent onClick={user.user? onChangePlan : onSignUp} subscriptionPlan={user.user? user.user.subscriptionPlan : ''} user={user.user}/>
+                    <SubscriptionPlanComponent onClick={user.userInfo? onChangePlan : onSignUp} subscriptionPlan={user.userInfo? userInfo.subscriptionPlan : ''}/>
                 </Grid>
             </Container>
         

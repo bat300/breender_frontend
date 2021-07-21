@@ -5,6 +5,8 @@ import PetProfileComponent from '../components/pet-profile/PetProfileComponent';
 import Loading from '../components/Loading';
 import { useDispatch } from 'react-redux';
 import { useLocation } from 'react-router-dom';
+import PremiumBanner from 'components/PremiumBanner';
+import { useLoggedInUser } from 'helper/hooks/auth.hooks';
 
 /**
  * Manages the process of getting pet details data
@@ -14,6 +16,7 @@ import { useLocation } from 'react-router-dom';
 function PetProfileView(props) {
     const dispatch = useDispatch();
     const location = useLocation();
+    const loggedInUser = useLoggedInUser();
 
     const petId = location.pathname.split('/pet/')[1];
 
@@ -34,22 +37,25 @@ function PetProfileView(props) {
     ) : selectedPet.error ? (
         <div>error</div>
     ) : selectedPet.pet ? (
-        <PetProfileComponent
-            id={petId}
-            officialName={selectedPet.pet.officialName}
-            nickname={selectedPet.pet.nickname}
-            age={calculateAge(selectedPet.pet.birthDate)}
-            sex={selectedPet.pet.sex}
-            price={selectedPet.pet.price}
-            profilePicture={selectedPet.pet.profilePicture}
-            pictures={getAlbumWithProfilePicture(selectedPet.pet)}
-            breed={selectedPet.pet.breed}
-            species={selectedPet.pet.species}
-            documents={selectedPet.pet.documents}
-            competitions={selectedPet.pet.competitions}
-            ownerId={selectedPet.pet.ownerId}
-            purchased={selectedPet.pet.purchased}
-        />
+        <>
+            {!loggedInUser || loggedInUser.subscriptionPlan === 'free' ? <PremiumBanner /> : null}
+            <PetProfileComponent
+                id={petId}
+                officialName={selectedPet.pet.officialName}
+                nickname={selectedPet.pet.nickname}
+                age={calculateAge(selectedPet.pet.birthDate)}
+                sex={selectedPet.pet.sex}
+                price={selectedPet.pet.price}
+                profilePicture={selectedPet.pet.profilePicture}
+                pictures={getAlbumWithProfilePicture(selectedPet.pet)}
+                breed={selectedPet.pet.breed}
+                species={selectedPet.pet.species}
+                documents={selectedPet.pet.documents}
+                competitions={selectedPet.pet.competitions}
+                ownerId={selectedPet.pet.ownerId}
+                purchased={selectedPet.pet.purchased}
+            />
+        </>
     ) : null;
 }
 

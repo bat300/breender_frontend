@@ -27,13 +27,13 @@ function SubscriptionPlanComponent(props) {
         {
             id: 'premium',
             title: 'Premium',
-            price: '9.00',
+            price: '4.99',
             included: ['View all applications', 'Phone & Email support', 'Contact pet owners', 'Pay no transaction fees', 'Get pet documents verified', 'Higher position in results', 'No advertisement banners'],
             excluded: [],
         },
         
     ];
-        return plans.map((planObject) => planObject.id === 'free'? <SubscriptionPlanCard plan={planObject} onClick={selectFreePlan} subscriptionPlan={props.subscriptionPlan} user={props.user}/> : <SubscriptionPlanCard plan={planObject} onClick={selectPremiumPlan} subscriptionPlan={props.subscriptionPlan} user={props.user}/>);
+        return plans.map((planObject) => planObject.id === 'free'? <SubscriptionPlanCard plan={planObject} onClick={selectFreePlan} subscriptionPlan={props.subscriptionPlan}/> : <SubscriptionPlanCard plan={planObject} onClick={selectPremiumPlan} subscriptionPlan={props.subscriptionPlan}/>);
    
 
 }
