@@ -43,6 +43,10 @@ function Header(props) {
         props.history.push('/premium');
     };
 
+    const onClickMessenger = () => {
+        props.history.push('/messenger');
+    };
+
     return (
         <AppBar position="sticky">
             <KebabMenu open={Boolean(menuAnchor)} anchor={menuAnchor} onClose={() => setMenuAnchor(null)} />
@@ -68,7 +72,7 @@ function Header(props) {
                 <IconButton onClick={onClickLogo} color="inherit">
                     <SearchIcon />
                 </IconButton>
-                <IconButton onClick={onClickLogo} color="inherit">
+                <IconButton onClick={onClickMessenger} color="inherit">
                     <ChatBubbleOutlineIcon />
                 </IconButton>
                 <IconButton onClick={(event) => setMenuAnchor(event.currentTarget)} color="inherit">
