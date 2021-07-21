@@ -9,6 +9,8 @@ import Loading from '../components/Loading';
 // helper imports
 import { isObjEmpty } from 'helper/helpers';
 import { usePet } from 'helper/hooks';
+import PremiumBanner from 'components/PremiumBanner';
+import { useLoggedInUser } from 'helper/hooks/auth.hooks';
 
 /**
  * Manages the process of getting pet details data
@@ -18,6 +20,7 @@ import { usePet } from 'helper/hooks';
 function PetProfileView(props) {
     const dispatch = useDispatch();
     const location = useLocation();
+    const loggedInUser = useLoggedInUser();
 
     const petId = location.pathname.split('/pet/')[1];
     const selectedPet = usePet();
@@ -42,6 +45,8 @@ function PetProfileView(props) {
     return isObjEmpty(selectedPet) ? (
         <Loading />
     ) : selectedPet ? (
+        <>
+        {!loggedInUser || loggedInUser.subscriptionPlan === 'free' ? <PremiumBanner /> : null}
         <PetProfileComponent
             id={petId}
             officialName={selectedPet.officialName}
@@ -57,6 +62,7 @@ function PetProfileView(props) {
             competitions={selectedPet.competitions}
             ownerId={selectedPet.ownerId}
         />
+        </>
     ) : null;
 }
 

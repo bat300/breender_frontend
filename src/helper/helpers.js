@@ -31,7 +31,7 @@ export const getAgeString = (age) => {
     return `${yearString} ${monthString} old`;
 };
 
-export  const getUser = () => {
+export  const getUserFromToken = () => {
     if (window.localStorage['jwtToken']) {
         let token = window.localStorage['jwtToken'];
         let base64Url = token.split('.')[1];

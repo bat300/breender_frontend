@@ -8,7 +8,7 @@ const pets = (state = initialState, action) => {
         case 'GET_PETS':
             return { ...state, pets: action.pets };
         case 'DELETE_PET':
-            return { ...state, pets: action.pets };
+            return { ...state };
         case 'ADD_PET':
             return { ...state };
         case 'UPDATE_PET':

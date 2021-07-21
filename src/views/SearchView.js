@@ -10,11 +10,13 @@ import Typography from '@material-ui/core/Typography';
 import Slider from '@material-ui/core/Slider';
 import Button from '@material-ui/core/Button';
 import { getPets } from '../redux/actions/petActions';
-import SearchResults from '../components/SearchResults';
+import SearchResults from '../components/search/SearchResults';
 import { breeds } from 'helper/data/breeds';
 import HomeLogo from 'images/home.svg';
 import { Grid } from '@material-ui/core';
 import { useUser } from 'helper/hooks/auth.hooks';
+import { useLoggedInUser } from 'helper/hooks/auth.hooks';
+import PremiumBanner from 'components/PremiumBanner';
 
 const useStyles = makeStyles((theme) => ({
     filters: {
@@ -47,10 +49,11 @@ const useStyles = makeStyles((theme) => ({
 function SearchView(props) {
     const classes = useStyles();
     const dispatch = useDispatch();
-    let pets = useSelector((state) => state.entities.pets);
+    let pets = useSelector((state) => state.entities.pets);    // get pets from redux store
     let user = useUser();
     // for scrolling to the search
     const ref = React.useRef(null);
+    const loggedInUser = useLoggedInUser();
 
     const [isLoading, setIsLoading] = React.useState(true);
     const [chosenSpecies, setSpecies] = React.useState('');
@@ -132,6 +135,7 @@ function SearchView(props) {
 
     return (
         <div>
+             {!loggedInUser || loggedInUser.subscriptionPlan === 'free' ? <PremiumBanner /> : null}
             <Grid container direction="row" justify="center">
                 <Grid container spacing={3} xs={6} justify="center" alignItems="flex-end" direction="column">
                     <Grid item justify="flex-start" alignItems="center">

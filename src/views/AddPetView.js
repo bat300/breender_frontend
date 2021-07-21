@@ -54,7 +54,7 @@ const AddPetView = (props) => {
 
         const clear = async () => {
             if (!loading) return;
-            dispatch(clearPet());
+            props.dispatch(clearPet());
             setLoading(false);
         };
 

@@ -1,14 +1,21 @@
 import React, { useEffect } from 'react';
 import { withRouter } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
-import { AppBar, IconButton, Link, Toolbar, Typography } from '@material-ui/core';
+import { AppBar, IconButton, Toolbar, Typography, Grid } from '@material-ui/core';
 
 import logo from '../images/breender.svg';
 import ChatBubbleOutlineIcon from '@material-ui/icons/ChatBubbleOutline';
 import PersonIcon from '@material-ui/icons/Person';
 import KebabMenu from './KebabMenu';
+import { useSelector } from 'react-redux';
 
 const useStyles = makeStyles((theme) => ({
+    root: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        flexGrow: 1,
+    },
     toolbar: {
         flexGrow: 1,
     },
@@ -23,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
         },
     },
     title2: {
-        paddingLeft: theme.spacing(2),
+        paddingLeft: theme.spacing(),
         fontWeight: 'lighter',
     },
     logo: {
@@ -43,6 +50,8 @@ const useStyles = makeStyles((theme) => ({
  */
 function Header(props) {
     const classes = useStyles();
+    const user = useSelector((state) => state.user);
+
     const [menuAnchor, setMenuAnchor] = React.useState(null);
     const [navigationSelectedStyle, setNavigationSelectedStyle] = React.useState({ search: null, blog: null, premium: null });
 
@@ -61,7 +70,13 @@ function Header(props) {
     const goToHome = () => props.history.push('/');
     // @TODOs
     const goToBlog = () => props.history.push('/');
-    const goToPremium = () => props.history.push('/');
+    
+    const onClickAdminConsole = () => {
+        props.history.push('/admin-console');
+    };
+    const onClickPremium = () => {
+        props.history.push('/premium');
+    };
 
     return (
         <AppBar position="sticky">
@@ -70,24 +85,42 @@ function Header(props) {
                 <div onClick={goToHome} className={classes.logo}>
                     <img src={`${logo}#svgView(preserveAspectRatio(xMaxYMax))`} height="55px" style={{ cursor: 'pointer' }} />
                 </div>
-                <div className={classes.navigation}>
-                    <Link className={classes.title} variant="h5" color="inherit" onClick={goToHome} style={navigationSelectedStyle.search}>
+                <div className={classes.root}>
+                    <Typography noWrap variant="h5" color="inherit" style={{ cursor: 'pointer', overflow: 'visible' }} onClick={goToHome}>
                         Find a mate
-                    </Link>
+                    </Typography>
                     <Typography className={classes.title2} variant="h5" color="inherit">
                         |
                     </Typography>
-                    <Link className={classes.title} variant="h5" color="inherit" onClick={goToBlog} style={navigationSelectedStyle.blog}>
+                    <Typography className={classes.title2} variant="h5" color="inherit" style={{ cursor: 'pointer' }} onClick={goToBlog}>
                         Blog
-                    </Link>
+                    </Typography>
                     <Typography className={classes.title2} variant="h5" color="inherit">
                         |
                     </Typography>
-                    <Link className={classes.title} variant="h5" color="inherit" onClick={goToPremium} style={navigationSelectedStyle.premium}>
+                    <Typography
+                        className={user.user ? (user.user.role === 'admin' ? classes.title2 : classes.title) : classes.title}
+                        variant="h5"
+                        color="inherit"
+                        style={{ cursor: 'pointer' }}
+                        onClick={onClickPremium}
+                    >
                         Premium
-                    </Link>
+                    </Typography>
+                    {user.user ? (
+                        user.user.role === 'admin' ? (
+                            <Grid container direction="row">
+                                <Typography className={classes.title2} variant="h5" color="inherit">
+                                    |
+                                </Typography>
+                                <Typography className={classes.title2} variant="h5" color="inherit" style={{ cursor: 'pointer' }} onClick={onClickAdminConsole}>
+                                    Admin Console
+                                </Typography>
+                            </Grid>
+                        ) : null
+                    ) : null}
                 </div>
-                <IconButton onClick={goToHome} color="inherit">
+                <IconButton color="inherit">
                     <ChatBubbleOutlineIcon />
                 </IconButton>
                 <IconButton onClick={(event) => setMenuAnchor(event.currentTarget)} color="inherit">

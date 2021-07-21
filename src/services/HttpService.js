@@ -6,7 +6,7 @@ export default class HttpService {
         return {
             id: userJson._id,
             username: userJson.username,
-            role: userJson.role,
+            role: userJson.role
         };
     }
 
