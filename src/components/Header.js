@@ -34,7 +34,6 @@ const useStyles = makeStyles((theme) => ({
         fontWeight: 'lighter',
     },
     logo: {
-        flexGrow: 1,
         alignItems: 'flex-start',
     },
     navigation: {
@@ -53,30 +52,34 @@ function Header(props) {
     const user = useSelector((state) => state.user);
 
     const [menuAnchor, setMenuAnchor] = React.useState(null);
-    const [navigationSelectedStyle, setNavigationSelectedStyle] = React.useState({ search: null, blog: null, premium: null });
+    const [navigationSelectedStyle, setNavigationSelectedStyle] = React.useState({ search: null, blog: null, premium: null, admin: null });
 
     useEffect(() => {
         // @TODOs
         switch (props.history.location.pathname) {
             case '/':
-                setNavigationSelectedStyle({ search: { fontWeight: 'normal' }, blog: null, premium: null }); break;
+                setNavigationSelectedStyle({ search: { fontWeight: 'normal' }, blog: null, premium: null, admin: null });
+                break;
             case '/premium':
-                setNavigationSelectedStyle({ search: null, blog: null, premium: { fontWeight: 'normal' } }); break;
+                setNavigationSelectedStyle({ search: null, blog: null, premium: { fontWeight: 'normal' }, admin: null });
+                break;
+            case '/blog':
+                setNavigationSelectedStyle({ search: null, blog: { fontWeight: 'normal' }, premium: null, admin: null });
+                break;
+            case '/admin-console':
+                setNavigationSelectedStyle({ search: null, blog: null, premium: null, admin: { fontWeight: 'normal' } });
+                break;
             default:
-                setNavigationSelectedStyle({ search: null, blog: null, premium: null }); break;
+                setNavigationSelectedStyle({ search: null, blog: null, premium: null, admin: null });
+                break;
         }
     }, [props.history.location.pathname]);
 
     const goToHome = () => props.history.push('/');
+    const onClickAdminConsole = () => props.history.push('/admin-console');
+    const onClickPremium = () => props.history.push('/premium');
     // @TODOs
     const goToBlog = () => props.history.push('/');
-    
-    const onClickAdminConsole = () => {
-        props.history.push('/admin-console');
-    };
-    const onClickPremium = () => {
-        props.history.push('/premium');
-    };
 
     return (
         <AppBar position="sticky">
@@ -86,37 +89,37 @@ function Header(props) {
                     <img src={`${logo}#svgView(preserveAspectRatio(xMaxYMax))`} height="55px" style={{ cursor: 'pointer' }} />
                 </div>
                 <div className={classes.root}>
-                    <Typography noWrap variant="h5" color="inherit" style={{ cursor: 'pointer', overflow: 'visible' }} onClick={goToHome}>
+                    <Typography className={classes.title} variant="h5" color="inherit" onClick={goToHome} style={navigationSelectedStyle.search}>
                         Find a mate
                     </Typography>
                     <Typography className={classes.title2} variant="h5" color="inherit">
                         |
                     </Typography>
-                    <Typography className={classes.title2} variant="h5" color="inherit" style={{ cursor: 'pointer' }} onClick={goToBlog}>
+                    <Typography className={classes.title} variant="h5" color="inherit" onClick={goToBlog} style={navigationSelectedStyle.blog}>
                         Blog
                     </Typography>
                     <Typography className={classes.title2} variant="h5" color="inherit">
                         |
                     </Typography>
                     <Typography
-                        className={user.user ? (user.user.role === 'admin' ? classes.title2 : classes.title) : classes.title}
+                        className={classes.title}
                         variant="h5"
                         color="inherit"
-                        style={{ cursor: 'pointer' }}
+                        style={navigationSelectedStyle.premium}
                         onClick={onClickPremium}
                     >
                         Premium
                     </Typography>
                     {user.user ? (
                         user.user.role === 'admin' ? (
-                            <Grid container direction="row">
+                            <>
                                 <Typography className={classes.title2} variant="h5" color="inherit">
                                     |
                                 </Typography>
-                                <Typography className={classes.title2} variant="h5" color="inherit" style={{ cursor: 'pointer' }} onClick={onClickAdminConsole}>
+                                <Typography className={classes.title} variant="h5" color="inherit" onClick={onClickAdminConsole} style={navigationSelectedStyle.admin}>
                                     Admin Console
                                 </Typography>
-                            </Grid>
+                            </>
                         ) : null
                     ) : null}
                 </div>
