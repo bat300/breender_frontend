@@ -56,7 +56,7 @@ export const getConversation = (id1, id2) => {
     // when the backend call was successfull and the conversation are retrieved
     // in the dispatcher the conversation will be added to the global state
     const onSuccess = (conversation) => {
-        return { type: ConversationTypes.GET_CONVERSATION, conversation: conversation };
+        return { type: ConversationTypes.GET_CONVERSATION, conversation };
     };
     // when the backend call was failed
     const onFailure = (error) => {

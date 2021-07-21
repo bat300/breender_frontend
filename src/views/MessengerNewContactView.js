@@ -27,7 +27,13 @@ function MessengerNewContactView(props) {
 
     const loadedConversation = useSelector((state) => state.conversations.conversation);
 
-    return !loadedConversation ? <Loading /> : loadedConversation ? <MessengerView currentConversation={loadedConversation} /> : null;
+    return !loadedConversation ? (
+        <div>
+            <Loading />
+        </div>
+    ) : loadedConversation ? (
+        <MessengerView currentConversation={loadedConversation} />
+    ) : null;
 }
 
 // connect() establishes allows the usage of redux functionality

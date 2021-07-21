@@ -8,6 +8,7 @@ import SendIcon from '@material-ui/icons/Send';
 import TextField from '@material-ui/core/TextField';
 import ConversationComponent from './ConversationComponent';
 import MessageComponent from './MessageComponent';
+import Loading from 'components/Loading';
 import io from 'socket.io-client';
 
 const useStyles = makeStyles((theme) => ({
@@ -46,11 +47,12 @@ const useStyles = makeStyles((theme) => ({
 function MessengerComponent(props) {
     const classes = useStyles();
     const [conversations, setConversations] = useState([]);
-    const [currentChat, setCurrentChat] = useState(null);
+    const [currentChat, setCurrentChat] = useState(props.currentConversation);
     const [messages, setMessages] = useState([]);
     const [arrivalMessage, setArrivalMessage] = useState(null);
     const socket = useRef();
     const userId = useSelector((state) => state.user.user.id);
+    const loadedConversations = useSelector((state) => state.conversations.conversations);
 
     useEffect(() => {
         socket.current = io('ws://localhost:8900');
@@ -113,10 +115,16 @@ function MessengerComponent(props) {
                 <List>
                     {menuProps.conversations
                         .filter((c) => {
-                            let friend = c.members.find((m) => {
-                                return m._id !== props.currentUser.id;
-                            });
-                            return friend.username.includes(searchName);
+                            if (c) {
+                                if (c.members) {
+                                    let friend = c.members.find((m) => {
+                                        return m._id !== props.currentUser.id;
+                                    });
+                                    if (friend.username) {
+                                        return friend.username.includes(searchName);
+                                    }
+                                }
+                            }
                         })
                         .map((c) => (
                             <div
@@ -175,7 +183,9 @@ function MessengerComponent(props) {
             setNewMessage('');
         };
 
-        return (
+        return !currentChat ? (
+            <Loading />
+        ) : (
             <div>
                 <List className={classes.messageArea}>
                     {Array.isArray(loadedMessages) && loadedMessages.length !== 0 ? (
