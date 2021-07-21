@@ -122,7 +122,7 @@ function SearchView(props) {
     };
 
     return (
-        <div>
+        <div ref={searchRef}>
             {!loggedInUser || loggedInUser.subscriptionPlan === 'free' ? <PremiumBanner /> : null}
             <div className={classes.filters}>
                 <FormControl className={classes.formControl}>
