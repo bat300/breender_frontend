@@ -150,17 +150,17 @@ export default function UserProfile(props) {
             <List>
                 {props.pets && props.pets.length > 0 ?
                     props.pets.map((pet) => <PetInformationPaper pet={pet} user={props.user} key={pet._id} editingMode={editingMode} />)
-                    : (editingMode ?
-                        (props.user.isVerified ?
-                            <Button style={{ margin: '0 auto', display: "flex" }} variant="contained" color="secondary" onClick={handleAddPet}>
-                                Add pet
-                            </Button>
-                            : <Typography className={classes.typographyNotifications} align="center">
-                                Please verify your email to add a pet
-                            </Typography>)
-                        : <Typography className={classes.typographyNotifications} align="center">
+                    : (!editingMode ?
+                        <Typography className={classes.typographyNotifications} align="center">
                             No pets added yet
-                        </Typography>)}
+                        </Typography> : <div />)}
+                {editingMode ? (props.user.isVerified ?
+                    <Button style={{ margin: '0 auto', display: "flex" }} variant="contained" color="secondary" onClick={handleAddPet}>
+                        Add pet
+                    </Button>
+                    : <Typography className={classes.typographyNotifications} align="center">
+                        Please verify your email to add a pet
+                    </Typography>) : <div />}
             </List>
             {editingMode ? <div />
                 :

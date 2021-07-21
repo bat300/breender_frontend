@@ -57,7 +57,7 @@ export default function PetInformationPaper(props) {
         const onSuccess = () => {
             NotificationService.notify('success', 'Success', 'Your pet was successfully deleted!');
             dispatch(getUserPets(props.user._id));
-            dispatch(getPets('', '', '', ''));
+            dispatch(getPets('', '', '', [1, 5]));
             history.push('/user');
         };
 
