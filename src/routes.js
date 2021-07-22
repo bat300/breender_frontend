@@ -6,13 +6,15 @@ import SignUpView from './views/SignUpView';
 import AddPetView from './views/AddPetView';
 import PetProfileView from './views/PetProfileView';
 import EmailConfirmationView from './views/EmailConfirmationView';
-import UserProfileView from "./views/UserProfileView";
+import UserProfileView from './views/UserProfileView';
 import SubscriptionPageView from './views/SubscriptionPageView';
 import EditPetView from './views/EditPetView';
 import NotFoundView from './views/NotFoundView';
 import SearchView from './views/SearchView';
 import SelectedUserProfileView from './views/SelectedUserProfileView';
 import TransactionsView from 'views/TransactionsView';
+import MessengerView from './views/MessengerView';
+import MessengerNewContactView from './views/MessengerNewContactView';
 import ChangeToPremiumView from 'views/ChangeToPremiumView';
 import AdminConsoleView from 'views/AdminConsoleView';
 // services
@@ -54,7 +56,7 @@ export const PrivateRoute = (props) => {
 export const AdminRoute = (props) => {
     const user = useSelector((state) => state.user);
 
-    return LocalStorageService.isAuthorized() && user.user.role === "admin"? (
+    return LocalStorageService.isAuthorized() && user.user.role === 'admin' ? (
         <Route {...props}>
             <DefaultHeader />
             {props.children}
@@ -109,6 +111,12 @@ const Routes = () => {
             </PrivateRoute>
             <PrivateRoute exact path="/transactions">
                 <TransactionsView />
+            </PrivateRoute>
+            <PrivateRoute exact path="/messenger/:breederId/:petId">
+                <MessengerNewContactView />
+            </PrivateRoute>
+            <PrivateRoute exact path="/messenger">
+                <MessengerView />
             </PrivateRoute>
             <DefaultRoute path="*">
                 <DefaultHeader />

@@ -8,7 +8,7 @@ import PetPhotos from './PetPhotos';
 import PetInformation from './PetInformation';
 import PetCompetitionsList from './PetCompetitionsList';
 import PetDocumentsList from './PetDocumentsList';
-import PaymentButton from '../../components/PaymentButton';
+import { PaymentButton, ContactButton } from '../Button';
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
 // state imports
 import { getPet } from 'redux/actions';
@@ -44,7 +44,8 @@ function PetProfileComponent(props) {
                                     {props.officialName}
                                 </Typography>
                                 <PetPhotos pictures={props.pictures} profilePicture={props.profilePicture} />
-                                <PaymentButton pet={props} />
+                                <ContactButton breederId={props.ownerId} petId={id} />
+                                {props.price && props.price > 0 && <PaymentButton pet={props} price={props.price} />}
                             </Grid>
                             <Divider variant="middle" />
                             <Grid xs={7} direction="column">
