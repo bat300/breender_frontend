@@ -7,7 +7,7 @@ export default function user(state = getUserFromToken(), action) {
         case 'LOGIN_FAILURE':
             return { error: 'Password or username incorrect.' };
         case 'LOGIN_RESET':
-            return { user: action.user, isAuthenticated: action.isAuthenticated };
+            return { ...state, user: action.user, isAuthenticated: action.isAuthenticated };
         case 'LOGOUT':
             return {};
         case "GET_USER_INFO":
