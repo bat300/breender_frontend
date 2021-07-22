@@ -4,7 +4,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import PaymentStepper from './transactions/PaymentStepper';
 import { Modal } from 'antd';
-import { useLoggedInUser } from 'helper/hooks/auth.hooks';
+import { useUser } from 'helper/hooks/auth.hooks';
 
 const useStyles = makeStyles((theme) => ({
     button: {
@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
 function PaymentButton({ pet }) {
     const classes = useStyles();
     const price = pet.price;
-    const loggedInUser = useLoggedInUser();
+    const loggedInUser = useUser();
 
     const [isModalOpened, setIsModalOpened] = useState(false);
     const [isMyPet, setIsMyPet] = useState(false);
@@ -31,9 +31,9 @@ function PaymentButton({ pet }) {
 
     useEffect(() => {
         if(loggedInUser) {
-            setIsMyPet(loggedInUser._id === pet.ownerId)
+            setIsMyPet(loggedInUser.id === pet.ownerId)
         }
-    }, []);
+    }, [loggedInUser, pet.ownerId]);
 
     const openStepper = () => setIsModalOpened(true);
     const closeModal = () => setIsModalOpened(false);

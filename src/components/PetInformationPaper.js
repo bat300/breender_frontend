@@ -11,7 +11,7 @@ import { getAgeString } from 'helper/helpers';
 import CloseIcon from '@material-ui/icons/Close';
 import { NotificationService } from 'services';
 import { useDispatch } from 'react-redux';
-import { deletePet, getUserPets, getPets, getPet } from 'redux/actions';
+import { deletePet, getUserPets, getPets } from 'redux/actions';
 
 const useStyles = makeStyles((theme) => ({
     root: {

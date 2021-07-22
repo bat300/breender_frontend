@@ -14,7 +14,6 @@ export default class PetService {
         this.setToken();
         return new Promise(async (resolve, reject) => {
             try {
-                console.log(user)
                 const me = `user=${user?.id ? user.id : ''}`;
                 const { data } = await axios.get(`/pets/search?${me}&species=${species}&sex=${sex}&breed=${breed}&age[]=${age}&showOwn=${showOwn}`);
                 resolve(data);
