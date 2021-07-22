@@ -84,9 +84,10 @@ function SearchView(props) {
         },
     ];
 
-    const loadPets = async (pageValue) => {
+    const loadPets = async (pageValue?) => {
         // trigger the redux action getPets
-        pets = props.dispatch(getPets(chosenSpecies, sex, breed, ageRange, pageValue, false, user));
+        let pageToFetch = pageValue ? pageValue : 1;
+        pets = props.dispatch(getPets(chosenSpecies, sex, breed, ageRange, pageToFetch, false, user));
     };
 
     useEffect(() => {
@@ -138,7 +139,7 @@ function SearchView(props) {
     const onSearchTrigger = () => ref.current.scrollIntoView({ behavior: 'smooth' });
 
     const handleChange = async (event, value) => {
-        loadPets(value - 1);
+        loadPets(value);
         searchRef.current?.scrollIntoView({ behavior: 'smooth' });
     };
 
