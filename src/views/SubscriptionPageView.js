@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
     },
     imageOverlay: {
         position: 'relative',
-        top: '7.2%',
+        top: '7.1%',
         left: '33%',
     },
 }));
