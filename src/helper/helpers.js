@@ -52,9 +52,12 @@ export  const getUserFromToken = () => {
                 username: userJson.username,
                 role: userJson.role,
             },
+            loggedInUser: {},
         };
     }
     return {};
 };
 
 export const isObjEmpty = (obj) => obj === undefined || obj === null || Object.keys(obj).length === 0;
+
+export const showPremiumBanner = (loggedInUser) => !loggedInUser || (loggedInUser.subscriptionPlan === 'free' && loggedInUser.role !== 'admin');

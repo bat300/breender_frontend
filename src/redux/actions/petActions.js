@@ -12,7 +12,7 @@ const PetTypes = {
     CLEAR_PET: 'CLEAR_PET'
 };
 
-export const getPets = (species, sex, breed, age, showOwn, user) => {
+export const getPets = (species, sex, breed, age, showOwn = false, user) => {
     // when the backend call was successfull and the pets are retrieved
     // in the dispatcher the pets will be added to the global state
     function onSuccess(pets) {

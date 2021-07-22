@@ -7,7 +7,7 @@ import { useLoggedInUser, useUser } from 'helper/hooks/auth.hooks';
 import Loading from 'components/Loading';
 import TransactionsOverviewTable from 'components/transactions/TransactionsOverviewTable';
 import PremiumBanner from 'components/PremiumBanner';
-import { showPremiumBanner } from 'helper/helper';
+import { showPremiumBanner } from 'helper/helpers';
 
 /**
  * Overview for all transactions

@@ -17,7 +17,7 @@ import { Grid } from '@material-ui/core';
 import { useUser } from 'helper/hooks/auth.hooks';
 import { useLoggedInUser } from 'helper/hooks/auth.hooks';
 import PremiumBanner from 'components/PremiumBanner';
-import { showPremiumBanner } from 'helper/helper';
+import { showPremiumBanner } from 'helper/helpers';
 
 const useStyles = makeStyles((theme) => ({
     filters: {
