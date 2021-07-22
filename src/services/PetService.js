@@ -10,11 +10,12 @@ export default class PetService {
         axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
     }
 
-    static getPets(species, sex, breed, age, page) {
+    static getPets(species, sex, breed, age, page, showOwn, user) {
         this.setToken();
         return new Promise(async (resolve, reject) => {
             try {
-                const { data } = await axios.get(`/pets/search?species=${species}&sex=${sex}&breed=${breed}&age[]=${age}&page=${page}`);
+                const me = `user=${user?.id ? user.id : ''}`;
+                const { data } = await axios.get(`/pets/search?${me}&species=${species}&sex=${sex}&breed=${breed}&age[]=${age}&page=${page}&showOwn=${showOwn}`);
                 resolve(data);
             } catch (err) {
                 reject(err);

@@ -28,6 +28,12 @@ const StepperInformation = ({ step, pet, petOwner, amount, loggedInUser, isFreeO
         { title: 'Breed', data: pet.breed },
     ];
 
+    const userColumns = [
+        { title: 'Username', data: petOwner?.username },
+        { title: 'City', data: petOwner?.city },
+        { title: 'State', data: petOwner?.state },
+    ];
+
     return (
         <div className={classes.layout}>
             {step === 0 ? (
@@ -64,10 +70,9 @@ const StepperInformation = ({ step, pet, petOwner, amount, loggedInUser, isFreeO
                             User Information
                         </Typography>
                         <Card className={classes.root}>
-                            <CardMedia className={classes.media} image={pet.profilePicture.src} title="pet profile picture" />
                             <CardContent>
                                 <Table>
-                                    {petColumns.map((item) => {
+                                    {userColumns.map((item) => {
                                         return (
                                             <TableRow hover>
                                                 <TableCell>

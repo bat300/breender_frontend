@@ -11,10 +11,10 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DocumentResultsList from 'components/DocumentResultsList';
 
-const DocumentListView = (props) => {
+const VerifyDocumentList = (props) => {
     var documents = useSelector((state) => state.entities.documents);
     const [openVerify, setOpenVerify] = React.useState(false); //for modal to verify doc
-    const [openDecline, setOpenDecline] = React.useState(false);//for modal to decline doc
+    const [openDecline, setOpenDecline] = React.useState(false); //for modal to decline doc
     const [id, setId] = React.useState('');
     const [type, setType] = React.useState('');
 
@@ -58,7 +58,7 @@ const DocumentListView = (props) => {
 
         props.dispatch(getDocuments());
         
-    }, []);
+    }, [props]);
 
     return (
         <div>
@@ -95,4 +95,4 @@ const DocumentListView = (props) => {
     );
 };
 
-export default connect()(withRouter(DocumentListView));
+export default connect()(withRouter(VerifyDocumentList));

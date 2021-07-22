@@ -7,13 +7,14 @@ const PriceTag = (props) => {
     const PLUS = '+ ';
 
     const color = () => {
-        if (isSender) return 'red';
-        else return 'green';
+        if (isSender === true) return 'red';
+        else if (isSender === false) return 'green';
+        else return 'black';
     };
 
     return (
         <div style={{ color: color(), fontWeight: 'lighter', fontSize: 18 }}>
-            {`${isSender ? MINUS : PLUS}${price} €`}
+            {`${isSender === true ? MINUS : isSender === false ? PLUS : ''}${price} €`}
         </div>
     );
 };

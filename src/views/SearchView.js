@@ -14,14 +14,20 @@ import Pagination from '@material-ui/lab/Pagination';
 import { getPets } from '../redux/actions/petActions';
 import SearchResults from '../components/search/SearchResults';
 import { breeds } from 'helper/data/breeds';
+import HomeLogo from 'images/home.svg';
+import { Grid } from '@material-ui/core';
+import { useUser } from 'helper/hooks/auth.hooks';
 import { useLoggedInUser } from 'helper/hooks/auth.hooks';
 import PremiumBanner from 'components/PremiumBanner';
+import { showPremiumBanner } from 'helper/helpers';
 
 const useStyles = makeStyles((theme) => ({
     filters: {
         display: 'flex',
+        flex: 1,
         flexDirection: 'row',
         alignItems: 'baseline',
+        justifyContent: 'center',
     },
     formControl: {
         margin: theme.spacing(1),
@@ -34,29 +40,39 @@ const useStyles = makeStyles((theme) => ({
         margin: theme.spacing(4),
         width: 200,
     },
+    homeLogo: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        margin: 50,
+        marginRight: 150,
+    },
 }));
 
 function SearchView(props) {
     const searchRef = useRef();
     const classes = useStyles();
-    // get pets from redux store
-    var pets = useSelector((state) => state.entities.pets);
+    let pets = useSelector((state) => state.entities.pets); // get pets from redux store
+    let user = useUser();
+    // for scrolling to the search
+    const ref = React.useRef(null);
     const loggedInUser = useLoggedInUser();
     var totalPages = useSelector((state) => state.entities.totalPages);
 
+    const [isLoading, setIsLoading] = React.useState(true);
     const [chosenSpecies, setSpecies] = React.useState('');
     const [order, setOrder] = React.useState('descending');
     const [sex, setSex] = React.useState('');
     const [breed, setBreed] = React.useState('');
-    const [ageRange, setAgeRange] = React.useState([1, 5]);
+    const [ageRange, setAgeRange] = React.useState([0.5, 10]);
 
     const sexes = ['female', 'male'];
     const orders = ['ascending price', 'descending price', 'newest'];
 
     const ageMarks = [
         {
-            value: 1,
-            label: '1 year',
+            value: 0.5,
+            label: '6 months',
         },
         {
             value: 5,
@@ -70,13 +86,14 @@ function SearchView(props) {
 
     const loadPets = async (pageValue) => {
         // trigger the redux action getPets
-        pets = props.dispatch(getPets(chosenSpecies, sex, breed, ageRange, pageValue));
+        pets = props.dispatch(getPets(chosenSpecies, sex, breed, ageRange, pageValue, false, user));
     };
 
     useEffect(() => {
         // load pets when the page is loaded or the pets were filtered.
-        if (!pets) {
+        if (!pets || isLoading) {
             loadPets(1);
+            setIsLoading(false);
         }
     }, [pets]);
 
@@ -85,7 +102,7 @@ function SearchView(props) {
         setSex('');
         setBreed('');
         setAgeRange([1, 10]);
-        pets = props.dispatch(getPets('', '', '', [1, 5], 1)); //change parameters manually because values remain constant inside render and are not updated immediately
+        pets = props.dispatch(getPets('', '', '', [0.5, 10], 1, false, user)); //change parameters manually because values remain constant inside render and are not updated immediately
     };
 
     const resetFilters = async () => {
@@ -116,6 +133,10 @@ function SearchView(props) {
         return `${age} years old`;
     }
 
+    const onSubscribe = () => props.history.push('/premium');
+
+    const onSearchTrigger = () => ref.current.scrollIntoView({ behavior: 'smooth' });
+
     const handleChange = async (event, value) => {
         loadPets(value - 1);
         searchRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -123,8 +144,28 @@ function SearchView(props) {
 
     return (
         <div>
-            {!loggedInUser || loggedInUser.subscriptionPlan === 'free' ? <PremiumBanner /> : null}
-            <div className={classes.filters} ref={searchRef}>
+            {showPremiumBanner(loggedInUser) ? <PremiumBanner /> : null}
+            <Grid container direction="row" justify="center">
+                <Grid container spacing={3} xs={6} justify="center" alignItems="flex-end" direction="column">
+                    <Grid item justify="flex-start" alignItems="center">
+                        <Typography style={{ fontSize: 24 }}>Find the best partner for your pet</Typography>
+                    </Grid>
+                    <Grid item>
+                        <Button variant="contained" color="primary" style={{ marginRight: 20 }} onClick={onSearchTrigger}>
+                            Search for a pet
+                        </Button>
+                        <Button variant="contained" color="primary" onClick={onSubscribe}>
+                            Subscribe
+                        </Button>
+                    </Grid>
+                </Grid>
+                <Grid item xs={6} justify="flex-end" alignItems="center">
+                    <div className={classes.homeLogo}>
+                        <img alt="home" src={HomeLogo} style={{ width: '25vw', height: 'auto' }} />
+                    </div>
+                </Grid>
+            </Grid>
+            <div ref={ref} className={classes.filters}>
                 <FormControl className={classes.formControl}>
                     <InputLabel id="species-select-label">Species</InputLabel>
                     <Select labelId="species-select-label" id="species-select" value={chosenSpecies} onChange={handleSpeciesChange}>
