@@ -2,6 +2,7 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import PetInformationListItem from './PetInformationListItem';
 import { Grid, List } from '@material-ui/core';
+import { getAgeString } from 'helper/helpers';
 
 const useStyles = makeStyles((theme) => ({
     layout: {
@@ -30,7 +31,7 @@ function PetInformation(props) {
                 <Grid item xs={6}>
                     <List>
                         <PetInformationListItem primary={props.breed} secondary={'Breed'} />
-                        <PetInformationListItem primary={props.age + ' years old'} secondary={'Age'} />
+                        <PetInformationListItem primary={getAgeString(props.age)} secondary={'Age'} />
                         <PetInformationListItem primary={props.sex} secondary={'Sex'} />
                     </List>
                 </Grid>

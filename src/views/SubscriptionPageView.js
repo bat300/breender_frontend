@@ -14,18 +14,17 @@ const useStyles = makeStyles((theme) => ({
         padding: theme.spacing(8, 0, 6),
     },
     paper: {
-        padding: theme.spacing(5),
-        marginTop: theme.spacing(20),
         width: '1000px',
         marginLeft: 'auto',
         marginRight: 'auto',
-        marginBottom: 'auto',
+        marginTop: theme.spacing(0),
+        marginBottom: theme.spacing(5),
         backgroundColor: '#F2CC8F',
     },
     imageOverlay: {
-        position: 'absolute',
-        top: '4.2%',
-        left: '37%',
+        position: 'relative',
+        top: '7.1%',
+        left: '33%',
     },
 }));
 

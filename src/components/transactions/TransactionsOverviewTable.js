@@ -56,8 +56,6 @@ const TransactionsOverviewTable = (props) => {
             NotificationService.notify('error', 'Error', 'There was a problem adding your review.');
             setIsModalVisible(false);
         };
-        console.log("Rating is", rating)
-        console.log("Date is ", new Date().toLocaleDateString('de-DE'))
 
         let reviewToUpload = {
             reviewerId: user.id,

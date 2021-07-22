@@ -1,27 +1,42 @@
 import React, { useEffect, useState } from 'react';
 import { connect, useDispatch } from 'react-redux';
-import { makeStyles } from '@material-ui/core/styles';
-import { PetInformationForm, PetPhotosForm } from 'components/forms';
-import { Button, CircularProgress } from '@material-ui/core';
-import { usePet } from 'helper/hooks/pets.hooks';
-import { addPet, clearPetInfos, updateProfilePicture, updateSelectedPet } from 'redux/actions';
-import { useUser } from 'helper/hooks/auth.hooks';
 import { useHistory } from 'react-router-dom';
-import FirebaseService from 'services/FirebaseService';
-import NotificationService from 'services/NotificationService';
+import { makeStyles } from '@material-ui/core/styles';
+import { Button, CircularProgress } from '@material-ui/core';
+// components imports
+import { PetInformationForm, PetPhotosForm } from 'components/forms';
 import Loading from 'components/Loading';
 import { useLoggedInUser } from 'helper/hooks/auth.hooks';
 
+// store-relevant imports
+import { usePetCompetitions, usePetDocuments, usePetPictures, usePetProfilePictureToUpload, useUser } from 'helper/hooks/';
+import { addPet, clearPet, updateCompetitionsToUpload, updateDocumentsToUpload, updatePicturesToUpload, updateProfilePicture } from 'redux/actions';
+// services import
+import { FirebaseService, NotificationService } from 'services';
+import { isObjEmpty } from 'helper/helpers';
+
+/**
+ * 
+ * @param {*} props 
+ * Main view for adding a new pet
+ */
 const AddPetView = (props) => {
     const classes = useStyles();
     const dispatch = useDispatch();
     const history = useHistory();
 
-    const pet = usePet();
+    // get user
     const user = useUser();
     const loggedInUser = useLoggedInUser();
 
+    // get pet upload states
+    const petDocuments = usePetDocuments();
+    const petCompetitions = usePetCompetitions();
+    const petPictures = usePetPictures();
+    const petProfilePictureToUpload = usePetProfilePictureToUpload();
+
     const [loading, setLoading] = useState(true);
+    const [buttonLoading, setButtonLoading] = useState(false);
     const [formIsDisabled, setFormIsDisabled] = useState(false);
     const [name, setName] = useState('');
     const [nickname, setNickname] = useState('');
@@ -32,16 +47,17 @@ const AddPetView = (props) => {
     const [price, setPrice] = useState(0);
 
     useEffect(() => {
-        const isEmpty = (str) => str === '' || str === undefined;
-        const disabled = isEmpty(name) || isEmpty(pet?.profilePicture?.path) || isEmpty(sex) || isEmpty(species) || isEmpty(breed);
+        const isEmpty = (obj) => obj === '' || obj === undefined;
+        const disabled = isEmpty(name) || isObjEmpty(petProfilePictureToUpload) || isEmpty(sex) || isEmpty(species) || isEmpty(breed);
         setFormIsDisabled(disabled);
-    }, [name, sex, breed, species, pet?.profilePicture?.path]);
+    }, [name, sex, breed, species, petProfilePictureToUpload]);
 
     useEffect(() => {
         let loading = true;
 
         const clear = async () => {
             if (!loading) return;
+            dispatch(clearPet());
             setLoading(false);
         };
 
@@ -52,16 +68,11 @@ const AddPetView = (props) => {
         };
     }, [dispatch]);
 
-    window.onbeforeunload = (event) => {
-        dispatch(clearPetInfos());
-        dispatch(updateProfilePicture({}));
-    };
-
     const uploadCompetitions = async () => {
-        const competitionsData = [...pet?.competitions];
+        const competitionsData = [...petCompetitions];
         for (let index = 0; index < competitionsData.length; index++) {
             let value = competitionsData[index];
-            if (value.certificate) {
+            if (value.certificate !== null || value.certificate !== undefined) {
                 const metadata = {
                     contentType: value.certificate.type,
                 };
@@ -70,14 +81,13 @@ const AddPetView = (props) => {
             }
         }
 
-        let petData = pet;
-        petData.competitions = competitionsData;
+        await dispatch(updateCompetitionsToUpload(competitionsData));
 
-        await dispatch(updateSelectedPet(petData));
+        return competitionsData;
     };
 
     const uploadDocuments = async () => {
-        const documentsData = [...pet?.documents];
+        const documentsData = [...petDocuments];
         for (let index = 0; index < documentsData.length; index++) {
             let value = documentsData[index];
             const metadata = {
@@ -87,14 +97,13 @@ const AddPetView = (props) => {
             documentsData[index].url = url;
         }
 
-        let petData = pet;
-        petData.documents = documentsData;
+        await dispatch(updateDocumentsToUpload(documentsData));
 
-        await dispatch(updateSelectedPet(petData));
+        return documentsData;
     };
 
     const uploadPictures = async () => {
-        const picturesData = [...pet.pictures];
+        const picturesData = [...petPictures];
         for (let index = 0; index < picturesData.length; index++) {
             let value = picturesData[index];
             const metadata = {
@@ -104,13 +113,14 @@ const AddPetView = (props) => {
             let url = await FirebaseService.upload(value.path, value.data, metadata);
             picturesData[index].src = url;
         }
-        let petData = pet;
-        petData.pictures = picturesData;
-        await dispatch(updateSelectedPet(petData));
+
+        await dispatch(updatePicturesToUpload(picturesData));
+
+        return picturesData;
     };
 
     const uploadProfilePicture = async () => {
-        let value = pet.profilePicture;
+        let value = petProfilePictureToUpload;
         const metadata = {
             contentType: 'image/png',
         };
@@ -118,20 +128,18 @@ const AddPetView = (props) => {
         let url = await FirebaseService.upload(value.path, value.data, metadata);
         value.src = url;
 
-        let petData = pet;
-        petData.profilePicture = value;
-
-        await dispatch(updateSelectedPet(petData));
+        await dispatch(updateProfilePicture(value, {}));
+        return value;
     };
 
     const createPet = async () => {
-        setLoading(true);
+        setButtonLoading(true);
 
         // upload documents and pics to firebase first
-        await uploadDocuments();
-        await uploadCompetitions();
-        await uploadPictures();
-        await uploadProfilePicture();
+        const documents = await uploadDocuments();
+        const competitions = await uploadCompetitions();
+        const pictures = await uploadPictures();
+        const profilePicture = await uploadProfilePicture();
 
         const dateCreated = Date.now();
         // combine all information about a pet
@@ -142,27 +150,27 @@ const AddPetView = (props) => {
             birthDate: birthDate,
             sex: sex,
             price: price,
-            profilePicture: pet.profilePicture,
-            pictures: pet.pictures,
+            profilePicture: profilePicture,
+            pictures: pictures,
             dateCreated: dateCreated,
             breed: breed,
             species: species,
-            competitions: pet.competitions,
-            documents: pet.documents,
+            competitions: competitions,
+            documents: documents,
         };
 
         const onSuccess = () => {
             NotificationService.notify('success', 'Success', 'Your four-legged friend was added to your profile!');
             history.push('/');
-            dispatch(clearPetInfos());
+            dispatch(clearPet());
         };
 
         const onError = () => {
             NotificationService.notify('error', 'Error', 'There was a problem uploading your pet.');
         };
 
-        dispatch(addPet(petToUpload, onSuccess, onError));
-        setLoading(false);
+        await dispatch(addPet(petToUpload, onSuccess, onError));
+        setButtonLoading(false);
     };
 
     return loading ? (
@@ -186,7 +194,7 @@ const AddPetView = (props) => {
             </div>
             <div className={classes.button}>
                 <Button disabled={formIsDisabled} onClick={createPet} type="submit" variant="contained" color="secondary" size="large">
-                    {loading ? <CircularProgress size={20} color="white" style={{ marginRight: 10 }} /> : ''} Save
+                    {buttonLoading ? <CircularProgress size={20} style={{ marginRight: 10, color: 'white' }} /> : ''} Save
                 </Button>
             </div>
         </div>

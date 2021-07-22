@@ -1,36 +1,13 @@
-const getUser = () => {
-    if (window.localStorage['jwtToken']) {
-        let token = window.localStorage['jwtToken'];
-        let base64Url = token.split('.')[1];
-        let base64 = base64Url.replace('-', '+').replace('_', '/');
-        let userJson = JSON.parse(window.atob(base64));
-        // if token is expired delete it and return {}
-        // --> User is not logged in anymore.
-        if (userJson.exp > Date.now()) {
-            window.localStorage.removeItem('jwtToken');
-            return {};
-        }
-        return {
-            user: {
-                id: userJson._id,
-                username: userJson.username,
-                role: userJson.role
-            }
-        };
-    }
-    return {};
-};
+import { getUserFromToken } from 'helper/helpers';
 
-export default function user(state = getUser(), action) {
+export default function user(state = getUserFromToken(), action) {
     switch (action.type) {
         case 'LOGIN_SUCCESS':
-            return { ...state, user: action.user };
+            return { user: action.user, isAuthenticated: true };
         case 'LOGIN_FAILURE':
-            return { error: action.error };
-        case "UPDATE_SUCCESS":
-            return { user: action.user };
-        case "LOGIN_RESET":
-            return {};
+            return { error: 'Password or username incorrect.' };
+        case 'LOGIN_RESET':
+            return { ...state, user: action.user, isAuthenticated: action.isAuthenticated };
         case 'LOGOUT':
             return {};
         case "GET_USER_INFO":

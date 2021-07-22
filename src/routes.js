@@ -1,5 +1,4 @@
-
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 // views
 import UserLoginView from './views/UserLoginView';
@@ -15,10 +14,9 @@ import SearchView from './views/SearchView';
 import SelectedUserProfileView from './views/SelectedUserProfileView';
 import TransactionsView from 'views/TransactionsView';
 import ChangeToPremiumView from 'views/ChangeToPremiumView';
-import AddReview from 'components/user-profile/AddReview';
 import AdminConsoleView from 'views/AdminConsoleView';
 // services
-import { LocalStorageService } from 'services';
+import { LocalStorageService, NotificationService } from 'services';
 import Header from 'components/Header';
 import AppTheme from 'theming/themetypes';
 import { useSelector } from 'react-redux';
@@ -34,16 +32,22 @@ const DefaultHeader = () => {
     return <Header darkmode={theme === AppTheme.DARK} toggletheme={toggleTheme} />;
 };
 
-
 // used for routing
 export const PrivateRoute = (props) => {
-    return LocalStorageService.isAuthorized() ? (
+    const isAuthorized = LocalStorageService.isAuthorized();
+    useEffect(() => {
+        if (!isAuthorized) {
+            NotificationService.notify('warning', 'Warning', 'You have to be logged in to view this page');
+        }
+    }, [isAuthorized]);
+
+    return isAuthorized ? (
         <Route {...props}>
             <DefaultHeader />
             {props.children}
         </Route>
     ) : (
-        <Redirect to={{ pathname: '/login', state: { from: props.location } }} />
+        <Redirect to={{}} />
     );
 };
 
@@ -103,13 +107,11 @@ const Routes = () => {
             <PrivateRoute exact path="/edit/pet/:id">
                 <EditPetView />
             </PrivateRoute>
-            <PrivateRoute exact path="/add-review">
-                <AddReview />
-            </PrivateRoute>
             <PrivateRoute exact path="/transactions">
                 <TransactionsView />
             </PrivateRoute>
             <DefaultRoute path="*">
+                <DefaultHeader />
                 <NotFoundView />
             </DefaultRoute>
         </Switch>

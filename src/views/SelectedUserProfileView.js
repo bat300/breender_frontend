@@ -5,7 +5,6 @@ import { getUser, getSelectedUserPets, getReviewsOnSelectedUser } from 'redux/ac
 import { useDispatch } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import Loading from '../components/Loading';
-import { ViewCarouselOutlined } from '@material-ui/icons';
 
 function SelectedUserProfileView(props) {
     const dispatch = useDispatch();
