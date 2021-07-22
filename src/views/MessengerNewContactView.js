@@ -32,7 +32,7 @@ function MessengerNewContactView(props) {
             <Loading />
         </div>
     ) : loadedConversation ? (
-        <MessengerView currentConversation={loadedConversation} />
+        <MessengerView currentConversationId={loadedConversation._id} />
     ) : null;
 }
 

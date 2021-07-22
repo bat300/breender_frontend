@@ -47,7 +47,7 @@ const useStyles = makeStyles((theme) => ({
 function MessengerComponent(props) {
     const classes = useStyles();
     const [conversations, setConversations] = useState([]);
-    const [currentChat, setCurrentChat] = useState(props.currentConversation);
+    const [currentChat, setCurrentChat] = useState(null);
     const [messages, setMessages] = useState([]);
     const [arrivalMessage, setArrivalMessage] = useState(null);
     const socket = useRef();
@@ -74,10 +74,10 @@ function MessengerComponent(props) {
     }, [userId]);
 
     useEffect(() => {
-        if (props.currentConversation) {
-            setCurrentChat(props.currentConversation);
+        if (props.currentConversationId) {
+            setCurrentChat(loadedConversations.find((c) => (c.id = props.currentConversationId)));
         }
-    }, [props.currentConversation]);
+    }, [props.currentConversationId]);
 
     return (
         <div className={classes.layout}>
@@ -96,7 +96,6 @@ function MessengerComponent(props) {
         </div>
     );
 
-    // TODO: Add search functionality
     function ChatMenuComponent(menuProps) {
         const classes = useStyles();
 
@@ -160,6 +159,10 @@ function MessengerComponent(props) {
 
         const loadedMessages = useSelector((state) => state.messages.messages);
 
+        useEffect(() => {
+            setMessages(loadedMessages);
+        }, [loadedMessages]);
+
         const handleSubmit = async (e) => {
             // Prevents refreshing of page on click
             if (e) {
@@ -171,7 +174,6 @@ function MessengerComponent(props) {
                 conversationId: chatProps.conversation._id,
             };
             setMessages([...messages, message]);
-            console.log(messages);
             const receiverId = currentChat.members.find((member) => member._id !== userId)._id;
             socket.current.emit('sendMessage', {
                 senderId: userId,
@@ -187,8 +189,8 @@ function MessengerComponent(props) {
         ) : (
             <div>
                 <List className={classes.messageArea}>
-                    {Array.isArray(loadedMessages) && loadedMessages.length !== 0 ? (
-                        loadedMessages.map((m) => <MessageComponent message={m} />)
+                    {Array.isArray(messages) && messages.length !== 0 ? (
+                        messages.map((m) => <MessageComponent message={m} />)
                     ) : (
                         <Typography variant="h5" className="header-message" className={classes.padding10}>
                             Send a message to start a conversation with{' '}

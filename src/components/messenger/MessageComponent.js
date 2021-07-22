@@ -21,7 +21,7 @@ function MessageComponent(props) {
     }
 
     function getTimestamp() {
-        return props.message.createdAt ? format(props.message.createdAt) : '00:00';
+        return props.message.createdAt ? format(props.message.createdAt) : 'just now';
     }
 
     const isToday = (someDate) => {
@@ -29,12 +29,10 @@ function MessageComponent(props) {
         return someDate.getDate() == today.getDate() && someDate.getMonth() == today.getMonth() && someDate.getFullYear() == today.getFullYear();
     };
 
-    // TODO: scrollRef scrolls to pre-last element
     useEffect(() => {
         scrollRef.current?.scrollIntoView({ behavior: 'smooth' });
     });
 
-    // TODO: Get user picture, fix alignment according to sender
     return (
         <ListItem key={props.message.id} ref={scrollRef}>
             <Grid container>
