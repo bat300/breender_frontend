@@ -56,21 +56,16 @@ function PetProfileView(props) {
             sex={selectedPet.sex}
             price={selectedPet.price}
             profilePicture={selectedPet.profilePicture}
-            pictures={getAlbumWithProfilePicture(selectedPet)}
+            pictures={selectedPet.pictures}
             breed={selectedPet.breed}
             species={selectedPet.species}
             documents={selectedPet.documents}
             competitions={selectedPet.competitions}
             ownerId={selectedPet.ownerId}
+            purchased={selectedPet.purchased}
         />
         </>
     ) : null;
-}
-
-function getAlbumWithProfilePicture(selectedPet) {
-    let pictures = [...selectedPet.pictures];
-    pictures.push(selectedPet.profilePicture);
-    return pictures;
 }
 
 // connect() establishes allows the usage of redux functionality
