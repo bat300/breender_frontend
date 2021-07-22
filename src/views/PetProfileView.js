@@ -24,6 +24,7 @@ function PetProfileView(props) {
     const location = useLocation();
     const loggedInUser = useLoggedInUser();
 
+    // get id of pet from URL
     const petId = location.pathname.split('/pet/')[1];
     const selectedPet = usePet();
 
@@ -34,14 +35,13 @@ function PetProfileView(props) {
         const loadPet = async (id) => {
             if (!loading) return;
             await dispatch(getPet(id));
-        }
+        };
 
         loadPet(petId);
 
         return () => {
             loading = false;
         };
-
     }, [dispatch, petId]);
 
     return isObjEmpty(selectedPet) ? (

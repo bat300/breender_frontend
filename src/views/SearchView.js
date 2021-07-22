@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { connect, useSelector } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import { withRouter } from 'react-router-dom';
@@ -9,6 +9,8 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Typography from '@material-ui/core/Typography';
 import Slider from '@material-ui/core/Slider';
 import Button from '@material-ui/core/Button';
+import Box from '@material-ui/core/Box';
+import Pagination from '@material-ui/lab/Pagination';
 import { getPets } from '../redux/actions/petActions';
 import SearchResults from '../components/search/SearchResults';
 import { breeds } from 'helper/data/breeds';
@@ -48,12 +50,14 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function SearchView(props) {
+    const searchRef = useRef();
     const classes = useStyles();
     let pets = useSelector((state) => state.entities.pets); // get pets from redux store
     let user = useUser();
     // for scrolling to the search
     const ref = React.useRef(null);
     const loggedInUser = useLoggedInUser();
+    var totalPages = useSelector((state) => state.entities.totalPages);
 
     const [isLoading, setIsLoading] = React.useState(true);
     const [chosenSpecies, setSpecies] = React.useState('');
@@ -80,15 +84,15 @@ function SearchView(props) {
         },
     ];
 
-    const loadPets = async () => {
+    const loadPets = async (pageValue) => {
         // trigger the redux action getPets
-        pets = props.dispatch(getPets(chosenSpecies, sex, breed, ageRange, false, user));
+        pets = props.dispatch(getPets(chosenSpecies, sex, breed, ageRange, pageValue, false, user));
     };
 
     useEffect(() => {
         // load pets when the page is loaded or the pets were filtered.
         if (!pets || isLoading) {
-            loadPets();
+            loadPets(1);
             setIsLoading(false);
         }
     }, [pets]);
@@ -98,7 +102,7 @@ function SearchView(props) {
         setSex('');
         setBreed('');
         setAgeRange([1, 10]);
-        pets = props.dispatch(getPets('', '', '', [0.5, 10], false, user)); //change parameters manually because values remain constant inside render and are not updated immediately
+        pets = props.dispatch(getPets('', '', '', [0.5, 10], 1, false, user)); //change parameters manually because values remain constant inside render and are not updated immediately
     };
 
     const resetFilters = async () => {
@@ -132,6 +136,11 @@ function SearchView(props) {
     const onSubscribe = () => props.history.push('/premium');
 
     const onSearchTrigger = () => ref.current.scrollIntoView({ behavior: 'smooth' });
+
+    const handleChange = async (event, value) => {
+        loadPets(value - 1);
+        searchRef.current?.scrollIntoView({ behavior: 'smooth' });
+    };
 
     return (
         <div>
@@ -223,6 +232,10 @@ function SearchView(props) {
                 </Button>
             </div>
             <SearchResults pets={pets} order={order} />
+
+            <Box my={2} display="flex" justifyContent="center">
+                <Pagination count={totalPages} variant="outlined" shape="rounded" onChange={handleChange} />
+            </Box>
         </div>
     );
 }

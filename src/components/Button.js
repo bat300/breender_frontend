@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Button } from '@material-ui/core';
+import { useSelector } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
+import { useHistory } from 'react-router-dom';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
+import SendIcon from '@material-ui/icons/Send';
 import PaymentStepper from './transactions/PaymentStepper';
 import { Modal } from 'antd';
 import { useLoggedInUser } from 'helper/hooks/auth.hooks';
@@ -52,3 +55,21 @@ function PaymentButton({ pet }) {
 }
 
 export default PaymentButton;
+
+function ContactButton(contactProps) {
+    const classes = useStyles();
+    const history = useHistory();
+
+    const user = useSelector((state) => state.user);
+    const handleContact = (id) => {
+        history.push('/messenger/' + contactProps.breederId + '/' + contactProps.petId);
+    };
+
+    return (
+        <Button variant="contained" color="secondary" className={classes.button} endIcon={<SendIcon />} onClick={() => handleContact()} disabled={user.user.subscriptionPlan === 'free'}>
+            Contact Breeder
+        </Button>
+    );
+}
+
+export { PaymentButton, ContactButton };
