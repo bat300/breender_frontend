@@ -95,7 +95,7 @@ const TransactionsOverviewTable = (props) => {
 
     // get the owner of the pet
     const getPetOwner = (transaction) => {
-        if (transaction.pet.ownerId === transaction.senderId._id) {
+        if (transaction.pet?.ownerId === transaction.senderId._id) {
             return transaction.senderId;
         } else {
             return transaction.receiverId;
