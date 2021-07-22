@@ -1,19 +1,23 @@
 import React, { createContext, useContext, useEffect, useRef, useState } from 'react';
+import moment from 'moment';
+import { connect, useDispatch } from 'react-redux';
 // antd imports
 import 'antd/dist/antd.css';
 import { DatePicker, Modal, Table, Typography } from 'antd';
+import { Input, Form } from 'antd';
 // material-ui imports
 import { makeStyles } from '@material-ui/core/styles';
 import { Button, Grid, IconButton } from '@material-ui/core';
-import { Input, Form } from 'antd';
-import DocumentsUpload from './upload/documents.upload';
-import moment from 'moment';
-import { useDispatch } from 'react-redux';
-import { usePet } from 'helper/hooks/pets.hooks';
-import { updateSelectedPet } from 'redux/actions';
 import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
+// components import
+import DocumentsUpload from './upload/documents.upload';
+// redux imports
+import { updateCompetitionsToUpload } from 'redux/actions';
+import { usePet, usePetCompetitions } from 'helper/hooks/pets.hooks';
+// services import
+import { NotificationService } from 'services';
 
-const { Text, Link } = Typography;
+const { Text } = Typography;
 
 const EditableContext = createContext(null);
 const DATE_FORMAT = 'DD.MM.YYYY';
@@ -56,7 +60,7 @@ const EditableCell = ({ title, focused, editable, children, dataIndex, record, h
             const values = await form.validateFields();
             toggleEdit();
             handleSave({ ...record, ...values });
-        } catch (errInfo) { }
+        } catch (errInfo) {}
     };
 
     let childNode = children;
@@ -95,7 +99,8 @@ const EditableCell = ({ title, focused, editable, children, dataIndex, record, h
 
 const prepareCompetitions = (competitions) => {
     let arr = competitions;
-    arr.map((value) => {
+    arr.map((value, index) => {
+        value.key = index;
         value.date = new Date(value.date);
         return value;
     });
@@ -108,10 +113,13 @@ const CompetitionsComponent = (props) => {
     const { mode } = props;
 
     const pet = usePet();
+    const competitionsData = usePetCompetitions();
 
     const [count, setCount] = useState(0);
     const [isModalVisible, setIsModalVisible] = useState(false);
+    // competitions on the modal
     const [competitions, setCompetitions] = useState(mode === 'add' ? [] : prepareCompetitions(pet.competitions));
+    // competitions on the edit page
     const [editedCompetitions, setEditedCompetitions] = useState(mode === 'add' ? [] : prepareCompetitions(pet.competitions));
 
     const columnsData = [
@@ -167,7 +175,7 @@ const CompetitionsComponent = (props) => {
             dataIndex: 'date',
             editable: false,
             render: (_, record) =>
-                competitions.length >= 1 ? <DatePicker value={moment(record.date, DATE_FORMAT)} bordered={false} onChange={(date) => changeDate(date, record)} format={DATE_FORMAT} /> : null,
+                competitions.length >= 1 ? <DatePicker defaultValue={moment(new Date(), DATE_FORMAT)} value={moment(record.date, DATE_FORMAT)} bordered={false} onChange={(date) => changeDate(date, record)} format={DATE_FORMAT} /> : null,
         },
         {
             title: 'Category',
@@ -191,11 +199,10 @@ const CompetitionsComponent = (props) => {
         },
         {
             title: 'Remove',
-            dataIndex: 'remove',
             key: 'remove',
-            render: (_, record) =>
+            render: (key) =>
                 competitions.length >= 1 ? (
-                    <IconButton onClick={() => handleDelete(record.key)}>
+                    <IconButton onClick={() => handleDelete(key)}>
                         <DeleteOutlinedIcon color="error" />
                     </IconButton>
                 ) : null,
@@ -233,20 +240,16 @@ const CompetitionsComponent = (props) => {
         setCompetitions([...competitions, newData]);
         setCount(count + 1);
 
-        let petData = pet;
-        petData.competitions.push(newData);
-        dispatch(updateSelectedPet(petData));
+        dispatch(updateCompetitionsToUpload([...competitions, newData]));
     };
 
     // delete row
     const handleDelete = (key) => {
-        const newData = competitions.filter((item) => item.key !== key);
+        const newData = competitions.filter((item) => item.key !== key.key);
         setCompetitions(newData);
         setCount(count - 1);
 
-        let petData = pet;
-        petData.competitions = newData;
-        dispatch(updateSelectedPet(petData));
+        dispatch(updateCompetitionsToUpload(newData));
     };
 
     // save competitions data
@@ -257,9 +260,7 @@ const CompetitionsComponent = (props) => {
         newData.splice(index, 1, { ...item, ...row });
         setCompetitions(newData);
 
-        let petData = pet;
-        petData.competitions = newData;
-        dispatch(updateSelectedPet(petData));
+        dispatch(updateCompetitionsToUpload(newData));
     };
 
     // handle change of the competition date
@@ -267,21 +268,46 @@ const CompetitionsComponent = (props) => {
         const newData = [...competitions];
         newData.map((item) => {
             if (record.key === item.key) {
-                item.date = new Date(date);
+                if (date === null) {
+                    item.date = new Date();
+                } else {
+                    item.date = new Date(date);
+                }
             }
             return item;
         });
         setCompetitions(newData);
 
-        let petData = pet;
-        petData.competitions = newData;
-        dispatch(updateSelectedPet(petData));
+        dispatch(updateCompetitionsToUpload(newData));
     };
 
     const showModal = () => setIsModalVisible(true);
+
     const hideModal = () => {
-        setEditedCompetitions(competitions);
+        dispatch(updateCompetitionsToUpload(editedCompetitions));
+        setCompetitions(editedCompetitions);
         setIsModalVisible(false);
+        setCount(editedCompetitions.length);
+    };
+
+    const onOk = () => {
+        // check if all columns of all competitions are filled out
+        let verified = true;
+        const isEmpty = (c) => c.name === '' || c.prize === '' || c.date === '' || c.category === '' || c.certificate === undefined || c.certificate === {};
+        competitionsData.forEach((item) => {
+            if (isEmpty(item)) {
+                verified = false;
+                return;
+            }
+        });
+        if (verified) {
+            dispatch(updateCompetitionsToUpload(competitions));
+            setEditedCompetitions(competitions);
+            setIsModalVisible(false);
+            setCount(competitions.length);
+        } else {
+            NotificationService.notify('error', 'All fields required', 'Please fill out all columns for the competitions!');
+        }
     };
 
     return (
@@ -304,7 +330,8 @@ const CompetitionsComponent = (props) => {
                 </Grid>
             </Grid>
             <Table dataSource={editedCompetitions} columns={columnsData} />
-            <Modal visible={isModalVisible} onOk={hideModal} onCancel={hideModal} className={classes.modal}>
+            {/* Modal for editable competitions table */}
+            <Modal visible={isModalVisible} onOk={onOk} onCancel={hideModal} className={classes.modal} width={'80vw'}>
                 <Grid container alignItems="flex-end" justify="flex-end">
                     <Button
                         onClick={handleAdd}
@@ -317,7 +344,7 @@ const CompetitionsComponent = (props) => {
                         Add a row
                     </Button>
                 </Grid>
-                <Table components={components} rowClassName={() => 'editable-row'} bordered dataSource={competitions} columns={columns} style={{ display: 'block' }} />
+                <Table components={components} rowClassName={() => 'editable-row'} bordered dataSource={competitions} columns={columns} style={{ width: '80vw' }} />
             </Modal>
         </div>
     );
@@ -326,6 +353,7 @@ const CompetitionsComponent = (props) => {
 const useStyles = makeStyles((theme) => ({
     layout: {
         display: 'flex',
+        width: '100%',
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
@@ -340,10 +368,11 @@ const useStyles = makeStyles((theme) => ({
         alignSelf: 'flex-end',
     },
     modal: {
-        width: '80vw',
-        margin: '0 auto',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
         marginTop: 100,
     },
 }));
 
-export default CompetitionsComponent;
+export default connect()(CompetitionsComponent);

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
@@ -31,8 +31,16 @@ const PaymentStepper = ({ pet, close }) => {
 
     const steps = ['Confirm general information', 'Confirm payment', 'Finish'];
     const loggedInUser = useLoggedInUser();
+    const [isFreeOfCharge, setIsFreeOfCharge] = useState(false);
 
-    const isFreeOfCharge = loggedInUser.subscriptionPlan === 'premium' && pet.price === 0; // premium user don't need to pay any fees for the free pet
+    useEffect(() => {
+
+        if(loggedInUser) {
+            setIsFreeOfCharge(loggedInUser.subscriptionPlan === 'premium' && pet.price === 0)// premium user don't need to pay any fees for the free pet
+        }
+    }, [])
+
+ 
     const isButtonDisabled = activeStep === 1 && !isFreeOfCharge;
 
     // helper functions for the transaction generation

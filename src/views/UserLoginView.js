@@ -1,15 +1,17 @@
-import React, { useEffect } from "react";
-import { withRouter } from "react-router-dom";
-import { connect, useSelector } from "react-redux";
-import LoginComponent from "../components/UserLoginComponent";
+import React, { useEffect } from 'react';
+import { useHistory, withRouter } from 'react-router-dom';
+import { connect, useDispatch, useSelector } from 'react-redux';
+import LoginComponent from '../components/UserLoginComponent';
+import { login, startLoading, stopLoading, loginReset, me} from '../redux/actions';
 import NotificationService from "services/NotificationService";
-import { login, loginReset, me } from "../redux/actions";
 
 /**
  * For user login
  * @param {props} props
  */
 function UserLoginView(props) {
+    const dispatch = useDispatch();
+    const history = useHistory();
     const user = useSelector((state) => state.user);
 
     useEffect(() => {
@@ -20,12 +22,14 @@ function UserLoginView(props) {
         }
     }, [user, props]);
 
-    const onLogin = (username, password) => {
-        props.dispatch(login(username, password));
+    const onLogin = async (username, password) => {
+        dispatch(startLoading());
+        await dispatch(login(username, password));
+        dispatch(stopLoading());
     };
 
     const onCancel = () => {
-        props.history.push("/");
+        history.push('/');
     };
 
     const onSignUp = () => {
@@ -33,14 +37,7 @@ function UserLoginView(props) {
         props.history.push("/register");
     };
 
-    return (
-        <LoginComponent
-            user={user}
-            onCancel={onCancel}
-            onLogin={onLogin}
-            onSignUp={onSignUp}
-        />
-    );
+    return <LoginComponent user={user} onCancel={onCancel} onLogin={onLogin} onSignUp={onSignUp} />;
 }
 
 export default connect()(withRouter(UserLoginView));

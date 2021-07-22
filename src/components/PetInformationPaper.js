@@ -7,10 +7,11 @@ import Button from '@material-ui/core/Button';
 import PropTypes from 'prop-types';
 import Image from 'material-ui-image';
 import { useHistory } from 'react-router-dom';
+import { getAgeString } from 'helper/helpers';
 import CloseIcon from '@material-ui/icons/Close';
 import { NotificationService } from 'services';
 import { useDispatch } from 'react-redux';
-import { deletePet, getUserPets, getPets } from 'redux/actions';
+import { deletePet, getUserPets, getPets, getPet } from 'redux/actions';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -89,7 +90,7 @@ export default function PetInformationPaper(props) {
                                     </Grid>
                                     <Grid item xs>
                                         <Typography variant="body2" gutterBottom>
-                                            {props.pet.age} years old
+                                            {getAgeString(props.pet.age)}
                                         </Typography>
                                     </Grid>
                                 </Grid>
@@ -126,7 +127,7 @@ export default function PetInformationPaper(props) {
                                     </Grid>
                                     <Grid item xs>
                                         <Typography variant="body2" gutterBottom>
-                                            {props.pet.competitions.length == 0 ? 'no' : 'yes'}
+                                            {props.pet.competitions.length === 0 ? 'no' : 'yes'}
                                         </Typography>
                                     </Grid>
                                 </Grid>

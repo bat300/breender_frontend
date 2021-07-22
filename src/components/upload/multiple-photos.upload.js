@@ -4,17 +4,18 @@ import { Upload, Modal } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { sha256 } from 'js-sha256';
 import { useDispatch } from 'react-redux';
-import { updateSelectedPet } from 'redux/actions';
-import { usePet } from 'helper/hooks/pets.hooks';
+import { usePet, usePetPictures } from 'helper/hooks/pets.hooks';
 import { useUser } from 'helper/hooks/auth.hooks';
+import { updatePicturesToUpload } from 'redux/actions';
+import { UPLOAD_STATUS } from 'helper/types';
 
-const prepareFileList = (pet) => {
+const prepareFileList = (petPictures) => {
     let petList = [];
-    pet.pictures.forEach((value, index) => {
+    petPictures.forEach((value, index) => {
         petList.push({
             uid: index,
             name: value.title,
-            status: 'done',
+            status: UPLOAD_STATUS.DONE,
             url: value.src,
         });
     });
@@ -25,13 +26,13 @@ const MultiplePhotosUpload = (props) => {
     const dispatch = useDispatch();
     const { mode } = props;
     const pet = usePet();
+    const user = useUser();
+    const petPictures = usePetPictures();
 
     const [previewVisible, setPreviewVisible] = useState(false);
     const [previewImage, setPreviewImage] = useState('');
     const [previewTitle, setPreviewTitle] = useState('');
-    const [fileList, setFileList] = useState(mode === 'add' ? [] : prepareFileList(pet));
-
-    const user = useUser();
+    const [fileList, setFileList] = useState(mode === 'add' ? [] : prepareFileList(petPictures));
 
     // get base64 format of the uploaded picture
     const getBase64 = (photo) => {
@@ -77,33 +78,28 @@ const MultiplePhotosUpload = (props) => {
             path: imgPath,
             src: undefined,
             description: '',
-            status: 'upload',
+            status: UPLOAD_STATUS.UPLOAD,
             data: data,
         };
 
-        let petData = pet;
-        let pics = [...pet.pictures, newData];
-        petData.pictures = pics;
+        let pics = [...petPictures, newData];
 
         // set global state
-        dispatch(updateSelectedPet(petData));
+        dispatch(updatePicturesToUpload(pics));
 
         data.onSuccess(null);
     };
 
     // remove the image from firebase
     const handleRemove = async (file) => {
-        let petData = pet;
         let picTemp = [...pet.pictures];
         if (file.url) {
             // set status delete to remove it later onSave from firebase
-            picTemp.map((value) => (value.title === file.name ? (value.status = 'delete') : value));
-            petData.pictures = picTemp;
-            dispatch(updateSelectedPet(petData));
+            picTemp.map((value) => (value.title === file.name ? (value.status = UPLOAD_STATUS.DELETE) : value));
+            dispatch(updatePicturesToUpload(picTemp));
         } else {
             let pics = picTemp.filter((value) => value.title !== file.name);
-            petData.pictures = pics;
-            dispatch(updateSelectedPet(petData));
+            dispatch(updatePicturesToUpload(pics));
         }
     };
 
