@@ -173,7 +173,7 @@ function MessengerComponent(props) {
                 text: newMessage,
                 conversationId: chatProps.conversation._id,
             };
-            setMessages([...messages, message]);
+            setMessages([...messages]);
             const receiverId = currentChat.members.find((member) => member._id !== userId)._id;
             socket.current.emit('sendMessage', {
                 senderId: userId,
