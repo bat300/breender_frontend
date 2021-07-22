@@ -123,6 +123,7 @@ const PetInformationForm = ({ nameProp, nicknameProp, sexProp, breedProp, specie
                                         format="dd.MM.yyyy"
                                         margin="none"
                                         label="Birth Date"
+                                        maxDate={new Date()}
                                         value={birthDate}
                                         onChange={handleDateChange}
                                         KeyboardButtonProps={{
@@ -178,7 +179,7 @@ const PetInformationForm = ({ nameProp, nicknameProp, sexProp, breedProp, specie
                                 <Grid item xs={12}>
                                     <Divider />
                                     <Grid>
-                                        <label className={classes.label}>Upload Documents</label>
+                                        <label className={classes.label}>Upload Documents (birth certificates, etc.)</label>
                                     </Grid>
                                     <DocumentsUpload mode={props.mode} />
                                 </Grid>
