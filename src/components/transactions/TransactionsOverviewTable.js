@@ -42,17 +42,18 @@ const TransactionsOverviewTable = (props) => {
     };
 
     const hideModal = () => {
-        saveReview();
         setIsModalVisible(false);
     };
 
     const saveReview = async () => {
         const onSuccess = () => {
             NotificationService.notify('success', 'Success', 'Your review was successfully added!');
+            setIsModalVisible(false);
         };
 
         const onError = () => {
             NotificationService.notify('error', 'Error', 'There was a problem adding your review.');
+            setIsModalVisible(false);
         };
         console.log("Rating is", rating)
         console.log("Date is ", new Date().toLocaleDateString('de-DE'))
@@ -181,14 +182,14 @@ const TransactionsOverviewTable = (props) => {
             dataIndex: 'review',
             key: 'review',
             align: 'center',
-            render: (_, record) => <Button> <AddBoxIcon onClick={function () { showModal(record); }} /> </Button>,
+            render: (_, record) => <Button disabled={!checkUserIsSender(record)}> <AddBoxIcon onClick={function () { showModal(record); }} /> </Button>,
         },
     ];
 
     return (
         <div>
             <Table columns={columns} dataSource={transactions} />
-            <Modal visible={isModalVisible} onOk={hideModal} onCancel={hideModal} className={classes.modal}>
+            <Modal visible={isModalVisible} onOk={saveReview} onCancel={hideModal} className={classes.modal}>
                 <AddReviewComponent ratingProp={{ rating, setRating }} reviewProp={{ review, setReview }} name={name} />
             </Modal>
         </div>
