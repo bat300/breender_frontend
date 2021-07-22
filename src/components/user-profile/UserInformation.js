@@ -40,82 +40,100 @@ const useStyles = makeStyles((theme) => ({
 export default function UserInformation(props) {
     const classes = useStyles();
 
+    function formatProvince() {
+        switch (props.user.province) {
+            case 'bavaria':
+                return 'Bavaria';
+            case 'lower-saxony':
+                return 'Lower Saxony';
+            case 'baden-wuerttemberg':
+                return 'Baden Württemberg';
+            case 'north-rhine-westphalia':
+                return 'North Rhine-Westphalia';
+            default:
+                return '';
+        }
+    }
+
     function capitalizeFirstLetter(string) {
-        if (typeof string === 'undefined' || typeof string !== 'undefined' && string.length < 2) {
-            return string
+        if (typeof string === 'undefined' || (typeof string !== 'undefined' && string.length < 2)) {
+            return string;
         }
         return string.charAt(0).toUpperCase() + string.slice(1);
     }
 
-    return props.profileOfLoggedInUser ? (<List>
-        <ListItem className={classes.listItem}>
-            <ListItemAvatar>
-                <Avatar className={classes.black}>
-                    <AccountCircleIcon />
-                </Avatar>
-            </ListItemAvatar>
-            <ListItemText primary={props.user.username} secondary="Username" />
-        </ListItem>
-        <ListItem className={classes.listItem}>
-            <ListItemAvatar>
-                <Avatar className={classes.black}>
-                    <AlternateEmailIcon />
-                </Avatar>
-            </ListItemAvatar>
-            <ListItemText primary={props.user.email} secondary="Email" />
-            <VerificationIcon verified={props.user.isVerified} />
-        </ListItem>
-        <ListItem className={classes.listItem}>
-            <ListItemAvatar>
-                <Avatar className={classes.black}>
-                    <LandscapeIcon />
-                </Avatar>
-            </ListItemAvatar>
-            <ListItemText primary={capitalizeFirstLetter(props.user.province)} secondary="Province" />
-        </ListItem>
-        <ListItem className={classes.listItem}>
-            <ListItemAvatar>
-                <Avatar className={classes.black}>
-                    <LocationCityIcon />
-                </Avatar>
-            </ListItemAvatar>
-            <ListItemText primary={capitalizeFirstLetter(props.user.city)} secondary="City" />
-        </ListItem>
-        <ListItem className={classes.listItem}>
-            <ListItemAvatar>
-                <Avatar className={classes.black}>
-                    <AttachMoneyIcon />
-                </Avatar>
-            </ListItemAvatar>
-            <ListItemText primary={capitalizeFirstLetter(props.user.subscriptionPlan)} secondary="Subscription plan" />
-        </ListItem>
-        {props.user.subscriptionPlan === 'premium' &&
+    return props.profileOfLoggedInUser ? (
+        <List>
             <ListItem className={classes.listItem}>
                 <ListItemAvatar>
                     <Avatar className={classes.black}>
-                        <EventIcon />
+                        <AccountCircleIcon />
                     </Avatar>
                 </ListItemAvatar>
-                <ListItemText primary={props.user.nextRenewalDate} secondary="Premium subscription untill" />
-            </ListItem>}
-        <Divider variant="middle" className={classes.divider} />
-        <Typography className={classes.typography} variant="h6" align="center" style={{ fontWeight: 600 }}>
-            Payment method
-        </Typography>
-        {props.user.paymentMethod ?
-            <ListItem className={classes.listItem}>
-                <ListItemAvatar>
-                    <Avatar className={classes.black}>
-                        <PaymentIcon />
-                    </Avatar>
-                </ListItemAvatar>
-                <ListItemText primary={props.user.paymentMethod.email} secondary={props.user.paymentMethod.type} />
+                <ListItemText primary={props.user.username} secondary="Username" />
             </ListItem>
-            : <Typography className={classes.typographyNotifications}>
-                No payment methods added yet
-            </Typography>}
-    </List>)
-        : (<List>
+            <ListItem className={classes.listItem}>
+                <ListItemAvatar>
+                    <Avatar className={classes.black}>
+                        <AlternateEmailIcon />
+                    </Avatar>
+                </ListItemAvatar>
+                <ListItemText primary={props.user.email} secondary="Email" />
+                <VerificationIcon verified={props.user.isVerified} />
+            </ListItem>
+            <ListItem className={classes.listItem}>
+                <ListItemAvatar>
+                    <Avatar className={classes.black}>
+                        <LandscapeIcon />
+                    </Avatar>
+                </ListItemAvatar>
+                <ListItemText primary={formatProvince()} secondary="Province" />
+            </ListItem>
+            <ListItem className={classes.listItem}>
+                <ListItemAvatar>
+                    <Avatar className={classes.black}>
+                        <LocationCityIcon />
+                    </Avatar>
+                </ListItemAvatar>
+                <ListItemText primary={capitalizeFirstLetter(props.user.city)} secondary="City" />
+            </ListItem>
+            <ListItem className={classes.listItem}>
+                <ListItemAvatar>
+                    <Avatar className={classes.black}>
+                        <AttachMoneyIcon />
+                    </Avatar>
+                </ListItemAvatar>
+                <ListItemText primary={capitalizeFirstLetter(props.user.subscriptionPlan)} secondary="Subscription plan" />
+            </ListItem>
+            {props.user.subscriptionPlan === 'premium' && (
+                <ListItem className={classes.listItem}>
+                    <ListItemAvatar>
+                        <Avatar className={classes.black}>
+                            <EventIcon />
+                        </Avatar>
+                    </ListItemAvatar>
+                    <ListItemText primary={props.user.nextRenewalDate} secondary="Premium subscription untill" />
+                </ListItem>
+            )}
+            <Divider variant="middle" className={classes.divider} />
+            <Typography className={classes.typography} variant="h6" align="center" style={{ fontWeight: 600 }}>
+                Payment method
+            </Typography>
+            {props.user.paymentMethod ? (
+                <ListItem className={classes.listItem}>
+                    <ListItemAvatar>
+                        <Avatar className={classes.black}>
+                            <PaymentIcon />
+                        </Avatar>
+                    </ListItemAvatar>
+                    <ListItemText primary={props.user.paymentMethod.email} secondary={props.user.paymentMethod.type} />
+                </ListItem>
+            ) : (
+                <Typography className={classes.typographyNotifications}>No payment methods added yet</Typography>
+            )}
+        </List>
+    ) : (
+        <List>
             <ListItem className={classes.listItem}>
                 <ListItemAvatar>
                     <Avatar className={classes.black}>
@@ -124,6 +142,6 @@ export default function UserInformation(props) {
                 </ListItemAvatar>
                 <ListItemText primary={props.user.city} secondary="City" />
             </ListItem>
-        </List>)
-
+        </List>
+    );
 }

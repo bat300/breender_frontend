@@ -1,12 +1,17 @@
 import React, { useEffect } from 'react';
-import { connect, useSelector } from 'react-redux';
-import { getPet } from '../redux/actions/petActions';
-import PetProfileComponent from '../components/pet-profile/PetProfileComponent';
-import Loading from '../components/Loading';
+import { connect } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { useLocation } from 'react-router-dom';
+import { getPet } from '../redux/actions/petActions';
+// components import
+import PetProfileComponent from '../components/pet-profile/PetProfileComponent';
+import Loading from '../components/Loading';
+// helper imports
+import { isObjEmpty } from 'helper/helpers';
+import { usePet } from 'helper/hooks';
 import PremiumBanner from 'components/PremiumBanner';
 import { useLoggedInUser } from 'helper/hooks/auth.hooks';
+import { showPremiumBanner } from 'helper/helpers';
 
 /**
  * Manages the process of getting pet details data
@@ -20,50 +25,47 @@ function PetProfileView(props) {
 
     // get id of pet from URL
     const petId = location.pathname.split('/pet/')[1];
+    const selectedPet = usePet();
 
     useEffect(() => {
-        props.dispatch(getPet(petId));
-    }, [petId]);
+        let loading = true;
 
-    const selectedPet = useSelector((state) => state.pets);
+        // get id of pet from URL
+        const loadPet = async (id) => {
+            if (!loading) return;
+            await dispatch(getPet(id));
+        };
 
-    return (!selectedPet.pet && !selectedPet.error) || !selectedPet.pet._id || !selectedPet ? (
+        loadPet(petId);
+
+        return () => {
+            loading = false;
+        };
+    }, [dispatch, petId]);
+
+    return isObjEmpty(selectedPet) ? (
         <Loading />
-    ) : selectedPet.error ? (
-        <div>error</div>
-    ) : selectedPet.pet ? (
+    ) : selectedPet ? (
         <>
-            {!loggedInUser || loggedInUser.subscriptionPlan === 'free' ? <PremiumBanner /> : null}
+            {showPremiumBanner(loggedInUser) ? <PremiumBanner /> : null}
             <PetProfileComponent
                 id={petId}
-                officialName={selectedPet.pet.officialName}
-                nickname={selectedPet.pet.nickname}
-                age={calculateAge(selectedPet.pet.birthDate)}
-                sex={selectedPet.pet.sex}
-                price={selectedPet.pet.price}
-                profilePicture={selectedPet.pet.profilePicture}
-                pictures={getAlbumWithProfilePicture(selectedPet.pet)}
-                breed={selectedPet.pet.breed}
-                species={selectedPet.pet.species}
-                documents={selectedPet.pet.documents}
-                competitions={selectedPet.pet.competitions}
-                ownerId={selectedPet.pet.ownerId}
-                purchased={selectedPet.pet.purchased}
+                officialName={selectedPet.officialName}
+                nickname={selectedPet.nickname}
+                age={selectedPet.age}
+                sex={selectedPet.sex}
+                price={selectedPet.price}
+                profilePicture={selectedPet.profilePicture}
+                pictures={selectedPet.pictures}
+                breed={selectedPet.breed}
+                species={selectedPet.species}
+                documents={selectedPet.documents}
+                competitions={selectedPet.competitions}
+                ownerId={selectedPet.ownerId}
+                purchased={selectedPet.purchased}
             />
         </>
     ) : null;
-}
-
-function calculateAge(birthDate) {
-    var ageDifMs = Date.now() - new Date(birthDate).getTime();
-    var ageDate = new Date(ageDifMs); // miliseconds from epoch
-    var result = Math.abs(ageDate.getUTCFullYear() - 1970);
-    return result ? result : 0;
-}
-
-function getAlbumWithProfilePicture(selectedPet) {
-    selectedPet.pictures.push(selectedPet.profilePicture);
-    return selectedPet.pictures;
 }
 
 // connect() establishes allows the usage of redux functionality

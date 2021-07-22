@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControl, InputLabel, makeStyles, MenuItem, Select } from '@material-ui/core';
-import { Tag } from 'antd';
+import { Button, Chip, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControl, InputLabel, makeStyles, MenuItem, Select } from '@material-ui/core';
 
 const STATUS_TYPE = {
     PENDING: 'pending',
@@ -16,13 +15,13 @@ const StatusTag = (props) => {
     const color = () => {
         switch (status) {
             case STATUS_TYPE.PENDING:
-                return 'orange';
+                return { color: 'orange', background: 'white', borderColor: '#FDCD7F' };
             case STATUS_TYPE.SUCCESS:
-                return 'green';
+                return { color: 'green', background: 'white', borderColor: '#A1CF6B' };
             case STATUS_TYPE.FAIL:
-                return 'red';
+                return { color: 'red', background: 'white', borderColor: '#E87461' };
             default:
-                return 'orange';
+                return { color: 'orange', background: 'white', borderColor: 'orange' };
         }
     };
 
@@ -53,9 +52,7 @@ const StatusTag = (props) => {
     return (
         <>
             {isSelected ? (
-                <Tag color={color()} key={status}>
-                    {status.toUpperCase()}
-                </Tag>
+                <Chip variant="outlined" key={status} label={status.toUpperCase()} style={{...color(), borderWidth: 2, fontWeight: 'lighter'}} />
             ) : (
                 <FormControl required variant="outlined" size="small" fullWidth>
                     <InputLabel id="response-label">Response</InputLabel>

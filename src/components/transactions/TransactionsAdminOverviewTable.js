@@ -1,19 +1,19 @@
 import React from 'react';
 // antd imports
-import { Table, Tooltip } from 'antd';
+import { Table } from 'antd';
 import '../../theming/antd.css';
 // material-ui imports
 import { makeStyles } from '@material-ui/core/styles';
 import { useDispatch } from 'react-redux';
 import PetPreviewProfileComponent from 'components/pet-profile/PetPreviewProfileComponent';
-import StatusTag from 'components/tags/StatusTag';
 import { useUser } from 'helper/hooks/auth.hooks';
 import PriceTag from 'components/PriceTag';
-import { getTransactions, updateTransaction } from 'redux/actions';
+import { getAdminTransactions, updateTransaction } from 'redux/actions';
 import moment from 'moment';
 import { Chip } from '@material-ui/core';
+import AdminStatusTag from 'components/tags/AdminStatusTag';
 
-const TransactionsOverviewTable = (props) => {
+const TransactionsAdminOverviewTable = (props) => {
     const classes = useStyles();
     const dispatch = useDispatch();
     const { transactions } = props;
@@ -22,52 +22,21 @@ const TransactionsOverviewTable = (props) => {
     const user = useUser();
     const checkRequiresInvestigation = (t) => (t.senderResponse === 'fail' && t.receiverResponse === 'success') || (t.senderResponse === 'success' && t.receiverResponse === 'fail');
 
-    // check if user is the sender or the receiver
-    const checkUserIsSender = (transaction) => {
-        if (transaction.receiverId._id === user.id) {
-            return false;
-        } else if (transaction.senderId._id === user.id) {
-            return true;
-        }
-    };
+
 
     // update transaction on confirming to change the transaction status
     const confirm = async (transaction) => {
         await dispatch(updateTransaction(transaction));
-        await dispatch(getTransactions(user.id));
-    };
-
-    const checkUserStatusWasSet = (transaction) => {
-        const isSender = checkUserIsSender(transaction);
-        const { senderResponse, receiverResponse, status } = transaction;
-        const statusWasSet = status === 'fail' || status === 'success';
-        if (isSender) return senderResponse === 'success' || senderResponse === 'fail' || statusWasSet;
-        else return receiverResponse === 'success' || receiverResponse === 'fail' || statusWasSet;
+        await dispatch(getAdminTransactions(user.id));
     };
 
     // get the owner of the pet
     const getPetOwner = (transaction) => {
-        if (transaction.pet?.ownerId === transaction.senderId._id) {
+        if (transaction.pet.ownerId === transaction.senderId._id) {
             return transaction.senderId;
         } else {
             return transaction.receiverId;
         }
-    };
-
-    // show tooltip on hovering over pending status row
-    const getToolTipTitle = (transaction) => {
-        const { status, senderResponse, receiverResponse } = transaction;
-        if (status === 'pending') {
-            if (senderResponse === 'pending' && receiverResponse === 'pending') {
-                return 'Both receiver and sender have not responded yet.';
-            } else if (senderResponse === 'pending') {
-                return 'Sender have not responded yet.';
-            } else if (receiverResponse === 'pending') {
-                return 'Receiver have not responded yet.';
-            }
-        } else if (status === 'fail' && ((senderResponse === 'fail' && receiverResponse === 'success') || (senderResponse === 'success' && receiverResponse === 'fail'))) {
-            return 'Transaction requires further investigation. Our employee will contact you soon.';
-        } else return null;
     };
 
     const columns = [
@@ -89,7 +58,7 @@ const TransactionsOverviewTable = (props) => {
             dataIndex: 'amount',
             key: 'amount',
             align: 'right',
-            render: (_, record) => <PriceTag isSender={checkUserIsSender(record)} price={record.amount} />,
+            render: (_, record) => <PriceTag price={record.amount} />,
         },
         {
             title: 'DEADLINE',
@@ -99,17 +68,17 @@ const TransactionsOverviewTable = (props) => {
             render: (deadline) => <div>{String(moment(deadline).format('LLL'))}</div>,
         },
         {
-            title: 'YOUR RESPONSE',
+            title: 'SENDER RESPONSE',
+            key: 'response',
+            dataIndex: 'response',
+            render: (_, record) => <AdminStatusTag variant="sender" status={record.senderResponse}  confirm={confirm} transaction={record} />,
+        },
+        {
+            title: 'RECEIVER RESPONSE',
             key: 'response',
             dataIndex: 'response',
             render: (_, record) => (
-                <StatusTag
-                    status={checkUserIsSender(record) ? record.senderResponse : record.receiverResponse}
-                    isSelected={checkUserStatusWasSet(record)}
-                    confirm={confirm}
-                    transaction={record}
-                    isSender={checkUserIsSender(record)}
-                />
+                <AdminStatusTag variant="receiver" status={record.receiverResponse} confirm={confirm} transaction={record} />
             ),
         },
         {
@@ -118,14 +87,14 @@ const TransactionsOverviewTable = (props) => {
             dataIndex: 'status',
             align: 'center',
             render: (_, record) => (
-                <Tooltip trigger="hover" placement="top" title={getToolTipTitle(record)}>
+                <>
                     <div>
-                        <StatusTag status={record.status} isSelected={true} />
+                        <AdminStatusTag variant="default" status={record.status} confirm={confirm} transaction={record} />
                     </div>
                     {checkRequiresInvestigation(record) ? (
                         <Chip className={classes.tags} variant="outlined" label="Requires Investigation" style={{color: 'black', background: '#FCCA46', borderColor: '#FDCD7F', borderWidth: 2, fontWeight: 'lighter'}} />
                     ) : null}
-                </Tooltip>
+                </>
             ),
         },
     ];
@@ -158,4 +127,4 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default TransactionsOverviewTable;
+export default TransactionsAdminOverviewTable;

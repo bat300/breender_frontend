@@ -21,11 +21,32 @@ const useStyles = makeStyles((theme) => ({
 const StepperInformation = ({ step, pet, petOwner, amount, loggedInUser, isFreeOfCharge, onApprove, onError }) => {
     const classes = useStyles();
 
+    function formatProvince(province) {
+        switch (province) {
+            case 'bavaria':
+                return 'Bavaria';
+            case 'lower-saxony':
+                return 'Lower Saxony';
+            case 'baden-wuerttemberg':
+                return 'Baden Württemberg';
+            case 'north-rhine-westphalia':
+                return 'North Rhine-Westphalia';
+            default:
+                return '';
+        }
+    }
+
     const petColumns = [
         { title: 'Name', data: pet.officialName },
         { title: 'Sex', data: pet.sex },
         { title: 'Species', data: pet.species },
         { title: 'Breed', data: pet.breed },
+    ];
+
+    const userColumns = [
+        { title: 'Username', data: petOwner?.username },
+        { title: 'City', data: petOwner?.city },
+        { title: 'Province', data: formatProvince(petOwner?.province) },
     ];
 
     return (
@@ -64,10 +85,9 @@ const StepperInformation = ({ step, pet, petOwner, amount, loggedInUser, isFreeO
                             User Information
                         </Typography>
                         <Card className={classes.root}>
-                            <CardMedia className={classes.media} image={pet.profilePicture.src} title="pet profile picture" />
                             <CardContent>
                                 <Table>
-                                    {petColumns.map((item) => {
+                                    {userColumns.map((item) => {
                                         return (
                                             <TableRow hover>
                                                 <TableCell>

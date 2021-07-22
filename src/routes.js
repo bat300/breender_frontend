@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
+// views
 import UserLoginView from './views/UserLoginView';
 import SignUpView from './views/SignUpView';
 import AddPetView from './views/AddPetView';
@@ -10,19 +11,17 @@ import SubscriptionPageView from './views/SubscriptionPageView';
 import EditPetView from './views/EditPetView';
 import NotFoundView from './views/NotFoundView';
 import SearchView from './views/SearchView';
-import DocumentListView from './views/DocumentListView';
 import SelectedUserProfileView from './views/SelectedUserProfileView';
 import TransactionsView from 'views/TransactionsView';
 import MessengerView from './views/MessengerView';
 import MessengerNewContactView from './views/MessengerNewContactView';
+import ChangeToPremiumView from 'views/ChangeToPremiumView';
+import AdminConsoleView from 'views/AdminConsoleView';
 // services
-import { LocalStorageService } from 'services';
+import { LocalStorageService, NotificationService } from 'services';
 import Header from 'components/Header';
 import AppTheme from 'theming/themetypes';
 import { useSelector } from 'react-redux';
-
-import ChangeToPremiumView from 'views/ChangeToPremiumView';
-import AddReview from 'components/user-profile/AddReview';
 
 const DefaultHeader = () => {
     // theme for app
@@ -37,20 +36,27 @@ const DefaultHeader = () => {
 
 // used for routing
 export const PrivateRoute = (props) => {
-    return LocalStorageService.isAuthorized() ? (
+    const isAuthorized = LocalStorageService.isAuthorized();
+    useEffect(() => {
+        if (!isAuthorized) {
+            NotificationService.notify('warning', 'Warning', 'You have to be logged in to view this page');
+        }
+    }, [isAuthorized]);
+
+    return isAuthorized ? (
         <Route {...props}>
             <DefaultHeader />
             {props.children}
         </Route>
     ) : (
-        <Redirect to={{ pathname: '/login', state: { from: props.location } }} />
+        <Redirect to={{}} />
     );
 };
 
 export const AdminRoute = (props) => {
     const user = useSelector((state) => state.user);
 
-    return LocalStorageService.isAuthorized() && user.user.role === "admin"? (
+    return LocalStorageService.isAuthorized() && user.user.role === 'admin' ? (
         <Route {...props}>
             <DefaultHeader />
             {props.children}
@@ -79,7 +85,7 @@ const Routes = () => {
                 <SearchView />
             </DefaultRoute>
             <AdminRoute exact path="/admin-console">
-                <DocumentListView />
+                <AdminConsoleView />
             </AdminRoute>
             <DefaultRoute exact path="/premium">
                 <DefaultHeader />
@@ -103,9 +109,6 @@ const Routes = () => {
             <PrivateRoute exact path="/edit/pet/:id">
                 <EditPetView />
             </PrivateRoute>
-            <PrivateRoute exact path="/add-review">
-                <AddReview />
-            </PrivateRoute>
             <PrivateRoute exact path="/transactions">
                 <TransactionsView />
             </PrivateRoute>
@@ -116,6 +119,7 @@ const Routes = () => {
                 <MessengerView />
             </PrivateRoute>
             <DefaultRoute path="*">
+                <DefaultHeader />
                 <NotFoundView />
             </DefaultRoute>
         </Switch>

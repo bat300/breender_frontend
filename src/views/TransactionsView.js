@@ -2,12 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { connect, useDispatch, useSelector } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import { Typography } from '@material-ui/core';
-import { clearPetInfos, getTransactions, updateProfilePicture } from 'redux/actions';
+import { getTransactions } from 'redux/actions';
 import { useLoggedInUser, useUser } from 'helper/hooks/auth.hooks';
-import { useHistory } from 'react-router-dom';
 import Loading from 'components/Loading';
 import TransactionsOverviewTable from 'components/transactions/TransactionsOverviewTable';
 import PremiumBanner from 'components/PremiumBanner';
+import { showPremiumBanner } from 'helper/helpers';
 
 /**
  * Overview for all transactions
@@ -18,7 +18,6 @@ import PremiumBanner from 'components/PremiumBanner';
 const TransactionsView = (props) => {
     const classes = useStyles();
     const dispatch = useDispatch();
-    const history = useHistory();
     const loggedInUser = useLoggedInUser();
 
     const user = useUser();
@@ -45,16 +44,11 @@ const TransactionsView = (props) => {
         };
     }, []);
 
-    window.onbeforeunload = (event) => {
-        dispatch(clearPetInfos());
-        dispatch(updateProfilePicture({}));
-    };
-
     return loading ? (
         <Loading />
     ) : (
         <>
-            {!loggedInUser || loggedInUser.subscriptionPlan === 'free' ? <PremiumBanner /> : null}
+            {showPremiumBanner(loggedInUser) ? <PremiumBanner /> : null}
             <div className={classes.layout}>
                 <Typography variant="h6" align="left">
                     Transactions
