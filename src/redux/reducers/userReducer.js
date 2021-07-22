@@ -14,8 +14,7 @@ const getUser = () => {
             user: {
                 id: userJson._id,
                 username: userJson.username,
-                role: userJson.role,
-                subscriptionPlan: userJson.subscriptionPlan
+                role: userJson.role
             }
         };
     }

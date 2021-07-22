@@ -6,7 +6,7 @@ import '../../theming/antd.css';
 import { makeStyles } from '@material-ui/core/styles';
 import { useDispatch } from 'react-redux';
 import PetPreviewProfileComponent from 'components/pet-profile/PetPreviewProfileComponent';
-import StatusTag from 'components/StatusTag';
+import StatusTag from 'components/tags/StatusTag';
 import { useUser } from 'helper/hooks/auth.hooks';
 import PriceTag from 'components/PriceTag';
 import { getTransactions, updateTransaction } from 'redux/actions';
@@ -16,6 +16,7 @@ import AddBoxIcon from '@material-ui/icons/AddBox';
 import { NotificationService } from 'services';
 import { addReview } from 'redux/actions';
 import AddReviewComponent from 'components/user-profile/AddReview';
+import { Chip } from '@material-ui/core';
 
 const TransactionsOverviewTable = (props) => {
     const classes = useStyles();
@@ -170,9 +171,7 @@ const TransactionsOverviewTable = (props) => {
                         <StatusTag status={record.status} isSelected={true} />
                     </div>
                     {checkRequiresInvestigation(record) ? (
-                        <Tag className={classes.tags} color="gold">
-                            Requires Investigation
-                        </Tag>
+                        <Chip className={classes.tags} variant="outlined" label="Requires Investigation" style={{ color: 'black', background: '#FCCA46', borderColor: '#FDCD7F', borderWidth: 2, fontWeight: 'lighter' }} />
                     ) : null}
                 </Tooltip>
             ),

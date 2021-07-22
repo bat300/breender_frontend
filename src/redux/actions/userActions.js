@@ -200,20 +200,6 @@ export const getSelectedUserPets = (ownerId) => {
     };
 };
 
-export function update(id, subscriptionPlan, paymentPlan, paymentMethod, onSuccess = () => null, onError = (err) => null) {
-    const updateUserAction = (user) => {
-        onSuccess();
-        return { type: 'UPDATE_SUCCESS', user: user };
-    };
-
-    return async (dispatch) => {
-        await UserService.update(id, subscriptionPlan, paymentPlan, paymentMethod).then((resp) => dispatch(updateUserAction(resp.user))).catch((e) => {
-            onError(e);
-        });
-
-    };
-};
-
 export const getReviewsOnUser = (id) => {
     // when the backend call was successfull and the reviews are retrieved
     // in the dispatcher the reviews will be added to the global state

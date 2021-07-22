@@ -3,6 +3,7 @@ import { ListItem, ListItemIcon, ListItemText, ListItemAvatar, Avatar } from '@m
 import GetAppIcon from '@material-ui/icons/GetApp';
 import PetsIcon from '@material-ui/icons/Pets';
 import VerificationIcon from '../../components/VerificationIcon';
+import CancelIcon from '@material-ui/icons/Cancel';
 
 function PetInformationListItem(props) {
     if (props.primary) {
@@ -11,7 +12,7 @@ function PetInformationListItem(props) {
             <ListItem button={isButton(props.itemType)} component={isButton(props.itemType) ? 'a' : null} href={props.itemType === 'document' ? props.url : (props.itemType === 'owner' ? urlForOwner : null)}>
                 <Icon itemType={props.itemType} avatar={props.avatar} />
                 <ListItemText primary={props.primary} secondary={props.secondary} />
-                {props.itemType === 'document' && <VerificationIcon verified={props.verified} />}
+                {props.itemType === 'document' ? props.declined? <CancelIcon style={{fill: 'red'}}/> : <VerificationIcon verified={props.verified}/> : null}
             </ListItem>
         );
     }

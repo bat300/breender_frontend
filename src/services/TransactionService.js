@@ -22,6 +22,18 @@ export default class TransactionService {
         });
     }
 
+    static getAdminTransactions(userId) {
+        this.setToken();
+        return new Promise(async (resolve, reject) => {
+            try {
+                const { data } = await axios.get(`/transaction/all/`, { params: { userId } });
+                resolve(data);
+            } catch (err) {
+                reject(err);
+            }
+        });
+    }
+
     static getTransaction(id) {
         this.setToken();
         return new Promise(async (resolve, reject) => {
