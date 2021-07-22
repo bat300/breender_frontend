@@ -12,7 +12,7 @@ import StepperInformation from './StepperInformation';
 import { useLoggedInUser } from 'helper/hooks/auth.hooks';
 import PaymentResultComponent from './PaymentResult';
 import { useDispatch, useSelector } from 'react-redux';
-import { changePet, createTransaction } from 'redux/actions';
+import { changePet, createTransaction, getUser } from 'redux/actions';
 import { NotificationService } from 'services';
 
 const STATUS_TYPE = {
@@ -26,6 +26,7 @@ const PaymentStepper = ({ pet, close }) => {
 
     const [paymentStatus, setPaymentStatus] = useState('none');
     const transaction = useSelector((state) => state.transaction.transaction);
+    const petOwner = useSelector((state) => state.user.selectedUser);
 
     const [activeStep, setActiveStep] = useState(0);
 
@@ -34,11 +35,11 @@ const PaymentStepper = ({ pet, close }) => {
     const [isFreeOfCharge, setIsFreeOfCharge] = useState(false);
 
     useEffect(() => {
-
         if(loggedInUser) {
-            setIsFreeOfCharge(loggedInUser.subscriptionPlan === 'premium' && pet.price === 0)// premium user don't need to pay any fees for the free pet
+            setIsFreeOfCharge(loggedInUser.subscriptionPlan === 'premium' && pet.price === 0) // premium user don't need to pay any fees for the free pet
+            dispatch(getUser(pet.ownerId));
         }
-    }, [])
+    }, [loggedInUser, pet.ownerId, pet.price, dispatch])
 
  
     const isButtonDisabled = activeStep === 1 && !isFreeOfCharge;
@@ -120,9 +121,9 @@ const PaymentStepper = ({ pet, close }) => {
     const getStepContent = (stepIndex) => {
         switch (stepIndex) {
             case 0:
-                return <StepperInformation pet={pet} loggedInUser={loggedInUser} step={0} isFreeOfCharge={isFreeOfCharge} onApprove={onApprove} onError={onError} amount={amountToPay()} />;
+                return <StepperInformation petOwner={petOwner} pet={pet} loggedInUser={loggedInUser} step={0} isFreeOfCharge={isFreeOfCharge} onApprove={onApprove} onError={onError} amount={amountToPay()} />;
             case 1:
-                return <StepperInformation pet={pet} loggedInUser={loggedInUser} step={1} isFreeOfCharge={isFreeOfCharge} onApprove={onApprove} onError={onError} amount={amountToPay()} />;
+                return <StepperInformation petOwner={petOwner} pet={pet} loggedInUser={loggedInUser} step={1} isFreeOfCharge={isFreeOfCharge} onApprove={onApprove} onError={onError} amount={amountToPay()} />;
             case 2:
                 return <PaymentResultComponent status={paymentStatus} transaction={transaction} />;
             default:
