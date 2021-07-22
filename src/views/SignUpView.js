@@ -4,6 +4,7 @@ import { connect, useSelector } from 'react-redux';
 import { register, resetError } from '../redux/actions';
 import NotificationService from 'services/NotificationService';
 import SignUpComponent from 'components/SignUpComponent';
+import SignUpPaper from 'components/SignUpPaper';
 
 /**
  * For register new users
@@ -35,7 +36,7 @@ function SignUpView(props) {
     };
 
     return (
-        <SignUpComponent
+        <SignUpPaper
             user={user}
             onRegister={onRegister}
             onCancel={onCancel}
