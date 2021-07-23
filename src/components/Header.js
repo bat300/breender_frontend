@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import { withRouter } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import { AppBar, IconButton, Toolbar, Typography } from '@material-ui/core';
-
 import logo from '../images/breender.svg';
 import ChatBubbleOutlineIcon from '@material-ui/icons/ChatBubbleOutline';
 import PersonIcon from '@material-ui/icons/Person';
@@ -86,7 +85,7 @@ function Header(props) {
     };
 
     return (
-        <AppBar position="sticky">
+        <AppBar position="relative" style={{ background: 'rgba(30, 36, 108, 0.07)', boxShadow: 'none', color: '#3E4059' }}>
             <KebabMenu open={Boolean(menuAnchor)} anchor={menuAnchor} onClose={() => setMenuAnchor(null)} />
             <Toolbar className={classes.toolbar}>
                 <div onClick={goToHome} className={classes.logo}>
