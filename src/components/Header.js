@@ -76,13 +76,11 @@ function Header(props) {
                 break;
         }
     }, [props.history.location.pathname]);
-    
 
     const goToHome = () => props.history.push('/');
     const onClickAdminConsole = () => props.history.push('/admin-console');
     const onClickPremium = () => props.history.push('/premium');
-    // @TODOs
-    const goToBlog = () => props.history.push('/');
+    const goToBlog = () => props.history.push('/blog');
 
     const onClickMessenger = () => {
         props.history.push('/messenger');

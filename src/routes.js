@@ -17,6 +17,8 @@ import MessengerView from './views/MessengerView';
 import MessengerNewContactView from './views/MessengerNewContactView';
 import ChangeToPremiumView from 'views/ChangeToPremiumView';
 import AdminConsoleView from 'views/AdminConsoleView';
+import BlogView from 'views/BlogView';
+
 // services
 import { LocalStorageService, NotificationService } from 'services';
 import Header from 'components/Header';
@@ -130,6 +132,9 @@ const Routes = () => {
             </PrivateRoute>
             <PrivateRoute exact path="/messenger">
                 <MessengerView />
+            </PrivateRoute>
+            <PrivateRoute exact path="/blog">
+                <BlogView />
             </PrivateRoute>
             <DefaultRoute path="*">
                 <DefaultHeader />
