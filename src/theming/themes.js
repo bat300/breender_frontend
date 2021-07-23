@@ -40,8 +40,10 @@ const appThemeOptions = {
                 paper: '#fff',
                 default: 'rgba(52, 57, 109, 0.1)',
             },
-            textPrimary: '#222330',
-            textSecondary: 'white',
+            text: {
+                primary: '#222330',
+                light: 'white',
+            }
         },
         typography: {
             body1: {

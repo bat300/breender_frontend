@@ -10,6 +10,10 @@
     box-shadow: 0 10px 20px rgba(0,0,0,.12), 0 4px 8px rgba(0,0,0,.06);
 }
 
+a:hover{
+    color: #EDCC97;
+}
+
 .MuiButton-root:disabled {
     background-color: #CECFD4;
     color: #3E4059;
@@ -28,4 +32,13 @@
 }
 .MuiListItemIcon-root {
     background: #D37F65;
+}
+
+.MuiListItem-button:hover {
+    text-decoration: none;
+    background-color: rgba(21, 26, 80, 0.1);
+}
+
+.lightbox-img-thumbnail {
+    width: 120px;
 }
