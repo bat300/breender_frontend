@@ -20,22 +20,14 @@ function PetInformation(props) {
 
     return (
         <div className={classes.layout}>
-            <Grid container direction="row" align="center" justify="center" alignItems="center">
-                <Grid item xs={6}>
-                    <List>
-                        <PetInformationListItem primary={props.officialName} secondary={'Name'} />
-                        <PetInformationListItem primary={props.nickname} secondary={'Nickname'} />
-                        <PetInformationListItem primary={props.ownerId} secondary={'Owner'} itemType={'owner'} avatar={props.avatar ? props.avatar : null} />
-                    </List>
-                </Grid>
-                <Grid item xs={6}>
-                    <List>
-                        <PetInformationListItem primary={props.breed} secondary={'Breed'} />
-                        <PetInformationListItem primary={getAgeString(props.age)} secondary={'Age'} />
-                        <PetInformationListItem primary={props.sex} secondary={'Sex'} />
-                    </List>
-                </Grid>
-            </Grid>
+            <List>
+                <PetInformationListItem primary={props.officialName} secondary={'Name'} itemType="name" />
+                <PetInformationListItem primary={props.nickname} secondary={'Nickname'} itemType="nickname" />
+                <PetInformationListItem primary={props.ownerId} secondary={'Owner'} itemType="owner" />
+                <PetInformationListItem primary={getAgeString(props.age)} secondary={'Age'} itemType="age" />
+                <PetInformationListItem primary={props.sex} secondary={'Sex'} itemType="sex" />
+                <PetInformationListItem primary={props.breed} secondary={'Breed'} itemType="breed" /> 
+            </List>
         </div>
     );
 }

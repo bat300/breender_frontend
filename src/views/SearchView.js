@@ -22,22 +22,17 @@ import PremiumBanner from 'components/PremiumBanner';
 import { showPremiumBanner } from 'helper/helpers';
 
 const useStyles = makeStyles((theme) => ({
-    filters: {
-        display: 'flex',
-        flex: 1,
-        flexDirection: 'row',
-        alignItems: 'baseline',
-        justifyContent: 'center',
-    },
     formControl: {
         margin: theme.spacing(1),
         minWidth: 120,
     },
     button: {
-        margin: theme.spacing(3),
+        margin: theme.spacing(2),
     },
     ageSlider: {
         margin: theme.spacing(4),
+        marginLeft: 50,
+        marginRight: 50,
         width: 200,
     },
     homeLogo: {
@@ -46,6 +41,9 @@ const useStyles = makeStyles((theme) => ({
         alignItems: 'center',
         margin: 50,
         marginRight: 150,
+    },
+    darkSlider: {
+        color: theme.palette.primary.dark,
     },
 }));
 
@@ -61,7 +59,7 @@ function SearchView(props) {
 
     const [isLoading, setIsLoading] = React.useState(true);
     const [chosenSpecies, setSpecies] = React.useState('');
-    const [order, setOrder] = React.useState('descending');
+    const [order, setOrder] = React.useState('');
     const [sex, setSex] = React.useState('');
     const [breed, setBreed] = React.useState('');
     const [ageRange, setAgeRange] = React.useState([0.5, 10]);
@@ -166,72 +164,82 @@ function SearchView(props) {
                     </div>
                 </Grid>
             </Grid>
-            <div ref={ref} className={classes.filters}>
-                <FormControl className={classes.formControl}>
-                    <InputLabel id="species-select-label">Species</InputLabel>
-                    <Select labelId="species-select-label" id="species-select" value={chosenSpecies} onChange={handleSpeciesChange}>
-                        {Object.keys(breeds).map((oneSpecies) => (
-                            <MenuItem key={oneSpecies} value={oneSpecies}>
-                                {oneSpecies}
-                            </MenuItem>
-                        ))}
-                    </Select>
-                </FormControl>
-
-                <FormControl className={classes.formControl}>
-                    <InputLabel id="sex-select-label">Sex</InputLabel>
-                    <Select labelId="sex-select-label" id="sex-select" value={sex} onChange={handleSexChange}>
-                        {sexes.map((sex) => (
-                            <MenuItem key={sex} value={sex}>
-                                {sex}
-                            </MenuItem>
-                        ))}
-                    </Select>
-                </FormControl>
-
-                <FormControl className={classes.formControl}>
-                    <InputLabel id="breed-select-label">Breed</InputLabel>
-                    <Select labelId="breed-select-label" id="breed-select" value={breed} onChange={handleBreedChange}>
-                        {(breeds[chosenSpecies] ?? []).map((breed) => (
-                            <MenuItem key={breed} value={breed}>
-                                {breed}
-                            </MenuItem>
-                        ))}
-                    </Select>
-                </FormControl>
-                <FormControl className={classes.formControl}>
-                    <InputLabel id="breed-select-label">Sort by</InputLabel>
-                    <Select labelId="breed-select-label" id="sort-select" value={order} onChange={handleOrderChange}>
-                        {orders.map((order) => (
-                            <MenuItem key={order} value={order}>
-                                {order}
-                            </MenuItem>
-                        ))}
-                    </Select>
-                </FormControl>
-
-                <div className={classes.ageSlider}>
-                    <Typography>Age Range</Typography>
-                    <Slider
-                        value={ageRange}
-                        onChange={handleAgeRangeChange}
-                        valueLabelDisplay="auto"
-                        aria-labelledby="range-slider"
-                        getAriaValueText={agetext}
-                        min={0.5}
-                        max={10}
-                        marks={ageMarks}
-                        color="secondary"
-                    />
-                </div>
-
-                <Button className={classes.button} variant="contained" color="secondary" onClick={loadPets}>
-                    Apply
-                </Button>
-                <Button className={classes.button} variant="contained" color="secondary" onClick={resetFilters}>
-                    Reset filters
-                </Button>
-            </div>
+            <Grid container direction="row" ref={ref} justify="center" alignItems="center">
+                <Grid item>
+                    <FormControl className={classes.formControl} variant="outlined" size="small">
+                        <InputLabel id="species-select-label">Species</InputLabel>
+                        <Select labelId="species-select-label" id="species-select" value={chosenSpecies} onChange={handleSpeciesChange}>
+                            {Object.keys(breeds).map((oneSpecies) => (
+                                <MenuItem key={oneSpecies} value={oneSpecies}>
+                                    {oneSpecies}
+                                </MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
+                </Grid>
+                <Grid item>
+                    <FormControl className={classes.formControl} variant="outlined" size="small">
+                        <InputLabel id="sex-select-label">Sex</InputLabel>
+                        <Select labelId="sex-select-label" id="sex-select" value={sex} onChange={handleSexChange}>
+                            {sexes.map((sex) => (
+                                <MenuItem key={sex} value={sex}>
+                                    {sex}
+                                </MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
+                </Grid>
+                <Grid item>
+                    <FormControl className={classes.formControl} variant="outlined" size="small">
+                        <InputLabel id="breed-select-label">Breed</InputLabel>
+                        <Select labelId="breed-select-label" id="breed-select" value={breed} onChange={handleBreedChange}>
+                            {(breeds[chosenSpecies] ?? []).map((breed) => (
+                                <MenuItem key={breed} value={breed}>
+                                    {breed}
+                                </MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
+                </Grid>
+                <Grid item>
+                    <FormControl className={classes.formControl} variant="outlined" size="small">
+                        <InputLabel id="breed-select-label">Sort by</InputLabel>
+                        <Select labelId="breed-select-label" id="sort-select" value={order} onChange={handleOrderChange}>
+                            {orders.map((order) => (
+                                <MenuItem key={order} value={order}>
+                                    {order}
+                                </MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
+                </Grid>
+                <Grid item>
+                    <div className={classes.ageSlider}>
+                        <Typography>Age Range</Typography>
+                        <Slider
+                            value={ageRange}
+                            onChange={handleAgeRangeChange}
+                            valueLabelDisplay="auto"
+                            aria-labelledby="range-slider"
+                            getAriaValueText={agetext}
+                            min={0.5}
+                            max={10}
+                            marks={ageMarks}
+                            className={classes.darkSlider}
+                        />
+                    </div>
+                </Grid>
+                <Grid item>
+                    <Button variant="contained" color="default" className={classes.button} onClick={loadPets}>
+                        Apply
+                    </Button>
+                </Grid>
+                <Grid item>
+                    <Button variant="contained" color="default" className={classes.button} onClick={resetFilters}>
+                        Reset filters
+                    </Button>
+                </Grid>
+            </Grid>
             <SearchResults pets={pets} order={order} />
 
             <Box my={2} display="flex" justifyContent="center">
