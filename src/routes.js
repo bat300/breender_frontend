@@ -38,7 +38,13 @@ const DefaultHeader = () => {
     const toggleTheme = () => {
         setTheme(theme === AppTheme.LIGHT ? AppTheme.DARK : AppTheme.LIGHT);
     };
-    return <Header darkmode={theme === AppTheme.DARK} toggletheme={toggleTheme} />;
+    return (
+        <div>
+            <div id="top-anchor" />
+            <ScrollToTop />
+            <Header darkmode={theme === AppTheme.DARK} toggletheme={toggleTheme} />
+        </div>
+    );
 };
 
 // used for routing
@@ -77,63 +83,59 @@ export const DefaultRoute = (props) => <Route {...props}>{props.children}</Route
 
 const Routes = () => {
     return (
-        <div>
-            <div id="top-anchor" />
-            <ScrollToTop />
-            <Switch>
-                <DefaultRoute exact path="/login">
-                    <UserLoginView />
-                </DefaultRoute>
-                <DefaultRoute path="/register">
-                    <SignUpView />
-                </DefaultRoute>
-                <DefaultRoute path="/confirmation/:email/:token">
-                    <EmailConfirmationView />
-                </DefaultRoute>
-                <DefaultRoute exact path="/">
-                    <DefaultHeader />
-                    <SearchView />
-                </DefaultRoute>
-                <AdminRoute exact path="/admin-console">
-                    <AdminConsoleView />
-                </AdminRoute>
-                <DefaultRoute exact path="/premium">
-                    <DefaultHeader />
-                    <SubscriptionPageView />
-                </DefaultRoute>
-                <PrivateRoute exact path="/premium/changePlan">
-                    <ChangeToPremiumView />
-                </PrivateRoute>
-                <PrivateRoute exact path="/user/:id">
-                    <SelectedUserProfileView />
-                </PrivateRoute>
-                <PrivateRoute exact path="/user">
-                    <UserProfileView />
-                </PrivateRoute>
-                <PrivateRoute exact path="/pet/:id">
-                    <PetProfileView />
-                </PrivateRoute>
-                <PrivateRoute exact path="/add-pet">
-                    <AddPetView />
-                </PrivateRoute>
-                <PrivateRoute exact path="/edit/pet/:id">
-                    <EditPetView />
-                </PrivateRoute>
-                <PrivateRoute exact path="/transactions">
-                    <TransactionsView />
-                </PrivateRoute>
-                <PrivateRoute exact path="/messenger/:breederId/:petId">
-                    <MessengerNewContactView />
-                </PrivateRoute>
-                <PrivateRoute exact path="/messenger">
-                    <MessengerView />
-                </PrivateRoute>
-                <DefaultRoute path="*">
-                    <DefaultHeader />
-                    <NotFoundView />
-                </DefaultRoute>
-            </Switch>
-        </div>
+        <Switch>
+            <DefaultRoute exact path="/login">
+                <UserLoginView />
+            </DefaultRoute>
+            <DefaultRoute path="/register">
+                <SignUpView />
+            </DefaultRoute>
+            <DefaultRoute path="/confirmation/:email/:token">
+                <EmailConfirmationView />
+            </DefaultRoute>
+            <DefaultRoute exact path="/">
+                <DefaultHeader />
+                <SearchView />
+            </DefaultRoute>
+            <AdminRoute exact path="/admin-console">
+                <AdminConsoleView />
+            </AdminRoute>
+            <DefaultRoute exact path="/premium">
+                <DefaultHeader />
+                <SubscriptionPageView />
+            </DefaultRoute>
+            <PrivateRoute exact path="/premium/changePlan">
+                <ChangeToPremiumView />
+            </PrivateRoute>
+            <PrivateRoute exact path="/user/:id">
+                <SelectedUserProfileView />
+            </PrivateRoute>
+            <PrivateRoute exact path="/user">
+                <UserProfileView />
+            </PrivateRoute>
+            <PrivateRoute exact path="/pet/:id">
+                <PetProfileView />
+            </PrivateRoute>
+            <PrivateRoute exact path="/add-pet">
+                <AddPetView />
+            </PrivateRoute>
+            <PrivateRoute exact path="/edit/pet/:id">
+                <EditPetView />
+            </PrivateRoute>
+            <PrivateRoute exact path="/transactions">
+                <TransactionsView />
+            </PrivateRoute>
+            <PrivateRoute exact path="/messenger/:breederId/:petId">
+                <MessengerNewContactView />
+            </PrivateRoute>
+            <PrivateRoute exact path="/messenger">
+                <MessengerView />
+            </PrivateRoute>
+            <DefaultRoute path="*">
+                <DefaultHeader />
+                <NotFoundView />
+            </DefaultRoute>
+        </Switch>
     );
 };
 
