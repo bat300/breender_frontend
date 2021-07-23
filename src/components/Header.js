@@ -8,6 +8,8 @@ import ChatBubbleOutlineIcon from '@material-ui/icons/ChatBubbleOutline';
 import PersonIcon from '@material-ui/icons/Person';
 import KebabMenu from './KebabMenu';
 import { useSelector } from 'react-redux';
+import useScrollTrigger from '@material-ui/core/useScrollTrigger';
+import Slide from '@material-ui/core/Slide';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -74,6 +76,7 @@ function Header(props) {
                 break;
         }
     }, [props.history.location.pathname]);
+    
 
     const goToHome = () => props.history.push('/');
     const onClickAdminConsole = () => props.history.push('/admin-console');
@@ -84,51 +87,61 @@ function Header(props) {
     const onClickMessenger = () => {
         props.history.push('/messenger');
     };
+    const scrollTrigger = useScrollTrigger();
+
+    useEffect(() => {
+        const headerHeight = document.querySelector('#header').clientHeight;
+        document.querySelector('#top-anchor').style.height = '' + headerHeight + 'px';
+    }, []);
 
     return (
-        <AppBar position="sticky">
-            <KebabMenu open={Boolean(menuAnchor)} anchor={menuAnchor} onClose={() => setMenuAnchor(null)} />
-            <Toolbar className={classes.toolbar}>
-                <div onClick={goToHome} className={classes.logo}>
-                    <img src={`${logo}#svgView(preserveAspectRatio(xMaxYMax))`} height="55px" style={{ cursor: 'pointer' }} />
-                </div>
-                <div className={classes.root}>
-                    <Typography className={classes.title} variant="h5" color="inherit" onClick={goToHome} style={navigationSelectedStyle.search}>
-                        Find a mate
-                    </Typography>
-                    <Typography className={classes.title2} variant="h5" color="inherit">
-                        |
-                    </Typography>
-                    <Typography className={classes.title} variant="h5" color="inherit" onClick={goToBlog} style={navigationSelectedStyle.blog}>
-                        Blog
-                    </Typography>
-                    <Typography className={classes.title2} variant="h5" color="inherit">
-                        |
-                    </Typography>
-                    <Typography className={classes.title} variant="h5" color="inherit" style={navigationSelectedStyle.premium} onClick={onClickPremium}>
-                        Premium
-                    </Typography>
-                    {user.user ? (
-                        user.user.role === 'admin' ? (
-                            <>
-                                <Typography className={classes.title2} variant="h5" color="inherit">
-                                    |
-                                </Typography>
-                                <Typography className={classes.title} variant="h5" color="inherit" onClick={onClickAdminConsole} style={navigationSelectedStyle.admin}>
-                                    Admin Console
-                                </Typography>
-                            </>
-                        ) : null
-                    ) : null}
-                </div>
-                <IconButton onClick={onClickMessenger} color="inherit">
-                    <ChatBubbleOutlineIcon />
-                </IconButton>
-                <IconButton onClick={(event) => setMenuAnchor(event.currentTarget)} color="inherit">
-                    <PersonIcon />
-                </IconButton>
-            </Toolbar>
-        </AppBar>
+        <div>
+            <Slide appear={false} direction="down" in={!scrollTrigger}>
+                <AppBar id="header">
+                    <KebabMenu open={Boolean(menuAnchor)} anchor={menuAnchor} onClose={() => setMenuAnchor(null)} />
+                    <Toolbar className={classes.toolbar}>
+                        <div onClick={goToHome} className={classes.logo}>
+                            <img src={`${logo}#svgView(preserveAspectRatio(xMaxYMax))`} height="55px" style={{ cursor: 'pointer' }} />
+                        </div>
+                        <div className={classes.root}>
+                            <Typography className={classes.title} variant="h5" color="inherit" onClick={goToHome} style={navigationSelectedStyle.search}>
+                                Find a mate
+                            </Typography>
+                            <Typography className={classes.title2} variant="h5" color="inherit">
+                                |
+                            </Typography>
+                            <Typography className={classes.title} variant="h5" color="inherit" onClick={goToBlog} style={navigationSelectedStyle.blog}>
+                                Blog
+                            </Typography>
+                            <Typography className={classes.title2} variant="h5" color="inherit">
+                                |
+                            </Typography>
+                            <Typography className={classes.title} variant="h5" color="inherit" style={navigationSelectedStyle.premium} onClick={onClickPremium}>
+                                Premium
+                            </Typography>
+                            {user.user ? (
+                                user.user.role === 'admin' ? (
+                                    <>
+                                        <Typography className={classes.title2} variant="h5" color="inherit">
+                                            |
+                                        </Typography>
+                                        <Typography className={classes.title} variant="h5" color="inherit" onClick={onClickAdminConsole} style={navigationSelectedStyle.admin}>
+                                            Admin Console
+                                        </Typography>
+                                    </>
+                                ) : null
+                            ) : null}
+                        </div>
+                        <IconButton onClick={onClickMessenger} color="inherit">
+                            <ChatBubbleOutlineIcon />
+                        </IconButton>
+                        <IconButton onClick={(event) => setMenuAnchor(event.currentTarget)} color="inherit">
+                            <PersonIcon />
+                        </IconButton>
+                    </Toolbar>
+                </AppBar>
+            </Slide>
+        </div>
     );
 }
 
