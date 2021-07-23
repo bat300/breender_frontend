@@ -56,16 +56,15 @@ function DocumentElement(props) {
     const [processed, setProcessed] = React.useState(false);
 
     useEffect(() => {
-        console.log(props.document);
         var document = props.document.certificate ? props.document.certificate : props.document;
         setProcessed(document.verified || document.declined);
     }, [props]);
 
     function verify() {
-        props.document.certificate ? props.openModalVerify(props.document.certificate._id, 'comp') : props.openModalVerify(props.document._id, 'doc');
+        props.document.certificate ? props.openModalVerify(props.document.certificate._id, 'comp', props.ownerId, props.officialName ) : props.openModalVerify(props.document._id, 'doc', props.ownerId, props.officialName );
     }
     function decline() {
-        props.document.certificate ? props.openModalDecline(props.document.certificate._id, 'comp') : props.openModalDecline(props.document._id, 'doc');
+        props.document.certificate ? props.openModalDecline(props.document.certificate._id, 'comp', props.ownerId, props.officialName ) : props.openModalDecline(props.document._id, 'doc', props.ownerId, props.officialName );
     }
 
     function formatDate(stringToFormat) {

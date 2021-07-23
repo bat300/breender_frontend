@@ -23,12 +23,12 @@ const AdminConsoleView = (props) => {
         setActiveTab(activeKey);
         setLoading(true);
   };
-
  
 
     return (
-        <Tabs activeKey={activeTab} centered onChange={onChangeTab}>
-    <TabPane tab="Unprocessed Documents" key="1">
+        <Tabs activeKey={activeTab} centered onChange={onChangeTab} >
+            
+   <TabPane tab="Unprocessed Documents" key="1">
     <div className={classes.childLayout}>
                 <DocumentsArray getDocuments={getDocuments} active={activeTab === '1'} loading={loading} setLoading={setLoading}/>
             </div>
@@ -59,6 +59,7 @@ const useStyles = makeStyles((theme) => ({
         marginRight: 'auto'
     },
     layout: {
+        overflowY: 'scroll',
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',

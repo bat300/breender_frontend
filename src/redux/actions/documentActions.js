@@ -1,5 +1,5 @@
 import DocumentService from 'services/DocumentService';
-export function verifyDocument(docId, docType) {
+export function verifyDocument(docId, docType, ownerId, officialName) {
     // when the backend call was successfull and the was verified
     function onSuccess() {
         return { type: 'VERIFY_DOCUMENT_SUCCESS' };
@@ -13,7 +13,7 @@ export function verifyDocument(docId, docType) {
     return async (dispatch) => {
         try {
             // verify doc in the backend
-            await DocumentService.verifyDocument(docId, docType);
+            await DocumentService.verifyDocument(docId, docType, ownerId, officialName);
             // call onSuccess in context of redux
             dispatch(onSuccess());
         } catch (e) {
@@ -22,7 +22,7 @@ export function verifyDocument(docId, docType) {
     };
 }
 
-export function declineDocument(docId, docType) {
+export function declineDocument(docId, docType, ownerId, officialName) {
     // when the backend call was successfull and the document was declined
     function onSuccess() {
         return { type: 'DECLINE_DOCUMENT_SUCCESS' };
@@ -36,7 +36,7 @@ export function declineDocument(docId, docType) {
     return async (dispatch) => {
         try {
             // decline doc in the backend
-            await DocumentService.declineDocument(docId, docType);
+            await DocumentService.declineDocument(docId, docType, ownerId, officialName);
             // call onSuccess in context of redux
             dispatch(onSuccess());
         } catch (e) {

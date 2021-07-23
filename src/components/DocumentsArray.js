@@ -17,10 +17,15 @@ const DocumentsArray = (props) => {
     const [openDecline, setOpenDecline] = React.useState(false); //for modal to decline doc
     const [id, setId] = React.useState('');
     const [type, setType] = React.useState('');
+    const [ownerId, setOwnerId] = React.useState('');
+    const [officialName, setOfficialName] = React.useState('');
 
-    function handleClickOpenVerify(docId, docType) {
+    function handleClickOpenVerify(docId, docType, ownerId, officialName) {
         setId(docId);
         setType(docType);
+        setOwnerId(ownerId);
+        setOfficialName(officialName);
+
         setOpenVerify(true);
     }
     const handleCloseVerify = () => {
@@ -28,20 +33,22 @@ const DocumentsArray = (props) => {
     };
 
     async function verify() {
-        props.dispatch(verifyDocument(id, type));
+        await props.dispatch(verifyDocument(id, type, ownerId, officialName));
         props.setLoading(true);
         setOpenVerify(false);
     }
 
     async function decline() {
-        props.dispatch(declineDocument(id, type));
+       await props.dispatch(declineDocument(id, type,  ownerId, officialName));
         props.setLoading(true);
         setOpenDecline(false);
     }
 
-    function handleClickOpenDecline(docId, docType) { 
+    function handleClickOpenDecline(docId, docType, ownerId, officialName) { 
         setId(docId);
         setType(docType);
+        setOwnerId(ownerId);
+        setOfficialName(officialName);
         setOpenDecline(true);
     }
     const handleCloseDecline = () => {
