@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useHistory, withRouter } from 'react-router-dom';
 import { connect, useDispatch, useSelector } from 'react-redux';
 import LoginComponent from '../components/UserLoginComponent';
-import { login, startLoading, stopLoading, loginReset, me } from '../redux/actions';
+import { login, startLoading, stopLoading, loginReset, getUsersInfo } from '../redux/actions';
 import NotificationService from 'services/NotificationService';
 
 /**
@@ -18,7 +18,7 @@ function UserLoginView(props) {
         if (user.user?.id) {
             NotificationService.notify('success', 'Success', 'Sucessfully signed in.');
             props.history.push('/');
-            props.dispatch(me(user.user.id));
+            props.dispatch(getUsersInfo(user.user.id));
         }
     }, [user, props]);
 
