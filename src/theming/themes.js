@@ -42,12 +42,20 @@ const appThemeOptions = {
             },
             text: {
                 primary: '#222330',
-                light: 'white',
+                secondary: 'white',
             }
         },
         typography: {
             body1: {
                 fontFamily: "'Open Sans', sans-serif",
+                fontWeight: 'lighter',
+                color: '#222330',
+            },
+            h3: {
+                fontWeight: 'lighter',
+                color: '#222330',
+            },
+            h6: {
                 fontWeight: 'lighter',
                 color: '#222330',
             },
