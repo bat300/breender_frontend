@@ -42,6 +42,9 @@ const useStyles = makeStyles((theme) => ({
         margin: 50,
         marginRight: 150,
     },
+    darkSlider: {
+        color: theme.palette.primary.dark,
+    },
 }));
 
 function SearchView(props) {
@@ -222,17 +225,17 @@ function SearchView(props) {
                             min={0.5}
                             max={10}
                             marks={ageMarks}
-                            color="secondary"
+                            className={classes.darkSlider}
                         />
                     </div>
                 </Grid>
                 <Grid item>
-                    <Button className={classes.button} variant="contained" color="secondary" onClick={loadPets}>
+                    <Button variant="contained" color="default" className={classes.button} onClick={loadPets}>
                         Apply
                     </Button>
                 </Grid>
                 <Grid item>
-                    <Button className={classes.button} variant="contained" color="secondary" onClick={resetFilters}>
+                    <Button variant="contained" color="default" className={classes.button} onClick={resetFilters}>
                         Reset filters
                     </Button>
                 </Grid>
