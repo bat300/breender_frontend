@@ -86,12 +86,14 @@ export default function UserProfile(props) {
 
     const updateUserOnSave = async () => {
 
-        let userWithChanges = props.user;
-        userWithChanges.username = username;
-        userWithChanges.email = email;
-        userWithChanges.province = province;
-        userWithChanges.city = city;
-        userWithChanges.paymentMethod = paymentMethod;
+        let userWithChanges = {
+            _id: props.user._id,
+            username: username,
+            email: email,
+            province: province,
+            city: city,
+            paymentMethod: paymentMethod
+        };
 
         if (password !== '' && password2 !== '' && password === password2) {
             userWithChanges.password = password
