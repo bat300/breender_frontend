@@ -49,7 +49,7 @@ const useStyles = makeStyles((theme) => ({
 
 function SearchView(props) {
     const classes = useStyles();
-    let pets = useSelector((state) => state.entities.pets); // get pets from redux store
+    let pets = useSelector((state) => state.pets.pets); // get pets from redux store
     let user = useUser();
     // for scrolling to the search
     const ref = React.useRef(null);

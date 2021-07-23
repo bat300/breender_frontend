@@ -1,51 +1,68 @@
-import React, { useEffect } from 'react';
-import { connect, useDispatch, useSelector } from 'react-redux';
+import React from 'react';
+import { connect } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import { withRouter } from 'react-router-dom';
-import { getAdminTransactions } from 'redux/actions';
-import { useUser } from 'helper/hooks/auth.hooks';
 import TransactionsAdminOverviewTable from 'components/transactions/TransactionsAdminOverviewTable';
-import VerifyDocumentList from '../components/VerifyDocumentsList';
-import { Typography } from '@material-ui/core';
+import DocumentsArray from '../components/DocumentsArray';
+import { Tabs } from 'antd';
+import { getDeclinedDocuments, getDocuments, getVerifiedDocuments} from 'redux/actions/documentActions';
+import { useUser } from 'helper/hooks';
+
+const { TabPane } = Tabs;
+
+
 
 const AdminConsoleView = (props) => {
     const classes = useStyles();
-    const dispatch = useDispatch();
     const user = useUser();
-    const transactions = useSelector((state) => state.transaction.transactions);
+    const [activeTab, setActiveTab] = React.useState('1');
+    const [loading, setLoading] = React.useState(true); //for trigering reload of the documents
 
-    useEffect(() => {
-        dispatch(getAdminTransactions(user.id));
-    }, [transactions.length, user.id, dispatch]);
+
+    const onChangeTab = activeKey => {
+        setActiveTab(activeKey);
+        setLoading(true);
+  };
+
+ 
 
     return (
-        <div className={classes.layout}>
-            <div className={classes.childLayout}>
-                <Typography variant="h4" align="left" style={{ fontWeight: 'lighter' }}>
-                    Documents to verify
-                </Typography>
-                <VerifyDocumentList />
+        <Tabs activeKey={activeTab} centered onChange={onChangeTab}>
+    <TabPane tab="Unprocessed Documents" key="1">
+    <div className={classes.childLayout}>
+                <DocumentsArray getDocuments={getDocuments} active={activeTab === '1'} loading={loading} setLoading={setLoading}/>
             </div>
-            <div className={classes.childLayout}>
-                <Typography variant="h4" align="left" style={{ fontWeight: 'lighter', marginBottom: 50 }}>
-                    Manage transactions
-                </Typography>
-                <TransactionsAdminOverviewTable transactions={transactions} />
+    </TabPane>
+    <TabPane tab="Verified Documents" key="2">
+    <div className={classes.childLayout}>
+                <DocumentsArray getDocuments={getVerifiedDocuments} active={activeTab === '2'} loading={loading} setLoading={setLoading}/>
             </div>
-        </div>
-    );
-};
+    </TabPane>
+    <TabPane tab="Declined Documents" key="3">
+    <div className={classes.childLayout}>
+                <DocumentsArray getDocuments={getDeclinedDocuments} active={activeTab === '3'} loading={loading} setLoading={setLoading}/>
+            </div>
+    </TabPane>
+    <TabPane tab="Transactions" key="4">
+    <div className={classes.childLayout}>
+    <TransactionsAdminOverviewTable active={activeTab === '4'} user={user}/>
+            </div>
+    </TabPane>
+  </Tabs>);
+    };
 
 const useStyles = makeStyles((theme) => ({
     childLayout: {
         width: '90vw',
-        marginTop: 50,
+        marginTop: 30,
+        marginLeft: 'auto',
+        marginRight: 'auto'
     },
     layout: {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        flexDirection: 'column',
+        flexDirection: 'column'
     },
 }));
 

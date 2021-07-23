@@ -19,6 +19,20 @@ export default class DocumentService {
         });
     }
 
+    static getProcessedDocuments(condition) {
+        return new Promise((resolve, reject) => {
+            HttpService.get(
+                `${DocumentService.baseURL()}/${condition}`,
+                function (data) {
+                    resolve(data);
+                },
+                function (textStatus) {
+                    reject(textStatus);
+                }
+            );
+        });
+    }
+
     static verifyDocument(docId, docType) {
         return new Promise((resolve, reject) => {
             HttpService.post(

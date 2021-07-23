@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import { connect, useSelector } from 'react-redux';
-import { makeStyles } from '@material-ui/core/styles';
 import { withRouter } from 'react-router-dom';
-import { declineDocument, getDocuments, verifyDocument } from 'redux/actions/documentActions';
+import { declineDocument, verifyDocument } from 'redux/actions/documentActions';
+import Loading from './Loading';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -11,8 +11,8 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DocumentResultsList from 'components/DocumentResultsList';
 
-const VerifyDocumentList = (props) => {
-    var documents = useSelector((state) => state.entities.documents);
+const DocumentsArray = (props) => {
+    const documents = useSelector((state) => state.documents);
     const [openVerify, setOpenVerify] = React.useState(false); //for modal to verify doc
     const [openDecline, setOpenDecline] = React.useState(false); //for modal to decline doc
     const [id, setId] = React.useState('');
@@ -27,19 +27,19 @@ const VerifyDocumentList = (props) => {
         setOpenVerify(false);
     };
 
-    function verify() {
+    async function verify() {
         props.dispatch(verifyDocument(id, type));
-        loadDocuments();
+        props.setLoading(true);
         setOpenVerify(false);
     }
 
-    function decline() {
+    async function decline() {
         props.dispatch(declineDocument(id, type));
-        loadDocuments();
+        props.setLoading(true);
         setOpenDecline(false);
     }
 
-    function handleClickOpenDecline(docId, docType) {
+    function handleClickOpenDecline(docId, docType) { 
         setId(docId);
         setType(docType);
         setOpenDecline(true);
@@ -48,21 +48,21 @@ const VerifyDocumentList = (props) => {
         setOpenDecline(false);
     };
 
-    const loadDocuments = async () => {
-        // trigger the redux action getDocuments
-        props.dispatch(getDocuments());
-    };
-
-    useEffect(() => {
+    useEffect(() => { 
+        if (props.loading) { //if reload is required and the tab is active, retrieve updated docs 
+           if (props.active) {
+                props.dispatch(props.getDocuments());
+                props.setLoading(false)
+            }
+        }
         // load docs when the page is loaded or the docs were verified/declined.
-
-        props.dispatch(getDocuments());
-        
     }, [props]);
 
-    return (
+    return !documents ? (
+        <Loading />
+    ) : (
         <div>
-            <DocumentResultsList documentsArray={documents} openModalVerify={handleClickOpenVerify} openModalDecline={handleClickOpenDecline} />
+            <DocumentResultsList documentsArray={documents.documents} openModalVerify={handleClickOpenVerify} openModalDecline={handleClickOpenDecline} />
             <Dialog open={openVerify} onClose={handleCloseVerify} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description">
                 <DialogTitle id="alert-dialog-title1">{'Verify document?'}</DialogTitle>
                 <DialogContent>
@@ -95,4 +95,4 @@ const VerifyDocumentList = (props) => {
     );
 };
 
-export default connect()(withRouter(VerifyDocumentList));
+export default connect()(withRouter(DocumentsArray));

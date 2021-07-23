@@ -69,7 +69,7 @@ function DocumentResultsList(props) {
                                 {docs.documents.map((doc) => (
                                     <li key={doc._id}>
                                         <Grid>
-                                            <DocumentElement document={doc} openModalVerify={props.openModalVerify} openModalDecline={props.openModalDecline} />{' '}
+                                            <DocumentElement document={doc} openModalVerify={props.openModalVerify} openModalDecline={props.openModalDecline} />
                                         </Grid>
                                     </li>
                                 ))}

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
@@ -19,6 +19,7 @@ const useStyles = makeStyles((theme) => ({
     paper: {
         padding: theme.spacing(2),
         margin: 'auto',
+        minWidth: "500px"
     },
     image: {
         width: 256,
@@ -50,14 +51,26 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
- function DocumentElement(props) {
+function DocumentElement(props) {
     const classes = useStyles();
+    const [processed, setProcessed] = React.useState(false);
+
+    useEffect(() => {
+        console.log(props.document);
+        var document = props.document.certificate ? props.document.certificate : props.document;
+        setProcessed(document.verified || document.declined);
+    }, [props]);
 
     function verify() {
-        props.document.certificate? props.openModalVerify(props.document.certificate._id, "comp") : props.openModalVerify(props.document._id, "doc");
+        props.document.certificate ? props.openModalVerify(props.document.certificate._id, 'comp') : props.openModalVerify(props.document._id, 'doc');
     }
     function decline() {
-        props.document.certificate? props.openModalDecline(props.document.certificate._id, "comp") : props.openModalDecline(props.document._id, "doc"); 
+        props.document.certificate ? props.openModalDecline(props.document.certificate._id, 'comp') : props.openModalDecline(props.document._id, 'doc');
+    }
+
+    function formatDate(stringToFormat) {
+        const date = new Date(stringToFormat);
+        return date.toLocaleDateString('en-GB')
     }
 
     return (
@@ -68,59 +81,103 @@ const useStyles = makeStyles((theme) => ({
                         <AssignmentIcon />
                     </Grid>
                     <Grid item xs={12} sm container>
-                        {props.document.certificate?<Grid item xs container direction="column" spacing={2}>
-                            <Grid item xs>
-                                <Grid container spacing={2}>
-                                    <Grid item xs>
-                                        <Typography variant="body2" gutterBottom className={classes.rowFontStyle}>
-                                            Name:
-                                        </Typography>
+                        {props.document.certificate ? (
+                            <Grid item xs container direction="column" spacing={2}>
+                                <Grid item xs>
+                                    <Grid container spacing={2}>
+                                        <Grid item xs>
+                                            <Typography variant="body2" gutterBottom className={classes.rowFontStyle}>
+                                                Name:
+                                            </Typography>
+                                        </Grid>
+                                        <Grid item xs={6}>
+                                            <Typography variant="body2" className={classes.valueFontStyle}>
+                                                {props.document.name}
+                                            </Typography>
+                                        </Grid>
                                     </Grid>
-                                    <Grid item xs={6}>
-                                        <Typography variant="body2" className={classes.valueFontStyle}>
-                                            {props.document.name}
-                                        </Typography>
-                                    </Grid>
-                                </Grid>
 
-                                <Grid container spacing={2}>
-                                    <Grid item xs>
-                                        <Typography variant="body2" className={classes.rowFontStyle}>
-                                            Date:
-                                        </Typography>
+                                    <Grid container spacing={2}>
+                                        <Grid item xs>
+                                            <Typography variant="body2" className={classes.rowFontStyle}>
+                                                Date:
+                                            </Typography>
+                                        </Grid>
+                                        <Grid item xs={6}>
+                                            <Typography variant="body2" className={classes.valueFontStyle}>
+                                                {formatDate(props.document.date)}
+                                            </Typography>
+                                        </Grid>
                                     </Grid>
-                                    <Grid item xs={6}>
-                                        <Typography variant="body2" className={classes.valueFontStyle}>
-                                            {props.document.date.substring(0, 10)}
-                                        </Typography>
+                                    <Grid container spacing={2}>
+                                        <Grid item xs>
+                                            <Typography variant="body2" className={classes.rowFontStyle}>
+                                                Category:
+                                            </Typography>
+                                        </Grid>
+                                        <Grid item xs={6}>
+                                            <Typography variant="body2" className={classes.valueFontStyle}>
+                                                {props.document.category === '' ? '-' : props.document.category}
+                                            </Typography>
+                                        </Grid>
                                     </Grid>
-                                </Grid>
-                                <Grid container spacing={2}>
-                                    <Grid item xs>
-                                        <Typography variant="body2" className={classes.rowFontStyle}>
-                                            Category:
-                                        </Typography>
+                                    <Grid container spacing={2}>
+                                        <Grid item xs>
+                                            <Typography variant="body2" className={classes.rowFontStyle}>
+                                                Prize:
+                                            </Typography>
+                                        </Grid>
+                                        <Grid item xs={6}>
+                                            <Typography variant="body2" className={classes.valueFontStyle}>
+                                                {props.document.prize === '' ? '-' : props.document.prize}
+                                            </Typography>
+                                        </Grid>
                                     </Grid>
-                                    <Grid item xs={6}>
-                                        <Typography variant="body2" className={classes.valueFontStyle}>
-                                            {props.document.category === '' ? '-' : props.document.category}
-                                        </Typography>
-                                    </Grid>
-                                </Grid>
-                                <Grid container spacing={2}>
-                                    <Grid item xs>
-                                        <Typography variant="body2" className={classes.rowFontStyle}>
-                                            Prize:
-                                        </Typography>
-                                    </Grid>
-                                    <Grid item xs={6}>
-                                        <Typography variant="body2" className={classes.valueFontStyle}>
-                                            {props.document.prize === '' ? '-' : props.document.prize}
-                                        </Typography>
-                                    </Grid>
+                                   {props.document.certificate.verificationDate? <Grid container spacing={2}>
+                                        <Grid item xs>
+                                            <Typography variant="body2" className={classes.rowFontStyle}>
+                                                Verification Date:
+                                            </Typography>
+                                        </Grid>
+                                        <Grid item xs={6}>
+                                            <Typography variant="body2" className={classes.valueFontStyle}>
+                                                {formatDate(props.document.certificate.verificationDate)}
+                                            </Typography>
+                                        </Grid>
+                                    </Grid> : <></>} 
                                 </Grid>
                             </Grid>
-                        </Grid> : props.document.name}
+                        ) : (
+                            <Grid item xs container direction="column" spacing={2}>
+                                <Grid item xs>
+                                    <Grid container spacing={2}>
+                                        <Grid item xs>
+                                            <Typography variant="body2" gutterBottom className={classes.rowFontStyle}>
+                                                Name:
+                                            </Typography>
+                                        </Grid>
+                                        <Grid item xs={6}>
+                                            <Typography variant="body2" className={classes.valueFontStyle}>
+                                                {props.document.name}
+                                            </Typography>
+                                        </Grid>
+                                    </Grid>
+
+                                    {props.document.verificationDate? <Grid container spacing={2}>
+                                        <Grid item xs>
+                                            <Typography variant="body2" className={classes.rowFontStyle}>
+                                                Verification Date:
+                                            </Typography>
+                                        </Grid>
+                                        <Grid item xs={6}>
+                                            <Typography variant="body2" className={classes.valueFontStyle}>
+                                                {formatDate(props.document.verificationDate)}
+                                            </Typography>
+                                        </Grid>
+                                    </Grid> : <></>}
+                                </Grid>
+                            </Grid>
+                        )}
                     </Grid>
                 </Grid>
                 <div className={classes.row + ' ' + classes.button}>
@@ -134,26 +191,16 @@ const useStyles = makeStyles((theme) => ({
                     >
                         Document
                     </Button>
-                    <Button
-                        variant="contained"
-                        color="secondary"
-                        className={classes.button}
-                        startIcon={<CheckIcon />}
-                        component="a"
-                        onClick={verify}
-                    >
-                        Verify
-                    </Button>
-                    <Button
-                        variant="contained"
-                        color="secondary"
-                        className={classes.button}
-                        startIcon={<ClearIcon />}
-                        component="a"
-                        onClick={decline}
-                    >
-                        Decline
-                    </Button>
+                    {processed ? null : ( //if document is already processed, do not show buttons
+                        <>
+                            <Button variant="contained" color="secondary" className={classes.button} startIcon={<CheckIcon />} component="a" onClick={verify}>
+                                Verify
+                            </Button>
+                            <Button variant="contained" color="secondary" className={classes.button} startIcon={<ClearIcon />} component="a" onClick={decline}>
+                                Decline
+                            </Button>
+                        </>
+                    )}
                 </div>
             </Paper>
         </div>
@@ -161,6 +208,5 @@ const useStyles = makeStyles((theme) => ({
 }
 
 // attributes of props and their type
-
 
 export default connect()(withRouter(DocumentElement));
