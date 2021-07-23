@@ -55,7 +55,6 @@ function SearchView(props) {
     let pets = useSelector((state) => state.entities.pets); // get pets from redux store
     let user = useUser();
     // for scrolling to the search
-    const ref = React.useRef(null);
     const loggedInUser = useLoggedInUser();
     var totalPages = useSelector((state) => state.entities.totalPages);
 
@@ -136,11 +135,21 @@ function SearchView(props) {
 
     const onSubscribe = () => props.history.push('/premium');
 
-    const onSearchTrigger = () => ref.current.scrollIntoView({ behavior: 'smooth' });
+    const onSearchTrigger = () => searchRef.current.scrollIntoView({ behavior: 'smooth' });
+
+    function scrollToTargetAdjusted() {
+        var headerOffset = document.querySelector('#header').clientHeight;
+        var elementPosition = searchRef.current?.getBoundingClientRect().top;
+        var offsetPosition = window.scrollY + elementPosition - headerOffset;
+        window.scrollTo({
+            top: offsetPosition,
+            behavior: 'smooth',
+        });
+    }
 
     const handleChange = async (event, value) => {
         loadPets(value);
-        searchRef.current?.scrollIntoView({ behavior: 'smooth' });
+        scrollToTargetAdjusted();
     };
 
     return (
@@ -166,7 +175,7 @@ function SearchView(props) {
                     </div>
                 </Grid>
             </Grid>
-            <div ref={ref} className={classes.filters}>
+            <div ref={searchRef} className={classes.filters}>
                 <FormControl className={classes.formControl}>
                     <InputLabel id="species-select-label">Species</InputLabel>
                     <Select labelId="species-select-label" id="species-select" value={chosenSpecies} onChange={handleSpeciesChange}>
