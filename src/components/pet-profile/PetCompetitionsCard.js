@@ -2,7 +2,7 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Grid, Card, CardHeader, CardContent, Typography, CardActions, Button } from '@material-ui/core';
 import GetAppIcon from '@material-ui/icons/GetApp';
-import { VerificationIcon, CancelationIcon } from 'components/icons';
+import { VerificationIcon, CancelIcon } from 'components/icons';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -35,7 +35,7 @@ function PetCompetitionsCard(props) {
     return (
         <Grid item>
             <Card className={classes.root}>
-                <CardHeader action={props.certificate.declined? <CancelationIcon /> : <VerificationIcon verified={props.certificate.verified} />} />
+                <CardHeader action={props.certificate.declined? <CancelIcon /> : <VerificationIcon verified={props.certificate.verified} />} />
                 <CardContent>
                     <Typography variant="h5" className={classes.label}>
                         {props.name}

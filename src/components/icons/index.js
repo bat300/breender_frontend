@@ -1,19 +1,18 @@
 import React from "react";
-import CancelIcon from '@material-ui/icons/Cancel';
-import Icon from "@material-ui/core/Icon";
-import VerifiedUserIcon from "@material-ui/icons/VerifiedUser";
-import NewReleasesIcon from "@material-ui/icons/NewReleases";
+import CancelTwoToneIcon from '@material-ui/icons/CancelTwoTone';
+import VerifiedUserTwoToneIcon from '@material-ui/icons/VerifiedUserTwoTone';
+import NewReleasesTwoToneIcon from "@material-ui/icons/NewReleasesTwoTone";
 import { makeStyles } from "@material-ui/core";
 
 export const VerificationIcon = (props) => {
     const classes = useStyles();
-  return props.verified ? <VerifiedUserIcon className={classes.success} /> : <NewReleasesIcon className={classes.warning} />
+  return props.verified ? <VerifiedUserTwoToneIcon className={classes.success} /> : <NewReleasesTwoToneIcon className={classes.warning} />
 }
 
 
-export const CancelationIcon = () => {
+export const CancelIcon = () => {
     const classes = useStyles();
-    return <CancelIcon className={classes.error} />;
+    return <CancelTwoToneIcon className={classes.error} />;
 };
 
 const useStyles = makeStyles((theme) => ({

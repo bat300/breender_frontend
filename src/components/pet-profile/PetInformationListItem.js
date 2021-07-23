@@ -8,7 +8,7 @@ import DateRangeRoundedIcon from '@material-ui/icons/DateRangeRounded';
 import GenderIcon from '../../images/icons/gender.svg';
 import DogIcon from '../../images/icons/cocker-spaniel.png';
 import DogTagIcon from '../../images/icons/dog-tag.png';
-import { VerificationIcon, CancelationIcon } from 'components/icons';
+import { VerificationIcon, CancelIcon } from 'components/icons';
 
 function PetInformationListItem(props) {
     const classes = useStyles();
@@ -27,7 +27,7 @@ function PetInformationListItem(props) {
                     </Avatar>
                 </ListItemAvatar>
                 <ListItemText primary={props.primary} secondary={props.secondary} />
-                {props.itemType === 'document' ? props.declined ? <CancelationIcon /> : <VerificationIcon verified={props.verified} /> : null}
+                {props.itemType === 'document' ? props.declined ? <CancelIcon /> : <VerificationIcon verified={props.verified} /> : null}
             </ListItem>
         );
     }
