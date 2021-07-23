@@ -22,7 +22,7 @@ function BlogView(props) {
         image: 'https://static.dw.com/image/54627079_303.jpg',
         imageText: 'Dog on a walk',
         title: 'Germany: Dogs must be walked twice a day under new rule',
-        description: '"Pets are not cuddly toys," German Agricultural Minister Julia Klöckner said.',
+        description: '"Pets are not cuddly toys," German Agricultural Minister Julia Klöckner said',
         linkText: 'Read more...',
         link: 'https://www.dw.com/en/germany-dogs-must-be-walked-twice-a-day-under-new-rule/a-54627195',
         text: 'The German agriculture minister has announced she will introduce a controversial new law that will require dog owners to walk their canine friends at least twice a day, for a total of at least one hour. The rules would also forbid owners from tying up dogs for long periods of time or leaving them alone all day. Around one in five German homes has a dog; over 9 million dogs are kept as pets in the country. "Pets are not cuddly toys — and their needs have to be considered," Agriculture Minister Julia Klöckner said Monday. She said her ministry was acting in accordance with "new scientific research about dog needs."',
