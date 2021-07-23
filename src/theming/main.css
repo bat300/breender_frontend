@@ -14,6 +14,16 @@ a:hover{
     color: #EDCC97;
 }
 
+.MuiButton-contained {
+    background-color: #3E4059;
+    color: white;
+}
+
+.MuiButton-contained:hover {
+    background-color: #7D7F9A;
+    color: white;
+}
+
 .MuiButton-root:disabled {
     background-color: #CECFD4;
     color: #3E4059;
@@ -21,6 +31,10 @@ a:hover{
 
 .MuiButton-containedPrimary {
     background-color: #7D7F9A;
+}
+
+.MuiButton-containedPrimary:hover {
+    background-color: #3E4059;
 }
 
 .MuiButton-containedSecondary {
@@ -39,6 +53,6 @@ a:hover{
     background-color: rgba(21, 26, 80, 0.1);
 }
 
-.lightbox-img-thumbnail {
-    width: 120px;
+.MuiPaper-root {
+    border-radius: 25px;
 }
