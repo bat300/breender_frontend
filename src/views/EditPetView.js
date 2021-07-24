@@ -8,7 +8,7 @@ import { PetInformationForm, PetPhotosForm } from 'components/forms';
 import Loading from 'components/Loading';
 // state imports
 import { usePet, usePetCompetitions, usePetDocuments, usePetPictures, usePetProfilePictureToRemove, usePetProfilePictureToUpload } from 'helper/hooks/pets.hooks';
-import { changePet, getPet, updateCompetitionsToUpload, updateDocumentsToUpload, updatePicturesToUpload, updateProfilePicture } from 'redux/actions';
+import { changePet, getPet, updateCompetitionsToUpload, updateDocumentsToUpload, updatePicturesToUpload, updateProfilePicture, getUserPets } from 'redux/actions';
 // helpers import
 import { useUser } from 'helper/hooks/auth.hooks';
 import { UPLOAD_STATUS } from 'helper/types';
@@ -65,6 +65,7 @@ const EditPetView = (props) => {
     const [species, setSpecies] = useState(pet.species);
     const [breed, setBreed] = useState(pet.breed);
     const [price, setPrice] = useState(pet.price);
+    const [purchased, setPurchased] = useState(pet.purchased);
 
     useEffect(() => {
         // update upload states
@@ -217,11 +218,14 @@ const EditPetView = (props) => {
             species: species,
             competitions: competitions,
             documents: documents,
+            purchased: purchased,
         };
 
         const onSuccess = () => {
             NotificationService.notify('success', 'Success', 'Your four-legged friend was successfully updated!');
             history.push('/');
+            // update pets of logged in user in redux store
+            dispatch(getUserPets(user.id));
         };
 
         const onError = () => {
@@ -250,6 +254,7 @@ const EditPetView = (props) => {
                     breedProp={{ breed, setBreed }}
                     priceProp={{ price, setPrice }}
                     disabledProp={{ formIsDisabled, setFormIsDisabled }}
+                    purchasedProp={{ purchased, setPurchased }}
                     user={loggedInUser}
                 />
             </div>

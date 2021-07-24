@@ -12,6 +12,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import { NotificationService } from 'services';
 import { useDispatch } from 'react-redux';
 import { deletePet, getUserPets, getPets } from 'redux/actions';
+import EventBusyIcon from '@material-ui/icons/EventBusy';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -139,7 +140,15 @@ export default function PetInformationPaper(props) {
                             </Grid>
                         </Grid>
                         <Grid item>
-                            {props.editingMode ? <Button onClick={deletePetOnClick}><CloseIcon /></Button> : <Typography className={classes.accentText} gutterBottom variant="h6" style={{ fontWeight: 600 }}>{props.pet.price ? props.pet.price : 0}€</Typography>}
+                            {props.editingMode ?
+                                <Button onClick={deletePetOnClick}>
+                                    <CloseIcon />
+                                </Button>
+                                : props.pet.purchased ?
+                                    <EventBusyIcon />
+                                    : <Typography className={classes.accentText} gutterBottom variant="h6" style={{ fontWeight: 600 }}>
+                                        {props.pet.price ? props.pet.price : 0}€
+                                    </Typography>}
                         </Grid>
                     </Grid>
                 </Grid>

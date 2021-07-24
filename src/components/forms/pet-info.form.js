@@ -17,7 +17,7 @@ const PetFormInputs = {
     price: 'price'
 };
 
-const PetInformationForm = ({ nameProp, nicknameProp, sexProp, breedProp, speciesProp, priceProp, birthDateProp, disabledProp, ...props }) => {
+const PetInformationForm = ({ nameProp, nicknameProp, sexProp, breedProp, speciesProp, priceProp, birthDateProp, disabledProp, purchasedProp, ...props }) => {
     const classes = useStyles();
     const { name, setName } = nameProp;
     const { nickname, setNickname } = nicknameProp;
@@ -28,6 +28,7 @@ const PetInformationForm = ({ nameProp, nicknameProp, sexProp, breedProp, specie
     const { birthDate, setBirthDate } = birthDateProp;
     const [errors, setErrors] = useState({ name: false, nickname: false, sex: false, species: false, breed: false, price: false });
     const { formIsDisabled, setFormIsDisabled } = disabledProp;
+    const { purchased, setPurchased } = purchasedProp;
 
     const validationErrors = {
         name: 'Name is required',
@@ -93,6 +94,9 @@ const PetInformationForm = ({ nameProp, nicknameProp, sexProp, breedProp, specie
     const handleBreedChange = (e) => {
         validate(PetFormInputs.breed, e.target.value);
         setBreed(e.target.value);
+    };
+    const handlePurchasedChange = (e) => {
+        setPurchased(e.target.value);
     };
 
     // sort breeds data
@@ -195,6 +199,15 @@ const PetInformationForm = ({ nameProp, nicknameProp, sexProp, breedProp, specie
                                                         : null}
                                         </Select>
                                         <FormHelperText>{errors[PetFormInputs.breed] && validationErrors[PetFormInputs.breed]}</FormHelperText>
+                                    </FormControl>
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <FormControl required variant="outlined" size="small" fullWidth>
+                                        <InputLabel id="purchased-label">Availability</InputLabel>
+                                        <Select label="Availability" id="purchased" value={purchased} onChange={handlePurchasedChange} onBlur={handlePurchasedChange}>
+                                            <MenuItem value={true}>Not available</MenuItem>
+                                            <MenuItem value={false}>Available</MenuItem>
+                                        </Select>
                                     </FormControl>
                                 </Grid>
                                 <Grid item xs={12}>

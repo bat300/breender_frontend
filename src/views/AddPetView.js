@@ -163,6 +163,7 @@ const AddPetView = (props) => {
             NotificationService.notify('success', 'Success', 'Your four-legged friend was added to your profile!');
             history.push('/');
             dispatch(clearPet());
+            // update pets of logged in user in redux store
             dispatch(getUserPets(user.id));
         };
 
