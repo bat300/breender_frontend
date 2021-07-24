@@ -24,7 +24,6 @@ const prepareCompetitions = (competitions) => {
 const prepareDocumentsFileList = (petDocuments) => {
     let petList = [];
     petDocuments.forEach((value, index) => {
-        console.log(value);
         petList.push({
             uid: index,
             name: value.name,
@@ -63,7 +62,7 @@ const DocumentsUpload = (props) => {
     const dispatch = useDispatch();
     const { mode } = props;
     const isCompetition = props.type === 'competitions';
-    let key = isCompetition ? props.competitionId : props.documentId;
+    let key = isCompetition ? props.competitionId : null;
 
     // get global states
     const user = useUser();
@@ -90,7 +89,7 @@ const DocumentsUpload = (props) => {
          */
         const imgPath = `${pathPrefix}/${docName}`;
 
-        var newData = {
+        const newData = {
             name: data.file.name,
             type: data.file.type,
             path: imgPath,
@@ -112,28 +111,6 @@ const DocumentsUpload = (props) => {
             });
             dispatch(updateCompetitionsToUpload(competitionData));
         } else {
-
-             newData = {
-                description: props.description,
-                name: data.file.name,
-                type: data.file.type,
-                path: imgPath,
-                url: undefined,
-                uploadDate: new Date(),
-                verified: false,
-                data: data,
-                status: UPLOAD_STATUS.UPLOAD,
-            };
-
-            let documentData = [...petDocuments];
-            documentData.map((item, index) => {
-                if (item.key === key) {
-                    item = newData;
-                    return item;
-                }
-                return item;
-            });
-            console.log(newData)
             let docs = [...petDocuments, newData];
             dispatch(updateDocumentsToUpload(docs));
         }
