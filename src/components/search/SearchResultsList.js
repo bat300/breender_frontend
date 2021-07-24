@@ -63,7 +63,7 @@ function getResult(pets, order) {
 
 function SearchResultsList(props) {
     return props.pets.length > 0 ? (
-        getResult(props.pets, props.order).map((petObject) => <PetInformationPaper pet={petObject} key={petObject._id} editingMode={false} />)
+        getResult(props.pets, props.order).map((petObject) => <PetInformationPaper pet={petObject} key={petObject._id} editingMode={false} fromSearch={true} />)
     ) : (
         <Grid container spacing={2} justify="center">
             <div style={{ fontSize: 30 }}>No results found</div>

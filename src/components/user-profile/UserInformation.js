@@ -36,6 +36,12 @@ const useStyles = makeStyles((theme) => ({
         padding: theme.spacing(2),
         margin: 'auto',
     },
+    icon: {
+        color: theme.palette.secondary.light,
+    },
+    avatar: {
+        background: theme.palette.secondary.main,
+    },
 }));
 
 export default function UserInformation(props) {
@@ -76,16 +82,16 @@ export default function UserInformation(props) {
         <List>
             <ListItem className={classes.listItem}>
                 <ListItemAvatar>
-                    <Avatar className={classes.black}>
-                        <AccountCircleIcon />
+                    <Avatar className={classes.avatar}>
+                        <AccountCircleIcon className={classes.icon} />
                     </Avatar>
                 </ListItemAvatar>
                 <ListItemText primary={props.user.username} secondary="Username" />
             </ListItem>
             <ListItem className={classes.listItem}>
                 <ListItemAvatar>
-                    <Avatar className={classes.black}>
-                        <AlternateEmailIcon />
+                    <Avatar className={classes.avatar}>
+                        <AlternateEmailIcon className={classes.icon} />
                     </Avatar>
                 </ListItemAvatar>
                 <ListItemText primary={props.user.email} secondary="Email" />
@@ -97,24 +103,24 @@ export default function UserInformation(props) {
             </ListItem>
             <ListItem className={classes.listItem}>
                 <ListItemAvatar>
-                    <Avatar className={classes.black}>
-                        <LandscapeIcon />
+                    <Avatar className={classes.avatar}>
+                        <LandscapeIcon className={classes.icon} />
                     </Avatar>
                 </ListItemAvatar>
                 <ListItemText primary={changeProvinceFormat()} secondary="Province" />
             </ListItem>
             <ListItem className={classes.listItem}>
                 <ListItemAvatar>
-                    <Avatar className={classes.black}>
-                        <LocationCityIcon />
+                    <Avatar className={classes.avatar}>
+                        <LocationCityIcon className={classes.icon} />
                     </Avatar>
                 </ListItemAvatar>
                 <ListItemText primary={capitalizeFirstLetter(props.user.city)} secondary="City" />
             </ListItem>
             <ListItem className={classes.listItem}>
                 <ListItemAvatar>
-                    <Avatar className={classes.black}>
-                        <AttachMoneyIcon />
+                    <Avatar className={classes.avatar}>
+                        <AttachMoneyIcon className={classes.icon} />
                     </Avatar>
                 </ListItemAvatar>
                 <ListItemText primary={capitalizeFirstLetter(props.user.subscriptionPlan)} secondary="Subscription plan" />
@@ -122,8 +128,8 @@ export default function UserInformation(props) {
             {props.user.subscriptionPlan === 'premium' && (
                 <ListItem className={classes.listItem}>
                     <ListItemAvatar>
-                        <Avatar className={classes.black}>
-                            <EventIcon />
+                        <Avatar className={classes.avatar}>
+                            <EventIcon className={classes.icon} />
                         </Avatar>
                     </ListItemAvatar>
                     <ListItemText primary={changeDateFormat()} secondary="Premium subscription untill" />
@@ -136,8 +142,8 @@ export default function UserInformation(props) {
             {props.user.paymentMethod ? (
                 <ListItem className={classes.listItem}>
                     <ListItemAvatar>
-                        <Avatar className={classes.black}>
-                            <PaymentIcon />
+                        <Avatar className={classes.avatar}>
+                            <PaymentIcon className={classes.icon} />
                         </Avatar>
                     </ListItemAvatar>
                     <ListItemText primary={props.user.paymentMethod.email} secondary={props.user.paymentMethod.type} />
@@ -152,8 +158,8 @@ export default function UserInformation(props) {
         <List>
             <ListItem className={classes.listItem}>
                 <ListItemAvatar>
-                    <Avatar className={classes.black}>
-                        <LocationCityIcon />
+                    <Avatar className={classes.avatar}>
+                        <LocationCityIcon className={classes.icon} />
                     </Avatar>
                 </ListItemAvatar>
                 <ListItemText primary={props.user.city} secondary="City" />

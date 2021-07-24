@@ -19,12 +19,12 @@ const useStyles = makeStyles((theme) => ({
         padding: theme.spacing(1),
     },
     paper: {
-        backgroundColor: '#f7ebd7',
         padding: theme.spacing(4),
         paddingTop: theme.spacing(6),
         margin: 'auto',
         marginTop: theme.spacing(6),
         maxWidth: '85%',
+        borderRadius: 25,
     },
     paperSmall: {
         padding: theme.spacing(3),
@@ -129,7 +129,7 @@ export default function UserProfile(props) {
                     </Typography>
                 </Grid>
                 <Grid item>
-                    {props.profileOfLoggedInUser ? <Button className={classes.button} variant="contained" color="secondary" onClick={handleModeChange} disabled={disableSave}>
+                    {props.profileOfLoggedInUser ? <Button className={classes.button} variant="contained" color="primary" onClick={handleModeChange} disabled={disableSave}>
                         {editingMode ? "Save" : "Edit"}
                     </Button> : <div />}
 
@@ -153,7 +153,7 @@ export default function UserProfile(props) {
             </Typography>
             <List>
                 {props.pets && props.pets.length > 0 ?
-                    props.pets.map((pet) => <PetInformationPaper pet={pet} user={props.user} key={pet._id} editingMode={editingMode} />)
+                    props.pets.map((pet) => <PetInformationPaper pet={pet} user={props.user} key={pet._id} editingMode={editingMode} fromSearch={false} />)
                     : (!editingMode ?
                         <Typography className={classes.typographyNotifications} align="center">
                             No pets added yet
