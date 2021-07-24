@@ -45,6 +45,13 @@ const useStyles = makeStyles((theme) => ({
     darkSlider: {
         color: theme.palette.primary.dark,
     },
+    filters: {
+        display: 'flex',
+        flex: 1,
+        flexDirection: 'row',
+        alignItems: 'baseline',
+        justifyContent: 'center',
+    },
 }));
 
 function SearchView(props) {
