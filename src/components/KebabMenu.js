@@ -35,7 +35,7 @@ function KebabMenu(props) {
     const userInfo = useSelector((state) => state.user.userInfo);
 
     useEffect(() => {
-        if (user) {
+        if (user && !userInfo) {
             props.dispatch(getUsersInfo(user.id));
         }
     }, [user, userInfo]);
