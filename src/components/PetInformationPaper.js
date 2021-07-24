@@ -12,7 +12,8 @@ import CloseIcon from '@material-ui/icons/Close';
 import { NotificationService } from 'services';
 import { useDispatch } from 'react-redux';
 import { deletePet, getUserPets, getPets } from 'redux/actions';
-import EventBusyIcon from '@material-ui/icons/EventBusy';
+import RemoveShoppingCartIcon from '@material-ui/icons/RemoveShoppingCart';
+import { Tooltip } from 'antd';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -145,7 +146,11 @@ export default function PetInformationPaper(props) {
                                     <CloseIcon />
                                 </Button>
                                 : props.pet.purchased ?
-                                    <EventBusyIcon />
+                                    <Tooltip trigger="hover" placement="top" title={"The pet is not available."}>
+                                        <div>
+                                            <RemoveShoppingCartIcon />
+                                        </div>
+                                    </Tooltip>
                                     : <Typography className={classes.accentText} gutterBottom variant="h6" style={{ fontWeight: 600 }}>
                                         {props.pet.price ? props.pet.price : 0}€
                                     </Typography>}
