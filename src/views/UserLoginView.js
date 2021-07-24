@@ -3,6 +3,7 @@ import { useHistory, withRouter } from 'react-router-dom';
 import { connect, useDispatch, useSelector } from 'react-redux';
 import LoginComponent from '../components/UserLoginComponent';
 import { login, startLoading, stopLoading, loginReset, me } from '../redux/actions';
+import { getUnseenMessages } from '../redux/actions/messageActions';
 import NotificationService from 'services/NotificationService';
 
 /**
@@ -19,6 +20,7 @@ function UserLoginView(props) {
             NotificationService.notify('success', 'Success', 'Sucessfully signed in.');
             props.history.push('/');
             props.dispatch(me(user.user.id));
+            props.dispatch(getUnseenMessages(user.user.id));
         }
     }, [user, props]);
 

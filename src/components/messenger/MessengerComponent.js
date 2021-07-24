@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { connect, useSelector, dispatch } from 'react-redux';
 import { useDispatch } from 'react-redux';
-import { getMessages, addMessage } from 'redux/actions/messageActions';
+import { getMessages, addMessage, updateMessagesToSeen, getUnseenMessages } from 'redux/actions/messageActions';
 import { Grid, Paper, Divider, Typography, List, ListItem, ListItemText, Button, Icon, Fab } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import SendIcon from '@material-ui/icons/Send';
@@ -13,6 +13,7 @@ import io from 'socket.io-client';
 
 function MessengerComponent(props) {
     const classes = useStyles();
+    const dispatch = useDispatch();
     const [conversations, setConversations] = useState([]);
     const [currentChat, setCurrentChat] = useState(null);
     const [messages, setMessages] = useState([]);
@@ -20,6 +21,7 @@ function MessengerComponent(props) {
     const socket = useRef();
     const userId = useSelector((state) => state.user.user.id);
     const loadedConversations = useSelector((state) => state.conversations.conversations);
+    const unseenMessages = useSelector((state) => state.messages.unseenMessages);
 
     useEffect(() => {
         socket.current = io('ws://localhost:8900');
@@ -47,8 +49,8 @@ function MessengerComponent(props) {
     }, [props.currentConversationId]);
 
     useEffect(() => {
-        if (currentChat) {
-            console.log(currentChat._id);
+        if (currentChat && userId) {
+            dispatch(getUnseenMessages(userId));
         }
     }, [currentChat]);
 
@@ -109,7 +111,6 @@ function MessengerComponent(props) {
                         .map((c) => (
                             <div
                                 onClick={() => {
-                                    console.log(c._id);
                                     setCurrentChat(c);
                                 }}
                             >
@@ -124,7 +125,6 @@ function MessengerComponent(props) {
     // TODO: Make scrolling to bottom message automatic
     function ChatBoxComponent(chatProps) {
         const classes = useStyles();
-        const dispatch = useDispatch();
         const [newMessage, setNewMessage] = useState('');
 
         useEffect(() => {
@@ -145,18 +145,29 @@ function MessengerComponent(props) {
             setMessages(loadedMessages);
         }, [loadedMessages]);
 
+        useEffect(() => {
+            if (Array.isArray(loadedMessages) && loadedMessages.length !== 0) {
+                let unseenMessages = loadedMessages.filter((m) => !m.seen && m.sender !== userId).map((m) => m._id);
+                if (unseenMessages.length !== 0) {
+                    dispatch(updateMessagesToSeen(unseenMessages));
+                }
+            }
+        }, [loadedMessages]);
+
         const handleSubmit = async (e) => {
             // Prevents refreshing of page on click
             if (e) {
                 e.preventDefault();
             }
+            const receiver = currentChat.members.find((member) => member._id !== userId);
             const message = {
                 sender: userId,
+                receiver: receiver._id,
                 text: newMessage,
+                seen: false,
                 conversationId: chatProps.conversation._id,
             };
             setMessages([...messages]);
-            const receiver = currentChat.members.find((member) => member._id !== userId);
             socket.current.emit('sendMessage', {
                 senderId: userId,
                 receiverId: receiver._id,
