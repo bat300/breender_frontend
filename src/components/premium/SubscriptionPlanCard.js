@@ -42,12 +42,10 @@ const useStyles = makeStyles((theme) => ({
     },
     checkIcon: {
         marginRight: theme.spacing(1),
-         marginTop: theme.spacing(0.3),
         color: '#C0E189',
     },
     crownIcon: {
-        marginRight: theme.spacing(1),
-         marginTop: theme.spacing(0.3),
+
         color: theme.palette.secondary.main,
     },
     cancelIcon: {
