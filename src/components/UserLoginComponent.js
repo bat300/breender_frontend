@@ -1,34 +1,35 @@
-import React, { useEffect } from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import { Paper, Button, TextField, Typography } from "@material-ui/core";
-import { connect } from "react-redux";
-import { withRouter } from "react-router-dom";
+import React, { useEffect } from 'react';
+import { makeStyles } from '@material-ui/core/styles';
+import { Paper, Button, TextField, Typography } from '@material-ui/core';
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
+
 const useStyles = makeStyles((theme) => ({
     userLoginRoot: {
-        margin: "auto",
+        margin: 'auto',
     },
     loginPaper: {
-        width: "500px",
-        padding: theme.spacing(2),
+        width: '500px',
+        padding: theme.spacing(4),
     },
     loginRow: {
         paddingTop: theme.spacing(1),
         paddingBottom: theme.spacing(1),
-        "&:last-child": {
+        '&:last-child': {
             paddingBottom: theme.spacing(0),
         },
-        "&:first-child": {
+        '&:first-child': {
             paddingTop: theme.spacing(0),
         },
     },
     loginButtons: {
-        display: "flex",
-        justifyContent: "space-between",
-        color: "secondary",
+        display: 'flex',
+        justifyContent: 'space-between',
+        color: 'secondary',
     },
     loginButton: {
         marginLeft: theme.spacing(1),
-        color: "secondary",
+        color: 'secondary',
     },
 }));
 
@@ -39,19 +40,20 @@ const useStyles = makeStyles((theme) => ({
 function LoginComponent(props) {
     const classes = useStyles();
 
-    const [username, setUsername] = React.useState("");
-    const [password, setPassword] = React.useState("");
+    const [username, setUsername] = React.useState('');
+    const [password, setPassword] = React.useState('');
     //set to false when component is rendered for the first time in order to skip error message from previous login
-    const [rendered, setRendered ] = React.useState(false);
-    const [loginError, setLoginError] = React.useState("");
+    const [rendered, setRendered] = React.useState(false);
+    const [loginError, setLoginError] = React.useState('');
 
     useEffect(() => {
         if (props.user.error) {
-            if(rendered) {//if component is rendered for the 2. or more times, show new error
+            if (rendered) {
+                //if component is rendered for the 2. or more times, show new error
                 setLoginError(props.user.error);
-            }  
+            }
         } else {
-            setLoginError("");      
+            setLoginError('');
         }
     }, [props.user]);
 
@@ -63,60 +65,35 @@ function LoginComponent(props) {
 
     const onChangeUsername = (e) => {
         setUsername(e.target.value);
-        setLoginError("");
+        setLoginError('');
     };
 
     const onChangePassword = (e) => {
         setPassword(e.target.value);
-        setLoginError("");
+        setLoginError('');
     };
 
     return (
         <div className={classes.userLoginRoot}>
             <Paper className={classes.loginPaper} component="form">
                 <div className={classes.loginRow}>
-                    <TextField
-                        label="Username"
-                        fullWidth
-                        value={username}
-                        onChange={onChangeUsername}
-                        error={loginError !== ""}
-                    />
+                    <TextField label="Username" variant="outlined" fullWidth value={username} onChange={onChangeUsername} error={loginError !== ''} />
                 </div>
                 <div className={classes.loginRow}>
-                    <TextField
-                        label="Password"
-                        fullWidth
-                        value={password}
-                        onChange={onChangePassword}
-                        error={loginError !== ""}
-                        type="password"
-                    />
+                    <TextField label="Password" variant="outlined" fullWidth value={password} onChange={onChangePassword} error={loginError !== ''} type="password" />
                 </div>
-                {loginError !== "" ? (
+                {loginError !== '' ? (
                     <div className={classes.loginRow}>
                         <Typography color="error">{loginError}</Typography>
                     </div>
                 ) : null}
-                <div className={classes.loginRow + " " + classes.loginButtons}>
-                    <Button onClick={props.onSignUp}>
-                        Not Registered yet?
-                    </Button>
+                <div className={classes.loginRow + ' ' + classes.loginButtons}>
+                    <Button onClick={props.onSignUp}>Not Registered yet?</Button>
                     <div>
-                        <Button
-                            className={classes.loginButton}
-                            onClick={props.onCancel}
-                        >
+                        <Button variant="outlined" color="primary" className={classes.loginButton} onClick={props.onCancel}>
                             Cancel
                         </Button>
-                        <Button
-                            className={classes.loginButton}
-                            variant="contained"
-                            color="secondary"
-                            onClick={onLogin}
-                            disabled={username === "" || password === ""}
-                            type="submit"
-                        >
+                        <Button className={classes.loginButton} variant="contained" color="primary" onClick={onLogin} disabled={username === '' || password === ''} type="submit">
                             Login
                         </Button>
                     </div>
@@ -126,4 +103,4 @@ function LoginComponent(props) {
     );
 }
 
-export default connect()(withRouter(LoginComponent));;
+export default connect()(withRouter(LoginComponent));

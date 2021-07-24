@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { InputLabel, MenuItem, Select, Grid, Paper, Button, TextField, Typography, FormControlLabel, Checkbox } from '@material-ui/core';
+import { InputLabel, MenuItem, Select, Grid, Paper, Button, TextField, Typography, FormControlLabel, Checkbox, FormControl } from '@material-ui/core';
 import { checkUser } from '../redux/actions';
 import { connect, useSelector } from 'react-redux';
 
@@ -9,8 +9,8 @@ const useStyles = makeStyles((theme) => ({
         margin: 'auto',
     },
     signUpPaper: {
-        width: '500px',
-        padding: theme.spacing(2),
+        width: 500,
+        padding: theme.spacing(4),
     },
     signUpRow: {
         paddingTop: theme.spacing(1),
@@ -50,7 +50,7 @@ function SignUpComponent(props) {
     const [next, setNext] = React.useState(false); //set to false when there are errors and disable next step
     const isValid = useSelector((state) => state.checkUser);
     //set to false when component is rendered for the first time in order to skip error message from previous registration
-    const [rendered, setRendered ] = React.useState(false);
+    const [rendered, setRendered] = React.useState(false);
 
     const saveAndContinue = (e) => {
         e.preventDefault();
@@ -65,7 +65,7 @@ function SignUpComponent(props) {
 
     useEffect(() => {
         if (isValid.error) {
-            if(rendered) {
+            if (rendered) {
                 if (isValid.error.type === 'username') {
                     props.handleChange('usernameError', isValid.error.message);
                 } else {
@@ -73,10 +73,10 @@ function SignUpComponent(props) {
                 }
             }
         } else {
-            if(next) {props.nextStep();}
- 
+            if (next) {
+                props.nextStep();
+            }
         }
-
     }, [isValid]);
 
     let options = null;
@@ -110,6 +110,8 @@ function SignUpComponent(props) {
                 <div className={classes.signUpRow}>
                     <TextField
                         label="Email"
+                        variant="outlined"
+                        size="small"
                         fullWidth
                         value={values.email}
                         onChange={(e) => props.handleChange('email', e)}
@@ -121,6 +123,8 @@ function SignUpComponent(props) {
                 <div className={classes.signUpRow}>
                     <TextField
                         label="Username"
+                        variant="outlined"
+                        size="small"
                         fullWidth
                         value={values.username}
                         onChange={(e) => props.handleChange('username', e)}
@@ -129,11 +133,22 @@ function SignUpComponent(props) {
                     />
                 </div>
                 <div className={classes.signUpRow}>
-                    <TextField label="Password" fullWidth value={values.password} onChange={(e) => props.handleChange('password', e)} error={passwordError !== ''} type="password" />
+                    <TextField
+                        label="Password"
+                        fullWidth
+                        variant="outlined"
+                        size="small"
+                        value={values.password}
+                        onChange={(e) => props.handleChange('password', e)}
+                        error={passwordError !== ''}
+                        type="password"
+                    />
                 </div>
                 <div className={classes.signUpRow}>
                     <TextField
                         label="Repeat Password"
+                        variant="outlined"
+                        size="small"
                         fullWidth
                         value={values.password2}
                         onChange={(e) => props.handleChange('password2', e)}
@@ -144,7 +159,7 @@ function SignUpComponent(props) {
                 </div>
                 <Grid container spacing={2} style={{ paddingTop: 20 }}>
                     <Grid item xs={6}>
-                        <div className={classes.signUpRow}>
+                        <FormControl required variant="outlined" size="small" fullWidth>
                             <InputLabel>State/Province</InputLabel>
                             <Select label="State/Province" value={values.province} onChange={(e) => props.handleChange('province', e)}>
                                 <MenuItem value={'bavaria'}>Bavaria</MenuItem>
@@ -152,15 +167,15 @@ function SignUpComponent(props) {
                                 <MenuItem value={'baden-wuerttemberg'}>Baden-Württemberg</MenuItem>
                                 <MenuItem value={'north-rhine-westphalia'}>North Rhine-Westphalia</MenuItem>
                             </Select>
-                        </div>
+                        </FormControl>
                     </Grid>
                     <Grid item xs={6}>
-                        <div className={classes.signUpRow}>
+                        <FormControl required variant="outlined" size="small" fullWidth>
                             <InputLabel>City</InputLabel>
                             <Select label="City" value={values.city} onChange={(e) => props.handleChange('city', e)}>
                                 {options}
                             </Select>
-                        </div>
+                        </FormControl>
                     </Grid>
                 </Grid>
                 <div className={classes.signUpRow}>
@@ -172,7 +187,7 @@ function SignUpComponent(props) {
                     </div>
                 ) : null}
                 <div className={classes.signUpRow + ' ' + classes.signUpButtons}>
-                    <Button className={classes.signUpButton} onClick={props.onCancel}>
+                    <Button variant="outlined" color="primary" className={classes.signUpButton} onClick={props.onCancel}>
                         Cancel
                     </Button>
                     <Button
