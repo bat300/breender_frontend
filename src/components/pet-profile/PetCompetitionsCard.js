@@ -37,10 +37,10 @@ function PetCompetitionsCard(props) {
             <Card className={classes.root}>
                 <CardHeader action={props.certificate.declined? <CancelIcon /> : <VerificationIcon verified={props.certificate.verified} />} />
                 <CardContent>
-                    <Typography variant="h5" className={classes.label}>
+                    <Typography variant="h5" className={classes.label} color="textSecondary">
                         {props.name}
                     </Typography>
-                    <Typography className={`${classes.pos} ${classes.label}`}>
+                    <Typography className={`${classes.pos}`} color="textSecondary">
                         {props.category}
                     </Typography>
                     <Typography variant="body2" component="p">

@@ -16,7 +16,7 @@ function PetInformationListItem(props) {
         const urlForOwner = 'http://localhost:3000/user/'.concat(props.primary);
         return (
             <ListItem
-            className={classes.item}
+                className={classes.item}
                 button={isButton(props.itemType)}
                 component={isButton(props.itemType) ? 'a' : null}
                 href={props.itemType === 'document' ? props.url : props.itemType === 'owner' ? urlForOwner : null}
@@ -26,7 +26,7 @@ function PetInformationListItem(props) {
                         <Icon itemType={props.itemType} />
                     </Avatar>
                 </ListItemAvatar>
-                <ListItemText primary={props.primary} secondary={props.secondary} />
+                <ListItemText primary={props.primary} secondary={props.secondary} secondaryTypographyProps={{ color: 'primary' }} />
                 {props.itemType === 'document' ? props.declined ? <CancelIcon /> : <VerificationIcon verified={props.verified} /> : null}
             </ListItem>
         );
@@ -40,7 +40,7 @@ function Icon(props) {
         case 'owner':
             return <PersonRoundedIcon className={classes.icon} />;
         case 'name':
-            return <img alt="name" width={25} height={25} src={DogTagIcon} className={classes.icon} />; 
+            return <img alt="name" width={25} height={25} src={DogTagIcon} className={classes.icon} />;
         case 'nickname':
             return <PersonRoundedIcon className={classes.icon} />;
         case 'age':
@@ -73,7 +73,7 @@ const useStyles = makeStyles((theme) => ({
         width: '100%',
         background: 'white',
         boxShadow: '0 6px 10px rgba(0,0,0,.07), 0 0 6px rgba(0,0,0,.02)',
-    }
+    },
 }));
 
 export default PetInformationListItem;
