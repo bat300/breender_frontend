@@ -156,10 +156,12 @@ function MessengerComponent(props) {
                 conversationId: chatProps.conversation._id,
             };
             setMessages([...messages]);
-            const receiverId = currentChat.members.find((member) => member._id !== userId)._id;
+            const receiver = currentChat.members.find((member) => member._id !== userId);
             socket.current.emit('sendMessage', {
                 senderId: userId,
-                receiverId: receiverId,
+                receiverId: receiver._id,
+                receiverEmail: receiver.email,
+                receiverUsername: receiver.username,
                 text: newMessage,
             });
             dispatch(addMessage(message));
