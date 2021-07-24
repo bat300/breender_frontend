@@ -43,9 +43,9 @@ function DocumentResultsList(props) {
     ) : !Array.isArray(props.documentsArray) ? (
         <div>error</div>
     ) : props.documentsArray.length > 0 ? (
-        <ul style={{ listStyle: 'none' }}>
+        <div >
             {props.documentsArray.map((docs) => (
-                <li key={docs._id}>
+                <div>
                     <Paper className={classes.paper}>
                         <Grid container justify="center">
                             <Grid item xs={12}>
@@ -64,20 +64,20 @@ function DocumentResultsList(props) {
                                     </Button>
                                 </div>
                             </Grid>
-                            <ul style={{ listStyle: 'none' }}>
+                            <div>
                                 {docs.documents.map((doc) => (
-                                    <li key={doc._id}>
+                                    <div >
                                         <Grid>
                                             <DocumentElement document={doc} openModalVerify={props.openModalVerify} openModalDecline={props.openModalDecline} ownerId={docs.ownerId} officialName={docs.officialName}/>
                                         </Grid>
-                                    </li>
+                                    </div >
                                 ))}
-                            </ul>
+                            </div>
                         </Grid>
                     </Paper>
-                </li>
+                </div>
             ))}
-        </ul>
+        </div>
     ) : (
         <Grid container spacing={2} justify="center">
             <div style={{ fontSize: 30, fontWeight: 'lighter', padding: 30 }}>No documents to verify</div>
