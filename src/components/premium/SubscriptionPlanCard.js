@@ -45,12 +45,10 @@ const useStyles = makeStyles((theme) => ({
         color: '#C0E189',
     },
     crownIcon: {
-
         color: theme.palette.secondary.main,
     },
     cancelIcon: {
         marginRight: theme.spacing(1),
-         marginTop: theme.spacing(0.3),
         color: '#F96149',
     },
 }));

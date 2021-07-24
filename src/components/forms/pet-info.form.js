@@ -7,6 +7,7 @@ import { FormControl, Grid, InputLabel, InputAdornment, MenuItem, Select, TextFi
 import { breeds } from 'helper/data/breeds';
 import DocumentsUpload from '../upload/documents.upload';
 import CompetitionsComponent from '../competitions';
+import DocumentsComponent from '../documents';
 
 // define types for error handling
 const PetFormInputs = {
@@ -26,7 +27,6 @@ const PetInformationForm = ({ nameProp, nicknameProp, sexProp, breedProp, specie
     const { price, setPrice } = priceProp;
     const { birthDate, setBirthDate } = birthDateProp;
     const [errors, setErrors] = useState({ name: false, nickname: false, sex: false, species: false, breed: false });
-
     const validationErrors = {
         name: 'Name is required',
         nickname: 'Nickname is required',
@@ -177,12 +177,10 @@ const PetInformationForm = ({ nameProp, nicknameProp, sexProp, breedProp, specie
                                     <CompetitionsComponent mode={props.mode} />
                                 </Grid>
                                 <Grid item xs={12}>
-                                    <Divider />
-                                    <Grid>
-                                        <label className={classes.label}>Upload Documents (birth certificates, etc.)</label>
-                                    </Grid>
-                                    <DocumentsUpload mode={props.mode} />
+                                   
+                                    <DocumentsComponent mode={props.mode} />
                                 </Grid>
+                                
                                 <Grid item xs={12}>
                                     <TextField
                                         fullWidth

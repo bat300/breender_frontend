@@ -61,10 +61,8 @@ function App() {
                     <PersistGate loading={null} persistor={persistor}>
                         <CssBaseline />
                         <React.Fragment>
-                            <ScrollContainer>
                                 <DataFetcher />
                                 <Routes />
-                            </ScrollContainer>
                         </React.Fragment>
                     </PersistGate>
                 </Provider>

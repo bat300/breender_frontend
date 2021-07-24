@@ -95,10 +95,10 @@ function SubscriptionPageView(props) {
                 <div>
                     <Dialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={open}>
                         <DialogTitle id="customized-dialog-title" onClose={handleClose}>
-                            Switching from Premium to Free
+                            Switching from Premium to Basic
                         </DialogTitle>
                         <DialogContent dividers>
-                            <Typography gutterBottom>After your premium subscription ends your plan will be automatically switched to free.</Typography>
+                            <Typography gutterBottom>After your Premium Subscription is completed your plan will be automatically switched to Basic.</Typography>
                         </DialogContent>
                         <DialogActions>
                             <Button autoFocus variant="contained" onClick={handleClose} color="primary">

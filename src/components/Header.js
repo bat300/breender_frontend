@@ -105,7 +105,7 @@ function Header(props) {
                         |
                     </Typography>
                     <Typography className={classes.title} variant="h5" color="inherit" style={navigationSelectedStyle.premium} onClick={onClickPremium}>
-                        Pricing
+                        Subscription Plans
                     </Typography>
                     {user.user ? (
                         user.user.role === 'admin' ? (

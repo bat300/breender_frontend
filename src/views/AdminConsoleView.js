@@ -7,6 +7,7 @@ import DocumentsArray from '../components/DocumentsArray';
 import { Tabs } from 'antd';
 import { getDeclinedDocuments, getDocuments, getVerifiedDocuments} from 'redux/actions/documentActions';
 import { useUser } from 'helper/hooks';
+import ScrollContainer from 'components/ScrollContainer';
 
 const { TabPane } = Tabs;
 
@@ -26,6 +27,7 @@ const AdminConsoleView = (props) => {
  
 
     return (
+        <ScrollContainer>
         <Tabs activeKey={activeTab} centered onChange={onChangeTab}>
             
    <TabPane tab="Pending Documents" key="1">
@@ -48,7 +50,7 @@ const AdminConsoleView = (props) => {
     <TransactionsAdminOverviewTable active={activeTab === '4'} user={user}/>
             </div>
     </TabPane>
-  </Tabs>);
+  </Tabs></ScrollContainer>);
     };
 
 const useStyles = makeStyles((theme) => ({
