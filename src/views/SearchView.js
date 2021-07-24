@@ -168,7 +168,7 @@ function SearchView(props) {
                 <Grid item>
                     <FormControl className={classes.formControl} variant="outlined" size="small">
                         <InputLabel id="species-select-label">Species</InputLabel>
-                        <Select labelId="species-select-label" id="species-select" value={chosenSpecies} onChange={handleSpeciesChange}>
+                        <Select labelId="species-select-label" id="species-select" value={chosenSpecies} onChange={handleSpeciesChange} label="Species">
                             {Object.keys(breeds).map((oneSpecies) => (
                                 <MenuItem key={oneSpecies} value={oneSpecies}>
                                     {oneSpecies}
@@ -180,7 +180,7 @@ function SearchView(props) {
                 <Grid item>
                     <FormControl className={classes.formControl} variant="outlined" size="small">
                         <InputLabel id="sex-select-label">Sex</InputLabel>
-                        <Select labelId="sex-select-label" id="sex-select" value={sex} onChange={handleSexChange}>
+                        <Select labelId="sex-select-label" id="sex-select" value={sex} onChange={handleSexChange} label="Sex">
                             {sexes.map((sex) => (
                                 <MenuItem key={sex} value={sex}>
                                     {sex}
@@ -192,7 +192,7 @@ function SearchView(props) {
                 <Grid item>
                     <FormControl className={classes.formControl} variant="outlined" size="small">
                         <InputLabel id="breed-select-label">Breed</InputLabel>
-                        <Select labelId="breed-select-label" id="breed-select" value={breed} onChange={handleBreedChange}>
+                        <Select labelId="breed-select-label" id="breed-select" value={breed} onChange={handleBreedChange} label="Breed">
                             {(breeds[chosenSpecies] ?? []).map((breed) => (
                                 <MenuItem key={breed} value={breed}>
                                     {breed}
@@ -204,7 +204,7 @@ function SearchView(props) {
                 <Grid item>
                     <FormControl className={classes.formControl} variant="outlined" size="small">
                         <InputLabel id="breed-select-label">Sort by</InputLabel>
-                        <Select labelId="breed-select-label" id="sort-select" value={order} onChange={handleOrderChange}>
+                        <Select labelId="breed-select-label" id="sort-select" value={order} onChange={handleOrderChange} label="Sort by">
                             {orders.map((order) => (
                                 <MenuItem key={order} value={order}>
                                     {order}
