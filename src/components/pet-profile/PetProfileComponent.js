@@ -45,7 +45,7 @@ function PetProfileComponent(props) {
                                 </Typography>
                                 <PetPhotos pictures={props.pictures} profilePicture={props.profilePicture} />
                                 <ContactButton breederId={props.ownerId} petId={id} />
-                                {props.price && props.price > 0 && <PaymentButton pet={props} price={props.price} />}
+                                <PaymentButton pet={props} />
                             </Grid>
                             <Divider variant="middle" />
                             <Grid xs={7} direction="column">
