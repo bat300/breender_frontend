@@ -1,14 +1,16 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
-import { getTransactions, logout } from '../redux/actions';
+import { getTransactions, getUsersInfo, logout } from '../redux/actions';
 import { Menu, MenuItem, Avatar, Divider } from '@material-ui/core';
-import { connect } from 'react-redux';
+import { connect, useSelector } from 'react-redux';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import VerifiedUserIcon from '@material-ui/icons/VerifiedUser';
 import { useUser } from 'helper/hooks/auth.hooks';
-
+import SecurityIcon from '@material-ui/icons/Security';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCrown } from '@fortawesome/free-solid-svg-icons';
 const useStyles = makeStyles((theme) => ({
     menuitem: {
         display: 'flex',
@@ -26,6 +28,13 @@ function KebabMenu(props) {
     const classes = useStyles();
     // return the currnetly logged in user from redux store
     const user = useUser();
+    const userInfo = useSelector((state) => state.user.userInfo);
+
+    useEffect(() => {
+        if (user) {
+            props.dispatch(getUsersInfo(user.id));
+        }
+    }, [user]);
 
     const onClickLogin = () => {
         // close this menu
@@ -44,7 +53,7 @@ function KebabMenu(props) {
     };
 
     const onClickGoToUserProfile = () => {
-        props.history.push("/user");
+        props.history.push('/user');
     };
 
     const onClickMyTransactions = (id) => {
@@ -63,34 +72,35 @@ function KebabMenu(props) {
                 horizontal: 'right',
             }}
         >
-            {user
+            {userInfo
                 ? [
-                    <MenuItem key="user" className={classes.menuitem} onClick={onClickGoToUserProfile}>
-                        <Avatar className={classes.avatar}>
-                            {user.username ? user.username[0] : ""}
-                        </Avatar>
-                        {user.username}
-                    </MenuItem>,
-                    <Divider key="divider" />,
-                    <MenuItem key="transactions" onClick={() => onClickMyTransactions(user.id)} className={classes.menuitem}>
-                        My transactions
-                    </MenuItem>,
-                    <Divider key="divider2" />,
-                    <MenuItem key="logout" onClick={onClickLogout} className={classes.menuitem}>
-                        <ExitToAppIcon className={classes.avatar} />
-                        Logout
-                    </MenuItem>,
-                ]
+                      <MenuItem key="user" className={classes.menuitem} onClick={onClickGoToUserProfile}>
+                          <Avatar className={classes.avatar}>{userInfo.username ? userInfo.username[0] : ''}</Avatar>
+                          {user.username}
+                          {userInfo.role === 'admin' ? (
+                              <SecurityIcon style={{ paddingLeft: '4px', fill: 'green' }} />
+                          ) : userInfo.subscriptionPlan === 'premium' ? (
+                              <FontAwesomeIcon icon={faCrown} size={"lg"} style={{ paddingLeft: '6px', color: 'green' }} />
+                          ) : (
+                              <></>
+                          )}
+                      </MenuItem>,
+                      <Divider key="divider" />,
+                      <MenuItem key="transactions" onClick={() => onClickMyTransactions(user.id)} className={classes.menuitem}>
+                          My transactions
+                      </MenuItem>,
+                      <Divider key="divider2" />,
+                      <MenuItem key="logout" onClick={onClickLogout} className={classes.menuitem}>
+                          <ExitToAppIcon className={classes.avatar} />
+                          Logout
+                      </MenuItem>,
+                  ]
                 : [
-                    <MenuItem
-                        key="login"
-                        onClick={onClickLogin}
-                        className={classes.menuitem}
-                    >
-                        <VerifiedUserIcon className={classes.avatar} />
-                        Login
-                    </MenuItem>,
-                ]}
+                      <MenuItem key="login" onClick={onClickLogin} className={classes.menuitem}>
+                          <VerifiedUserIcon className={classes.avatar} />
+                          Login
+                      </MenuItem>,
+                  ]}
         </Menu>
     );
 }

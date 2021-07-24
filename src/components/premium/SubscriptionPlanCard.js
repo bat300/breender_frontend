@@ -11,6 +11,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import CancelIcon from '@material-ui/icons/Cancel';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCrown } from '@fortawesome/free-solid-svg-icons';
 
 const useStyles = makeStyles((theme) => ({
     rootChosen: {
@@ -50,7 +52,7 @@ function SubscriptionPlanCard(props) {
                     title={props.plan.title}
                     titleTypographyProps={{ align: 'center' }}
                     subheaderTypographyProps={{ align: 'center' }}
-                    action={props.plan.id === 'premium' ? <StarIcon style={{ fill: 'yellow' }} /> : null}
+                    action={props.plan.id === 'premium' ? <FontAwesomeIcon icon={faCrown} size={"lg"} style={{ paddingLeft: '4px', color: 'green' }} /> : <></>}
                     className={classes.cardHeader}
                 />
                 <CardContent>
