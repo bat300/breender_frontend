@@ -5,7 +5,6 @@ import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import { Typography } from '@material-ui/core';
 
-
 const payments = [
     { description: '4.99€ for 1 month', plan: '1mo', price: '4.99' },
     { description: '12,99€ for 3 months', plan: '3mo', price: '12.99' },
@@ -23,7 +22,7 @@ const SubscriptionPlanPreview = ({ user }) => {
     const getPaymentPlanDescription = () => {
         const planResult = payments.filter((item) => item.plan === user.paymentPlan);
         return planResult[0].description;
-    }
+    };
 
     return (
         <Grid item xs={12} className={classes.root}>
@@ -33,9 +32,7 @@ const SubscriptionPlanPreview = ({ user }) => {
                         <Typography variant="h6" className={classes.labelPremium}>
                             Premium
                         </Typography>
-                        <Typography >
-                            {getPaymentPlanDescription()}
-                        </Typography>
+                        <Typography className={classes.labelPremium}>{getPaymentPlanDescription()}</Typography>
                     </CardContent>
                 </Card>
             ) : (
@@ -54,16 +51,10 @@ const SubscriptionPlanPreview = ({ user }) => {
 const useStyles = makeStyles((theme) => ({
     premium: {
         minWidth: 250,
-        borderRadius: '60px',
-        background: '#D37F65',
+        borderRadius: 25,
+        background: theme.palette.primary.main,
         boxShadow: '0 6px 10px rgba(0,0,0,.08), 0 0 6px rgba(0,0,0,.05)',
-        transition: '.3s transform cubic-bezier(.155,1.105,.295,1.12),.3s box-shadow,.3s -webkit-transform cubic-bezier(.155,1.105,.295,1.12)',
-        cursor: 'pointer',
         border: `2px solid #3E4059`,
-        ':hover&': {
-            transform: 'scale(1.05)',
-            boxShadow: '0 10px 20px rgba(0,0,0,.12), 0 4px 8px rgba(0,0,0,.06)',
-        },
     },
     free: {
         minWidth: 250,
@@ -87,16 +78,14 @@ const useStyles = makeStyles((theme) => ({
         justifyContent: 'center',
         flexDirection: 'column',
         alignItems: 'center',
-
     },
     labelPremium: {
-        color: '##3E405',
-        fontWeight: "lighter",
-        fontSize: 20,
+        color: 'white',
+        fontWeight: 'lighter',
     },
     labelFree: {
         color: 'black',
-        fontWeight: "lighter",
+        fontWeight: 'lighter',
         fontSize: 20,
     },
 }));

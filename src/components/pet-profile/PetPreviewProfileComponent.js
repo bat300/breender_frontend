@@ -37,8 +37,8 @@ const useStyles = makeStyles((theme) => ({
     textLayout: {
         display: 'flex',
         flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'left',
+        justifyContent: 'flex-start',
+        alignItems: 'flex-start',
     },
     picture: {
         width: 50,

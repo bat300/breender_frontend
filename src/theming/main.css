@@ -1,0 +1,58 @@
+.resize-on-hover {
+    min-width: 250;
+    box-shadow: 0 6px 10px rgba(0,0,0,.08), 0 0 6px rgba(0,0,0,.05);
+    transition: .3s transform cubic-bezier(.155,1.105,.295,1.12),.3s box-shadow,.3s -webkit-transform cubic-bezier(.155,1.105,.295,1.12);
+    cursor: pointer;
+}
+
+.resize-on-hover:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 20px rgba(0,0,0,.12), 0 4px 8px rgba(0,0,0,.06);
+}
+
+a:hover{
+    color: #EDCC97;
+}
+
+.MuiButton-contained {
+    background-color: #3E4059;
+    color: white;
+}
+
+.MuiButton-contained:hover {
+    background-color: #7D7F9A;
+    color: white;
+}
+
+.MuiButton-root:disabled {
+    background-color: #CECFD4;
+    color: #3E4059;
+}
+
+.MuiButton-containedPrimary {
+    background-color: #7D7F9A;
+}
+
+.MuiButton-containedPrimary:hover {
+    background-color: #3E4059;
+}
+
+.MuiButton-containedSecondary {
+    background-color: #D2D3DA;
+    color: #222330;
+}
+.MuiButton-containedSecondary:hover {
+    background-color: rgba(145, 147, 179, 1);
+}
+.MuiListItemIcon-root {
+    background: #D37F65;
+}
+
+.MuiListItem-button:hover {
+    text-decoration: none;
+    background-color: rgba(21, 26, 80, 0.1);
+}
+
+.MuiPaper-root {
+    border-radius: 10px;
+}

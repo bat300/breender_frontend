@@ -1,25 +1,33 @@
-import React from "react";
+import React from 'react';
 import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
 import Grid from '@material-ui/core/Grid';
-import StarIcon from '@material-ui/icons/Star';
+import StarTwoToneIcon from '@material-ui/icons/StarTwoTone';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
-import CancelIcon from '@material-ui/icons/Cancel';
-import CheckCircleIcon from '@material-ui/icons/CheckCircle';
+import { CancelIcon, CheckIcon } from 'components/icons';
 
 const useStyles = makeStyles((theme) => ({
     rootChosen: {
+        background: theme.palette.primary.main,
         minWidth: 275,
-        border: `4px solid ${theme.palette.secondary.main}`,
+        border: `1px solid rgba(145, 147, 179, 0.5)`,
+        boxShadow: '0 6px 10px rgba(0,0,0,.07), 0 0 6px rgba(0,0,0,.02)',
+        cursor: 'pointer',
+        marginBottom: 30,
     },
-    root: {},
+    root: {
+        border: `1px solid rgba(145, 147, 179, 0.5)`,
+        boxShadow: '0 6px 10px rgba(0,0,0,.07), 0 0 6px rgba(0,0,0,.02)',
+        cursor: 'pointer',
+        marginBottom: 30,
+    },
     cardHeader: {
-        backgroundColor: theme.palette.type === 'light' ? theme.palette.grey[200] : theme.palette.grey[700],
+        backgroundColor: theme.palette.primary.light,
     },
     cardPricing: {
         display: 'flex',
@@ -34,31 +42,37 @@ const useStyles = makeStyles((theme) => ({
         paddingBottom: theme.spacing(2),
         display: 'flex',
         flexWrap: 'nowrap',
+        alignItems: 'center',
+    },
+    button: {
+        padding: 20,
     },
 }));
 /**
- * For choosing and presenting subscription plan 
+ * For choosing and presenting subscription plan
  * @param {props} props
  */
 function SubscriptionPlanCard(props) {
     const classes = useStyles();
 
+    const isPremium = props.plan.id === 'premium';
+
     return (
         <Grid item key={props.plan.title} xs={6}>
-            <Card className={props.subscriptionPlan === props.plan.id ? classes.rootChosen : classes.root}>
+            <Card className={`${props.subscriptionPlan === props.plan.id ? classes.rootChosen : classes.root} ${'resize-on-hover'}`}>
                 <CardHeader
                     title={props.plan.title}
                     titleTypographyProps={{ align: 'center' }}
                     subheaderTypographyProps={{ align: 'center' }}
-                    action={props.plan.id === 'premium' ? <StarIcon style={{ fill: 'yellow' }} /> : null}
+                    //action={isPremium ? <StarTwoToneIcon className={classes.icon} /> : null}
                     className={classes.cardHeader}
                 />
                 <CardContent>
                     <div className={classes.cardPricing}>
-                        <Typography component="h2" variant="h3" color="textPrimary">
+                        <Typography variant="h3" color={`${isPremium ? 'textSecondary' : 'textPrimary'}`}>
                             ${props.plan.price}
                         </Typography>
-                        <Typography variant="h6" color="textSecondary">
+                        <Typography variant="h6" color={`${isPremium ? 'textSecondary' : 'textPrimary'}`}>
                             /mo
                         </Typography>
                     </div>
@@ -66,19 +80,19 @@ function SubscriptionPlanCard(props) {
                         <ul>
                             {props.plan.included.map((line) => (
                                 <div key={`${line}_${props.plan.id}div`}>
-                                    <Typography variant="subtitle1" key={`${line}_${props.plan.id}`}>
+                                    <Typography key={`${line}_${props.plan.id}`} color={`${isPremium ? 'textSecondary' : 'textPrimary'}`}>
                                         <div className={classes.features}>
-                                            <CheckCircleIcon style={{ fill: 'green', marginRight: '7' }} />
+                                            <CheckIcon style={{ marginRight: 8 }} />
                                             {line}
                                         </div>
                                     </Typography>
                                 </div>
-                            ))}      
+                            ))}
                             {props.plan.excluded.map((line) => (
                                 <div key={`${line}_${props.plan.id}div`}>
-                                    <Typography variant="subtitle1" key={`${line}_${props.plan.id}`}>
+                                    <Typography key={`${line}_${props.plan.id}`}>
                                         <div className={classes.features}>
-                                            <CancelIcon style={{ fill: 'red', marginRight: '7' }} />
+                                            <CancelIcon style={{ marginRight: 8 }} />
                                             {line}
                                         </div>
                                     </Typography>
@@ -87,7 +101,7 @@ function SubscriptionPlanCard(props) {
                         </ul>
                     </div>
                 </CardContent>
-                <CardActions>
+                <CardActions className={classes.button}>
                     <Button fullWidth variant="contained" color={props.subscriptionPlan === props.plan.id ? 'secondary' : 'primary'} onClick={props.onClick}>
                         {props.subscriptionPlan === props.plan.id ? 'YOUR CHOICE' : 'CHOOSE'}
                     </Button>

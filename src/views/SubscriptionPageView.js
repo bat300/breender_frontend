@@ -14,17 +14,18 @@ const useStyles = makeStyles((theme) => ({
         padding: theme.spacing(8, 0, 6),
     },
     paper: {
-        width: '1000px',
+        width: '70%',
         marginLeft: 'auto',
         marginRight: 'auto',
         marginTop: theme.spacing(0),
         marginBottom: theme.spacing(5),
-        backgroundColor: '#F2CC8F',
+        backgroundColor: 'white',
+        boxShadow: '0 10px 20px rgba(0,0,0,.07), 0 0 20px rgba(0,0,0,.02)',
     },
     imageOverlay: {
         position: 'relative',
-        top: '7.1%',
-        left: '33%',
+        top: '7.4%',
+        left: '28%',
     },
 }));
 
@@ -74,10 +75,10 @@ function SubscriptionPageView(props) {
             </div>
             <Paper className={classes.paper}>
                 <Container maxWidth="sm" component="main" className={classes.premiumDescription}>
-                    <Typography component="h1" variant="h2" align="center" color="textPrimary" gutterBottom>
+                    <Typography variant="h3" align="center" color="textPrimary" gutterBottom>
                         Get Access to All Features!
                     </Typography>
-                    <Typography variant="h5" align="center" color="textSecondary" component="p">
+                    <Typography variant="h6" align="center" color="textPrimary" component="p">
                         Basic product or service is provided free of charge, but money (a premium) is charged for additional features, services, or virtual (online) or physical (offline) goods that
                         expand the functionality of the free version.
                     </Typography>

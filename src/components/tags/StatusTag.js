@@ -15,13 +15,13 @@ const StatusTag = (props) => {
     const color = () => {
         switch (status) {
             case STATUS_TYPE.PENDING:
-                return { color: 'orange', background: 'white', borderColor: '#FDCD7F' };
+                return { color: 'orange', background: 'white', borderColor: '#F9C339' };
             case STATUS_TYPE.SUCCESS:
-                return { color: 'green', background: 'white', borderColor: '#A1CF6B' };
+                return { color: 'green', background: 'white', borderColor: '#C0E189' };
             case STATUS_TYPE.FAIL:
-                return { color: 'red', background: 'white', borderColor: '#E87461' };
+                return { color: 'red', background: 'white', borderColor: '#F96149' };
             default:
-                return { color: 'orange', background: 'white', borderColor: 'orange' };
+                return { color: 'orange', background: 'white', borderColor: '#F9C339' };
         }
     };
 
