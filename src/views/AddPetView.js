@@ -10,7 +10,7 @@ import { useLoggedInUser } from 'helper/hooks/auth.hooks';
 
 // store-relevant imports
 import { usePetCompetitions, usePetDocuments, usePetPictures, usePetProfilePictureToUpload, useUser } from 'helper/hooks/';
-import { addPet, clearPet, updateCompetitionsToUpload, updateDocumentsToUpload, updatePicturesToUpload, updateProfilePicture } from 'redux/actions';
+import { addPet, clearPet, updateCompetitionsToUpload, updateDocumentsToUpload, updatePicturesToUpload, updateProfilePicture, getUserPets } from 'redux/actions';
 // services import
 import { FirebaseService, NotificationService } from 'services';
 import { isObjEmpty } from 'helper/helpers';
@@ -163,6 +163,7 @@ const AddPetView = (props) => {
             NotificationService.notify('success', 'Success', 'Your four-legged friend was added to your profile!');
             history.push('/');
             dispatch(clearPet());
+            dispatch(getUserPets(user.id));
         };
 
         const onError = () => {
