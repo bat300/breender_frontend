@@ -63,16 +63,16 @@ const StatusTag = (props) => {
                     </Select>
                 </FormControl>
             )}
-            <Dialog open={open} onClose={handleClose} onBlur={handleClose} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description">
-                <DialogTitle id="alert-dialog-title">{'Confirm Action'}</DialogTitle>
+            <Dialog open={open} onClose={handleClose} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description">
+            <DialogTitle id="alert-dialog-title" color="primary">{'Confirm Action'}</DialogTitle>
                 <DialogContent>
-                    <DialogContentText id="alert-dialog-description">Please confirm you want to officially change the status.</DialogContentText>
+                    <DialogContentText color="primary" id="alert-dialog-description">Please confirm you want to officially change the status.</DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleClose} color="primary">
+                    <Button onClick={handleClose} variant="outlined" color="primary">
                         Cancel
                     </Button>
-                    <Button onClick={handleConfirm} color="primary" autoFocus>
+                    <Button onClick={handleConfirm} variant="contained" color="primary" autoFocus>
                         Confirm
                     </Button>
                 </DialogActions>
