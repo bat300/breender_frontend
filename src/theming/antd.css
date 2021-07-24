@@ -25,3 +25,12 @@
     opacity: 0;
     transition: opacity 0.3s;
 }
+
+.ant-modal-content {
+    border-radius: 25px;
+}
+
+.ant-modal-header {
+    border-top-right-radius: 25px;
+    border-top-left-radius: 25px;
+}
