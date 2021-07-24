@@ -86,7 +86,7 @@ function MessengerComponent(props) {
                         InputLabelProps={{ classeName: classes.label }}
                         color="secondary"
                         variant="outlined"
-                        label="Search for breeders..."
+                        label="Filter breeders..."
                         onChange={handleSearchChange}
                         fullWidth
                     />
