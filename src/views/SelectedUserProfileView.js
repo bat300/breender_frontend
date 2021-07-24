@@ -2,12 +2,10 @@ import React, { useEffect } from 'react';
 import { connect, useSelector } from "react-redux";
 import UserProfile from "../components/user-profile/UserProfile";
 import { getUser, getSelectedUserPets, getReviewsOnSelectedUser } from 'redux/actions';
-import { useDispatch } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import Loading from '../components/Loading';
 
 function SelectedUserProfileView(props) {
-    const dispatch = useDispatch();
     const location = useLocation();
 
     const userId = location.pathname.split('/user/')[1];
@@ -35,8 +33,9 @@ function SelectedUserProfileView(props) {
         // load user when the page is loaded
         if (!selectedUser || (selectedUser && selectedUser._id !== userId)) {
             loadUser(userId);
+            loadReviews();
         }
-    }, [selectedUser]);
+    }, [selectedUser, reviews]);
 
     useEffect(() => {
         // load pets of a user when the page is loaded
@@ -50,9 +49,9 @@ function SelectedUserProfileView(props) {
         if (!reviews || (reviews && reviews.length > 0 && reviews[0].revieweeId !== userId)) {
             loadReviews();
         }
-    }, [pets]);
+    }, [reviews]);
 
-    return !selectedUser ? (
+    return !selectedUser || selectedUser._id !== userId ? (
         <Loading />
     ) : <UserProfile user={selectedUser} pets={pets} profileOfLoggedInUser={false} reviews={reviews} />
 }

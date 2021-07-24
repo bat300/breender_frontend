@@ -22,8 +22,8 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor: '#787878',
     },
     listItem: {
-        paddingLeft: '15%',
-        paddingRight: '15%',
+        paddingLeft: '25%',
+        paddingRight: '40%',
     },
     typography: {
         margin: theme.spacing(2),

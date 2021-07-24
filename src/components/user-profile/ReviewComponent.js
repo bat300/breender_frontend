@@ -6,6 +6,8 @@ import Rating from '@material-ui/lab/Rating';
 import { VerificationIcon } from '../icons';
 import { useHistory } from 'react-router-dom';
 import { Tooltip } from 'antd';
+import { getUser, getSelectedUserPets, getReviewsOnSelectedUser } from 'redux/actions';
+import { useDispatch } from 'react-redux';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -27,11 +29,28 @@ const useStyles = makeStyles((theme) => ({
 export default function ReviewComponent(props) {
     const classes = useStyles();
     const history = useHistory();
+    const dispatch = useDispatch();
+
+    const loadUser = async (id) => {
+        // trigger the redux action getUser
+        dispatch(getUser(id));
+    };
+
+    const loadUserPets = async (userId) => {
+        // trigger the redux action getSelectedUserPets
+        dispatch(getSelectedUserPets(userId));
+    };
+
+    const loadReviews = async (userId) => {
+        // trigger the redux action getReviewsOnSelectedUser
+        dispatch(getReviewsOnSelectedUser(userId));
+    };
 
     const goToUserPage = () => {
-        setTimeout(function () {
-            history.push('/user/' + props.review.reviewerId);
-        }, 1000);
+        history.push('/user/' + props.review.reviewerId);
+        loadUser(props.review.reviewerId);
+        loadUserPets(props.review.reviewerId);
+        loadReviews(props.review.reviewerId);
     };
 
     return (
