@@ -6,19 +6,37 @@ import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 
 function ConversationComponent(props) {
+    const classes = useStyles();
+
     let friend = props.conversation.members.find((m) => {
         return m._id !== props.currentUser.id;
     });
 
     // TODO: set friend avatar
     return !friend ? null : (
-        <ListItem button key={friend.username}>
+        <ListItem button key={friend.username} selected={props.isCurrentChat} className={classes.conversationItem}>
             <ListItemAvatar>
-                <Avatar />
+                <Avatar className={classes.icon} />
             </ListItemAvatar>
-            <ListItemText primary={friend ? friend.username : 'Unknown'} />
+            <ListItemText
+                primary={
+                    <Typography variant="h6" className={classes.username}>
+                        {friend ? friend.username : 'Unknown'}
+                    </Typography>
+                }
+            />
         </ListItem>
     );
 }
+
+const useStyles = makeStyles((theme) => ({
+    icon: {
+        background: theme.palette.secondary.main,
+        color: theme.palette.secondary.light,
+    },
+    username: {
+        color: theme.palette.text.secondary,
+    },
+}));
 
 export default ConversationComponent;
