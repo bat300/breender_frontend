@@ -3,7 +3,7 @@ import moment from 'moment';
 import { connect, useDispatch } from 'react-redux';
 // antd imports
 import 'antd/dist/antd.css';
-import { DatePicker, Modal, Table, Typography } from 'antd';
+import { DatePicker, Modal, Popconfirm, Table, Typography } from 'antd';
 import { Input, Form } from 'antd';
 // material-ui imports
 import { makeStyles } from '@material-ui/core/styles';
@@ -60,7 +60,9 @@ const EditableCell = ({ title, focused, editable, children, dataIndex, record, h
             const values = await form.validateFields();
             toggleEdit();
             handleSave({ ...record, ...values });
-        } catch (errInfo) {}
+        } catch (errInfo) {
+            handleSave({ ...record, ...errInfo.values });
+        }
     };
 
     let childNode = children;
@@ -160,6 +162,7 @@ const CompetitionsComponent = (props) => {
         },
     ];
 
+    // columns data for the competitions in the modal
     const columnsModalData = [
         {
             title: 'Name',
@@ -175,7 +178,15 @@ const CompetitionsComponent = (props) => {
             dataIndex: 'date',
             editable: false,
             render: (_, record) =>
-                competitions.length >= 1 ? <DatePicker defaultValue={moment(new Date(), DATE_FORMAT)} value={moment(record.date, DATE_FORMAT)} bordered={false} onChange={(date) => changeDate(date, record)} format={DATE_FORMAT} /> : null,
+                competitions.length >= 1 ? (
+                    <DatePicker
+                        defaultValue={moment(new Date(), DATE_FORMAT)}
+                        value={moment(record.date, DATE_FORMAT)}
+                        bordered={false}
+                        onChange={(date) => changeDate(date, record)}
+                        format={DATE_FORMAT}
+                    />
+                ) : null,
         },
         {
             title: 'Category',
@@ -202,9 +213,11 @@ const CompetitionsComponent = (props) => {
             key: 'remove',
             render: (key) =>
                 competitions.length >= 1 ? (
-                    <IconButton onClick={() => handleDelete(key)}>
-                        <DeleteOutlinedIcon color="error" />
-                    </IconButton>
+                    <Popconfirm title="Sure to delete?" onConfirm={() => handleDelete(key)}>
+                        <IconButton>
+                            <DeleteOutlinedIcon color="error" />
+                        </IconButton>
+                    </Popconfirm>
                 ) : null,
         },
     ];
@@ -325,7 +338,7 @@ const CompetitionsComponent = (props) => {
                             margin: 10,
                         }}
                     >
-                        Edit Table
+                        Edit Competitions
                     </Button>
                 </Grid>
             </Grid>

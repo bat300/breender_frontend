@@ -7,7 +7,7 @@ function PetCompetitionsList(props) {
     <Grid item>
       <Grid
         container
-        spacing={2}
+        spacing={5}
         alignItems="center"
         justify="center"
         direction="row"

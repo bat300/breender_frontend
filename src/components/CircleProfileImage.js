@@ -1,24 +1,22 @@
-import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import { Avatar } from "@material-ui/core";
+import React from 'react';
+import { makeStyles } from '@material-ui/core/styles';
+import { Image } from 'antd';
 
 const useStyles = makeStyles((theme) => ({
-  large: {
-    width: theme.spacing(20),
-    height: theme.spacing(20),
-    margin: theme.spacing(2),
-  },
+    image: {
+        borderRadius: '50%',
+        objectFit: 'cover',
+        border: `2px solid ${theme.palette.primary.main}`,
+    },
+    layout: {
+      margin: theme.spacing(1),
+      marginBottom: theme.spacing(4),
+    }
 }));
 
 function CircleProfileImage(props) {
-  const classes = useStyles();
-  return (
-    <Avatar
-      className={classes.large}
-      src={props.imageUrl}
-      alt="Pet Profile Picture"
-    />
-  );
+    const classes = useStyles();
+    return <div className={classes.layout}><Image height={220} width={220} className={classes.image} src={props.imageUrl} /></div>;
 }
 
 export default CircleProfileImage;

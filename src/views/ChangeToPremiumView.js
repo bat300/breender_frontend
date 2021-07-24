@@ -71,7 +71,7 @@ function ChangeToPremiumView(props) {
             }, 1000);
         };
 
-        props.dispatch(update(user.user.id, 'premium', plan, paymentMethod, onSuccess, onError));
+        props.dispatch(update(user.userInfo.id, 'premium', plan, paymentMethod, onSuccess, onError));
     }
 
     const prevStep = () => {

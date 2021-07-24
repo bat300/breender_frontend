@@ -9,13 +9,13 @@ const PetTypes = {
     GET_PET: 'GET_PET',
     UPDATE_SELECTED_PET: 'UPDATE_SELECTED_PET',
     UPDATE_PROFILE_PICTURE: 'UPDATE_PROFILE_PICTURE',
-    CLEAR_PET: 'CLEAR_PET'
+    CLEAR_PET: 'CLEAR_PET',
 };
 
-export const getPets = (species, sex, breed, age, showOwn = false, user) => {
+export const getPets = (species, sex, breed, age, page, showOwn = false, user) => {
     // when the backend call was successfull and the pets are retrieved
     // in the dispatcher the pets will be added to the global state
-    function onSuccess(pets) {
+    function onSuccess(pets, totalPages) {
         return { type: PetTypes.GET_PETS, pets: pets };
     }
     // when the backend call was failed
@@ -27,12 +27,12 @@ export const getPets = (species, sex, breed, age, showOwn = false, user) => {
     return async (dispatch) => {
         try {
             // ask for the pets in the backend
-            let pets = await PetService.getPets(species, sex, breed, age, showOwn, user);
+            let pets = await PetService.getPets(species, sex, breed, age, page, showOwn, user);
             // call onSuccess in context of redux
-            dispatch(onSuccess(pets));
+            dispatch(onSuccess(pets, pets.totalPages));
         } catch (e) {
             onFailure(e);
-            NotificationService.notify('error', 'Error', 'Retrieve of the pets failed. Please try again.')
+            NotificationService.notify('error', 'Error', 'Retrieve of the pets failed. Please try again.');
         }
     };
 };
@@ -53,7 +53,7 @@ export const deletePet = (id, onSuccess = () => null, onError = (err) => null) =
             dispatch(deletePetAction());
         } catch (e) {
             onFailure(e);
-            NotificationService.notify('error', 'Deletion Error', 'During deletion occurred an error. Please try again.')
+            NotificationService.notify('error', 'Deletion Error', 'During deletion occurred an error. Please try again.');
         }
     };
 };
@@ -74,7 +74,7 @@ export const addPet = (pet, onSuccess = () => null, onError = (err) => null) => 
             })
             .catch((e) => {
                 onFailure(e);
-                NotificationService.notify('error', 'Error', 'Failed to add a new pet. Please try again.')
+                NotificationService.notify('error', 'Error', 'Failed to add a new pet. Please try again.');
             });
     };
 };
@@ -95,7 +95,7 @@ export const changePet = (changedPet, onSuccess = () => null, onError = (err) =>
             dispatch(changePetAction(pet));
         } catch (e) {
             onFailure(e);
-            NotificationService.notify('error', 'Error', 'Failed to update the pet. Please try again.')
+            NotificationService.notify('error', 'Error', 'Failed to update the pet. Please try again.');
         }
     };
 };
@@ -114,14 +114,13 @@ export const getPet = (id) => {
             dispatch(getPetAction(pet));
         } catch (e) {
             onFailure(e);
-            NotificationService.notify('error', 'Error', 'Failed to get a pet. Please try again.')
+            NotificationService.notify('error', 'Error', 'Failed to get a pet. Please try again.');
         }
     };
 };
 
 export const updateSelectedPet = (pet) => {
     const updatePetAction = (pet) => {
-
         return { type: PetTypes.UPDATE_SELECTED_PET, pet: pet };
     };
     const onFailure = (error) => {
@@ -150,7 +149,7 @@ export const clearPet = () => {
             dispatch(clearPetAction());
         } catch (e) {
             onFailure(e);
-            NotificationService.notify('error', 'Error', 'Failed to clear a pet. Please try again.')
+            NotificationService.notify('error', 'Error', 'Failed to clear a pet. Please try again.');
         }
     };
 };

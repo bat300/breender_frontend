@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { getTransactions, getUsersInfo, logout } from '../redux/actions';
-import { Menu, MenuItem, Avatar, Divider } from '@material-ui/core';
+import { Menu, MenuItem, Avatar, Divider, Typography } from '@material-ui/core';
 import { connect, useSelector } from 'react-redux';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import VerifiedUserIcon from '@material-ui/icons/VerifiedUser';
@@ -17,8 +17,11 @@ const useStyles = makeStyles((theme) => ({
         minWidth: '200px',
     },
     avatar: {
-        marginRight: theme.spacing(1),
+        background: theme.palette.secondary.main,
     },
+    margin: {
+        marginRight: theme.spacing(1),
+    }
 }));
 /**
  * Menu for user managment
@@ -75,8 +78,8 @@ function KebabMenu(props) {
             {userInfo
                 ? [
                       <MenuItem key="user" className={classes.menuitem} onClick={onClickGoToUserProfile}>
-                          <Avatar className={classes.avatar}>{userInfo.username ? userInfo.username[0] : ''}</Avatar>
-                          {user.username}
+                          <Avatar className={classes.avatar}><Typography color="textSecondary">{user.username ? user.username[0] : ""}</Typography></Avatar>
+                          {userInfo.username}
                           {userInfo.role === 'admin' ? (
                               <SecurityIcon style={{ paddingLeft: '4px', fill: 'green' }} />
                           ) : userInfo.subscriptionPlan === 'premium' ? (
@@ -91,7 +94,7 @@ function KebabMenu(props) {
                       </MenuItem>,
                       <Divider key="divider2" />,
                       <MenuItem key="logout" onClick={onClickLogout} className={classes.menuitem}>
-                          <ExitToAppIcon className={classes.avatar} />
+                          <ExitToAppIcon className={classes.margin} />
                           Logout
                       </MenuItem>,
                   ]

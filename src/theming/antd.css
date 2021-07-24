@@ -8,3 +8,20 @@
 .ant-table-tbody > tr.ant-table-row:hover > td {
     background-color: rgba(62, 64, 89, 0.05);
 }
+
+.ant-image-mask {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    background: rgba(62, 64, 89, 0.25);
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.3s;
+}

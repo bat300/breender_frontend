@@ -10,7 +10,7 @@ import AlternateEmailIcon from '@material-ui/icons/AlternateEmail';
 import LocationCityIcon from '@material-ui/icons/LocationCity';
 import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 import EventIcon from '@material-ui/icons/Event';
-import VerificationIcon from '../VerificationIcon';
+import { VerificationIcon } from '../icons';
 import LandscapeIcon from '@material-ui/icons/Landscape';
 import PaymentIcon from '@material-ui/icons/Payment';
 import { Divider, Typography } from '@material-ui/core';
