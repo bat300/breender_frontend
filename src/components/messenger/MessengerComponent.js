@@ -232,6 +232,7 @@ const useStyles = makeStyles((theme) => ({
     chatMenu: {
         borderRight: '1px solid #e0e0e0',
         backgroundColor: theme.palette.primary.dark,
+        borderRadius: theme.shape.borderRadius,
     },
     messageArea: {
         height: '70vh',
