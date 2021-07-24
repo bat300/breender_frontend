@@ -28,7 +28,7 @@ const AdminConsoleView = (props) => {
     return (
         <Tabs activeKey={activeTab} centered onChange={onChangeTab}>
             
-   <TabPane tab="Unprocessed Documents" key="1">
+   <TabPane tab="Pending Documents" key="1">
     <div className={classes.childLayout}>
                 <DocumentsArray getDocuments={getDocuments} active={activeTab === '1'} loading={loading} setLoading={setLoading}/>
             </div>
