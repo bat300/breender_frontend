@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
     },
     margin: {
         marginRight: theme.spacing(1),
-    }
+    },
 }));
 /**
  * Menu for user managment
@@ -90,7 +90,7 @@ function KebabMenu(props) {
                         onClick={onClickLogin}
                         className={classes.menuitem}
                     >
-                        <VerifiedUserIcon className={classes.avatar} />
+                        <VerifiedUserIcon color="primary" className={classes.margin} />
                         Login
                     </MenuItem>,
                 ]}
