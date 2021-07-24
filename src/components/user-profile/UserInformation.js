@@ -14,6 +14,7 @@ import VerificationIcon from '../VerificationIcon';
 import LandscapeIcon from '@material-ui/icons/Landscape';
 import PaymentIcon from '@material-ui/icons/Payment';
 import { Divider, Typography } from '@material-ui/core';
+import { Tooltip } from 'antd';
 
 const useStyles = makeStyles((theme) => ({
     black: {
@@ -88,7 +89,11 @@ export default function UserInformation(props) {
                     </Avatar>
                 </ListItemAvatar>
                 <ListItemText primary={props.user.email} secondary="Email" />
-                <VerificationIcon verified={props.user.isVerified} />
+                <Tooltip trigger="hover" placement="top" title={props.user.isVerified ? "Your email is verified." : "Your email is NOT verified."}>
+                    <div>
+                        <VerificationIcon verified={props.user.isVerified} />
+                    </div>
+                </Tooltip>
             </ListItem>
             <ListItem className={classes.listItem}>
                 <ListItemAvatar>

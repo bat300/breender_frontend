@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import { FormControl, Grid, InputLabel, Button, MenuItem, Select, TextField, FormHelperText, Divider, Typography } from '@material-ui/core';
-import CloseIcon from '@material-ui/icons/Close';
 import * as EmailValidator from 'email-validator';
+import { Tooltip } from 'antd';
 
 const useStyles = makeStyles((theme) => ({
     layout: {
@@ -181,7 +181,7 @@ export default function UserForm({ usernameProp, emailProp, provinceProp, cityPr
         }
     }
 
-    const handleAddPet = (e) => {
+    const handleChangeSubscriptionPlan = (e) => {
         history.push('/premium');
     };
 
@@ -278,9 +278,17 @@ export default function UserForm({ usernameProp, emailProp, provinceProp, cityPr
                             />
                         </Grid>
                         <Grid item xs={12} sm={6}>
-                            <Button style={{ margin: '0 auto', display: "flex" }} variant="contained" color="secondary" onClick={handleAddPet}>
-                                Adjust subscription plan
-                            </Button>
+                            {props.subscriptionPlan === 'premium' ?
+                                <Tooltip trigger="hover" placement="top" title={"After your premium subscription ends your plan will be automatically switched to free."}>
+                                    <div>
+                                        <Button style={{ margin: '0 auto', display: "flex", pointerEvents: 'none' }} variant="contained" color="secondary" onClick={handleChangeSubscriptionPlan} disabled={props.subscriptionPlan === 'premium'}>
+                                            Adjust subscription plan
+                                        </Button>
+                                    </div>
+                                </Tooltip>
+                                : <Button style={{ margin: '0 auto', display: "flex" }} variant="contained" color="secondary" onClick={handleChangeSubscriptionPlan} disabled={props.subscriptionPlan === 'premium'}>
+                                    Adjust subscription plan
+                                </Button>}
                         </Grid>
                     </Grid>
                     <Divider variant="middle" className={classes.divider} />

@@ -4,6 +4,7 @@ import { Grid, Card, CardHeader, CardContent, Typography, CardActions, Button } 
 import GetAppIcon from '@material-ui/icons/GetApp';
 import VerificationIcon from '../../components/VerificationIcon';
 import CancelIcon from '@material-ui/icons/Cancel';
+import { Tooltip } from 'antd';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -28,7 +29,16 @@ function PetCompetitionsCard(props) {
     return (
         <Grid item>
             <Card className={classes.root}>
-                <CardHeader action={props.certificate.declined? <CancelIcon style={{fill: 'red'}}/> : <VerificationIcon verified={props.certificate.verified} />} />
+                <CardHeader action={
+                    props.certificate.declined ?
+                        <CancelIcon style={{ fill: 'red' }} />
+                        : (<Tooltip trigger="hover" placement="top" title={props.verified ? "The document is verified." : "The document is NOT yet verified."}>
+                            <div>
+                                <VerificationIcon verified={props.certificate.verified} />
+                            </div>
+                        </Tooltip>)
+                } />
+
                 <CardContent>
                     <Typography variant="h5" component="h2">
                         {props.name}

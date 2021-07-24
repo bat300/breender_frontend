@@ -92,8 +92,10 @@ export default function UserProfile(props) {
             email: email,
             province: province,
             city: city,
-            paymentMethod: paymentMethod
+            paymentMethod: paymentMethod,
+            subscriptionPlan: props.user.subscriptionPlan
         };
+
 
         if (password !== '' && password2 !== '' && password === password2) {
             userWithChanges.password = password

@@ -4,8 +4,8 @@ import { Paper, Typography, Button } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import Rating from '@material-ui/lab/Rating';
 import VerificationIcon from '../VerificationIcon';
-import Popover from '@material-ui/core/Popover';
 import { useHistory } from 'react-router-dom';
+import { Tooltip } from 'antd';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -22,31 +22,18 @@ const useStyles = makeStyles((theme) => ({
         marginTop: theme.spacing(4),
         marginBottom: theme.spacing(4),
     },
-    popover: {
-        padding: theme.spacing(1),
-    },
 }));
 
 export default function ReviewComponent(props) {
     const classes = useStyles();
     const history = useHistory();
-    //Ancors for popover
-    const [anchorEl, setAnchorEl] = React.useState(null);
-
-    const handlePopoverOpen = (event) => {
-        setAnchorEl(event.currentTarget);
-    };
-
-    const handlePopoverClose = () => {
-        setAnchorEl(null);
-    };
 
     const goToUserPage = () => {
-        history.push('/user/' + props.review.reviewerId);
+        setTimeout(function () {
+            history.push('/user/' + props.review.reviewerId);
+        }, 1000);
     };
 
-    //if popover is open
-    const open = Boolean(anchorEl);
     return (
         <div className={classes.root}>
             <Paper className={classes.paper}>
@@ -61,28 +48,11 @@ export default function ReviewComponent(props) {
                             <Rating name="rating" value={props.review.rating} readOnly />
                         </Grid>
                         <Grid item>
-                            <div aria-owns={open ? 'mouse-over-popover' : undefined} aria-haspopup="true" onClick={handlePopoverOpen} onMouseEnter={handlePopoverOpen}>
-                                <VerificationIcon verified={props.review.transaction.processed} />
-                            </div>
-                            <Popover
-                                id='mouse-over-popover'
-                                classes={{
-                                    paper: classes.popover,
-                                }}
-                                open={open}
-                                anchorEl={anchorEl}
-                                onClose={handlePopoverClose}
-                                anchorOrigin={{
-                                    vertical: 'bottom',
-                                    horizontal: 'center',
-                                }}
-                                transformOrigin={{
-                                    vertical: 'top',
-                                    horizontal: 'center',
-                                }}
-                            >
-                                <Typography>{props.review.transaction.processed ? "The transaction of reviewer is processed." : "The transaction of reviewer is NOT processed."}</Typography>
-                            </Popover>
+                            <Tooltip trigger="hover" placement="top" title={props.review.transaction.processed ? "The transaction of reviewer is processed." : "The transaction of reviewer is NOT processed."}>
+                                <div>
+                                    <VerificationIcon verified={props.review.transaction.processed} />
+                                </div>
+                            </Tooltip>
                         </Grid>
                     </Grid>
                     <Grid item xs={12}>
