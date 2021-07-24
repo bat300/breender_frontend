@@ -218,6 +218,7 @@ const useStyles = makeStyles((theme) => ({
     layout: {
         width: '80%',
         alignSelf: 'center',
+        paddingTop: theme.spacing(1),
     },
     table: {
         minWidth: 650,
