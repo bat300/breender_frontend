@@ -6,7 +6,6 @@ import storage from 'redux-persist/lib/storage';
 import thunkMiddleware from 'redux-thunk';
 import { MuiThemeProvider, createMuiTheme, makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import ScrollContainer from './components/ScrollContainer';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import rootReducer from './redux/reducers';
 import reducers from './redux/reducers';
@@ -35,7 +34,7 @@ const persistConfig = {
 
 function App() {
     const classes = useStyles();
-    
+
     useEffect(() => AxiosConfiguration.setupInterceptors(), []);
 
     // set document title
@@ -58,10 +57,8 @@ function App() {
                     <PersistGate loading={null} persistor={persistor}>
                         <CssBaseline />
                         <React.Fragment>
-                            <ScrollContainer>
-                                <DataFetcher />
-                                <Routes />
-                            </ScrollContainer>
+                            <DataFetcher />
+                            <Routes />
                         </React.Fragment>
                     </PersistGate>
                 </Provider>
