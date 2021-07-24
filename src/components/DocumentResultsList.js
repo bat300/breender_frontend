@@ -15,7 +15,6 @@ const useStyles = makeStyles((theme) => ({
         marginRight: 'auto',
         marginBottom: 'auto',
         maxWidth: '70%',
-        backgroundColor: '#F2CC8F',
     },
     button: {
         margin: theme.spacing(1),

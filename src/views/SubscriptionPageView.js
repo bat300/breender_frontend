@@ -13,18 +13,23 @@ const useStyles = makeStyles((theme) => ({
     premiumDescription: {
         padding: theme.spacing(8, 0, 6),
     },
+    title: theme.typography.h3,
+    description: theme.typography.h6,
     paper: {
         width: '1000px',
         marginLeft: 'auto',
         marginRight: 'auto',
         marginTop: theme.spacing(0),
         marginBottom: theme.spacing(5),
-        backgroundColor: '#F2CC8F',
     },
-    imageOverlay: {
+    container: {
         position: 'relative',
-        top: '7.1%',
-        left: '33%',
+        paddingTop: '172px'
+    },
+    image: {
+        position: 'absolute',
+        left: 'calc(50% - 350px)',
+        top: '0%'
     },
 }));
 
@@ -68,16 +73,15 @@ function SubscriptionPageView(props) {
     };
 
     return (
-        <div>
-            <div className={classes.imageOverlay}>
-                <img src={pets} alt="pets" width="700" />
-            </div>
+        <div className={classes.container}>
+                <img src={pets} alt="pets" width="700" className={classes.image}/>
+          
             <Paper className={classes.paper}>
                 <Container maxWidth="sm" component="main" className={classes.premiumDescription}>
-                    <Typography component="h1" variant="h2" align="center" color="textPrimary" gutterBottom>
+                    <Typography className={classes.title} align="center" gutterBottom>
                         Get Access to All Features!
                     </Typography>
-                    <Typography variant="h5" align="center" color="textSecondary" component="p">
+                    <Typography  className={classes.description} align="center" component="p">
                         Basic product or service is provided free of charge, but money (a premium) is charged for additional features, services, or virtual (online) or physical (offline) goods that
                         expand the functionality of the free version.
                     </Typography>

@@ -19,6 +19,10 @@ const useStyles = makeStyles((theme) => ({
     avatar: {
         background: theme.palette.secondary.main,
     },
+    icon: {
+        marginRight: theme.spacing(1),
+        color: theme.palette.secondary.main,
+    },
     margin: {
         marginRight: theme.spacing(1),
     }
@@ -79,11 +83,11 @@ function KebabMenu(props) {
                 ? [
                       <MenuItem key="user" className={classes.menuitem} onClick={onClickGoToUserProfile}>
                           <Avatar className={classes.avatar}><Typography color="textSecondary">{user.username ? user.username[0] : ""}</Typography></Avatar>
-                          {userInfo.username}
+                          <div style={{"padding": "10px"}}>{userInfo.username}</div>
                           {userInfo.role === 'admin' ? (
-                              <SecurityIcon style={{ paddingLeft: '4px', fill: 'green' }} />
+                              <SecurityIcon className={classes.icon} />
                           ) : userInfo.subscriptionPlan === 'premium' ? (
-                              <FontAwesomeIcon icon={faCrown} size={"lg"} style={{ paddingLeft: '6px', color: 'green' }} />
+                              <FontAwesomeIcon icon={faCrown} size={"lg"} className={classes.icon} />
                           ) : (
                               <></>
                           )}

@@ -5,7 +5,6 @@ import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
 import Grid from '@material-ui/core/Grid';
-import StarIcon from '@material-ui/icons/Star';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
@@ -22,22 +21,42 @@ const useStyles = makeStyles((theme) => ({
     root: {},
     cardHeader: {
         backgroundColor: theme.palette.type === 'light' ? theme.palette.grey[200] : theme.palette.grey[700],
+        paddingLeft: theme.spacing(3)
     },
     cardPricing: {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'baseline',
         marginBottom: theme.spacing(2),
+        paddingLeft: theme.spacing(5)
     },
     cardContent: {
         paddingLeft: theme.spacing(8),
     },
+    pricing: theme.typography.h4,
+    description: theme.typography.body1,
     features: {
         paddingBottom: theme.spacing(2),
         display: 'flex',
         flexWrap: 'nowrap',
     },
+    checkIcon: {
+        marginRight: theme.spacing(1),
+         marginTop: theme.spacing(0.3),
+        color: '#C0E189',
+    },
+    crownIcon: {
+        marginRight: theme.spacing(1),
+         marginTop: theme.spacing(0.3),
+        color: theme.palette.secondary.main,
+    },
+    cancelIcon: {
+        marginRight: theme.spacing(1),
+         marginTop: theme.spacing(0.3),
+        color: '#F96149',
+    },
 }));
+
 /**
  * For choosing and presenting subscription plan 
  * @param {props} props
@@ -52,13 +71,13 @@ function SubscriptionPlanCard(props) {
                     title={props.plan.title}
                     titleTypographyProps={{ align: 'center' }}
                     subheaderTypographyProps={{ align: 'center' }}
-                    action={props.plan.id === 'premium' ? <FontAwesomeIcon icon={faCrown} size={"lg"} style={{ paddingLeft: '4px', color: 'green' }} /> : <></>}
+                    action={props.plan.id === 'premium' ? <FontAwesomeIcon icon={faCrown} size={"lg"} className={classes.crownIcon} /> : <></>}
                     className={classes.cardHeader}
                 />
                 <CardContent>
                     <div className={classes.cardPricing}>
-                        <Typography component="h2" variant="h3" color="textPrimary">
-                            ${props.plan.price}
+                        <Typography component="h2" className={classes.pricing} color="textPrimary">
+                        {props.plan.price} €
                         </Typography>
                         <Typography variant="h6" color="textSecondary">
                             /mo
@@ -69,8 +88,8 @@ function SubscriptionPlanCard(props) {
                             {props.plan.included.map((line) => (
                                 <div key={`${line}_${props.plan.id}div`}>
                                     <Typography variant="subtitle1" key={`${line}_${props.plan.id}`}>
-                                        <div className={classes.features}>
-                                            <CheckCircleIcon style={{ fill: 'green', marginRight: '7' }} />
+                                        <div className={classes.features + " " + classes.description}>
+                                            <CheckCircleIcon  className={classes.checkIcon} />
                                             {line}
                                         </div>
                                     </Typography>
@@ -79,8 +98,8 @@ function SubscriptionPlanCard(props) {
                             {props.plan.excluded.map((line) => (
                                 <div key={`${line}_${props.plan.id}div`}>
                                     <Typography variant="subtitle1" key={`${line}_${props.plan.id}`}>
-                                        <div className={classes.features}>
-                                            <CancelIcon style={{ fill: 'red', marginRight: '7' }} />
+                                        <div className={classes.features + " " + classes.description}>
+                                            <CancelIcon className={classes.cancelIcon}/>
                                             {line}
                                         </div>
                                     </Typography>

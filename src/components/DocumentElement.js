@@ -19,7 +19,9 @@ const useStyles = makeStyles((theme) => ({
     paper: {
         padding: theme.spacing(2),
         margin: 'auto',
-        minWidth: "500px"
+        minWidth: "500px",
+        backgroundColor: '#7D7F9A',
+        boxShadow: '0 6px 10px rgba(0,0,0,.07), 0 0 6px rgba(0,0,0,.02)'
     },
     image: {
         width: 256,
@@ -37,18 +39,7 @@ const useStyles = makeStyles((theme) => ({
         paddingTop: theme.spacing(1),
         paddingBottom: theme.spacing(1),
     },
-    rowFontStyle: {
-        fontSize: 18,
-        fontWeight: 600,
-    },
-    valueFontStyle: {
-        fontSize: 18,
-    },
-
-    largeIcon: {
-        width: 60,
-        height: 60,
-    },
+    label: theme.typography.h6
 }));
 
 function DocumentElement(props) {
@@ -85,12 +76,12 @@ function DocumentElement(props) {
                                 <Grid item xs>
                                     <Grid container spacing={2}>
                                         <Grid item xs>
-                                            <Typography variant="body2" gutterBottom className={classes.rowFontStyle}>
+                                            <Typography variant="body2" gutterBottom className={classes.label} style={{fontWeight: "500"}}>
                                                 Name:
                                             </Typography>
                                         </Grid>
                                         <Grid item xs={6}>
-                                            <Typography variant="body2" className={classes.valueFontStyle}>
+                                            <Typography variant="body2" className={classes.label}>
                                                 {props.document.name}
                                             </Typography>
                                         </Grid>
@@ -98,48 +89,48 @@ function DocumentElement(props) {
 
                                     <Grid container spacing={2}>
                                         <Grid item xs>
-                                            <Typography variant="body2" className={classes.rowFontStyle}>
+                                            <Typography variant="body2" className={classes.label} style={{fontWeight: "500"}}>
                                                 Date:
                                             </Typography>
                                         </Grid>
                                         <Grid item xs={6}>
-                                            <Typography variant="body2" className={classes.valueFontStyle}>
+                                            <Typography variant="body2" className={classes.label}>
                                                 {formatDate(props.document.date)}
                                             </Typography>
                                         </Grid>
                                     </Grid>
                                     <Grid container spacing={2}>
                                         <Grid item xs>
-                                            <Typography variant="body2" className={classes.rowFontStyle}>
+                                            <Typography variant="body2" className={classes.label} style={{fontWeight: "500"}}>
                                                 Category:
                                             </Typography>
                                         </Grid>
                                         <Grid item xs={6}>
-                                            <Typography variant="body2" className={classes.valueFontStyle}>
+                                            <Typography variant="body2" className={classes.label}>
                                                 {props.document.category === '' ? '-' : props.document.category}
                                             </Typography>
                                         </Grid>
                                     </Grid>
                                     <Grid container spacing={2}>
                                         <Grid item xs>
-                                            <Typography variant="body2" className={classes.rowFontStyle}>
+                                            <Typography variant="body2" className={classes.label} style={{fontWeight: "500"}}>
                                                 Prize:
                                             </Typography>
                                         </Grid>
                                         <Grid item xs={6}>
-                                            <Typography variant="body2" className={classes.valueFontStyle}>
+                                            <Typography variant="body2" className={classes.label}>
                                                 {props.document.prize === '' ? '-' : props.document.prize}
                                             </Typography>
                                         </Grid>
                                     </Grid>
                                    {props.document.certificate.verificationDate? <Grid container spacing={2}>
                                         <Grid item xs>
-                                            <Typography variant="body2" className={classes.rowFontStyle}>
+                                            <Typography variant="body2" className={classes.label} style={{fontWeight: "500"}}>
                                                 Verification Date:
                                             </Typography>
                                         </Grid>
                                         <Grid item xs={6}>
-                                            <Typography variant="body2" className={classes.valueFontStyle}>
+                                            <Typography variant="body2" className={classes.label}>
                                                 {formatDate(props.document.certificate.verificationDate)}
                                             </Typography>
                                         </Grid>
@@ -151,12 +142,12 @@ function DocumentElement(props) {
                                 <Grid item xs>
                                     <Grid container spacing={2}>
                                         <Grid item xs>
-                                            <Typography variant="body2" gutterBottom className={classes.rowFontStyle}>
+                                            <Typography variant="body2" gutterBottom className={classes.label} style={{fontWeight: "500"}}>
                                                 Name:
                                             </Typography>
                                         </Grid>
                                         <Grid item xs={6}>
-                                            <Typography variant="body2" className={classes.valueFontStyle}>
+                                            <Typography variant="body2" className={classes.label}>
                                                 {props.document.name}
                                             </Typography>
                                         </Grid>
@@ -164,12 +155,12 @@ function DocumentElement(props) {
 
                                     {props.document.verificationDate? <Grid container spacing={2}>
                                         <Grid item xs>
-                                            <Typography variant="body2" className={classes.rowFontStyle}>
+                                            <Typography variant="body2" className={classes.label} style={{fontWeight: "500"}}>
                                                 Verification Date:
                                             </Typography>
                                         </Grid>
                                         <Grid item xs={6}>
-                                            <Typography variant="body2" className={classes.valueFontStyle}>
+                                            <Typography variant="body2" className={classes.label}>
                                                 {formatDate(props.document.verificationDate)}
                                             </Typography>
                                         </Grid>
