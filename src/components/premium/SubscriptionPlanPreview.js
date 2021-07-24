@@ -5,7 +5,6 @@ import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import { Typography } from '@material-ui/core';
 
-
 const payments = [
     { description: '4.99€ for 1 month', plan: '1mo', price: '4.99' },
     { description: '12,99€ for 3 months', plan: '3mo', price: '12.99' },
@@ -23,7 +22,7 @@ const SubscriptionPlanPreview = ({ user }) => {
     const getPaymentPlanDescription = () => {
         const planResult = payments.filter((item) => item.plan === user.paymentPlan);
         return planResult[0].description;
-    }
+    };
 
     return (
         <Grid item xs={12} className={classes.root}>
@@ -33,9 +32,7 @@ const SubscriptionPlanPreview = ({ user }) => {
                         <Typography variant="h6" className={classes.labelPremium}>
                             Premium
                         </Typography>
-                        <Typography >
-                            {getPaymentPlanDescription()}
-                        </Typography>
+                        <Typography>{getPaymentPlanDescription()}</Typography>
                     </CardContent>
                 </Card>
             ) : (
@@ -87,16 +84,15 @@ const useStyles = makeStyles((theme) => ({
         justifyContent: 'center',
         flexDirection: 'column',
         alignItems: 'center',
-
     },
     labelPremium: {
         color: '##3E405',
-        fontWeight: "lighter",
+        fontWeight: 'lighter',
         fontSize: 20,
     },
     labelFree: {
         color: 'black',
-        fontWeight: "lighter",
+        fontWeight: 'lighter',
         fontSize: 20,
     },
 }));
