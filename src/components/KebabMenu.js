@@ -38,7 +38,7 @@ function KebabMenu(props) {
         if (user) {
             props.dispatch(getUsersInfo(user.id));
         }
-    }, [user]);
+    }, [user, userInfo]);
 
     const onClickLogin = () => {
         // close this menu
@@ -78,33 +78,33 @@ function KebabMenu(props) {
         >
             {userInfo
                 ? [
-                      <MenuItem key="user" className={classes.menuitem} onClick={onClickGoToUserProfile}>
-                          <Avatar className={classes.avatar}><Typography color="textSecondary">{user.username ? user.username[0] : ""}</Typography></Avatar>
-                          <div style={{"padding": "10px"}}>{userInfo.username}</div>
-                          {userInfo.role === 'admin' ? (
-                              <SecurityIcon className={classes.icon} />
-                          ) : userInfo.subscriptionPlan === 'premium' ? (
-                              <FontAwesomeIcon icon={faCrown} size={"lg"} className={classes.icon} />
-                          ) : (
-                              <></>
-                          )}
-                      </MenuItem>,
-                      <Divider key="divider" />,
-                      <MenuItem key="transactions" onClick={() => onClickMyTransactions(user.id)} className={classes.menuitem}>
-                          My transactions
-                      </MenuItem>,
-                      <Divider key="divider2" />,
-                      <MenuItem key="logout" onClick={onClickLogout} className={classes.menuitem}>
-                          <ExitToAppIcon className={classes.margin} />
-                          Logout
-                      </MenuItem>,
-                  ]
+                    <MenuItem key="user" className={classes.menuitem} onClick={onClickGoToUserProfile}>
+                        <Avatar className={classes.avatar}><Typography color="textSecondary">{user.username ? user.username[0] : ""}</Typography></Avatar>
+                        <div style={{ "padding": "10px" }}>{userInfo.username}</div>
+                        {userInfo.role === 'admin' ? (
+                            <SecurityIcon className={classes.icon} />
+                        ) : userInfo.subscriptionPlan === 'premium' ? (
+                            <FontAwesomeIcon icon={faCrown} size={"lg"} className={classes.icon} />
+                        ) : (
+                            <></>
+                        )}
+                    </MenuItem>,
+                    <Divider key="divider" />,
+                    <MenuItem key="transactions" onClick={() => onClickMyTransactions(user.id)} className={classes.menuitem}>
+                        My transactions
+                    </MenuItem>,
+                    <Divider key="divider2" />,
+                    <MenuItem key="logout" onClick={onClickLogout} className={classes.menuitem}>
+                        <ExitToAppIcon className={classes.margin} />
+                        Logout
+                    </MenuItem>,
+                ]
                 : [
-                      <MenuItem key="login" onClick={onClickLogin} className={classes.menuitem}>
-                          <VerifiedUserIcon className={classes.icon} />
-                          Login
-                      </MenuItem>,
-                  ]}
+                    <MenuItem key="login" onClick={onClickLogin} className={classes.menuitem}>
+                        <VerifiedUserIcon className={classes.icon} />
+                        Login
+                    </MenuItem>,
+                ]}
         </Menu>
     );
 }

@@ -51,8 +51,8 @@ const useStyles = makeStyles((theme) => ({
         marginRight: theme.spacing(1),
         color: '#F96149',
     },
-    button: {
-        borderRadius: "10px"
+    cardActions: {
+        padding: theme.spacing(2),
     }
 }));
 
@@ -76,10 +76,10 @@ function SubscriptionPlanCard(props) {
                 <CardContent>
                     <div className={classes.cardPricing}>
                         <Typography component="h2" className={classes.pricing} color="textPrimary">
-                          {props.plan.id === "premium"? `${props.plan.price} €/mo`: `${props.plan.price} €`}
+                            {props.plan.id === "premium" ? `${props.plan.price} €/mo` : `${props.plan.price} €`}
                         </Typography>
                         <Typography variant="h6" color="textSecondary">
-                            
+
                         </Typography>
                     </div>
                     <div className={classes.cardContent}>
@@ -88,17 +88,17 @@ function SubscriptionPlanCard(props) {
                                 <div key={`${line}_${props.plan.id}div`}>
                                     <Typography variant="subtitle1" key={`${line}_${props.plan.id}`}>
                                         <div className={classes.features + " " + classes.description}>
-                                            <CheckCircleIcon  className={classes.checkIcon} />
+                                            <CheckCircleIcon className={classes.checkIcon} />
                                             {line}
                                         </div>
                                     </Typography>
                                 </div>
-                            ))}      
+                            ))}
                             {props.plan.excluded.map((line) => (
                                 <div key={`${line}_${props.plan.id}div`}>
                                     <Typography variant="subtitle1" key={`${line}_${props.plan.id}`}>
                                         <div className={classes.features + " " + classes.description}>
-                                            <CancelIcon className={classes.cancelIcon}/>
+                                            <CancelIcon className={classes.cancelIcon} />
                                             {line}
                                         </div>
                                     </Typography>
@@ -107,8 +107,8 @@ function SubscriptionPlanCard(props) {
                         </ul>
                     </div>
                 </CardContent>
-                <CardActions>
-                    <Button fullWidth variant="contained" color={props.subscriptionPlan === props.plan.id ? 'secondary' : 'primary'}  className={classes.button} onClick={props.onClick}>
+                <CardActions className={classes.cardActions}>
+                    <Button fullWidth variant="contained" color={props.subscriptionPlan === props.plan.id ? 'secondary' : 'primary'} onClick={props.onClick}>
                         {props.subscriptionPlan === props.plan.id ? 'YOUR CHOICE' : 'CHOOSE'}
                     </Button>
                 </CardActions>
