@@ -13,7 +13,10 @@ import DocumentResultsList from 'components/DocumentResultsList';
 import { makeStyles } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
-    description: theme.typography.body1
+    description: theme.typography.body1,
+    modal: {
+        bordeRadius: "10px"
+    }
 }));
 
 const DocumentsArray = (props) => {
@@ -75,8 +78,8 @@ const DocumentsArray = (props) => {
         <Loading />
     ) : (
         <div>
-            <DocumentResultsList documentsArray={documents.documents} openModalVerify={handleClickOpenVerify} openModalDecline={handleClickOpenDecline} />
-            <Dialog open={openVerify} onClose={handleCloseVerify} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description">
+            <DocumentResultsList documentsArray={documents.documents} openModalVerify={handleClickOpenVerify} openModalDecline={handleClickOpenDecline} className={classes.modal} />
+            <Dialog open={openVerify} onClose={handleCloseVerify} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description1">
                 <DialogTitle id="alert-dialog-title1">{'Verify document?'}</DialogTitle>
                 <DialogContent>
                     <DialogContentText className={classes.description}>Once the document is verified, this action cannot be reverted.</DialogContentText>
@@ -90,7 +93,7 @@ const DocumentsArray = (props) => {
                     </Button>
                 </DialogActions>
             </Dialog>
-            <Dialog open={openDecline} onClose={handleCloseDecline} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description">
+            <Dialog open={openDecline} onClose={handleCloseDecline} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description2" className={classes.modal}>
                 <DialogTitle id="alert-dialog-title2">{'Decline document?'}</DialogTitle>
                 <DialogContent>
                     <DialogContentText className={classes.description}>Once the document is declined, this action cannot be reverted.</DialogContentText>

@@ -51,6 +51,9 @@ const useStyles = makeStyles((theme) => ({
         marginRight: theme.spacing(1),
         color: '#F96149',
     },
+    button: {
+        borderRadius: "10px"
+    }
 }));
 
 /**
@@ -73,10 +76,10 @@ function SubscriptionPlanCard(props) {
                 <CardContent>
                     <div className={classes.cardPricing}>
                         <Typography component="h2" className={classes.pricing} color="textPrimary">
-                        {props.plan.price} €
+                          {props.plan.id === "premium"? `${props.plan.price} €/mo`: `${props.plan.price} €`}
                         </Typography>
                         <Typography variant="h6" color="textSecondary">
-                            /mo
+                            
                         </Typography>
                     </div>
                     <div className={classes.cardContent}>
@@ -105,7 +108,7 @@ function SubscriptionPlanCard(props) {
                     </div>
                 </CardContent>
                 <CardActions>
-                    <Button fullWidth variant="contained" color={props.subscriptionPlan === props.plan.id ? 'secondary' : 'primary'} onClick={props.onClick}>
+                    <Button fullWidth variant="contained" color={props.subscriptionPlan === props.plan.id ? 'secondary' : 'primary'}  className={classes.button} onClick={props.onClick}>
                         {props.subscriptionPlan === props.plan.id ? 'YOUR CHOICE' : 'CHOOSE'}
                     </Button>
                 </CardActions>

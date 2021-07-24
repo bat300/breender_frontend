@@ -7,7 +7,6 @@ import { FormControl, Grid, InputLabel, InputAdornment, MenuItem, Select, TextFi
 import { breeds } from 'helper/data/breeds';
 import DocumentsUpload from '../upload/documents.upload';
 import CompetitionsComponent from '../competitions';
-import DocumentsComponent from '../documents';
 
 // define types for error handling
 const PetFormInputs = {
@@ -177,8 +176,13 @@ const PetInformationForm = ({ nameProp, nicknameProp, sexProp, breedProp, specie
                                     <CompetitionsComponent mode={props.mode} />
                                 </Grid>
                                 <Grid item xs={12}>
+                                    <Divider />
+                                    <Grid>
+                                        <label className={classes.label}>Upload Documents (birth certificates, etc.)</label>
+                                        <label className={classes.label2}>Please make sure that the documents have a right name</label>
+                                    </Grid>
+                                    <DocumentsUpload mode={props.mode} />
                                    
-                                    <DocumentsComponent mode={props.mode} />
                                 </Grid>
                                 
                                 <Grid item xs={12}>
@@ -233,7 +237,9 @@ const useStyles = makeStyles((theme) => ({
         fontWeight: 500,
         marginBottom: 15,
         marginTop: 15,
+        fontFamily: "'Open Sans', sans-serif"
     },
+    label2: theme.typography.body1,
     title: {
         display: 'flex',
         justifyContent: 'center',

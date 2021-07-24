@@ -103,7 +103,7 @@ export default function UserInformation(props) {
                         <AttachMoneyIcon />
                     </Avatar>
                 </ListItemAvatar>
-                <ListItemText primary={capitalizeFirstLetter(props.user.subscriptionPlan)} secondary="Subscription plan" />
+                <ListItemText primary={props.user.subscriptionPlan === "premium" ? "Premium" : "Basic"} secondary="Subscription Plan" />
             </ListItem>
             {props.user.subscriptionPlan === 'premium' && (
                 <ListItem className={classes.listItem}>

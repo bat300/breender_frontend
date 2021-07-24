@@ -31,6 +31,14 @@ const useStyles = makeStyles((theme) => ({
         left: 'calc(50% - 350px)',
         top: '0%'
     },
+    modal: {
+        borderRadius: "10px"
+    },
+    plans: {
+        paddingBottom: "40px",
+        paddingRight: "20px",
+        paddingLeft: "20px"
+    }
 }));
 
 function SubscriptionPageView(props) {
@@ -82,18 +90,17 @@ function SubscriptionPageView(props) {
                         Get Access to All Features!
                     </Typography>
                     <Typography  className={classes.description} align="center" component="p">
-                        Basic product or service is provided free of charge, but money (a premium) is charged for additional features, services, or virtual (online) or physical (offline) goods that
-                        expand the functionality of the free version.
+                    Find the best breeding partner for your favourite pet in just few clicks: all you need to do is to subscribe to our Premium Plan, search for a perfect match and safely pay for breeding through our website.
                     </Typography>
                 </Container>
-                <Container maxWidth="md" component="main">
+                <Container maxWidth="md" component="main" className={classes.plans}>
                     <Grid container spacing={5} alignItems="flex-end">
                         <SubscriptionPlanComponent onClick={user.userInfo ? onChangePlan : onSignUp} subscriptionPlan={user.userInfo ? userInfo.subscriptionPlan : ''} />
                     </Grid>
                 </Container>
 
                 <div>
-                    <Dialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={open}>
+                    <Dialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={open} style={{borderRadius: "10px"}}>
                         <DialogTitle id="customized-dialog-title" onClose={handleClose}>
                             Switching from Premium to Basic
                         </DialogTitle>
@@ -101,7 +108,7 @@ function SubscriptionPageView(props) {
                             <Typography gutterBottom>After your Premium Subscription is completed your plan will be automatically switched to Basic.</Typography>
                         </DialogContent>
                         <DialogActions>
-                            <Button autoFocus variant="contained" onClick={handleClose} color="primary">
+                            <Button autoFocus  onClick={handleClose} color="primary">
                                 OK
                             </Button>
                         </DialogActions>

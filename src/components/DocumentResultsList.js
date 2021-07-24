@@ -11,10 +11,11 @@ const useStyles = makeStyles((theme) => ({
     paper: {
         padding: theme.spacing(5),
         marginTop: theme.spacing(5),
+        marginBottom: theme.spacing(5),
         marginLeft: 'auto',
         marginRight: 'auto',
-        marginBottom: 'auto',
-        maxWidth: '70%',
+
+        maxWidth: '60%',
     },
     button: {
         margin: theme.spacing(1),
@@ -80,7 +81,7 @@ function DocumentResultsList(props) {
         </div>
     ) : (
         <Grid container spacing={2} justify="center">
-            <div style={{ fontSize: 30, fontWeight: 'lighter', padding: 30 }}>No documents to verify</div>
+            <div style={{ fontSize: 30, fontWeight: 'lighter', padding: 30 }}>No documents</div>
         </Grid>
     );
 }

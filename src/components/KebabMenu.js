@@ -16,9 +16,6 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         minWidth: '200px',
     },
-    avatar: {
-        background: theme.palette.secondary.main,
-    },
     icon: {
         marginRight: theme.spacing(1),
         color: theme.palette.secondary.main,
@@ -104,7 +101,7 @@ function KebabMenu(props) {
                   ]
                 : [
                       <MenuItem key="login" onClick={onClickLogin} className={classes.menuitem}>
-                          <VerifiedUserIcon className={classes.avatar} />
+                          <VerifiedUserIcon className={classes.icon} />
                           Login
                       </MenuItem>,
                   ]}
