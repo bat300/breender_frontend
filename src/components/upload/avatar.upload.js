@@ -5,7 +5,7 @@ import { Upload, Image } from 'antd';
 import { LoadingOutlined } from '@ant-design/icons';
 // material-ui imports
 import { makeStyles } from '@material-ui/core/styles';
-import { Button, IconButton, Snackbar, FormHelperText } from '@material-ui/core';
+import { Button, IconButton, Snackbar, Typography } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
 import PetsIcon from '@material-ui/icons/Pets';
 import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
@@ -25,7 +25,7 @@ const AvatarUpload = (props) => {
     const [openAlert, setOpenAlert] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
     const [imageUrl, setImageUrl] = useState(mode === 'add' ? '' : pet.profilePicture.src);
- 
+
     const user = useUser();
     const petProfilePictureToRemove = usePetProfilePictureToRemove();
 
@@ -104,18 +104,22 @@ const AvatarUpload = (props) => {
         const image = pet.profilePicture;
         let imageToDelete = petProfilePictureToRemove;
 
-        if(image && image?.src !== '' && Object.keys(petProfilePictureToRemove).length === 0) {
+        if (image && image?.src !== '' && Object.keys(petProfilePictureToRemove).length === 0) {
             imageToDelete = image;
         }
-    
+
         // update in global state
-         await dispatch(updateProfilePicture({}, imageToDelete));
+        await dispatch(updateProfilePicture({}, imageToDelete));
     };
 
     return (
         <div>
             <div className={classes.box}>
-                {imageUrl ? <Image src={imageUrl} alt="avatar" style={{ width: 200, height: 200, objectFit: 'cover' }} /> : <div>{loading ? <LoadingOutlined /> : <PetsIcon fontSize="large" htmlColor={'#ced2de'} />}</div>}
+                {imageUrl ? (
+                    <Image src={imageUrl} alt="avatar" style={{ width: 250, height: 250, objectFit: 'cover', borderRadius: '50%' }} />
+                ) : (
+                    <div>{loading ? <LoadingOutlined /> : <PetsIcon fontSize="large" htmlColor={'#ced2de'} />}</div>
+                )}
             </div>
             <div className={classes.layout}>
                 {imageUrl ? (
@@ -125,13 +129,11 @@ const AvatarUpload = (props) => {
                         </IconButton>
                     </div>
                 ) : (
-                    <div style={{ justifyContent: 'center', display: 'flex' }}>
-                        <FormHelperText>Avatar upload is required!</FormHelperText>
-                    </div>
+                    <Typography color="secondary" style={{ marginTop: 10 }}>Avatar upload is required!</Typography>
                 )}
                 <Upload accept="image/*" name="avatar" listType="picture" showUploadList={false} beforeUpload={beforeUpload} onChange={handleChange} customRequest={customUpload}>
-                    <Button variant="contained" color="secondary" style={{ margin: 30 }}>
-                        Choose Photo
+                    <Button variant="outlined" color="primary" style={{ marginTop: 30 }}>
+                        Choose Avatar
                     </Button>
                 </Upload>
             </div>
@@ -147,9 +149,9 @@ const AvatarUpload = (props) => {
 const useStyles = makeStyles((theme) => ({
     box: {
         display: 'flex',
-        width: 200,
-        height: 200,
-        borderRadius: 10,
+        width: 250,
+        height: 250,
+        borderRadius: '50%',
         justifyContent: 'center',
         alignItems: 'center',
         background: '#f0f1f5',
@@ -158,6 +160,8 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         width: 'auto',
         flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
     },
 }));
 
