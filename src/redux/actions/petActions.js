@@ -16,7 +16,7 @@ export const getPets = (species, sex, breed, age, page, showOwn = false, user) =
     // when the backend call was successfull and the pets are retrieved
     // in the dispatcher the pets will be added to the global state
     function onSuccess(pets, totalPages) {
-        return { type: 'GETPETS_SUCCESS', pets: pets, totalPages: totalPages };
+        return { type: PetTypes.GET_PETS, pets: pets };
     }
     // when the backend call was failed
     function onFailure(error) {

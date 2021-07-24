@@ -6,7 +6,7 @@ const initialState = {
 const pets = (state = initialState, action) => {
     switch (action.type) {
         case 'GET_PETS':
-            return { ...state, pets: action.pets };
+            return { pets: action.pets, totalPages: action.totalPages };
         case 'DELETE_PET':
             return { ...state };
         case 'ADD_PET':

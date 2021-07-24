@@ -13,19 +13,32 @@ const useStyles = makeStyles((theme) => ({
     premiumDescription: {
         padding: theme.spacing(8, 0, 6),
     },
+    title: theme.typography.h3,
+    description: theme.typography.h6,
     paper: {
         width: '1000px',
         marginLeft: 'auto',
         marginRight: 'auto',
         marginTop: theme.spacing(0),
         marginBottom: theme.spacing(5),
-        backgroundColor: '#F2CC8F',
     },
-    imageOverlay: {
+    container: {
         position: 'relative',
-        top: '7.1%',
-        left: '33%',
+        paddingTop: '172px'
     },
+    image: {
+        position: 'absolute',
+        left: 'calc(50% - 350px)',
+        top: '0%'
+    },
+    modal: {
+        borderRadius: "10px"
+    },
+    plans: {
+        paddingBottom: "40px",
+        paddingRight: "20px",
+        paddingLeft: "20px"
+    }
 }));
 
 function SubscriptionPageView(props) {
@@ -68,36 +81,34 @@ function SubscriptionPageView(props) {
     };
 
     return (
-        <div>
-            <div className={classes.imageOverlay}>
-                <img src={pets} alt="pets" width="700" />
-            </div>
+        <div className={classes.container}>
+                <img src={pets} alt="pets" width="700" className={classes.image}/>
+          
             <Paper className={classes.paper}>
                 <Container maxWidth="sm" component="main" className={classes.premiumDescription}>
-                    <Typography component="h1" variant="h2" align="center" color="textPrimary" gutterBottom>
+                    <Typography className={classes.title} align="center" gutterBottom>
                         Get Access to All Features!
                     </Typography>
-                    <Typography variant="h5" align="center" color="textSecondary" component="p">
-                        Basic product or service is provided free of charge, but money (a premium) is charged for additional features, services, or virtual (online) or physical (offline) goods that
-                        expand the functionality of the free version.
+                    <Typography  className={classes.description} align="center" component="p">
+                    Find the best breeding partner for your favourite pet in just few clicks: all you need to do is to subscribe to our Premium Plan, search for a perfect match and safely pay for breeding through our website.
                     </Typography>
                 </Container>
-                <Container maxWidth="md" component="main">
+                <Container maxWidth="md" component="main" className={classes.plans}>
                     <Grid container spacing={5} alignItems="flex-end">
                         <SubscriptionPlanComponent onClick={user.userInfo ? onChangePlan : onSignUp} subscriptionPlan={user.userInfo ? userInfo.subscriptionPlan : ''} />
                     </Grid>
                 </Container>
 
                 <div>
-                    <Dialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={open}>
+                    <Dialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={open} style={{borderRadius: "10px"}}>
                         <DialogTitle id="customized-dialog-title" onClose={handleClose}>
-                            Switching from Premium to Free
+                            Switching from Premium to Basic
                         </DialogTitle>
                         <DialogContent dividers>
-                            <Typography gutterBottom>After your premium subscription ends your plan will be automatically switched to free.</Typography>
+                            <Typography gutterBottom>After your Premium Subscription is completed your plan will be automatically switched to Basic.</Typography>
                         </DialogContent>
                         <DialogActions>
-                            <Button autoFocus variant="contained" onClick={handleClose} color="primary">
+                            <Button autoFocus  onClick={handleClose} color="primary">
                                 OK
                             </Button>
                         </DialogActions>

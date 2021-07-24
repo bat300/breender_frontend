@@ -10,7 +10,7 @@ import AlternateEmailIcon from '@material-ui/icons/AlternateEmail';
 import LocationCityIcon from '@material-ui/icons/LocationCity';
 import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 import EventIcon from '@material-ui/icons/Event';
-import VerificationIcon from '../VerificationIcon';
+import { VerificationIcon } from '../icons';
 import LandscapeIcon from '@material-ui/icons/Landscape';
 import PaymentIcon from '@material-ui/icons/Payment';
 import { Divider, Typography } from '@material-ui/core';
@@ -103,7 +103,7 @@ export default function UserInformation(props) {
                         <AttachMoneyIcon />
                     </Avatar>
                 </ListItemAvatar>
-                <ListItemText primary={capitalizeFirstLetter(props.user.subscriptionPlan)} secondary="Subscription plan" />
+                <ListItemText primary={props.user.subscriptionPlan === "premium" ? "Premium" : "Basic"} secondary="Pricing" />
             </ListItem>
             {props.user.subscriptionPlan === 'premium' && (
                 <ListItem className={classes.listItem}>
@@ -112,7 +112,7 @@ export default function UserInformation(props) {
                             <EventIcon />
                         </Avatar>
                     </ListItemAvatar>
-                    <ListItemText primary={props.user.nextRenewalDate} secondary="Premium subscription untill" />
+                    <ListItemText primary={props.user.nextRenewalDate} secondary="Premium plan untill" />
                 </ListItem>
             )}
             <Divider variant="middle" className={classes.divider} />

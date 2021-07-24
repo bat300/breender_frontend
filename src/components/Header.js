@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import { withRouter } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import { AppBar, IconButton, Toolbar, Typography } from '@material-ui/core';
-
 import logo from '../images/breender.svg';
 import ChatBubbleOutlineIcon from '@material-ui/icons/ChatBubbleOutline';
 import PersonIcon from '@material-ui/icons/Person';
@@ -115,7 +114,7 @@ function Header(props) {
                                 |
                             </Typography>
                             <Typography className={classes.title} variant="h5" color="inherit" style={navigationSelectedStyle.premium} onClick={onClickPremium}>
-                                Premium
+                                Pricing
                             </Typography>
                             {user.user ? (
                                 user.user.role === 'admin' ? (

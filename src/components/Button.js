@@ -44,7 +44,7 @@ function PaymentButton({ pet }) {
 
     return (
         <>
-            <Button disabled={isMyPet || wasPurchased} variant="contained" color="secondary" className={classes.button} endIcon={<ShoppingCartIcon />} onClick={openStepper}>
+            <Button disabled={isMyPet || wasPurchased} variant="contained" color="primary" className={classes.button} endIcon={<ShoppingCartIcon />} onClick={openStepper}>
                 {wasPurchased ? 'Was Purchased' : price === 0 || price === null ? 'Free' : `${price} €` }
             </Button>
             <Modal title="Payment Confirmation" visible={isModalOpened} onCancel={closeModal} className={classes.modal} footer={null}>
@@ -66,8 +66,8 @@ function ContactButton(contactProps) {
     };
 
     return (
-        <Button variant="contained" color="secondary" className={classes.button} endIcon={<SendIcon />} onClick={() => handleContact()} disabled={user.user.subscriptionPlan === 'free'}>
-            Contact Breeder
+        <Button variant="contained" color="primary" className={classes.button} endIcon={<SendIcon />} onClick={() => handleContact()} disabled={user.user.subscriptionPlan === 'free'}>
+            Contact Owner
         </Button>
     );
 }

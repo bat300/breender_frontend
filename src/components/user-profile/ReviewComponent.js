@@ -3,10 +3,9 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Paper, Typography, Button } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import Rating from '@material-ui/lab/Rating';
-import VerificationIcon from '../VerificationIcon';
+import { VerificationIcon } from '../icons';
 import Popover from '@material-ui/core/Popover';
 import { useHistory } from 'react-router-dom';
-
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -52,9 +51,7 @@ export default function ReviewComponent(props) {
             <Paper className={classes.paper}>
                 <Grid container spacing={3}>
                     <Grid item xs={12}>
-                        <Button onClick={goToUserPage}>
-                            Reviewer: {props.review.reviewerId}
-                        </Button>
+                        <Button onClick={goToUserPage}>Reviewer: {props.review.reviewerId}</Button>
                     </Grid>
                     <Grid container direction="row" justify="space-between" item>
                         <Grid item>
@@ -65,7 +62,7 @@ export default function ReviewComponent(props) {
                                 <VerificationIcon verified={props.review.verifiedTransaction} />
                             </div>
                             <Popover
-                                id='mouse-over-popover'
+                                id="mouse-over-popover"
                                 classes={{
                                     paper: classes.popover,
                                 }}
@@ -81,21 +78,18 @@ export default function ReviewComponent(props) {
                                     horizontal: 'center',
                                 }}
                             >
-                                <Typography>{props.review.verifiedTransaction ? "The transaction of reviewer is verified." : "The transaction of reviewer is NOT verified."}</Typography>
+                                <Typography>{props.review.verifiedTransaction ? 'The transaction of reviewer is verified.' : 'The transaction of reviewer is NOT verified.'}</Typography>
                             </Popover>
                         </Grid>
                     </Grid>
                     <Grid item xs={12}>
-                        <Typography className={classes.typography}>
-                            {props.review.review}
-                        </Typography>
+                        <Typography className={classes.typography}>{props.review.review}</Typography>
                     </Grid>
                     <Grid item xs={12}>
-                        <Typography variant="body2">
-                            {new Date(props.review.reviewDate).toLocaleDateString('de-DE')}
-                        </Typography>
+                        <Typography variant="body2">{new Date(props.review.reviewDate).toLocaleDateString('de-DE')}</Typography>
                     </Grid>
                 </Grid>
             </Paper>
-        </div>)
+        </div>
+    );
 }

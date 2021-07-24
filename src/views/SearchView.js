@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { connect, useSelector } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import { withRouter } from 'react-router-dom';
@@ -22,22 +22,17 @@ import PremiumBanner from 'components/PremiumBanner';
 import { showPremiumBanner } from 'helper/helpers';
 
 const useStyles = makeStyles((theme) => ({
-    filters: {
-        display: 'flex',
-        flex: 1,
-        flexDirection: 'row',
-        alignItems: 'baseline',
-        justifyContent: 'center',
-    },
     formControl: {
         margin: theme.spacing(1),
         minWidth: 120,
     },
     button: {
-        margin: theme.spacing(3),
+        margin: theme.spacing(2),
     },
     ageSlider: {
         margin: theme.spacing(4),
+        marginLeft: 50,
+        marginRight: 50,
         width: 200,
     },
     homeLogo: {
@@ -47,20 +42,23 @@ const useStyles = makeStyles((theme) => ({
         margin: 50,
         marginRight: 150,
     },
+    darkSlider: {
+        color: theme.palette.primary.dark,
+    },
 }));
 
 function SearchView(props) {
     const searchRef = useRef();
     const classes = useStyles();
-    let pets = useSelector((state) => state.entities.pets); // get pets from redux store
+    let pets = useSelector((state) => state.pets.pets); // get pets from redux store
     let user = useUser();
     // for scrolling to the search
     const loggedInUser = useLoggedInUser();
-    var totalPages = useSelector((state) => state.entities.totalPages);
+    var totalPages = useSelector((state) => state.pets.totalPages);
 
     const [isLoading, setIsLoading] = React.useState(true);
     const [chosenSpecies, setSpecies] = React.useState('');
-    const [order, setOrder] = React.useState('descending');
+    const [order, setOrder] = React.useState('');
     const [sex, setSex] = React.useState('');
     const [breed, setBreed] = React.useState('');
     const [ageRange, setAgeRange] = React.useState([0.5, 10]);
