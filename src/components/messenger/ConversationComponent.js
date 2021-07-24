@@ -28,7 +28,7 @@ function ConversationComponent(props) {
                 }
             />
             <ListItemSecondaryAction className={classes.badge}>
-                <Badge badgeContent={unseenMessages.filter((m) => m._id == props.conversation._id)[0]?.count} color="secondary"></Badge>
+                {unseenMessages ? <Badge badgeContent={unseenMessages.filter((m) => m._id == props.conversation._id)[0]?.count} color="secondary"></Badge> : null}
             </ListItemSecondaryAction>
         </ListItem>
     );

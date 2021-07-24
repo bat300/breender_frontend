@@ -132,10 +132,14 @@ function Header(props) {
                             ) : null}
                         </div>
                         <IconButton onClick={onClickMessenger} color="inherit">
-                            {unseenMessages.map((m) => m.count).reduce((c1, c2) => c1 + c2, 0) !== 0 ? (
-                                <Badge badgeContent={unseenMessages.map((m) => m.count).reduce((c1, c2) => c1 + c2, 0)} color="secondary">
-                                    <ChatIcon />
-                                </Badge>
+                            {unseenMessages ? (
+                                unseenMessages.map((m) => m.count).reduce((c1, c2) => c1 + c2, 0) !== 0 ? (
+                                    <Badge badgeContent={unseenMessages.map((m) => m.count).reduce((c1, c2) => c1 + c2, 0)} color="secondary">
+                                        <ChatIcon />
+                                    </Badge>
+                                ) : (
+                                    <ChatBubbleOutlineIcon />
+                                )
                             ) : (
                                 <ChatBubbleOutlineIcon />
                             )}
