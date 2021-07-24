@@ -27,10 +27,50 @@
 }
 
 .ant-modal-content {
-    border-radius: 25px;
+    border-radius: 10px;
+    padding: 10px;
 }
 
 .ant-modal-header {
     border-top-right-radius: 25px;
     border-top-left-radius: 25px;
+}
+
+.ant-upload.ant-upload-select-picture-card {
+    width: 125px;
+    height: 125px;
+    border: 1px solid rgba(145, 147, 179, 0.3);
+    border-radius: 25px;
+}
+
+.ant-upload.ant-upload-select-picture-card:hover {
+    border-color: #7D7F9A;
+}
+
+.ant-btn {
+    border-color: #7D7F9A;
+    border-radius: 5px;
+}
+
+.ant-btn:hover {
+    border-color: #3E4059;
+    color: #3E4059;
+    background-color: rgba(21, 26, 80, 0.01);
+    border-radius: 5px;
+}
+
+.ant-btn-primary {
+    background-color: #7D7F9A;
+    border-radius: 5px;
+}
+
+.ant-btn-primary:hover {
+    background-color: #3E4059;
+}
+
+.ant-tooltip-inner {
+    border-radius: 10px;
+    padding: 15px;
+    background-color:rgba(62, 64, 89, 0.85);
+    color: white;
 }
