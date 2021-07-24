@@ -10,8 +10,14 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DocumentResultsList from 'components/DocumentResultsList';
+import { makeStyles } from '@material-ui/core';
+
+const useStyles = makeStyles((theme) => ({
+    description: theme.typography.body1
+}));
 
 const DocumentsArray = (props) => {
+    const classes = useStyles();
     const documents = useSelector((state) => state.documents);
     const [openVerify, setOpenVerify] = React.useState(false); //for modal to verify doc
     const [openDecline, setOpenDecline] = React.useState(false); //for modal to decline doc
@@ -73,7 +79,7 @@ const DocumentsArray = (props) => {
             <Dialog open={openVerify} onClose={handleCloseVerify} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description">
                 <DialogTitle id="alert-dialog-title1">{'Verify document?'}</DialogTitle>
                 <DialogContent>
-                    <DialogContentText id="alert-dialog-description1">Once the document is verified, this action cannot be reverted.</DialogContentText>
+                    <DialogContentText className={classes.description}>Once the document is verified, this action cannot be reverted.</DialogContentText>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleCloseVerify} color="primary">
@@ -87,7 +93,7 @@ const DocumentsArray = (props) => {
             <Dialog open={openDecline} onClose={handleCloseDecline} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description">
                 <DialogTitle id="alert-dialog-title2">{'Decline document?'}</DialogTitle>
                 <DialogContent>
-                    <DialogContentText id="alert-dialog-description2">Once the document is declined, this action cannot be reverted.</DialogContentText>
+                    <DialogContentText className={classes.description}>Once the document is declined, this action cannot be reverted.</DialogContentText>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleCloseDecline} color="primary">
