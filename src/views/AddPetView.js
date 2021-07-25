@@ -6,9 +6,11 @@ import { Button, CircularProgress } from '@material-ui/core';
 // components imports
 import { PetInformationForm, PetPhotosForm } from 'components/forms';
 import Loading from 'components/Loading';
+import { useLoggedInUser } from 'helper/hooks/auth.hooks';
+
 // store-relevant imports
 import { usePetCompetitions, usePetDocuments, usePetPictures, usePetProfilePictureToUpload, useUser } from 'helper/hooks/';
-import { addPet, clearPet, updateCompetitionsToUpload, updateDocumentsToUpload, updatePicturesToUpload, updateProfilePicture } from 'redux/actions';
+import { addPet, clearPet, updateCompetitionsToUpload, updateDocumentsToUpload, updatePicturesToUpload, updateProfilePicture, getUserPets } from 'redux/actions';
 // services import
 import { FirebaseService, NotificationService } from 'services';
 import { isObjEmpty } from 'helper/helpers';
@@ -25,6 +27,7 @@ const AddPetView = (props) => {
 
     // get user
     const user = useUser();
+    const loggedInUser = useLoggedInUser();
 
     // get pet upload states
     const petDocuments = usePetDocuments();
@@ -41,7 +44,8 @@ const AddPetView = (props) => {
     const [birthDate, setBirthDate] = useState(new Date());
     const [species, setSpecies] = useState('');
     const [breed, setBreed] = useState('');
-    const [price, setPrice] = useState('');
+    const [price, setPrice] = useState(0);
+    const [purchased, setPurchased] = useState(false);
 
     useEffect(() => {
         const isEmpty = (obj) => obj === '' || obj === undefined;
@@ -69,7 +73,7 @@ const AddPetView = (props) => {
         const competitionsData = [...petCompetitions];
         for (let index = 0; index < competitionsData.length; index++) {
             let value = competitionsData[index];
-            if (value.certificate !== null ||  value.certificate !== undefined) {
+            if (value.certificate !== null || value.certificate !== undefined) {
                 const metadata = {
                     contentType: value.certificate.type,
                 };
@@ -137,7 +141,7 @@ const AddPetView = (props) => {
         const competitions = await uploadCompetitions();
         const pictures = await uploadPictures();
         const profilePicture = await uploadProfilePicture();
-        
+
         const dateCreated = Date.now();
         // combine all information about a pet
         let petToUpload = {
@@ -160,6 +164,8 @@ const AddPetView = (props) => {
             NotificationService.notify('success', 'Success', 'Your four-legged friend was added to your profile!');
             history.push('/');
             dispatch(clearPet());
+            // update pets of logged in user in redux store
+            dispatch(getUserPets(user.id));
         };
 
         const onError = () => {
@@ -175,7 +181,7 @@ const AddPetView = (props) => {
     ) : (
         <div>
             <div className={classes.layout}>
-                <PetPhotosForm mode="add"/>
+                <PetPhotosForm mode="add" />
                 <PetInformationForm
                     mode="add"
                     nameProp={{ name, setName }}
@@ -185,6 +191,9 @@ const AddPetView = (props) => {
                     speciesProp={{ species, setSpecies }}
                     breedProp={{ breed, setBreed }}
                     priceProp={{ price, setPrice }}
+                    disabledProp={{ formIsDisabled, setFormIsDisabled }}
+                    purchasedProp={{ purchased, setPurchased }}
+                    user={loggedInUser}
                 />
             </div>
             <div className={classes.button}>
@@ -211,6 +220,8 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         justifyContent: 'flex-end',
         marginRight: 50,
+        marginBottom: 25,
+        marginTop: -25,
     },
 }));
 

@@ -1,7 +1,8 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Grid, Paper } from '@material-ui/core';
+import { Grid, Paper, Typography } from '@material-ui/core';
 import { AvatarUpload, MultiplePhotosUpload } from 'components/upload';
+import { Row, Col } from 'antd';
 
 function PetPhotosForm(props) {
     const classes = useStyles();
@@ -11,9 +12,9 @@ function PetPhotosForm(props) {
                 <Paper className={classes.paper}>
                     <Grid container alignItems="center" justify="center" direction="column">
                         <AvatarUpload mode={props.mode} />
-                        <label className={classes.label}>Add more photos</label>
                     </Grid>
-                    <Grid style={{ marginLeft: 20 }}>
+                    <Grid container alignItems="center" justify="center" direction="column">
+                        <Typography variant="h6" className={classes.label}>Add more photos</Typography>
                         <MultiplePhotosUpload mode={props.mode} />
                     </Grid>
                 </Paper>
@@ -31,12 +32,13 @@ const useStyles = makeStyles((theme) => ({
     },
     paper: {
         width: '100%',
+        borderRadius: 25,
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
         marginTop: theme.spacing(6),
         marginBottom: theme.spacing(6),
-        padding: theme.spacing(3),
+        padding: 30,
         [theme.breakpoints.down('sm')]: {
             marginTop: theme.spacing(3),
             marginBottom: theme.spacing(3),
@@ -46,6 +48,7 @@ const useStyles = makeStyles((theme) => ({
     label: {
         fontSize: 18,
         marginBottom: 20,
+        marginTop: 50,
     },
 }));
 

@@ -107,7 +107,7 @@ function PaymentInformationComponent(props) {
                     </PayPalScriptProvider>
                 </div>
                 <div className={classes.row + ' ' + classes.buttons}>
-                    <Button className={classes.button} onClick={props.prevStep} disabled={disabled}>
+                    <Button className={classes.button} onClick={props.prevStep} disabled={disabled} variant="outlined" color="primary">
                         Back
                     </Button>
                 </div>

@@ -283,20 +283,3 @@ export const addReview = (review, onSuccess = () => null, onError = (err) => nul
         }
     };
 };
-export function me(id) {
-    function onSuccess(user) {
-        return { type: 'GET_LOGGEDINUSER', userInfo: user };
-    }
-    function onFailure(error) {
-        return { type: 'LOGIN_RESET' };
-    }
-
-    return async (dispatch) => {
-        try {
-            let resp = await UserService.getLoggedInUser(id);
-            dispatch(onSuccess(resp));
-        } catch (e) {
-            dispatch(onFailure(e));
-        }
-    };
-}

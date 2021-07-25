@@ -13,6 +13,8 @@ import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
 // state imports
 import { getPet } from 'redux/actions';
 import { useLoggedInUser } from 'helper/hooks';
+import { Col, Row } from 'antd';
+
 
 /**
  * Manages the process of getting pet details data
@@ -37,10 +39,10 @@ function PetProfileComponent(props) {
         <div className={classes.layout}>
             <Grid container>
                 <Grid item className={classes.maxWidth} spacing={2}>
-                    <Paper className={classes.paper} style={{ padding: 50, paddingTop: 24 }}>
+                    <Paper className={classes.paper} style={{ padding: 60, paddingTop: 24 }}>
                         <Grid container alignItems="center" justify="space-between" className={classes.gridMargin}>
                             <Grid item container xs justify="center" alignItems="center">
-                                <Typography variant="h4" className={classes.label}>
+                                <Typography variant="h3" className={classes.label}>
                                     {props.officialName}
                                 </Typography>
                             </Grid>
@@ -57,12 +59,16 @@ function PetProfileComponent(props) {
                             </Grid>
                         </Grid>
                         <Divider variant="middle" />
-                        <Grid container xs alignItems="center" justify="center" className={classes.centerGridMargin}>
-                            <Grid item container xs justify="center" className={classes.leftLayout} style={{ padding: 20 }}>
-                                <PetPhotos pictures={props.pictures} profilePicture={props.profilePicture} />
-                                <PaymentButton pet={props} />
-                            </Grid>
-                            <Grid item container xs={7} alignItems="center" justify="center" style={{ paddingLeft: 80 }}>
+                        <Row align="middle" gutter={[64, 32]} className={classes.centerGridMargin}>
+                            <Col span={9} offset={1}>
+                                <div className={classes.leftLayout}>
+                                    <Row justify="center">
+                                        <PetPhotos pictures={props.pictures} profilePicture={props.profilePicture} />
+                                        <PaymentButton pet={props} />
+                                    </Row>
+                                </div>
+                            </Col>
+                            <Col span={13}>
                                 <PetInformation
                                     officialName={props.officialName}
                                     nickname={props.nickname}
@@ -73,8 +79,8 @@ function PetProfileComponent(props) {
                                     species={props.species}
                                     ownerId={props.ownerId}
                                 />
-                            </Grid>
-                        </Grid>
+                            </Col>
+                        </Row>
                         {props.documents.length === 0 && props.competitions.length === 0 ? null : <Divider variant="middle" />}
                         <Grid container justify="space-between" className={classes.gridMargin}>
                             <PetOptionalInformation ownerId={props.ownerId} documents={props.documents} competitions={props.competitions} />
@@ -112,7 +118,6 @@ function Competitions(props) {
         <Grid item className={classes.maxWidth}>
             <LeftTypography text="Competitions:" />
             <PetCompetitionsList competitions={props.competitions} ownerId={props.ownerId} />
-            <Divider variant="middle" style={{ marginTop: 30 }} />
         </Grid>
     );
 }
@@ -123,7 +128,6 @@ function Documents(props) {
         <Grid item className={classes.maxWidth}>
             <LeftTypography text="Documents:" />
             <PetDocumentsList documents={props.documents} ownerId={props.ownerId} />
-            <Divider variant="middle" style={{ marginTop: 30 }} />
         </Grid>
     );
 }
@@ -136,11 +140,11 @@ const useStyles = makeStyles((theme) => ({
         alignSelf: 'center',
     },
     maxWidth: {
-        marginTop: 20,
+        marginTop: 50,
         width: '100%',
     },
     paper: {
-        background: '#FEFEFE',
+        background: '#FDFDFD',
         borderRadius: 25,
         [theme.breakpoints.up(600 + theme.spacing(3) * 2)]: {
             marginTop: theme.spacing(6),
@@ -165,8 +169,8 @@ const useStyles = makeStyles((theme) => ({
         },
     },
     centerGridMargin: {
-        marginTop: 20,
-        marginBottom: 20,
+        marginTop: 40,
+        marginBottom: 40,
         [theme.breakpoints.down('sm')]: {
             flexDirection: 'column',
         },
@@ -177,6 +181,7 @@ const useStyles = makeStyles((theme) => ({
         paddingRight: 15,
     },
     leftLayout: {
+        padding: 20,
         borderRadius: 25,
         width: '100%',
         background: 'white',

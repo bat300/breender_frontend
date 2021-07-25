@@ -4,13 +4,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import { useSelector } from 'react-redux';
 import { Grid, Paper, Divider, Typography, ListItem, ListItemAvatar, ListItemText, Avatar } from '@material-ui/core';
 
-const useStyles = makeStyles((theme) => ({
-    layout: {
-        width: '80%',
-        alignSelf: 'center',
-    },
-}));
-
 function MessageComponent(props) {
     const classes = useStyles();
     const userId = useSelector((state) => state.user.user.id);
@@ -40,11 +33,28 @@ function MessageComponent(props) {
                     <ListItemText align={getAlignment()} primary={props.message.text} />
                 </Grid>
                 <Grid item xs={12}>
-                    <ListItemText align={getAlignment()} secondary={getTimestamp()} />
+                    <ListItemText
+                        align={getAlignment()}
+                        secondary={
+                            <Typography type="body3" className={classes.timestamp}>
+                                {getTimestamp()}
+                            </Typography>
+                        }
+                    />
                 </Grid>
             </Grid>
         </ListItem>
     );
 }
+
+const useStyles = makeStyles((theme) => ({
+    timestamp: {
+        color: theme.palette.primary.light,
+    },
+    layout: {
+        width: '80%',
+        alignSelf: 'center',
+    },
+}));
 
 export default MessageComponent;

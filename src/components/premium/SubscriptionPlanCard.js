@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
@@ -39,6 +39,10 @@ const useStyles = makeStyles((theme) => ({
         paddingBottom: theme.spacing(2),
         display: 'flex',
         flexWrap: 'nowrap',
+        alignItems: 'center',
+    },
+    button: {
+        padding: 20,
     },
     checkIcon: {
         marginRight: theme.spacing(1),
@@ -57,15 +61,17 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 /**
- * For choosing and presenting subscription plan 
+ * For choosing and presenting subscription plan
  * @param {props} props
  */
 function SubscriptionPlanCard(props) {
     const classes = useStyles();
 
+    const isPremium = props.plan.id === 'premium';
+
     return (
         <Grid item key={props.plan.title} xs={6}>
-            <Card className={props.subscriptionPlan === props.plan.id ? classes.rootChosen : classes.root}>
+            <Card className={`${props.subscriptionPlan === props.plan.id ? classes.rootChosen : classes.root} ${'resize-on-hover'}`}>
                 <CardHeader
                     title={props.plan.title}
                     titleTypographyProps={{ align: 'center' }}

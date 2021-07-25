@@ -20,6 +20,7 @@ const useStyles = makeStyles((theme) => ({
         minWidth: '60vw',
         maxWidth: '80vw',
         width: 'auto',
+        borderRadius: 25,
     },
 }));
 

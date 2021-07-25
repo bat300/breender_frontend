@@ -13,6 +13,10 @@ const useStyles = makeStyles((theme) => ({
         width: '1000px',
         padding: theme.spacing(2),
     },
+    container: {
+        paddingTop: theme.spacing(3),
+        paddingBottom: theme.spacing(3),
+    },
     signUpRow: {
         paddingTop: theme.spacing(1),
         paddingBottom: theme.spacing(1),
@@ -42,8 +46,7 @@ function SubscriptionStepComponent(props) {
 
     const saveAndContinue = (e) => {
         e.preventDefault();
-        props.subscriptionPlan === "free"? props.onRegister( values.email, values.username, values.password, values.city, values.province, values.isAdmin, values.subscriptionPlan) : 
-        props.nextStep();
+        props.subscriptionPlan === 'free' ? props.onRegister(values.email, values.username, values.password, values.city, values.province, values.isAdmin, values.subscriptionPlan) : props.nextStep();
     };
 
     const back = (e) => {
@@ -63,17 +66,17 @@ function SubscriptionStepComponent(props) {
                         Choose your subscription plan
                     </Typography>
                 </div>
-                <Container maxWidth="md" component="main">
+                <Container maxWidth="md" component="main" className={classes.container}>
                     <Grid container spacing={5} alignItems="flex-end">
-                        <SubscriptionPlanComponent onClick={onSelect} subscriptionPlan={props.subscriptionPlan}/>
+                        <SubscriptionPlanComponent onClick={onSelect} subscriptionPlan={props.subscriptionPlan} />
                     </Grid>
                 </Container>
                 <div className={classes.signUpRow + ' ' + classes.signUpButtons}>
-                    <Button className={classes.signUpButton} onClick={back}>
+                    <Button className={classes.signUpButton} onClick={back} variant="outlined" color="primary">
                         back
                     </Button>
                     <Button className={classes.signUpButton} variant="contained" color="primary" onClick={saveAndContinue}>
-                    {props.subscriptionPlan === 'free' ? 'SUBMIT' : 'NEXT'}
+                        {props.subscriptionPlan === 'free' ? 'SUBMIT' : 'NEXT'}
                     </Button>
                 </div>
             </Paper>

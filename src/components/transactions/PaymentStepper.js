@@ -36,12 +36,12 @@ const PaymentStepper = ({ pet, close }) => {
 
 
     useEffect(() => {
-        if(loggedInUser) {
+        if (loggedInUser) {
             setIsFreeOfCharge(loggedInUser.subscriptionPlan === 'premium' && pet.price === 0) // premium user don't need to pay any fees for the free pet
         }
     }, [loggedInUser, pet.ownerId, pet.price, dispatch])
 
- 
+
     const isButtonDisabled = activeStep === 1 && !isFreeOfCharge;
 
     // helper functions for the transaction generation
@@ -152,7 +152,7 @@ const PaymentStepper = ({ pet, close }) => {
                     <div>
                         {getStepContent(activeStep)}
                         <div>
-                            <Button disabled={activeStep === 0 || activeStep === 2} onClick={handleBack} className={classes.button}>
+                            <Button disabled={activeStep === 0 || activeStep === 2} onClick={handleBack} className={classes.button} variant="contained" color="primary">
                                 Back
                             </Button>
                             <Button disabled={isButtonDisabled} variant="contained" color="primary" onClick={handleNext} className={classes.button}>
