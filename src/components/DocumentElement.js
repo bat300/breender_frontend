@@ -141,11 +141,6 @@ function DocumentElement(props) {
                             <Grid item xs container direction="column" spacing={2}>
                                 <Grid item xs>
                                     <Grid container spacing={2}>
-                                        <Grid item xs>
-                                            <Typography variant="body2" gutterBottom className={classes.label} style={{fontWeight: "500", color: "white"}}>
-                                                Name:
-                                            </Typography>
-                                        </Grid>
                                         <Grid item xs={6}>
                                             <Typography variant="body2" className={classes.label} style={{ color: "white"}}>
                                                 {props.document.name}
