@@ -20,6 +20,10 @@ const useStyles = makeStyles((theme) => ({
         maxWidth: '80%',
         backgroundColor: '#7D7F9A',
     },
+    reviewText: {
+        backgroundColor: 'white',
+        padding: theme.spacing(3),
+    },
     typography: {
         marginTop: theme.spacing(4),
         marginBottom: theme.spacing(4),
@@ -73,17 +77,17 @@ export default function ReviewComponent(props) {
                         </Grid>
                     </Grid>
                     <Grid item xs={12}>
-                        <Typography className={classes.typography} style={{ color: "white" }}>
-                            {props.review.review}
-                        </Typography>
+                        <Paper className={classes.reviewText}>
+                            <Typography className={classes.typography}>{props.review.review}</Typography>
+                        </Paper>
                     </Grid>
                     <Grid item xs={12}>
-                        <Typography variant="body2" style={{ color: "white" }} >
+                        <Typography variant="body2" style={{ color: 'white' }}>
                             {new Date(props.review.reviewDate).toLocaleDateString('en-GB')}
                         </Typography>
                     </Grid>
                 </Grid>
             </Paper>
-        </div >
+        </div>
     );
 }
