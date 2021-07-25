@@ -4,6 +4,7 @@ import { connect, useDispatch, useSelector } from 'react-redux';
 import LoginComponent from '../components/UserLoginComponent';
 import { login, startLoading, stopLoading, loginReset, getUsersInfo } from '../redux/actions';
 import NotificationService from 'services/NotificationService';
+import { getUnseenMessages } from '../redux/actions/messageActions';
 import logo from '../images/breender.svg';
 import { makeStyles } from '@material-ui/core';
 
