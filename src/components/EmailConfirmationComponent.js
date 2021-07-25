@@ -2,7 +2,7 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import LinearProgress from '@material-ui/core/LinearProgress';
-import { Button } from '@material-ui/core';
+import { Button, Typography } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
     button: {
@@ -25,9 +25,9 @@ function EmailConfirmationComponent(props) {
             <Grid item xs={12}>
                 {props.confirmation.confirmation ? (
                     <div>
-                        <h1>{props.confirmation.confirmation.message}</h1>
+                        <Typography variant="h4">{props.confirmation.confirmation.message}</Typography>
                         <div className={classes.button}>
-                            <Button variant="contained" color="secondary" onClick={props.onMove}>
+                            <Button variant="contained" color="primary" onClick={props.onMove}>
                                 Go to Home Page
                             </Button>
                         </div>
