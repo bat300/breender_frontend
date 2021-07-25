@@ -14,9 +14,10 @@ const PetFormInputs = {
     sex: 'sex',
     species: 'species',
     breed: 'breed',
+    price: 'price'
 };
 
-const PetInformationForm = ({ nameProp, nicknameProp, sexProp, breedProp, speciesProp, priceProp, birthDateProp, ...props }) => {
+const PetInformationForm = ({ nameProp, nicknameProp, sexProp, breedProp, speciesProp, priceProp, birthDateProp, disabledProp, purchasedProp, ...props }) => {
     const classes = useStyles();
     const { name, setName } = nameProp;
     const { nickname, setNickname } = nicknameProp;
@@ -25,22 +26,45 @@ const PetInformationForm = ({ nameProp, nicknameProp, sexProp, breedProp, specie
     const { species, setSpecies } = speciesProp;
     const { price, setPrice } = priceProp;
     const { birthDate, setBirthDate } = birthDateProp;
-    const [errors, setErrors] = useState({ name: false, nickname: false, sex: false, species: false, breed: false });
+    const [errors, setErrors] = useState({ name: false, nickname: false, sex: false, species: false, breed: false, price: false });
+    const { formIsDisabled, setFormIsDisabled } = disabledProp;
+    const { purchased, setPurchased } = purchasedProp;
+
     const validationErrors = {
         name: 'Name is required',
         nickname: 'Nickname is required',
         sex: 'Sex is required',
         species: 'Species is required',
         breed: 'Breed is required',
+        price: 'Please add payment method to your account to add a price tag!'
     };
 
     // validate fields
     const validate = (type, value) => {
         let temp = { ...errors };
-        if (value === '') {
+        if (type !== PetFormInputs.price && value === '') {
             temp[type] = true;
         } else {
             temp[type] = false;
+        }
+
+
+        if (type == PetFormInputs.price && (typeof props.user.paymentMethod === 'undefined' || (typeof props.user.paymentMethod !== 'undefined' && props.user.paymentMethod === null))) {
+            if (value > 0) {
+                temp[type] = true;
+            } else {
+                temp[type] = false;
+            }
+        }
+
+        let values = Object.keys(temp).map(function (key) {
+            return temp[key];
+        });
+
+        if (values.every(element => element === false)) {
+            setFormIsDisabled(false);
+        } else {
+            setFormIsDisabled(true);
         }
         setErrors({ ...temp });
     };
@@ -56,7 +80,10 @@ const PetInformationForm = ({ nameProp, nicknameProp, sexProp, breedProp, specie
         validate(PetFormInputs.sex, e.target.value);
         setSex(e.target.value);
     };
-    const handlePriceChange = (e) => setPrice(e.target.value);
+    const handlePriceChange = (e) => {
+        validate(PetFormInputs.price, e.target.value);
+        setPrice(e.target.value);
+    }
 
     const handleDateChange = (date) => setBirthDate(date);
 
@@ -67,6 +94,9 @@ const PetInformationForm = ({ nameProp, nicknameProp, sexProp, breedProp, specie
     const handleBreedChange = (e) => {
         validate(PetFormInputs.breed, e.target.value);
         setBreed(e.target.value);
+    };
+    const handlePurchasedChange = (e) => {
+        setPurchased(e.target.value);
     };
 
     // sort breeds data
@@ -173,6 +203,15 @@ const PetInformationForm = ({ nameProp, nicknameProp, sexProp, breedProp, specie
                                     </FormControl>
                                 </Grid>
                                 <Grid item xs={12}>
+                                    <FormControl required variant="outlined" size="small" fullWidth>
+                                        <InputLabel id="purchased-label">Availability</InputLabel>
+                                        <Select label="Availability" id="purchased" value={purchased} onChange={handlePurchasedChange} onBlur={handlePurchasedChange}>
+                                            <MenuItem value={true}>Not available</MenuItem>
+                                            <MenuItem value={false}>Available</MenuItem>
+                                        </Select>
+                                    </FormControl>
+                                </Grid>
+                                <Grid item xs={12}>
                                     <CompetitionsComponent mode={props.mode} />
                                 </Grid>
                                 <Grid item xs={12}>
@@ -182,9 +221,9 @@ const PetInformationForm = ({ nameProp, nicknameProp, sexProp, breedProp, specie
                                         <label className={classes.label2}>Please make sure that the documents have a right name</label>
                                     </Grid>
                                     <DocumentsUpload mode={props.mode} />
-                                   
+
                                 </Grid>
-                                
+
                                 <Grid item xs={12}>
                                     <TextField
                                         fullWidth
@@ -203,6 +242,7 @@ const PetInformationForm = ({ nameProp, nicknameProp, sexProp, breedProp, specie
                                                 min: 0,
                                             },
                                         }}
+                                        {...(errors[PetFormInputs.price] && { error: true, helperText: validationErrors[PetFormInputs.price] })}
                                     />
                                 </Grid>
                             </Grid>

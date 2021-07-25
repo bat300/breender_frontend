@@ -1,4 +1,6 @@
 import React from 'react';
+import { Tooltip } from 'antd';
+import '../../theming/antd.css';
 import { ListItem, ListItemText, ListItemAvatar, Avatar, makeStyles } from '@material-ui/core';
 // icons import
 import GetAppIcon from '@material-ui/icons/GetApp';
@@ -10,24 +12,36 @@ import DogIcon from '../../images/icons/cocker-spaniel.png';
 import DogTagIcon from '../../images/icons/dog-tag.png';
 import { VerificationIcon, CancelIcon } from 'components/icons';
 
+
 function PetInformationListItem(props) {
     const classes = useStyles();
     if (props.primary) {
-        const urlForOwner = 'http://localhost:3000/user/'.concat(props.primary);
+        const urlForOwner = "http://localhost:3000/user/".concat(props.primary)
         return (
             <ListItem
                 className={classes.item}
                 button={isButton(props.itemType)}
                 component={isButton(props.itemType) ? 'a' : null}
-                href={props.itemType === 'document' ? props.url : props.itemType === 'owner' ? urlForOwner : null}
-            >
+                href={props.itemType === 'document' ? props.url : (props.itemType === 'owner' ? urlForOwner : null)}>
                 <ListItemAvatar>
                     <Avatar className={classes.avatar}>
                         <Icon itemType={props.itemType} />
                     </Avatar>
                 </ListItemAvatar>
-                <ListItemText primary={props.primary} secondary={props.secondary} secondaryTypographyProps={{ color: 'primary' }} />
-                {props.itemType === 'document' ? props.declined ? <CancelIcon /> : <VerificationIcon verified={props.verified} /> : null}
+                <ListItemText primary={props.primary} secondary={props.secondary} />
+                {props.itemType === 'document' ?
+                    props.declined ?
+                        (<Tooltip trigger="hover" placement="top" title={"The document is checked and DECLINED."}>
+                            <div>
+                                <CancelIcon style={{ fill: 'red' }} />
+                            </div>
+                        </Tooltip>)
+                        : (<Tooltip trigger="hover" placement="top" title={props.verified ? "The document is verified." : "The document is NOT yet verified."}>
+                            <div>
+                                <VerificationIcon verified={props.verified} />
+                            </div>
+                        </Tooltip>)
+                    : null}
             </ListItem>
         );
     }

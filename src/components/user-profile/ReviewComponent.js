@@ -4,8 +4,10 @@ import { Paper, Typography, Button } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import Rating from '@material-ui/lab/Rating';
 import { VerificationIcon } from '../icons';
-import Popover from '@material-ui/core/Popover';
 import { useHistory } from 'react-router-dom';
+import { Tooltip } from 'antd';
+import { getUser, getSelectedUserPets, getReviewsOnSelectedUser } from 'redux/actions';
+import { useDispatch } from 'react-redux';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -16,80 +18,72 @@ const useStyles = makeStyles((theme) => ({
         padding: theme.spacing(5),
         margin: 'auto',
         maxWidth: '80%',
+        backgroundColor: '#7D7F9A',
     },
     typography: {
         marginTop: theme.spacing(4),
         marginBottom: theme.spacing(4),
-    },
-    popover: {
-        padding: theme.spacing(1),
     },
 }));
 
 export default function ReviewComponent(props) {
     const classes = useStyles();
     const history = useHistory();
-    //Ancors for popover
-    const [anchorEl, setAnchorEl] = React.useState(null);
+    const dispatch = useDispatch();
 
-    const handlePopoverOpen = (event) => {
-        setAnchorEl(event.currentTarget);
+    const loadUser = async (id) => {
+        // trigger the redux action getUser
+        dispatch(getUser(id));
     };
 
-    const handlePopoverClose = () => {
-        setAnchorEl(null);
+    const loadUserPets = async (userId) => {
+        // trigger the redux action getSelectedUserPets
+        dispatch(getSelectedUserPets(userId));
+    };
+
+    const loadReviews = async (userId) => {
+        // trigger the redux action getReviewsOnSelectedUser
+        dispatch(getReviewsOnSelectedUser(userId));
     };
 
     const goToUserPage = () => {
         history.push('/user/' + props.review.reviewerId);
+        loadUser(props.review.reviewerId);
+        loadUserPets(props.review.reviewerId);
+        loadReviews(props.review.reviewerId);
     };
 
-    //if popover is open
-    const open = Boolean(anchorEl);
     return (
         <div className={classes.root}>
             <Paper className={classes.paper}>
                 <Grid container spacing={3}>
                     <Grid item xs={12}>
-                        <Button onClick={goToUserPage}>Reviewer: {props.review.reviewerId}</Button>
+                        <Button onClick={goToUserPage} color="white">Reviewer: {props.review.reviewerId}</Button>
                     </Grid>
                     <Grid container direction="row" justify="space-between" item>
                         <Grid item>
                             <Rating name="rating" value={props.review.rating} readOnly />
                         </Grid>
                         <Grid item>
-                            <div aria-owns={open ? 'mouse-over-popover' : undefined} aria-haspopup="true" onClick={handlePopoverOpen} onMouseEnter={handlePopoverOpen}>
-                                <VerificationIcon verified={props.review.verifiedTransaction} />
-                            </div>
-                            <Popover
-                                id="mouse-over-popover"
-                                classes={{
-                                    paper: classes.popover,
-                                }}
-                                open={open}
-                                anchorEl={anchorEl}
-                                onClose={handlePopoverClose}
-                                anchorOrigin={{
-                                    vertical: 'bottom',
-                                    horizontal: 'center',
-                                }}
-                                transformOrigin={{
-                                    vertical: 'top',
-                                    horizontal: 'center',
-                                }}
-                            >
-                                <Typography>{props.review.verifiedTransaction ? 'The transaction of reviewer is verified.' : 'The transaction of reviewer is NOT verified.'}</Typography>
-                            </Popover>
+                            <Tooltip trigger="hover" placement="top" title={props.review.transaction.processed ? "The transaction of reviewer is processed." : "The transaction of reviewer is NOT processed."}>
+                                <div>
+                                    <VerificationIcon verified={props.review.transaction.processed} />
+                                </div>
+                            </Tooltip>
                         </Grid>
                     </Grid>
                     <Grid item xs={12}>
-                        <Typography className={classes.typography}>{props.review.review}</Typography>
+                        <Typography className={classes.typography} style={{ color: "white" }}>
+                            {props.review.review}
+                        </Typography>
                     </Grid>
                     <Grid item xs={12}>
-                        <Typography variant="body2">{new Date(props.review.reviewDate).toLocaleDateString('de-DE')}</Typography>
+                        <Typography variant="body2" style={{ color: "white" }} >
+                            {new Date(props.review.reviewDate).toLocaleDateString('en-GB')}
+                        </Typography>
                     </Grid>
                 </Grid>
             </Paper>
-        </div>
+        </div >
     );
 }

@@ -24,7 +24,7 @@ const AvatarUpload = (props) => {
     const [loading, setLoading] = useState(false);
     const [openAlert, setOpenAlert] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
-    const [imageUrl, setImageUrl] = useState(mode === 'add' ? '' : pet.profilePicture.src);
+    const [imageUrl, setImageUrl] = useState(mode === 'add' ? '' : pet.profilePicture?.src);
 
     const user = useUser();
     const petProfilePictureToRemove = usePetProfilePictureToRemove();

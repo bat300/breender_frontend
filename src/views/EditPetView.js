@@ -8,13 +8,14 @@ import { PetInformationForm, PetPhotosForm } from 'components/forms';
 import Loading from 'components/Loading';
 // state imports
 import { usePet, usePetCompetitions, usePetDocuments, usePetPictures, usePetProfilePictureToRemove, usePetProfilePictureToUpload } from 'helper/hooks/pets.hooks';
-import { changePet, getPet, updateCompetitionsToUpload, updateDocumentsToUpload, updatePicturesToUpload, updateProfilePicture } from 'redux/actions';
+import { changePet, getPet, updateCompetitionsToUpload, updateDocumentsToUpload, updatePicturesToUpload, updateProfilePicture, getUserPets } from 'redux/actions';
 // helpers import
 import { useUser } from 'helper/hooks/auth.hooks';
 import { UPLOAD_STATUS } from 'helper/types';
 import { isObjEmpty } from 'helper/helpers';
 // services import
 import { NotificationService, FirebaseService } from 'services';
+import { useLoggedInUser } from 'helper/hooks/auth.hooks';
 
 /**
  * 
@@ -30,7 +31,23 @@ const EditPetView = (props) => {
     const id = location.pathname.split('/edit/pet/')[1];
     const pet = usePet();
     const user = useUser();
+    const loggedInUser = useLoggedInUser();
 
+    useEffect(() => {
+        // remove old profile picture
+        dispatch(updateProfilePicture({}))
+
+        if (pet.officialName) {
+            setLoading(false);
+        } else {
+            const fetchPet = () => {
+                dispatch(getPet(id));
+                setLoading(false);
+            };
+            fetchPet();
+        }
+
+    }, [dispatch, id, pet.officialName]);
     // get pet upload states
     const petDocuments = usePetDocuments();
     const petCompetitions = usePetCompetitions();
@@ -48,6 +65,7 @@ const EditPetView = (props) => {
     const [species, setSpecies] = useState(pet.species);
     const [breed, setBreed] = useState(pet.breed);
     const [price, setPrice] = useState(pet.price);
+    const [purchased, setPurchased] = useState(pet.purchased);
 
     useEffect(() => {
         // update upload states
@@ -200,11 +218,14 @@ const EditPetView = (props) => {
             species: species,
             competitions: competitions,
             documents: documents,
+            purchased: purchased,
         };
 
         const onSuccess = () => {
             NotificationService.notify('success', 'Success', 'Your four-legged friend was successfully updated!');
             history.push('/');
+            // update pets of logged in user in redux store
+            dispatch(getUserPets(user.id));
         };
 
         const onError = () => {
@@ -232,6 +253,9 @@ const EditPetView = (props) => {
                     speciesProp={{ species, setSpecies }}
                     breedProp={{ breed, setBreed }}
                     priceProp={{ price, setPrice }}
+                    disabledProp={{ formIsDisabled, setFormIsDisabled }}
+                    purchasedProp={{ purchased, setPurchased }}
+                    user={loggedInUser}
                 />
             </div>
             <div className={classes.button}>

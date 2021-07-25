@@ -7,7 +7,7 @@ const PetPreviewProfileComponent = (props) => {
     const history = useHistory();
 
     const { pet, username } = props;
-    const image = pet.profilePicture.src;
+    const image = pet?.profilePicture.src;
 
     const redirectToPetPage = () => history.push(`/pet/${pet._id}`);
 
@@ -17,8 +17,8 @@ const PetPreviewProfileComponent = (props) => {
                 <Grid item>
                     <Avatar className={classes.picture} src={image} alt="Pet Profile Picture" />
                 </Grid>
-                <Grid item direction="column" className={classes.textLayout}>
-                    <Typography variant="caption">{pet.officialName}</Typography>
+                <Grid item direction="column" spacing={2} className={classes.textLayout}>
+                    <Typography variant="caption">{pet?.officialName}</Typography>
                     <Typography variant="caption">{username}</Typography>
                 </Grid>
             </Grid>

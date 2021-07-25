@@ -2,6 +2,7 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Grid, Card, CardHeader, CardContent, Typography, CardActions, Button } from '@material-ui/core';
 import GetAppIcon from '@material-ui/icons/GetApp';
+import { Tooltip } from 'antd';
 import { VerificationIcon, CancelIcon } from 'components/icons';
 
 const useStyles = makeStyles((theme) => ({
@@ -32,8 +33,21 @@ function PetCompetitionsCard(props) {
 
     return (
         <Grid item>
-            <Card className={classes.root} style={{ borderRadius: 25 }}>
-                <CardHeader action={props.certificate.declined ? <CancelIcon /> : <VerificationIcon verified={props.certificate.verified} />} />
+            <Card className={classes.root}>
+                <CardHeader action={
+                    props.certificate.declined ?
+                        (<Tooltip trigger="hover" placement="top" title={"The document is checked and DECLINED."}>
+                            <div>
+                                <CancelIcon style={{ fill: 'red' }} />
+                            </div>
+                        </Tooltip>)
+                        : (<Tooltip trigger="hover" placement="top" title={props.verified ? "The document is verified." : "The document is NOT yet verified."}>
+                            <div>
+                                <VerificationIcon verified={props.certificate.verified} />
+                            </div>
+                        </Tooltip>)
+                } />
+
                 <CardContent>
                     <Typography variant="h5" className={classes.label} color="textSecondary">
                         {props.name}
