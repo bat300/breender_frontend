@@ -73,8 +73,14 @@ export const addPet = (pet, onSuccess = () => null, onError = (err) => null) => 
                 dispatch(addPetAction());
             })
             .catch((e) => {
-                onFailure(e);
-                NotificationService.notify('error', 'Error', 'Failed to add a new pet. Please try again.');
+                switch (e.status) {
+                    case 400:
+                        NotificationService.notify('warning', 'Warning', e.data.message);
+                        break;
+                    default:
+                        onFailure(e.data.message);
+                        break;
+                }
             });
     };
 };
