@@ -1,7 +1,6 @@
 import { combineReducers } from 'redux';
 import user from './userReducer';
 import checkUser from './checkUserReducer';
-import selectedMovie from './selectedMovieReducer';
 import pets from './petReducer';
 import confirmation from './confirmationReducer';
 import conversations from './conversationReducer';
@@ -15,7 +14,6 @@ import transaction from './transactionReducer';
 const reducers = combineReducers({
     user,
     checkUser,
-    selectedMovie,
     pets,
     documents,
     confirmation,
