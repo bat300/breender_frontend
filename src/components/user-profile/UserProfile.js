@@ -10,7 +10,7 @@ import UserForm from './UserForm';
 import { NotificationService } from 'services';
 import { useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { updateUser } from 'redux/actions';
+import { updateUser, clearPet, clearUpload } from 'redux/actions';
 import ReviewComponent from './ReviewComponent';
 
 const useStyles = makeStyles((theme) => ({
@@ -115,6 +115,8 @@ export default function UserProfile(props) {
     };
 
     const handleAddPet = (event) => {
+        dispatch(clearPet());
+        dispatch((clearUpload()));
         history.push('/add-pet');
     };
 
