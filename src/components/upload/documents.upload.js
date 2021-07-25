@@ -23,7 +23,7 @@ const prepareCompetitions = (competitions) => {
 
 const prepareDocumentsFileList = (petDocuments) => {
     let petList = [];
-    petDocuments.forEach((value, index) => {
+    petDocuments?.forEach((value, index) => {
         petList.push({
             uid: index,
             name: value.name,

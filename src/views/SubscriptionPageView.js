@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme) => ({
     title: theme.typography.h3,
     description: theme.typography.h6,
     paper: {
-        width: '70%',
+        width: '1250px',
         marginLeft: 'auto',
         marginRight: 'auto',
         marginTop: theme.spacing(0),
@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
         borderRadius: '10px',
     },
     plans: {
-        paddingBottom: '40px',
+        paddingBottom: '60px',
         paddingRight: '20px',
         paddingLeft: '20px',
     },
