@@ -34,9 +34,9 @@ function PaymentButton({ pet }) {
     const [wasPurchased, setWasPurchased] = useState(false);
 
     useEffect(() => {
-        if(loggedInUser) {
-            setIsMyPet(loggedInUser._id === pet.ownerId)
-            setWasPurchased(pet.purchased)
+        if (loggedInUser) {
+            setIsMyPet(loggedInUser._id === pet.ownerId);
+            setWasPurchased(pet.purchased);
         }
     }, [loggedInUser, pet.ownerId, pet.purchased]);
 
@@ -46,7 +46,7 @@ function PaymentButton({ pet }) {
     return (
         <>
             <Button disabled={isMyPet || wasPurchased} variant="contained" color="primary" className={classes.button} endIcon={<ShoppingCartIcon />} onClick={openStepper}>
-                {wasPurchased ? 'Was Purchased' : price === 0 || price === null ? 'Free' : `${price} €` }
+                {wasPurchased ? 'Was Purchased' : price === 0 || price === null ? 'Free' : `${price} €`}
             </Button>
             <Modal title="Payment Confirmation" visible={isModalOpened} onCancel={closeModal} className={classes.modal} footer={null}>
                 <PaymentStepper pet={pet} close={closeModal} />

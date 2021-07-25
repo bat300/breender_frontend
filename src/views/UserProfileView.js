@@ -11,41 +11,51 @@ function UserProfileView(props) {
     var pets = useSelector((state) => state.user.pets);
     var reviews = useSelector((state) => state.user.reviews);
 
-    const loadUser = async () => {
-        // trigger the redux action getUsersInfo
-        usersInfo = props.dispatch(getUsersInfo(user.id));
-    };
+    useEffect(() => {
+        let loading = true;
 
-    const loadUserPets = async () => {
-        // trigger the redux action getUserPets
-        pets = props.dispatch(getUserPets(user.id));
-    };
+        const loadUser = async () => {
+            // trigger the redux action getUsersInfo
+            if (!loading) return;
+            await  props.dispatch(getUsersInfo(user.id));
+        };
+        loadUser();
 
-    const loadReviews = async () => {
-        // trigger the redux action getReviewsOnUser
-        reviews = props.dispatch(getReviewsOnUser(user.id));
-    };
+        return () => {
+            loading = false;
+        };
+    }, [props, user.id]);
 
     useEffect(() => {
-        // load user when the page is loaded and the information is not yet in the redux store
-        if (!usersInfo) {
-            loadUser();
-        }
-    }, [usersInfo]);
+        let loading = true;
+
+        const loadUserPets = async () => {
+            // trigger the redux action getUserPets
+            if (!loading) return;
+            await props.dispatch(getUserPets(user.id));
+        };
+        loadUserPets();
+    
+        return () => {
+            loading = false;
+        };
+    }, [props, user.id]);
 
     useEffect(() => {
-        // load pets of a user when the page is loaded and the information is not yet in the redux store
-        if (!pets) {
-            loadUserPets();
-        }
-    }, [pets]);
+        let loading = true;
 
-    useEffect(() => {
-        // load reviews on a user when the page is loaded and the information is not yet in the redux store
-        if (!reviews) {
-            loadReviews();
-        }
-    }, [pets]);
+        const loadReviews = async () => {
+            // trigger the redux action getReviewsOnUser
+            if (!loading) return;
+            await props.dispatch(getReviewsOnUser(user.id));
+        };
+
+        loadReviews();
+    
+        return () => {
+            loading = false;
+        };
+    }, [props, user.id]);
 
     return <UserProfile user={usersInfo ? usersInfo : user} pets={pets} profileOfLoggedInUser={true} reviews={reviews} />
 }

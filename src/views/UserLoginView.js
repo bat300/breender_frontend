@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useHistory, withRouter } from 'react-router-dom';
 import { connect, useDispatch, useSelector } from 'react-redux';
 import LoginComponent from '../components/UserLoginComponent';
-import { login, startLoading, stopLoading, loginReset, getUsersInfo } from '../redux/actions';
+import { login, startLoading, stopLoading, loginReset, getUsersInfo, getUser } from '../redux/actions';
 import NotificationService from 'services/NotificationService';
 import { getUnseenMessages } from '../redux/actions/messageActions';
 import logo from '../images/breender.svg';
@@ -23,6 +23,7 @@ function UserLoginView(props) {
             NotificationService.notify('success', 'Success', 'Sucessfully signed in.');
             props.history.push('/');
             props.dispatch(getUsersInfo(user.user.id));
+            props.dispatch(getUser(user.user.id));
             props.dispatch(getUnseenMessages(user.user.id));
         }
     }, [user, props]);
@@ -38,7 +39,6 @@ function UserLoginView(props) {
     };
 
     const onSignUp = () => {
-        props.dispatch(loginReset());
         props.history.push('/register');
     };
 

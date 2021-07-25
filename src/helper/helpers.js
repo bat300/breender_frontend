@@ -52,7 +52,6 @@ export  const getUserFromToken = () => {
                 username: userJson.username,
                 role: userJson.role,
             },
-            loggedInUser: {},
         };
     }
     return {};

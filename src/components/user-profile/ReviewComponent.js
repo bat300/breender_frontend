@@ -62,16 +62,16 @@ export default function ReviewComponent(props) {
             <Paper className={classes.paper}>
                 <Grid container spacing={3}>
                     <Grid item xs={12}>
-                        <Button onClick={goToUserPage} color="white">Reviewer: {props.review.reviewerId}</Button>
+                        <Button onClick={goToUserPage} color="white">Reviewer: {props.review.username}</Button>
                     </Grid>
                     <Grid container direction="row" justify="space-between" item>
                         <Grid item>
                             <Rating name="rating" value={props.review.rating} readOnly />
                         </Grid>
                         <Grid item>
-                            <Tooltip trigger="hover" placement="top" title={props.review.transaction.processed ? "The transaction of reviewer is processed." : "The transaction of reviewer is NOT processed."}>
+                            <Tooltip trigger="hover" placement="top" title={props.review.transaction.status !== "pending" ? "The transaction of reviewer is processed." : "The transaction of reviewer is NOT processed."}>
                                 <div>
-                                    <VerificationIcon verified={props.review.transaction.processed} />
+                                    <VerificationIcon verified={props.review.transaction.status !== "pending"} />
                                 </div>
                             </Tooltip>
                         </Grid>

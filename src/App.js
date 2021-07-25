@@ -8,9 +8,6 @@ import { MuiThemeProvider, createMuiTheme, makeStyles, StylesProvider } from '@m
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import rootReducer from './redux/reducers';
-import reducers from './redux/reducers';
-import routes from './routes';
-import Header from './components/Header';
 import AppTheme from './theming/themetypes';
 import AppThemeOptions from './theming/themes';
 import AxiosConfiguration from './helper/axios';

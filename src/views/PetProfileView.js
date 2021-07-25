@@ -2,17 +2,16 @@ import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { useLocation } from 'react-router-dom';
-import { getPet } from '../redux/actions/petActions';
 // components import
 import PetProfileComponent from '../components/pet-profile/PetProfileComponent';
 import Loading from '../components/Loading';
-import { getUser } from 'redux/actions';
 // helper imports
 import { isObjEmpty } from 'helper/helpers';
 import { usePet } from 'helper/hooks';
 import PremiumBanner from 'components/PremiumBanner';
 import { useLoggedInUser } from 'helper/hooks/auth.hooks';
 import { showPremiumBanner } from 'helper/helpers';
+import { getPet, getUser } from 'redux/actions';
 
 /**
  * Manages the process of getting pet details data
@@ -29,20 +28,12 @@ function PetProfileView(props) {
     const selectedPet = usePet();
 
     useEffect(() => {
-        let loading = true;
-
-        // get id of pet from URL
-        const loadPet = async (id) => {
-            if (!loading) return;
-            await dispatch(getPet(id));
-        };
-
-        loadPet(petId);
-
-        return () => {
-            loading = false;
-        };
-    }, [dispatch, petId]);
+        if (selectedPet) {
+            dispatch(getUser(selectedPet.ownerId));
+        } else {
+            dispatch(getPet(petId));
+        }
+    }, [dispatch, selectedPet, petId]);
 
     return isObjEmpty(selectedPet) ? (
         <Loading />

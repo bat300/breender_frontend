@@ -25,7 +25,7 @@ function generateDocumentItems(documents) {
         <PetInformationListItem
           key={doc.name + doc.type}
           primary={doc.name}
-          secondary={doc.type}
+          secondary={'Additional Document'}
           verified={doc.verified}
           declined={doc.declined}
           url={doc.url}

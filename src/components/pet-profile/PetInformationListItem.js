@@ -11,12 +11,13 @@ import GenderIcon from '../../images/icons/gender.svg';
 import DogIcon from '../../images/icons/cocker-spaniel.png';
 import DogTagIcon from '../../images/icons/dog-tag.png';
 import { VerificationIcon, CancelIcon } from 'components/icons';
-
+import { useSelectedUser } from 'helper/hooks';
 
 function PetInformationListItem(props) {
     const classes = useStyles();
+    const petOwner = useSelectedUser();
     if (props.primary) {
-        const urlForOwner = "http://localhost:3000/user/".concat(props.primary)
+        const urlForOwner = "http://localhost:3000/user/".concat(petOwner._id)
         return (
             <ListItem
                 className={classes.item}

@@ -9,10 +9,10 @@ import { Check } from '@material-ui/icons';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import StepperInformation from './StepperInformation';
-import { useLoggedInUser } from 'helper/hooks/auth.hooks';
+import { useLoggedInUser, useSelectedUser } from 'helper/hooks/auth.hooks';
 import PaymentResultComponent from './PaymentResult';
 import { useDispatch, useSelector } from 'react-redux';
-import { changePet, createTransaction, getUser } from 'redux/actions';
+import { changePet, createTransaction, getPet } from 'redux/actions';
 import { NotificationService } from 'services';
 
 const STATUS_TYPE = {
@@ -24,20 +24,20 @@ const PaymentStepper = ({ pet, close }) => {
     const classes = useStyles();
     const dispatch = useDispatch();
 
-    const [paymentStatus, setPaymentStatus] = useState('none');
     const transaction = useSelector((state) => state.transaction.transaction);
-    const petOwner = useSelector((state) => state.user.selectedUser);
+    const petOwner = useSelectedUser();
+    const loggedInUser = useLoggedInUser();
 
+    const [paymentStatus, setPaymentStatus] = useState('none');
     const [activeStep, setActiveStep] = useState(0);
+    const [isFreeOfCharge, setIsFreeOfCharge] = useState(pet.price === 0 || pet.price === null); // if pet is free
 
     const steps = ['Confirm general information', 'Confirm payment', 'Finish'];
-    const loggedInUser = useLoggedInUser();
-    const [isFreeOfCharge, setIsFreeOfCharge] = useState(false);
+
 
     useEffect(() => {
         if (loggedInUser) {
-            setIsFreeOfCharge(loggedInUser.subscriptionPlan === 'premium' && pet.price === 0) // premium user don't need to pay any fees for the free pet
-            dispatch(getUser(pet.ownerId));
+            setIsFreeOfCharge(pet.price === 0 || pet.price === null) // premium user don't need to pay any fees for the free pet
         }
     }, [loggedInUser, pet.ownerId, pet.price, dispatch])
 
@@ -45,13 +45,13 @@ const PaymentStepper = ({ pet, close }) => {
     const isButtonDisabled = activeStep === 1 && !isFreeOfCharge;
 
     // helper functions for the transaction generation
-    const amountToPay = () => {
-        if (loggedInUser.subscriptionPlan === 'free') {
+    const calculateFee = () => {
+        if (petOwner.subscriptionPlan === 'free') {
             let fee = Math.min(pet.price * 0.05, 20); // 5% of the pet price or maximum 20€ as fee
             fee = Math.max(fee, 1); // min 1€
-            return pet.price + fee;
+            return fee;
         }
-        return pet.price;
+        return 0;
     };
     // generate order number for new transactions
     const generateId = () => Math.floor(Math.random() * 10000000000).toString(16);
@@ -64,7 +64,8 @@ const PaymentStepper = ({ pet, close }) => {
         senderResponse: 'pending',
         receiverResponse: 'pending',
         status: 'pending',
-        amount: amountToPay(),
+        amount: pet.price ? pet.price : 0,
+        fee: calculateFee(),
         processed: false,
         reminderSent: false,
     };
@@ -73,7 +74,6 @@ const PaymentStepper = ({ pet, close }) => {
     const handleNext = () => {
         if (activeStep === steps.length - 1) {
             close();
-            setActiveStep(0);
             return;
         }
         // skip payment and create transaction directly
@@ -103,6 +103,7 @@ const PaymentStepper = ({ pet, close }) => {
                     // update pet status to purchased
                     let newPet = { ...pet, purchased: true };
                     dispatch(changePet(newPet));
+                    dispatch(getPet(pet.id));
                 },
                 () => {
                     NotificationService.notify('error', 'Transaction Error', 'Error occurred during transaction creation');
@@ -121,9 +122,9 @@ const PaymentStepper = ({ pet, close }) => {
     const getStepContent = (stepIndex) => {
         switch (stepIndex) {
             case 0:
-                return <StepperInformation petOwner={petOwner} pet={pet} loggedInUser={loggedInUser} step={0} isFreeOfCharge={isFreeOfCharge} onApprove={onApprove} onError={onError} amount={amountToPay()} />;
+                return <StepperInformation petOwner={petOwner} pet={pet} loggedInUser={loggedInUser} step={0} isFreeOfCharge={isFreeOfCharge} onApprove={onApprove} onError={onError} />;
             case 1:
-                return <StepperInformation petOwner={petOwner} pet={pet} loggedInUser={loggedInUser} step={1} isFreeOfCharge={isFreeOfCharge} onApprove={onApprove} onError={onError} amount={amountToPay()} />;
+                return <StepperInformation petOwner={petOwner} pet={pet} loggedInUser={loggedInUser} step={1} isFreeOfCharge={isFreeOfCharge} onApprove={onApprove} onError={onError} />;
             case 2:
                 return <PaymentResultComponent status={paymentStatus} transaction={transaction} />;
             default:

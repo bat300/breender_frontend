@@ -102,11 +102,11 @@ const Routes = () => {
             <AdminRoute exact path="/admin-console">
                 <AdminConsoleView />
             </AdminRoute>
-            <DefaultRoute exact path="/premium">
+            <DefaultRoute exact path="/pricing">
                 <DefaultHeader />
                 <SubscriptionPageView />
             </DefaultRoute>
-            <PrivateRoute exact path="/premium/changePlan">
+            <PrivateRoute exact path="/pricing/changePlan">
                 <ChangeToPremiumView />
             </PrivateRoute>
             <PrivateRoute exact path="/user/:id">

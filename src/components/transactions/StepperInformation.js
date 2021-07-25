@@ -1,7 +1,6 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Card, CardContent, CardMedia, Grid, Table, TableCell, TableRow, Typography } from '@material-ui/core';
-import SubscriptionPlanPreview from 'components/premium/SubscriptionPlanPreview';
 import PayPalPayment from './PayPalPayment';
 
 const useStyles = makeStyles((theme) => ({
@@ -18,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const StepperInformation = ({ step, pet, petOwner, amount, loggedInUser, isFreeOfCharge, onApprove, onError }) => {
+const StepperInformation = ({ step, pet, petOwner, loggedInUser, isFreeOfCharge, onApprove, onError }) => {
     const classes = useStyles();
 
     function formatProvince(province) {
@@ -108,27 +107,16 @@ const StepperInformation = ({ step, pet, petOwner, amount, loggedInUser, isFreeO
                 </Grid>
             ) : step === 1 ? (
                 <Grid container direction="column" alignItems="center" justify="center" item xs={12} spacing={5}>
-                    <Grid item align="center">
-                        <Typography gutterBottom style={{ fontSize: 16 }}>
-                            Your Current Subscription
-                        </Typography>
-                        <SubscriptionPlanPreview user={loggedInUser} />
-                    </Grid>
                     <Grid item align="center" style={{ maxWidth: 500 }}>
                         {isFreeOfCharge ? (
-                            <Typography variant="body2" color="textSecondary" component="p">
+                            <Typography variant="body2" color="textPrimary" component="p">
                                 You can directly proceed.
                             </Typography>
                         ) : (
                             <>
                                 <Typography>Pay now </Typography>
                                 {/* Payment with PayPal Component */}
-                                <PayPalPayment amount={amount} onApprove={onApprove} onError={onError} />
-                                {loggedInUser.subscriptionPlan === 'free' ? (
-                                    <Typography variant="body2" color="textSecondary" component="p">
-                                        * We additionally charge 5% (min 1€ and max 20€) from the price for the transaction, because you have a free plan.
-                                    </Typography>
-                                ) : null}
+                                <PayPalPayment amount={pet.price} onApprove={onApprove} onError={onError} />
                             </>
                         )}
                     </Grid>

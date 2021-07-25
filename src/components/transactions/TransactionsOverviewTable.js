@@ -93,7 +93,7 @@ const TransactionsOverviewTable = (props) => {
 
     // get the owner of the pet
     const getPetOwner = (transaction) => {
-        if (transaction.pet?.ownerId === transaction.senderId._id) {
+        if (transaction.pet?.ownerId === transaction.senderId?._id) {
             return transaction.senderId;
         } else {
             return transaction.receiverId;
@@ -101,19 +101,26 @@ const TransactionsOverviewTable = (props) => {
     };
 
     // show tooltip on hovering over pending status row
-    const getToolTipTitle = (transaction) => {
-        const { status, senderResponse, receiverResponse } = transaction;
-        if (status === 'pending') {
-            if (senderResponse === 'pending' && receiverResponse === 'pending') {
-                return 'Both receiver and sender have not responded yet.';
-            } else if (senderResponse === 'pending') {
-                return 'Sender have not responded yet.';
-            } else if (receiverResponse === 'pending') {
-                return 'Receiver have not responded yet.';
+    const getToolTipTitle = (transaction, type) => {
+        const { status, senderResponse, receiverResponse, fee } = transaction;
+
+        if (type === 'amount') {
+            if (fee > 0 && !checkUserIsSender(transaction)) {
+                return 'Because of your free plan, we charge 5% (min 1€ and max 20€) from the transaction price.';
             }
-        } else if (status === 'fail' && ((senderResponse === 'fail' && receiverResponse === 'success') || (senderResponse === 'success' && receiverResponse === 'fail'))) {
-            return 'Transaction requires further investigation. Our employee will contact you soon.';
-        } else return null;
+        } else {
+            if (status === 'pending') {
+                if (senderResponse === 'pending' && receiverResponse === 'pending') {
+                    return 'Both receiver and sender have not responded yet.';
+                } else if (senderResponse === 'pending') {
+                    return 'Sender have not responded yet.';
+                } else if (receiverResponse === 'pending') {
+                    return 'Receiver have not responded yet.';
+                }
+            } else if (status === 'fail' && ((senderResponse === 'fail' && receiverResponse === 'success') || (senderResponse === 'success' && receiverResponse === 'fail'))) {
+                return 'Transaction requires further investigation. Our employee will contact you soon.';
+            } else return null;
+        }
     };
 
     const columns = [
@@ -135,7 +142,13 @@ const TransactionsOverviewTable = (props) => {
             dataIndex: 'amount',
             key: 'amount',
             align: 'right',
-            render: (_, record) => <PriceTag isSender={checkUserIsSender(record)} price={record.amount} />,
+            render: (_, record) => (
+                <Tooltip trigger="hover" placement="top" title={getToolTipTitle(record, 'amount')}>
+                    <div>
+                        <PriceTag isSender={checkUserIsSender(record)} price={record.amount} fee={record.fee} />
+                    </div>
+                </Tooltip>
+            ),
         },
         {
             title: 'DEADLINE',
@@ -164,12 +177,17 @@ const TransactionsOverviewTable = (props) => {
             dataIndex: 'status',
             align: 'center',
             render: (_, record) => (
-                <Tooltip trigger="hover" placement="top" title={getToolTipTitle(record)}>
+                <Tooltip trigger="hover" placement="top" title={getToolTipTitle(record, 'status')}>
                     <div>
                         <StatusTag status={record.status} isSelected={true} />
                     </div>
                     {checkRequiresInvestigation(record) ? (
-                        <Chip className={classes.tags} variant="outlined" label="Requires Investigation" style={{ color: 'black', background: '#FCCA46', borderColor: '#FDCD7F', borderWidth: 2, fontWeight: 'lighter' }} />
+                        <Chip
+                            className={classes.tags}
+                            variant="outlined"
+                            label="Requires Investigation"
+                            style={{ color: 'black', background: '#FCCA46', borderColor: '#FDCD7F', borderWidth: 2, fontWeight: 'lighter' }}
+                        />
                     ) : null}
                 </Tooltip>
             ),
@@ -179,16 +197,7 @@ const TransactionsOverviewTable = (props) => {
             dataIndex: 'review',
             key: 'review',
             align: 'center',
-            render: (_, record) => (
-                <Button disabled={!checkUserIsSender(record) || !record.isReviewed}>
-                    {' '}
-                    <AddBoxIcon
-                        onClick={function () {
-                            showModal(record);
-                        }}
-                    />{' '}
-                </Button>
-            ),
+            render: (_, record) => <Button disabled={!checkUserIsSender(record) || !record.isReviewed}> <AddBoxIcon onClick={function () { if (checkUserIsSender(record) || !record.isReviewed) { showModal(record); } }} /> </Button>,
         },
     ];
 

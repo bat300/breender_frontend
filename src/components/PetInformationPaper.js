@@ -13,7 +13,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCrown } from '@fortawesome/free-solid-svg-icons';
 import { NotificationService } from 'services';
 import { useDispatch } from 'react-redux';
-import { deletePet, getUserPets, getPets } from 'redux/actions';
+import { deletePet, getUserPets, getPets, getPet } from 'redux/actions';
 import RemoveShoppingCartIcon from '@material-ui/icons/RemoveShoppingCart';
 import { Tooltip } from 'antd';
 
@@ -60,7 +60,8 @@ export default function PetInformationPaper(props) {
     const history = useHistory();
     const dispatch = useDispatch();
 
-    function goToPetProfile() {
+    const goToPetProfile = async () => {
+        await dispatch(getPet(props.pet._id));
         if (props.editingMode) {
             history.push('/edit/pet/' + props.pet._id);
         } else {
@@ -186,4 +187,5 @@ export default function PetInformationPaper(props) {
 // attributes of props and their type
 PetInformationPaper.propTypes = {
     pet: PropTypes.object,
+    editingMode: PropTypes.bool,
 };

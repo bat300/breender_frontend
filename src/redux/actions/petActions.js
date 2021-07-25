@@ -73,8 +73,14 @@ export const addPet = (pet, onSuccess = () => null, onError = (err) => null) => 
                 dispatch(addPetAction());
             })
             .catch((e) => {
-                onFailure(e);
-                NotificationService.notify('error', 'Error', 'Failed to add a new pet. Please try again.');
+                switch (e.status) {
+                    case 400:
+                        NotificationService.notify('warning', 'Warning', e.data.message);
+                        break;
+                    default:
+                        onFailure(e.data.message);
+                        break;
+                }
             });
     };
 };
@@ -94,8 +100,14 @@ export const changePet = (changedPet, onSuccess = () => null, onError = (err) =>
             let pet = await PetService.updatePet(changedPet);
             dispatch(changePetAction(pet));
         } catch (e) {
-            onFailure(e);
-            NotificationService.notify('error', 'Error', 'Failed to update the pet. Please try again.');
+            switch (e.status) {
+                case 400:
+                    NotificationService.notify('warning', 'Warning', e.data.message);
+                    break;
+                default:
+                    onFailure(e.data.message);
+                    break;
+            }
         }
     };
 };

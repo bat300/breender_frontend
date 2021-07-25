@@ -296,14 +296,7 @@ const CompetitionsComponent = (props) => {
 
     const showModal = () => setIsModalVisible(true);
 
-    const hideModal = () => {
-        dispatch(updateCompetitionsToUpload(editedCompetitions));
-        setCompetitions(editedCompetitions);
-        setIsModalVisible(false);
-        setCount(editedCompetitions.length);
-    };
-
-    const onOk = () => {
+    const checkIfVerified = () => {
         // check if all columns of all competitions are filled out
         let verified = true;
         const isEmpty = (c) => c.name === '' || c.prize === '' || c.date === '' || c.category === '' || c.certificate === undefined || c.certificate === {};
@@ -313,7 +306,22 @@ const CompetitionsComponent = (props) => {
                 return;
             }
         });
-        if (verified) {
+        return verified;
+    };
+
+    const hideModal = () => {
+        if (competitionsData.length > 0 && !checkIfVerified()) {
+            NotificationService.notify('error', 'All fields required', 'Please fill out all columns for the competitions!');
+        } else {
+            dispatch(updateCompetitionsToUpload(editedCompetitions));
+            setCompetitions(editedCompetitions);
+            setIsModalVisible(false);
+            setCount(editedCompetitions.length);
+        }
+    };
+
+    const onOk = () => {
+        if (checkIfVerified()) {
             dispatch(updateCompetitionsToUpload(competitions));
             setEditedCompetitions(competitions);
             setIsModalVisible(false);

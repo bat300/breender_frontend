@@ -125,7 +125,7 @@ export default function UserProfile(props) {
                 <Grid item />
                 <Grid item >
                     <Typography variant="h6" align="center" style={{ fontWeight: 600 }}>
-                        {props.profileOfLoggedInUser ? "Account information" : username.toUpperCase()}
+                        {props.profileOfLoggedInUser ? "Account information" : props.user.username.toUpperCase()}
                     </Typography>
                 </Grid>
                 <Grid item>
@@ -158,10 +158,12 @@ export default function UserProfile(props) {
                         <Typography className={classes.typographyNotifications} align="center">
                             No pets added yet
                         </Typography> : <div />)}
-                {editingMode ? (props.user.isVerified ?
-                    <Button style={{ margin: '0 auto', display: "flex" }} variant="contained" color="secondary" onClick={handleAddPet}>
-                        Add pet
-                    </Button>
+                {props.profileOfLoggedInUser ? (props.user.isVerified ?
+                    <div style={{ marginTop: 20 }}>
+                        <Button style={{ margin: '0 auto', display: "flex" }} variant="contained" color="secondary" onClick={handleAddPet}>
+                            Add pet
+                        </Button>
+                    </div>
                     : <Typography className={classes.typographyNotifications} align="center">
                         Please verify your email to add a pet
                     </Typography>) : <div />}

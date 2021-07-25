@@ -24,7 +24,7 @@ const PremiumBanner = (props) => {
     const classes = useStyles();
     const history = useHistory();
 
-    const onClick = () => history.push('/premium');
+    const onClick = () => history.push('/pricing');
 
     return (
         <div className={classes.container}>

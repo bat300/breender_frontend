@@ -92,7 +92,7 @@ const MultiplePhotosUpload = (props) => {
 
     // remove the image from firebase
     const handleRemove = async (file) => {
-        let picTemp = [...pet.pictures];
+        let picTemp = [...petPictures];
         if (file.url) {
             // set status delete to remove it later onSave from firebase
             picTemp.map((value) => (value.title === file.name ? (value.status = UPLOAD_STATUS.DELETE) : value));

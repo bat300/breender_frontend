@@ -1,9 +1,8 @@
 import React, { useEffect } from 'react';
 import { withRouter } from 'react-router-dom';
-import { connect, useSelector } from 'react-redux';
-import { register, resetError, getUsersInfo } from '../redux/actions';
+import { connect, useDispatch, useSelector } from 'react-redux';
+import { getUsersInfo, register, resetError, startLoading, stopLoading } from '../redux/actions';
 import NotificationService from 'services/NotificationService';
-import SignUpComponent from 'components/SignUpComponent';
 import SignUpPaper from 'components/SignUpPaper';
 import { makeStyles } from '@material-ui/core';
 import logo from '../images/breender.svg';
@@ -15,6 +14,7 @@ import logo from '../images/breender.svg';
 function SignUpView(props) {
     const classes = useStyles();
     const user = useSelector((state) => state.user);
+    const dispatch = useDispatch();
 
     useEffect(() => {
         if (user.user) {
@@ -33,8 +33,10 @@ function SignUpView(props) {
         };
     }, [user, props.history]);
 
-    const onRegister = (email, username, password, city, province, isAdmin, subscriptionPlan, paymentPlan, paymentMethod) => {
-        props.dispatch(register(email, username, password, city, province, isAdmin, subscriptionPlan, paymentPlan, paymentMethod));
+    const onRegister = async (email, username, password, city, province, isAdmin, subscriptionPlan, paymentPlan, paymentMethod) => {
+        dispatch(startLoading());
+        await dispatch(register(email, username, password, city, province, isAdmin, subscriptionPlan, paymentPlan, paymentMethod));
+        dispatch(stopLoading());
     };
 
     const onCancel = () => {

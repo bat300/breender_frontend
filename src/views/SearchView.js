@@ -89,14 +89,16 @@ function SearchView(props) {
         },
     ];
 
-    const loadPets = async (pageValue?) => {
+    const loadPets = async (pageValue) => {
         // trigger the redux action getPets
         let pageToFetch = pageValue ? pageValue : 1;
         pets = props.dispatch(getPets(chosenSpecies, sex, breed, ageRange, pageToFetch, false, user));
     };
 
     useEffect(() => {
-        props.dispatch(getUsersInfo(user.id));
+        if (user) {
+            props.dispatch(getUsersInfo(user.id));
+        }
     }, []);
 
     useEffect(() => {
@@ -143,7 +145,7 @@ function SearchView(props) {
         return `${age} years old`;
     }
 
-    const onSubscribe = () => props.history.push('/premium');
+    const onSubscribe = () => props.history.push('/pricing');
 
     const onSearchTrigger = () => searchRef.current.scrollIntoView({ behavior: 'smooth' });
 

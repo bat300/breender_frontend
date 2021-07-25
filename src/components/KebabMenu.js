@@ -1,8 +1,8 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
-import { getTransactions, getUsersInfo, logout } from '../redux/actions';
+import { getReviewsOnUser, getTransactions, getUsersInfo, logout } from '../redux/actions';
 import { Menu, MenuItem, Avatar, Divider, Typography } from '@material-ui/core';
 import { connect, useSelector } from 'react-redux';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
@@ -34,6 +34,7 @@ const useStyles = makeStyles((theme) => ({
 function KebabMenu(props) {
     const classes = useStyles();
     // return the currnetly logged in user from redux store
+
     const user = useUser();
     const userInfo = useSelector((state) => state.user.userInfo);
 
@@ -60,12 +61,17 @@ function KebabMenu(props) {
     };
 
     const onClickGoToUserProfile = () => {
+        props.dispatch(getReviewsOnUser(user.id));
         props.history.push('/user');
+        // close this menu
+        props.onClose();
     };
 
     const onClickMyTransactions = (id) => {
         props.dispatch(getTransactions(id));
         props.history.push('/transactions');
+        // close this menu
+        props.onClose();
     };
 
     return (
@@ -81,37 +87,35 @@ function KebabMenu(props) {
         >
             {userInfo
                 ? [
-                    <MenuItem key="user" className={classes.menuitem} onClick={onClickGoToUserProfile}>
-                        <Avatar className={classes.avatar}><Typography color="textSecondary">{user.username ? user.username[0] : ""}</Typography></Avatar>
-                        <div style={{ "padding": "10px" }}>{userInfo.username}</div>
-                        {userInfo.role === 'admin' ? (
-                            <SecurityIcon className={classes.icon} />
-                        ) : userInfo.subscriptionPlan === 'premium' ? (
-                            <FontAwesomeIcon icon={faCrown} size={"lg"} className={classes.icon} />
-                        ) : (
-                            <></>
-                        )}
-                    </MenuItem>,
-                    <Divider key="divider" />,
-                    <MenuItem key="transactions" onClick={() => onClickMyTransactions(user.id)} className={classes.menuitem}>
-                        My transactions
-                    </MenuItem>,
-                    <Divider key="divider2" />,
-                    <MenuItem key="logout" onClick={onClickLogout} className={classes.menuitem}>
-                        <ExitToAppIcon className={classes.margin} />
-                        Logout
-                    </MenuItem>,
-                ]
+                      <MenuItem key="user" className={classes.menuitem} onClick={onClickGoToUserProfile}>
+                          <Avatar className={classes.avatar}>
+                              <Typography color="textSecondary">{user.username ? user.username[0] : ''}</Typography>
+                          </Avatar>
+                          <div style={{ padding: '10px' }}>{userInfo.username}</div>
+                          {userInfo.role === 'admin' ? (
+                              <SecurityIcon className={classes.icon} />
+                          ) : userInfo.subscriptionPlan === 'premium' ? (
+                              <FontAwesomeIcon icon={faCrown} size={'lg'} className={classes.icon} />
+                          ) : (
+                              <></>
+                          )}
+                      </MenuItem>,
+                      <Divider key="divider" />,
+                      <MenuItem key="transactions" onClick={() => onClickMyTransactions(user.id)} className={classes.menuitem}>
+                          My transactions
+                      </MenuItem>,
+                      <Divider key="divider2" />,
+                      <MenuItem key="logout" onClick={onClickLogout} className={classes.menuitem}>
+                          <ExitToAppIcon className={classes.margin} />
+                          Logout
+                      </MenuItem>,
+                  ]
                 : [
-                    <MenuItem
-                        key="login"
-                        onClick={onClickLogin}
-                        className={classes.menuitem}
-                    >
-                        <VerifiedUserIcon color="primary" className={classes.margin} />
-                        Login
-                    </MenuItem>,
-                ]}
+                      <MenuItem key="login" onClick={onClickLogin} className={classes.menuitem}>
+                          <VerifiedUserIcon color="primary" className={classes.margin} />
+                          Login
+                      </MenuItem>,
+                  ]}
         </Menu>
     );
 }

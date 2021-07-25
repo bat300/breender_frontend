@@ -101,7 +101,7 @@ const AvatarUpload = (props) => {
     const handleRemove = async (file) => {
         setImageUrl('');
 
-        const image = pet.profilePicture;
+        const image = pet?.profilePicture;
         let imageToDelete = petProfilePictureToRemove;
 
         if (image && image?.src !== '' && Object.keys(petProfilePictureToRemove).length === 0) {
