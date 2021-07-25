@@ -1,6 +1,4 @@
-# seba-master-movie-frontend application
-
-Movie database app example application based on React. Backend can be found [here](https://github.com/sebischair/seba-master-movie-backend)
+# Breender Frontend Project
 
 ## Prerequisites
 
@@ -8,32 +6,14 @@ Both for the frontend and the backend:
 
 -   nodejs [official website](https://nodejs.org/en/) - nodejs includes [npm](https://www.npmjs.com/) (node package manager)
 
-## Getting Started
+### Getting started
 
-To get you started you can simply clone the [seba-master-movie-frontend](https://github.com/sebischair/seba-master-movie-frontend/) repository and install all its dependencies:
+You need git to clone the repository. You can get git from [http://git-scm.com/](http://git-scm.com/).
+You must also have node.js and its package manager (npm) installed. You can get them from [http://nodejs.org/](http://nodejs.org/).
 
-### Prerequisites
+### Clone the Project
 
-You need git to clone the [seba-master-movie-frontend](https://github.com/sebischair/seba-master-movie-frontend/) repository. You can get git from [http://git-scm.com/](http://git-scm.com/).
-
-We also use a number of node.js tools to initialize and test [seba-master-movie-frontend](https://github.com/sebischair/seba-master-movie-frontend/) . You must have node.js and its package manager (npm) installed. You can get them from [http://nodejs.org/](http://nodejs.org/).
-
-### Clone Movie Project
-
-Clone the [seba-master-movie-frontend](https://github.com/sebischair/seba-master-movie-frontend/) repository using [git](http://git-scm.com/):
-
-```
-git clone https://github.com/sebischair/seba-master-movie-frontend.git
-cd seba-master-movie-frontend
-```
-
-If you just want to start a new project without the [seba-master-movie-frontend](https://github.com/sebischair/seba-master-movie-frontend/) commit history then you can do:
-
-```bash
-git clone --depth=1 https://github.com/sebischair/seba-master-movie-frontend.git <your-project-name>
-```
-
-The `depth=1` tells git to only pull down one commit worth of historical data.
+Clone the repository using [git](http://git-scm.com/).
 
 ### Install Dependencies
 
@@ -43,27 +23,38 @@ We get the tools we depend upon via `npm`, the [node package manager](https://ww
 npm install
 ```
 
-### Create a Bundle for the Application
-
-This project use [webpack](https://github.com/webpack/webpack) version 1 for creating a bundle of the application and its dependencies
-
-We have pre-configured `npm` to automatically run `webpack` so we can simply do:
-
-```
-npm run build
-```
-
-Behind the scenes this will call `webpack --config webpack.config.js `. After, you should find that you have one new folder in your project.
-
--   `dist` - contains all the files of your application and their dependencies.
-
 ### Run the Application
 
-We have preconfigured the project with a simple development web server. The simplest way to start
-this server is:
+Start the web server with:
 
 ```
 npm start
 ```
 
 Now browse to the app at `http://localhost:3000`.
+
+### Breender Gmail Account Credentials
+
+```
+email: breenderseba@gmail.com 
+password: breenderTeamSEBA2021
+```
+
+You can log in into Gmail Account and use it for our [Firebase project](https://console.firebase.google.com/u/0/project/breender-seba/overview) and [MongoDB Atlas database](https://cloud.mongodb.com/). 
+
+### PayPal Account Credentials
+
+In order to pay with PayPal, please use these credentials:
+```
+email: breenderCustomer@personal.example.com
+password: breenderCustomer
+
+```
+
+to see that the Breender received the money, please use these credentials for log in [here](https://www.sandbox.paypal.com/de/signin): 
+
+```
+email: breenderBusiness@business.example.com
+password: breenderBusiness
+
+```

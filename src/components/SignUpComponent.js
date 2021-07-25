@@ -1,40 +1,42 @@
-import React, { useEffect } from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import {
-    Paper,
-    Button,
-    TextField,
-    Typography,
-    FormControlLabel,
-    Checkbox,
-} from "@material-ui/core";
+import React, { useEffect } from 'react';
+import { makeStyles } from '@material-ui/core/styles';
+import { InputLabel, MenuItem, Select, Grid, Paper, Button, TextField, Typography, FormControlLabel, Checkbox, FormControl } from '@material-ui/core';
+import { checkUser } from '../redux/actions';
+import { connect, useSelector } from 'react-redux';
 
 const useStyles = makeStyles((theme) => ({
     usersignUpRoot: {
-        margin: "auto",
+        margin: 'auto',
     },
     signUpPaper: {
-        width: "500px",
-        padding: theme.spacing(2),
+        width: 500,
+        padding: theme.spacing(4),
     },
     signUpRow: {
         paddingTop: theme.spacing(1),
         paddingBottom: theme.spacing(1),
-        "&:last-child": {
+        '&:last-child': {
             paddingBottom: theme.spacing(0),
         },
-        "&:first-child": {
+        '&:first-child': {
             paddingTop: theme.spacing(0),
         },
     },
     signUpButtons: {
-        display: "flex",
-        justifyContent: "flex-end",
+        display: 'flex',
+        justifyContent: 'flex-end',
     },
     signUpButton: {
         marginLeft: theme.spacing(1),
     },
 }));
+
+const provincesAndCities = {
+    bavaria: ['Munich', 'Nuremberg', 'Augsburg', 'Regensburg', 'Ingolstadt', 'Würzburg', 'Other'],
+    'lower-saxony': ['Hanover', 'Braunschweig', 'Oldenburg', 'Osnabrück', 'Wolfsburg', 'Göttingen', 'Other'],
+    'baden-wuerttemberg': ['Stuttgart', 'Karlsruhe', 'Mannheim', 'Freiburg im Breisgau', 'Heidelberg', 'Ulm', 'Other'],
+    'north-rhine-westphalia': ['Cologne', 'Düsseldorf', 'Dortmund', 'Essen', 'Duisburg', 'Bochum', 'Other'],
+};
 
 /**
  * For register new users
@@ -42,48 +44,57 @@ const useStyles = makeStyles((theme) => ({
  */
 function SignUpComponent(props) {
     const classes = useStyles();
+    const values = props.values;
+    const errors = props.errors;
+    const [passwordError, setPasswordError] = React.useState('');
+    const [next, setNext] = React.useState(false); //set to false when there are errors and disable next step
+    const isValid = useSelector((state) => state.checkUser);
+    //set to false when component is rendered for the first time in order to skip error message from previous registration
+    const [rendered, setRendered] = React.useState(false);
 
-    const [username, setUsername] = React.useState("");
-    const [password, setPassword] = React.useState("");
-    const [password2, setPassword2] = React.useState("");
-    const [isAdmin, setIsAdmin] = React.useState(false);
+    const saveAndContinue = (e) => {
+        e.preventDefault();
+        checkIfUserIsValid();
+    };
 
-    const [registerError, setRegisterError] = React.useState("");
+    function checkIfUserIsValid() {
+        props.dispatch(checkUser(values.email, values.username, values.isAdmin));
+        setRendered(true);
+        setNext(true);
+    }
 
     useEffect(() => {
-        if (props.user.error) {
-            setRegisterError(props.user.error);
+        if (isValid.error) {
+            if (rendered) {
+                if (isValid.error.type === 'username') {
+                    props.handleChange('usernameError', isValid.error.message);
+                } else {
+                    props.handleChange('emailError', isValid.error.message);
+                }
+            }
         } else {
-            setRegisterError("");
+            if (next) {
+                props.nextStep();
+            }
         }
-    }, [props.user]);
+    }, [isValid]);
 
-    const onRegister = (e) => {
-        e.preventDefault();
-        props.onRegister(username, password, isAdmin);
-    };
+    let options = null;
 
-    const onChangeUsername = (e) => {
-        setUsername(e.target.value);
-        setRegisterError("");
-    };
-
-    const onChangePassword = (e) => {
-        setPassword(e.target.value);
-        setRegisterError("");
-    };
-
-    const onChangePassword2 = (e) => {
-        setPassword2(e.target.value);
-        setRegisterError("");
-    };
+    if (values.province) {
+        options = provincesAndCities[values.province].map((elem) => (
+            <MenuItem key={elem} value={elem}>
+                {elem}
+            </MenuItem>
+        ));
+    }
 
     const onBlurPassword = (e) => {
-        if (password !== "" && password2 !== "") {
-            if (password !== password2) {
-                setRegisterError("Passwords do not match.");
+        if (values.password !== '' && values.password2 !== '') {
+            if (values.password !== values.password2) {
+                setPasswordError('Passwords do not match.');
             } else {
-                setRegisterError("");
+                setPasswordError('');
             }
         }
     };
@@ -93,80 +104,111 @@ function SignUpComponent(props) {
             <Paper className={classes.signUpPaper} component="form">
                 <div className={classes.signUpRow}>
                     <Typography variant="h4" align="center">
-                        Welcome to the Movie Database App!
+                        Welcome to the Breender App!
                     </Typography>
                 </div>
                 <div className={classes.signUpRow}>
                     <TextField
-                        label="Username"
+                        label="Email"
+                        variant="outlined"
+                        size="small"
                         fullWidth
-                        value={username}
-                        onChange={onChangeUsername}
+                        value={values.email}
+                        onChange={(e) => props.handleChange('email', e)}
+                        error={errors.emailError !== ''}
+                        helperText={errors.emailError !== '' ? errors.emailError : null}
+                        type="email"
+                    />
+                </div>
+                <div className={classes.signUpRow}>
+                    <TextField
+                        label="Username"
+                        variant="outlined"
+                        size="small"
+                        fullWidth
+                        value={values.username}
+                        onChange={(e) => props.handleChange('username', e)}
+                        error={errors.usernameError !== ''}
+                        helperText={errors.usernameError !== '' ? errors.usernameError : null}
                     />
                 </div>
                 <div className={classes.signUpRow}>
                     <TextField
                         label="Password"
                         fullWidth
-                        value={password}
-                        onChange={onChangePassword}
-                        error={registerError !== ""}
-                        onBlur={onBlurPassword}
+                        variant="outlined"
+                        size="small"
+                        value={values.password}
+                        onChange={(e) => props.handleChange('password', e)}
+                        error={passwordError !== ''}
                         type="password"
                     />
                 </div>
                 <div className={classes.signUpRow}>
                     <TextField
                         label="Repeat Password"
+                        variant="outlined"
+                        size="small"
                         fullWidth
-                        value={password2}
-                        onChange={onChangePassword2}
-                        error={registerError !== ""}
+                        value={values.password2}
+                        onChange={(e) => props.handleChange('password2', e)}
+                        error={passwordError !== ''}
                         onBlur={onBlurPassword}
                         type="password"
                     />
                 </div>
+                <Grid container spacing={2} style={{ paddingTop: 20 }}>
+                    <Grid item xs={6}>
+                        <FormControl required variant="outlined" size="small" fullWidth>
+                            <InputLabel>State/Province</InputLabel>
+                            <Select label="State/Province" value={values.province} onChange={(e) => props.handleChange('province', e)}>
+                                <MenuItem value={'bavaria'}>Bavaria</MenuItem>
+                                <MenuItem value={'lower-saxony'}>Lower Saxony</MenuItem>
+                                <MenuItem value={'baden-wuerttemberg'}>Baden-Württemberg</MenuItem>
+                                <MenuItem value={'north-rhine-westphalia'}>North Rhine-Westphalia</MenuItem>
+                            </Select>
+                        </FormControl>
+                    </Grid>
+                    <Grid item xs={6}>
+                        <FormControl required variant="outlined" size="small" fullWidth>
+                            <InputLabel>City</InputLabel>
+                            <Select label="City" value={values.city} onChange={(e) => props.handleChange('city', e)}>
+                                {options}
+                            </Select>
+                        </FormControl>
+                    </Grid>
+                </Grid>
                 <div className={classes.signUpRow}>
-                    <FormControlLabel
-                        control={
-                            <Checkbox
-                                checked={isAdmin}
-                                onChange={(e) => setIsAdmin(e.target.checked)}
-                                color="primary"
-                            />
-                        }
-                        label="Is Admin"
-                    />
+                    <FormControlLabel control={<Checkbox checked={values.isAdmin} onChange={(e) => props.handleChange('isAdmin', e)} style={{color: "#D37F65"}} />} label="Is Admin" />
                 </div>
-                {registerError !== "" ? (
+                {passwordError !== '' ? (
                     <div className={classes.signUpRow}>
-                        <Typography color="error">{registerError}</Typography>
+                        <Typography color="error">{passwordError}</Typography>
                     </div>
                 ) : null}
-                <div
-                    className={classes.signUpRow + " " + classes.signUpButtons}
-                >
-                    <Button
-                        className={classes.signUpButton}
-                        onClick={props.onCancel}
-                    >
+                <div className={classes.signUpRow + ' ' + classes.signUpButtons}>
+                    <Button variant="outlined" color="primary" className={classes.signUpButton} onClick={props.onCancel}>
                         Cancel
                     </Button>
                     <Button
                         className={classes.signUpButton}
                         variant="contained"
                         color="primary"
-                        onClick={onRegister}
                         disabled={
-                            username === "" ||
-                            password === "" ||
-                            password2 === "" ||
-                            registerError !== "" ||
-                            password !== password2
+                            values.email === '' ||
+                            errors.emailError !== '' ||
+                            values.username === '' ||
+                            errors.usernameError !== '' ||
+                            values.password === '' ||
+                            values.password2 === '' ||
+                            values.password !== values.password2 ||
+                            values.province === '' ||
+                            values.city === '' ||
+                            passwordError !== ''
                         }
-                        type="submit"
+                        onClick={saveAndContinue}
                     >
-                        Register
+                        Next
                     </Button>
                 </div>
             </Paper>
@@ -174,4 +216,4 @@ function SignUpComponent(props) {
     );
 }
 
-export default SignUpComponent;
+export default connect()(SignUpComponent);

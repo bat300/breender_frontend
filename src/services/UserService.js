@@ -1,11 +1,20 @@
-import HttpService from "./HttpService";
+import HttpService from './HttpService';
+import axios from 'axios';
 
 export default class UserService {
     static baseURL() {
-        return "http://localhost:4000/auth";
+        return 'http://localhost:4000/auth';
+    }
+    static baseUserURL() {
+        return 'http://localhost:4000/user';
     }
 
-    static register(user, pass, isAdmin) {
+    static setToken() {
+        const token = localStorage.getItem('jwtToken');
+        axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
+    }
+
+    static register(email, user, pass, city, province, isAdmin, subscriptionPlan, paymentPlan, paymentMethod) {
         return new Promise((resolve, reject) => {
             HttpService.post(
                 `${UserService.baseURL()}/register`,
@@ -13,7 +22,41 @@ export default class UserService {
                     username: user,
                     password: pass,
                     isAdmin: isAdmin,
+                    email: email,
+                    city: city,
+                    province: province,
+                    subscriptionPlan: subscriptionPlan,
+                    paymentPlan: paymentPlan,
+                    paymentMethod: paymentMethod,
                 },
+                function (data) {
+                    resolve(data);
+                },
+                function (textStatus) {
+                    reject(textStatus);
+                }
+            );
+        });
+    }
+
+    static checkUser(email, username, isAdmin) {
+        return new Promise((resolve, reject) => {
+            HttpService.get(
+                `${UserService.baseURL()}/checkUser/${email}/${username}/${isAdmin}`,
+                function (data) {
+                    resolve(data);
+                },
+                function (textStatus) {
+                    reject(textStatus);
+                }
+            );
+        });
+    }
+
+    static confirmEmail(email, token) {
+        return new Promise((resolve, reject) => {
+            HttpService.get(
+                `${UserService.baseURL()}/confirmation/${email}/${token}`,
                 function (data) {
                     resolve(data);
                 },
@@ -43,6 +86,104 @@ export default class UserService {
     }
 
     static logout() {
-        window.localStorage.removeItem("jwtToken");
+        window.localStorage.removeItem('jwtToken');
+    }
+
+    static update(id, subscriptionPlan, paymentPlan, paymentMethod) {
+        return new Promise((resolve, reject) => {
+            HttpService.post(
+                `${UserService.baseURL()}/update`,
+                {
+                    id: id,
+                    subscriptionPlan: subscriptionPlan,
+                    paymentPlan: paymentPlan,
+                    paymentMethod: paymentMethod
+                },
+                function (data) {
+                    resolve(data);
+                },
+                function (textStatus) {
+                    reject(textStatus);
+                }
+            );
+        });
+    }
+
+    static getUsersInfo(id) {
+        return new Promise(async (resolve, reject) => {
+            HttpService.get(
+                `${UserService.baseUserURL()}/${id}`,
+                function (data) {
+                    if (data !== undefined || Object.keys(data).length !== 0) {
+                        resolve(data);
+                    } else {
+                        reject("Error while retrieving user");
+                    }
+                },
+                function (textStatus) {
+                    reject(textStatus);
+                }
+            );
+        });
+    }
+
+    static updateUser(user) {
+        return new Promise((resolve, reject) => {
+            HttpService.put(
+                `${this.baseUserURL()}/${user._id}`,
+                user,
+                function (data) {
+                    resolve(data);
+                },
+                function (textStatus) {
+                    reject(textStatus);
+                }
+            );
+        });
+    }
+
+    static getUserPets(ownerId) {
+        return new Promise((resolve, reject) => {
+            HttpService.get(
+                `${this.baseUserURL()}/pets/${ownerId}`,
+                function (data) {
+                    resolve(data);
+                },
+                function (textStatus) {
+                    reject(textStatus);
+                }
+            );
+        });
+    }
+
+    static getReviewsOnUser(id) {
+        return new Promise((resolve, reject) => {
+            HttpService.get(
+                `${this.baseUserURL()}/${id}/reviews`,
+                function (data) {
+                    resolve(data);
+                },
+                function (textStatus) {
+                    reject(textStatus);
+                }
+            );
+        });
+    }
+
+    static addReview(review) {
+        return new Promise((resolve, reject) => {
+            HttpService.post(
+                `${UserService.baseUserURL()}/add-review`,
+                {
+                    review: review
+                },
+                function (data) {
+                    resolve(data);
+                },
+                function (textStatus) {
+                    reject(textStatus);
+                }
+            );
+        });
     }
 }

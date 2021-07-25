@@ -1,48 +1,86 @@
-import { AppTheme } from "./themetypes";
+import { AppTheme } from './themetypes';
 
 const themeindependent = {
     mixins: {
-        textfieldminheight: "38px",
+        textfieldminheight: '38px',
     },
 };
 
 const appThemeOptions = {
     [AppTheme.LIGHT]: {
+        overrides: {
+            MuiCssBaseline: {
+                '@global': {
+                    body: {
+                        background: 'linear-gradient(180deg, rgba(97, 102, 174, 0.3) 0%, rgba(255, 225, 117, 0.3) 50%, rgba(255, 184, 0, 0.3) 100%)',
+                        backgroundRepeat: 'no-repeat',
+                        backgroundAttachment: 'fixed',
+                    },
+                },
+            },
+        },
         palette: {
-            type: "light",
+            type: 'light',
             primary: {
-                light: "#7986cb",
-                main: "#3f51b5",
-                dark: "#303f9f",
+                main: '#7D7F9A',
+                light: '#D2D3DA',
+                dark: '#3E4059',
+            },
+            card: {
+                main: '#70739A',
             },
             secondary: {
-                light: "#ff4081",
-                main: "#f50057",
-                dark: "#c51162",
+                main: '#D37F65',
+                light: '#F3F1E0',
+            },
+            ternary: {
+                main: '#E07A5F',
             },
             background: {
-                paper: "#fff",
-                default: "#fafafa",
+                paper: '#fff',
+                default: 'rgba(52, 57, 109, 0.1)',
             },
+            text: {
+                primary: '#222330',
+                secondary: 'white',
+            }
+        },
+        typography: {
+            body1: {
+                fontFamily: "'Open Sans', sans-serif",
+                fontWeight: 'lighter',
+                color: '#222330',
+            },
+            h3: {
+                fontWeight: 'lighter',
+                color: '#222330',
+            },
+            h6: {
+                fontWeight: 'lighter',
+                color: '#222330',
+            },
+            h5: {
+                fontWeight: 500,
+                color: '#222330',
+            },
+            h4: {
+                fontWeight: 'lighter',
+            }
         },
         ...themeindependent,
     },
     [AppTheme.DARK]: {
         palette: {
-            type: "dark",
+            type: 'dark',
             primary: {
-                light: "#616161",
-                main: "#424242",
-                dark: "#212121",
+                main: '#3D405B',
             },
             secondary: {
-                light: "#5A42EA",
-                main: "#3E22E6",
-                dark: "#22108E",
+                main: '#81B29A',
             },
             background: {
-                paper: "#303030",
-                default: "#000",
+                paper: '#303030',
+                default: '#000',
             },
         },
         ...themeindependent,
