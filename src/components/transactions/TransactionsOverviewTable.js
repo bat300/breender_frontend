@@ -70,9 +70,9 @@ const TransactionsOverviewTable = (props) => {
 
     // check if user is the sender or the receiver
     const checkUserIsSender = (transaction) => {
-        if (transaction.receiverId._id === user.id) {
+        if (transaction.receiverId?._id === user.id) {
             return false;
-        } else if (transaction.senderId._id === user.id) {
+        } else if (transaction.senderId?._id === user.id) {
             return true;
         }
     };
