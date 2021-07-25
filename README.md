@@ -6,11 +6,7 @@ Both for the frontend and the backend:
 
 -   nodejs [official website](https://nodejs.org/en/) - nodejs includes [npm](https://www.npmjs.com/) (node package manager)
 
-## Getting Started
-
-To get you started you can simply clone the repository and install all its dependencies:
-
-### Prerequisites
+### Getting started
 
 You need git to clone the repository. You can get git from [http://git-scm.com/](http://git-scm.com/).
 You must also have node.js and its package manager (npm) installed. You can get them from [http://nodejs.org/](http://nodejs.org/).
