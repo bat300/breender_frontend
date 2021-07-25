@@ -1,7 +1,5 @@
 Breender Frontend Project
 
----------------- TODO : Adjust Documentation ---------
-
 ## Prerequisites
 
 Both for the frontend and the backend:
@@ -10,30 +8,16 @@ Both for the frontend and the backend:
 
 ## Getting Started
 
-To get you started you can simply clone the [seba-master-movie-frontend](https://github.com/sebischair/seba-master-movie-frontend/) repository and install all its dependencies:
+To get you started you can simply clone the repository and install all its dependencies:
 
 ### Prerequisites
 
-You need git to clone the [seba-master-movie-frontend](https://github.com/sebischair/seba-master-movie-frontend/) repository. You can get git from [http://git-scm.com/](http://git-scm.com/).
+You need git to clone the repository. You can get git from [http://git-scm.com/](http://git-scm.com/).
+You must also have node.js and its package manager (npm) installed. You can get them from [http://nodejs.org/](http://nodejs.org/).
 
-We also use a number of node.js tools to initialize and test [seba-master-movie-frontend](https://github.com/sebischair/seba-master-movie-frontend/) . You must have node.js and its package manager (npm) installed. You can get them from [http://nodejs.org/](http://nodejs.org/).
+### Clone the Project
 
-### Clone Movie Project
-
-Clone the [seba-master-movie-frontend](https://github.com/sebischair/seba-master-movie-frontend/) repository using [git](http://git-scm.com/):
-
-```
-git clone https://github.com/sebischair/seba-master-movie-frontend.git
-cd seba-master-movie-frontend
-```
-
-If you just want to start a new project without the [seba-master-movie-frontend](https://github.com/sebischair/seba-master-movie-frontend/) commit history then you can do:
-
-```bash
-git clone --depth=1 https://github.com/sebischair/seba-master-movie-frontend.git <your-project-name>
-```
-
-The `depth=1` tells git to only pull down one commit worth of historical data.
+Clone the repository using [git](http://git-scm.com/).
 
 ### Install Dependencies
 
@@ -43,27 +27,14 @@ We get the tools we depend upon via `npm`, the [node package manager](https://ww
 npm install
 ```
 
-### Create a Bundle for the Application
-
-This project use [webpack](https://github.com/webpack/webpack) version 1 for creating a bundle of the application and its dependencies
-
-We have pre-configured `npm` to automatically run `webpack` so we can simply do:
-
-```
-npm run build
-```
-
-Behind the scenes this will call `webpack --config webpack.config.js `. After, you should find that you have one new folder in your project.
-
--   `dist` - contains all the files of your application and their dependencies.
-
 ### Run the Application
 
-We have preconfigured the project with a simple development web server. The simplest way to start
-this server is:
+Start the web server with:
 
 ```
 npm start
 ```
 
 Now browse to the app at `http://localhost:3000`.
+
+### Breender Account Credentials
