@@ -45,6 +45,7 @@ const AddPetView = (props) => {
     const [species, setSpecies] = useState('');
     const [breed, setBreed] = useState('');
     const [price, setPrice] = useState(0);
+    const [purchased, setPurchased] = useState(false);
 
     useEffect(() => {
         const isEmpty = (obj) => obj === '' || obj === undefined;
@@ -191,6 +192,7 @@ const AddPetView = (props) => {
                     breedProp={{ breed, setBreed }}
                     priceProp={{ price, setPrice }}
                     disabledProp={{ formIsDisabled, setFormIsDisabled }}
+                    purchasedProp={{ purchased, setPurchased }}
                     user={loggedInUser}
                 />
             </div>
