@@ -66,7 +66,7 @@ const StepperInformation = ({ step, pet, petOwner, amount, loggedInUser, isFreeO
                                         return (
                                             <TableRow hover>
                                                 <TableCell>
-                                                    <Typography variant="body2" color="textSecondary" component="p">
+                                                    <Typography variant="body2" color="textPrimary" component="p">
                                                         {item.title}
                                                     </Typography>
                                                 </TableCell>
@@ -91,7 +91,7 @@ const StepperInformation = ({ step, pet, petOwner, amount, loggedInUser, isFreeO
                                         return (
                                             <TableRow hover>
                                                 <TableCell>
-                                                    <Typography variant="body2" color="textSecondary" component="p">
+                                                    <Typography variant="body2" color="textPrimary" component="p">
                                                         {item.title}
                                                     </Typography>
                                                 </TableCell>

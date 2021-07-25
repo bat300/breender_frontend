@@ -24,17 +24,20 @@ a:hover{
     color: white;
 }
 
-.MuiButton-root:disabled {
-    background-color: #CECFD4;
-    color: #3E4059;
-}
-
 .MuiButton-containedPrimary {
     background-color: #7D7F9A;
 }
 
 .MuiButton-containedPrimary:hover {
     background-color: #3E4059;
+}
+
+.MuiButton-outlinedPrimary {
+    border: 1px solid #3E4059;
+}
+
+.MuiButton-outlinedPrimary:hover {
+    background-color: rgba(145, 147, 179, 0.1);
 }
 
 .MuiButton-containedSecondary {
@@ -53,6 +56,21 @@ a:hover{
     background-color: rgba(21, 26, 80, 0.1);
 }
 
-.MuiPaper-root {
-    border-radius: 25px;
+.MuiButtonBase-root.Mui-disabled {
+    background: #CECFD4;
+    color: #3E4059;
+    pointer-events: all;
+    cursor: not-allowed;
+}
+
+.MuiButtonBase-root.Mui-disabled:hover {
+    background: #CECFD4;
+}
+
+.MuiPaper-rounded {
+    border-radius: 10px;
+}
+
+.MuiDialog-paper {
+    padding: 15px;
 }

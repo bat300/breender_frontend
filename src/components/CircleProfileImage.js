@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme) => ({
 
 function CircleProfileImage(props) {
     const classes = useStyles();
-    return <div className={classes.layout}><Image height={220} width={220} className={classes.image} src={props.imageUrl} /></div>;
+    return <div className={classes.layout}><Image height={240} width={240} className={classes.image} src={props.imageUrl} /></div>;
 }
 
 export default CircleProfileImage;

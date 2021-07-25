@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme) => ({
     title: theme.typography.h3,
     description: theme.typography.h6,
     paper: {
-        width: '1000px',
+        width: '70%',
         marginLeft: 'auto',
         marginRight: 'auto',
         marginTop: theme.spacing(0),
@@ -24,21 +24,21 @@ const useStyles = makeStyles((theme) => ({
     },
     container: {
         position: 'relative',
-        paddingTop: '172px'
+        paddingTop: '172px',
     },
     image: {
         position: 'absolute',
         left: 'calc(50% - 350px)',
-        top: '0%'
+        top: '0%',
     },
     modal: {
-        borderRadius: "10px"
+        borderRadius: '10px',
     },
     plans: {
-        paddingBottom: "40px",
-        paddingRight: "20px",
-        paddingLeft: "20px"
-    }
+        paddingBottom: '40px',
+        paddingRight: '20px',
+        paddingLeft: '20px',
+    },
 }));
 
 function SubscriptionPageView(props) {
@@ -82,15 +82,16 @@ function SubscriptionPageView(props) {
 
     return (
         <div className={classes.container}>
-                <img src={pets} alt="pets" width="700" className={classes.image}/>
-          
-            <Paper className={classes.paper}>
+            <img src={pets} alt="pets" width="700" className={classes.image} />
+
+            <Paper className={classes.paper} style={{ borderRadius: 25 }}>
                 <Container maxWidth="sm" component="main" className={classes.premiumDescription}>
                     <Typography className={classes.title} align="center" gutterBottom>
                         Get Access to All Features!
                     </Typography>
-                    <Typography  className={classes.description} align="center" component="p">
-                    Find the best breeding partner for your favourite pet in just few clicks: all you need to do is to subscribe to our Premium Plan, search for a perfect match and safely pay for breeding through our website.
+                    <Typography className={classes.description} align="center" component="p">
+                        Find the best breeding partner for your favourite pet in just few clicks: all you need to do is to subscribe to our Premium Plan, search for a perfect match and safely pay for
+                        breeding through our website.
                     </Typography>
                 </Container>
                 <Container maxWidth="md" component="main" className={classes.plans}>
@@ -100,7 +101,7 @@ function SubscriptionPageView(props) {
                 </Container>
 
                 <div>
-                    <Dialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={open} style={{borderRadius: "10px"}}>
+                    <Dialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={open} style={{ borderRadius: '10px' }}>
                         <DialogTitle id="customized-dialog-title" onClose={handleClose}>
                             Switching from Premium to Basic
                         </DialogTitle>
@@ -108,7 +109,7 @@ function SubscriptionPageView(props) {
                             <Typography gutterBottom>After your Premium Subscription is completed your plan will be automatically switched to Basic.</Typography>
                         </DialogContent>
                         <DialogActions>
-                            <Button autoFocus  onClick={handleClose} color="primary">
+                            <Button autoFocus onClick={handleClose} color="primary">
                                 OK
                             </Button>
                         </DialogActions>

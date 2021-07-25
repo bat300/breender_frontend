@@ -15,13 +15,13 @@ const StatusTag = (props) => {
     const color = () => {
         switch (status) {
             case STATUS_TYPE.PENDING:
-                return { color: 'orange', background: 'white', borderColor: '#FDCD7F' };
+                return { color: 'orange', background: 'white', borderColor: '#F9C339' };
             case STATUS_TYPE.SUCCESS:
-                return { color: 'green', background: 'white', borderColor: '#A1CF6B' };
+                return { color: 'green', background: 'white', borderColor: '#C0E189' };
             case STATUS_TYPE.FAIL:
-                return { color: 'red', background: 'white', borderColor: '#E87461' };
+                return { color: 'red', background: 'white', borderColor: '#F96149' };
             default:
-                return { color: 'orange', background: 'white', borderColor: 'orange' };
+                return { color: 'orange', background: 'white', borderColor: '#F9C339' };
         }
     };
 
@@ -63,16 +63,16 @@ const StatusTag = (props) => {
                     </Select>
                 </FormControl>
             )}
-            <Dialog open={open} onClose={handleClose} onBlur={handleClose} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description">
-                <DialogTitle id="alert-dialog-title">{'Confirm Action'}</DialogTitle>
+            <Dialog open={open} onClose={handleClose} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description">
+            <DialogTitle id="alert-dialog-title" color="primary">{'Confirm Action'}</DialogTitle>
                 <DialogContent>
-                    <DialogContentText id="alert-dialog-description">Please confirm you want to officially change the status.</DialogContentText>
+                    <DialogContentText color="primary" id="alert-dialog-description">Please confirm you want to officially change the status.</DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleClose} color="primary">
+                    <Button onClick={handleClose} variant="outlined" color="primary">
                         Cancel
                     </Button>
-                    <Button onClick={handleConfirm} color="primary" autoFocus>
+                    <Button onClick={handleConfirm} variant="contained" color="primary" autoFocus>
                         Confirm
                     </Button>
                 </DialogActions>

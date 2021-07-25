@@ -12,13 +12,12 @@ function SignUpPaper(props) {
     const [city, setCity] = React.useState('');
     const [isAdmin, setIsAdmin] = React.useState(false);
     // if user comes from premium page, set plan to selected; if from login , set plan to free
-    const [subscriptionPlan, setSubscriptionPlan] = React.useState(props.subscriptionPlan? props.subscriptionPlan : 'free');
+    const [subscriptionPlan, setSubscriptionPlan] = React.useState(props.subscriptionPlan ? props.subscriptionPlan : 'free');
 
     const [emailError, setEmailError] = React.useState('');
     const [usernameError, setUsernameError] = React.useState('');
     //registration step
     const [step, setStep] = React.useState(1);
-
 
     const payments = [
         { description: '4.99€ for 1 month', plan: '1mo', price: '4.99' },
@@ -28,8 +27,8 @@ function SignUpPaper(props) {
     ];
 
     const [chosenPayment, setChosenPayment] = React.useState('4.99');
-    const values = { username, password, password2, email, province, city, isAdmin, subscriptionPlan, chosenPayment};
-    const errors = {emailError, usernameError};
+    const values = { username, password, password2, email, province, city, isAdmin, subscriptionPlan, chosenPayment };
+    const errors = { emailError, usernameError };
 
     const nextStep = () => {
         setStep(step + 1);
@@ -39,7 +38,6 @@ function SignUpPaper(props) {
         setStep(step - 1);
     };
 
-
     const onChangeEmail = (v) => {
         setEmailError('');
         setEmail(v);
@@ -48,22 +46,21 @@ function SignUpPaper(props) {
     const onChangeUsername = (v) => {
         setUsernameError('');
         setUsername(v);
-
     };
 
     const onChangeIsAdmin = (v) => {
-        if(emailError.indexOf('admin') >= 0 && !v) {
+        if (emailError.indexOf('admin') >= 0 && !v) {
             setEmailError('');
         }
         setIsAdmin(v);
-    }
-
-    function onChangeSubscriptionPlan(v)  {
-        setSubscriptionPlan(v);
     };
 
+    function onChangeSubscriptionPlan(v) {
+        setSubscriptionPlan(v);
+    }
+
     //change state dependent on the input value
-    function handleChange  (input,event) {
+    function handleChange(input, event) {
         switch (input) {
             case 'email':
                 onChangeEmail(event.target.value);
@@ -94,31 +91,47 @@ function SignUpPaper(props) {
                 break;
             case 'chosenPayment':
                 setChosenPayment(event.target.value);
-    };
-}
+                break;
+            default:
+                return;
+        }
+    }
 
-function onRegister(paymentMethod) {
-    const paymentPlan = payments.find( x => x.price === chosenPayment);
-    props.onRegister(values.email, values.username, values.password, values.city, values.province, values.isAdmin, values.subscriptionPlan, paymentPlan.plan, paymentMethod);
-}
+    function onRegister(paymentMethod) {
+        const paymentPlan = payments.find((x) => x.price === chosenPayment);
+        props.onRegister(values.email, values.username, values.password, values.city, values.province, values.isAdmin, values.subscriptionPlan, paymentPlan.plan, paymentMethod);
+    }
 
     //choose registration step
     function chooseStep() {
         switch (step) {
             case 1:
-                return <SignUpComponent nextStep={nextStep} handleChange={handleChange} onCancel={props.onCancel} values={values} errors={errors}/>;
+                return <SignUpComponent nextStep={nextStep} handleChange={handleChange} onCancel={props.onCancel} values={values} errors={errors} />;
             case 2:
-                return <SubscriptionStepComponent onRegister={props.onRegister} nextStep={nextStep} prevStep={prevStep} handleChange={onChangeSubscriptionPlan} values={values} subscriptionPlan={subscriptionPlan}/>;
-            case 3:
-            return <PaymentInformationComponent
-                    nextStep={nextStep}
-                    prevStep={prevStep}
-                    values={values}
-                    handleChange={handleChange}
-                    payments={payments}
-                    onSuccess={props.onRegister}
-                    user={props.user}
+                return (
+                    <SubscriptionStepComponent
+                        onRegister={props.onRegister}
+                        nextStep={nextStep}
+                        prevStep={prevStep}
+                        handleChange={onChangeSubscriptionPlan}
+                        values={values}
+                        subscriptionPlan={subscriptionPlan}
                     />
+                );
+            case 3:
+                return (
+                    <PaymentInformationComponent
+                        nextStep={nextStep}
+                        prevStep={prevStep}
+                        values={values}
+                        handleChange={handleChange}
+                        payments={payments}
+                        onSuccess={props.onRegister}
+                        user={props.user}
+                    />
+                );
+            default:
+                return <div />;
         }
     }
 

@@ -60,7 +60,6 @@ const appThemeOptions = {
                 color: '#222330',
             },
             h5: {
-                fontFamily: "'Open Sans', sans-serif",
                 fontWeight: 500,
                 color: '#222330',
             },
