@@ -27,7 +27,7 @@ export default function user(state = getUserFromToken(), action) {
         case 'ADD_REVIEW':
             return { ...state };
         case 'GET_LOGGEDINUSER':
-            return { ...state, loggedInUser: action.loggedInUser };
+            return { ...state, userInfo: action.userInfo };
         default:
             return state;
     }
