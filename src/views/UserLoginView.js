@@ -45,26 +45,33 @@ function UserLoginView(props) {
     const goToHome = () => props.history.push('/');
 
     return (
-        <>
+        <div className={classes.container}>
             <div onClick={goToHome}>
                 <img alt="logo" src={logo} className={classes.logo} />
             </div>
             <LoginComponent user={user} onCancel={onCancel} onLogin={onLogin} onSignUp={onSignUp} />
-        </>
+        </div>
     );
 }
 
 const useStyles = makeStyles((theme) => ({
     logo: {
-        position: 'absolute',
-        marginLeft: 'auto',
-        marginRight: 'auto',
-        left: 0,
-        right: 0,
-        top: 100,
+        display: 'flex',
+        justifyContent: 'center',
+        flexDirection: 'column',
+        alignItems: 'center',
+        marginTop: 100,
+        marginBottom: 50,
         maxWidth: 425,
         maxHeight: 'auto',
         cursor: 'pointer',
+    },
+    container: {
+        position: 'relative',
+        display: 'flex',        
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
     },
 }));
 
