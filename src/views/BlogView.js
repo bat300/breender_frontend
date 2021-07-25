@@ -10,7 +10,7 @@ import { connect } from 'react-redux';
 function BlogView(props) {
     const loggedInUser = useLoggedInUser();
     const dummyPost1 = {
-        image: 'https://cbsnews3.cbsistatic.com/hub/i/r/2021/06/14/9d3833d6-9ece-4e9d-8a49-58de8ea170ed/thumbnail/620x413/0da11f0cec1da21e2c6e28d00f357415/2021-06-14t034749z-486606328-rc220o963qso-rtrmadp-3-usa-dogshow-westminster.jpg',
+        image: 'https://pbs.twimg.com/media/E30630UXEAAcHjg?format=jpg&name=4096x4096',
         imageText: 'Wasabi',
         title: 'Westminster Dog Show 2021: The Flavor of the Moment Is Wasabi',
         description: 'Wasabi the Pekingese won Best in Show at Westminster, held this year at a riverside estate in Westchester County',
@@ -19,7 +19,7 @@ function BlogView(props) {
         text: 'Wasabi, a low-slung Pekingese named through bloodlines for a Michigan sushi restaurant, won Best in Show at the Westminster Kennel Club Dog Show on Sunday, his long tresses winning out in a field that included a trim whippet, a bushy sheepdog and a blinding white Samoyed that was the top-ranked show dog in the country. Wasabi is the son of a champion Pekingese and the great-grandson of Malachy, the 2012 Best in Show winner who was also bred and shown by Wasabi’s owner and handler, David Fitzpatrick.',
     };
     const dummyPost2 = {
-        image: 'https://static.dw.com/image/54627079_303.jpg',
+        image: 'https://s.walldump.com/wallpapers/walldump-jlR06XLdp.jpg',
         imageText: 'Dog on a walk',
         title: 'Germany: Dogs must be walked twice a day under new rule',
         description: '"Pets are not cuddly toys," German Agricultural Minister Julia Klöckner said',
