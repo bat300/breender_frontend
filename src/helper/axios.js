@@ -39,24 +39,10 @@ class AxiosConfiguration {
     setupResponseInterceptor() {
         axios.interceptors.response.use(
             async (response) => {
-                if (response && response.config.url && response.config.url?.indexOf('/logout') > -1) {
-                    this.cancelSource.cancel('logout');
-                }
-
                 return response;
             },
             async (error) => {
-                const originalRequest = error?.config;
-
-                if (!error?.config || !error.config.url) {
-                    return Promise.reject(error);
-                }
-
-                if (error.config.url === '/login') {
-                    return Promise.reject(error);
-                }
-
-                return Promise.reject(error);
+                return Promise.reject(error.response);
             }
         );
     }
