@@ -218,9 +218,12 @@ const PetInformationForm = ({ nameProp, nicknameProp, sexProp, breedProp, specie
                                     <Divider />
                                     <Grid>
                                         <label className={classes.label}>Upload Documents (birth certificates, etc.)</label>
+                                        <label className={classes.label2}>Please make sure that the documents have a right name</label>
                                     </Grid>
                                     <DocumentsUpload mode={props.mode} />
+
                                 </Grid>
+
                                 <Grid item xs={12}>
                                     <TextField
                                         fullWidth
@@ -274,7 +277,9 @@ const useStyles = makeStyles((theme) => ({
         fontWeight: 500,
         marginBottom: 15,
         marginTop: 15,
+        fontFamily: "'Open Sans', sans-serif"
     },
+    label2: theme.typography.body1,
     title: {
         display: 'flex',
         justifyContent: 'center',

@@ -271,8 +271,8 @@ export default function UserForm({ usernameProp, emailProp, provinceProp, cityPr
                                 disabled
                                 id="plan"
                                 name="plan"
-                                value={props.subscriptionPlan}
-                                label="Subscription plan"
+                                value={props.subscriptionPlan === 'premium' ? "Premium" : "Basic"}
+                                label="Pricing"
                                 variant="outlined"
                                 fullWidth
                             />
@@ -282,12 +282,12 @@ export default function UserForm({ usernameProp, emailProp, provinceProp, cityPr
                                 <Tooltip trigger="hover" placement="top" title={"After your premium subscription ends your plan will be automatically switched to free."}>
                                     <div>
                                         <Button style={{ margin: '0 auto', display: "flex", pointerEvents: 'none' }} variant="contained" color="secondary" onClick={handleChangeSubscriptionPlan} disabled={props.subscriptionPlan === 'premium'}>
-                                            Adjust subscription plan
+                                            Adjust the plan
                                         </Button>
                                     </div>
                                 </Tooltip>
                                 : <Button style={{ margin: '0 auto', display: "flex" }} variant="contained" color="secondary" onClick={handleChangeSubscriptionPlan} disabled={props.subscriptionPlan === 'premium'}>
-                                    Adjust subscription plan
+                                    Adjust the plan
                                 </Button>}
                         </Grid>
                     </Grid>

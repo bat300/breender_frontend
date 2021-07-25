@@ -164,7 +164,7 @@ function SignUpComponent(props) {
                     </Grid>
                 </Grid>
                 <div className={classes.signUpRow}>
-                    <FormControlLabel control={<Checkbox checked={values.isAdmin} onChange={(e) => props.handleChange('isAdmin', e)} color="primary" />} label="Is Admin" />
+                    <FormControlLabel control={<Checkbox checked={values.isAdmin} onChange={(e) => props.handleChange('isAdmin', e)} style={{color: "#D37F65"}} />} label="Is Admin" />
                 </div>
                 {passwordError !== '' ? (
                     <div className={classes.signUpRow}>

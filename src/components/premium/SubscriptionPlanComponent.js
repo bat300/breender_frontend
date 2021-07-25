@@ -17,24 +17,16 @@ function SubscriptionPlanComponent(props) {
     const plans = [
         {
             id: 'free',
-            title: 'Free',
+            title: 'Basic',
             price: '0.00',
-            included: ['View all applications', 'Phone & Email support'],
+            included: ['View all applications', 'Create pet profile', 'Phone & Email support'],
             excluded: ['Contact pet owners', ' Pay no transaction fees', 'Get pet documents verified', 'Higher position in results', 'No advertisement banners'],
         },
         {
             id: 'premium',
             title: 'Premium',
             price: '4.99',
-            included: [
-                'View all applications',
-                'Phone & Email support',
-                'Contact pet owners',
-                'Pay no transaction fees',
-                'Get pet documents verified',
-                'Higher position in results',
-                'No advertisement banners',
-            ],
+            included: ['View all applications', 'Create pet profile', 'Phone & Email support', 'Contact pet owners', 'Pay no transaction fees', 'Get pet documents verified', 'Higher position in results', 'No advertisement banners'],
             excluded: [],
         },
     ];
