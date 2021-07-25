@@ -46,7 +46,7 @@ const PaymentStepper = ({ pet, close }) => {
 
     // helper functions for the transaction generation
     const calculateFee = () => {
-        if (petOwner.subscriptionPlan === 'free') {
+        if (petOwner.subscriptionPlan === 'free' && pet.price > 0) {
             let fee = Math.min(pet.price * 0.05, 20); // 5% of the pet price or maximum 20€ as fee
             fee = Math.max(fee, 1); // min 1€
             return fee;
