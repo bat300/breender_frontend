@@ -179,7 +179,16 @@ const TransactionsOverviewTable = (props) => {
             dataIndex: 'review',
             key: 'review',
             align: 'center',
-            render: (_, record) => <Button disabled={!checkUserIsSender(record)}> <AddBoxIcon onClick={function () { showModal(record); }} /> </Button>,
+            render: (_, record) => (
+                <Button disabled={!checkUserIsSender(record) || !record.isReviewed}>
+                    {' '}
+                    <AddBoxIcon
+                        onClick={function () {
+                            showModal(record);
+                        }}
+                    />{' '}
+                </Button>
+            ),
         },
     ];
 
