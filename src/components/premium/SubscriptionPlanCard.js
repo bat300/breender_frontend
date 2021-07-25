@@ -82,11 +82,9 @@ function SubscriptionPlanCard(props) {
                 <CardContent>
                     <div className={classes.cardPricing}>
                         <Typography component="h2" className={classes.pricing} color="textPrimary">
-                            {props.plan.id === "premium" ? `${props.plan.price} €/mo` : `${props.plan.price} €`}
+                            {props.plan.id === 'premium' ? `${props.plan.price} €` : `${props.plan.price} €`}
                         </Typography>
-                        <Typography variant="h6" color="textSecondary">
-
-                        </Typography>
+                        <Typography variant="h6" color="textSecondary"></Typography>
                     </div>
                     <div className={classes.cardContent}>
                         <ul>
