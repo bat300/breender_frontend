@@ -16,6 +16,7 @@ import { useDispatch } from 'react-redux';
 import { deletePet, getUserPets, getPets, getPet } from 'redux/actions';
 import RemoveShoppingCartIcon from '@material-ui/icons/RemoveShoppingCart';
 import { Tooltip } from 'antd';
+import { useLoggedInUser } from 'helper/hooks';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -59,9 +60,12 @@ export default function PetInformationPaper(props) {
     const classes = useStyles();
     const history = useHistory();
     const dispatch = useDispatch();
+    const loggedInUser = useLoggedInUser();
 
     const goToPetProfile = async () => {
-        await dispatch(getPet(props.pet._id));
+        if (loggedInUser) {
+            await dispatch(getPet(props.pet._id));
+        }
         if (props.editingMode) {
             history.push('/edit/pet/' + props.pet._id);
         } else {
