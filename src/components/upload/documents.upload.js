@@ -124,7 +124,7 @@ const DocumentsUpload = (props) => {
             let competitionData = [...petCompetitions];
             competitionData.map((item, index) => {
                 if (item.key === key) {
-                    if (item.certificate.name === file.name) {
+                    if (file.url) {
                         // set status delete to remove it later onSave from firebase
                         if (item.certificates) {
                             let toDelete = item.certificate;
