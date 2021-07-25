@@ -33,4 +33,28 @@ npm start
 
 Now browse to the app at `http://localhost:3000`.
 
-### Breender Account Credentials
+### Breender Gmail Account Credentials
+
+```
+email: breenderseba@gmail.com 
+password: breenderTeamSEBA2021
+```
+
+You can log in into Gmail Account and use it for our [Firebase project](https://console.firebase.google.com/u/0/project/breender-seba/overview) and [MongoDB Atlas database](https://cloud.mongodb.com/). 
+
+### PayPal Account Credentials
+
+In order to pay with PayPal, please use these credentials:
+```
+email: breenderCustomer@personal.example.com
+password: breenderCustomer
+
+```
+
+to see that the Breender received the money, please use these credentials for log in [here](https://www.sandbox.paypal.com/de/signin): 
+
+```
+email: breenderBusiness@business.example.com
+password: breenderBusiness
+
+```
