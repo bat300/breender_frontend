@@ -20,7 +20,6 @@ const prepareCompetitions = (competitions) => {
     return arr;
 };
 
-
 const prepareDocumentsFileList = (petDocuments) => {
     let petList = [];
     petDocuments.forEach((value, index) => {
@@ -124,9 +123,18 @@ const DocumentsUpload = (props) => {
         if (isCompetition) {
             let competitionData = [...petCompetitions];
             competitionData.map((item, index) => {
-                if (item._id === key) {
+                if (item.key === key) {
+                    if (item.certificate.name === file.name) {
+                        // set status delete to remove it later onSave from firebase
+                        if (item.certificates) {
+                            let toDelete = item.certificate;
+                            toDelete.status = UPLOAD_STATUS.DELETE;
+                            item.certificates.push(toDelete);
+                        } else {
+                            item.certificates = [item.certificate];
+                        }
+                    }
                     item.certificate = undefined;
-                    return item;
                 }
                 return item;
             });

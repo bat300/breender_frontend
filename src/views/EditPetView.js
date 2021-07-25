@@ -95,8 +95,13 @@ const EditPetView = (props) => {
                     };
                     let url = await FirebaseService.upload(value.certificate.path, value.certificate.data, metadata);
                     competitionsData[index].certificate.url = url;
-                } else if (value.certificate.status === UPLOAD_STATUS.DELETE) {
-                    await FirebaseService.remove(value.certificate.path);
+                }
+            }
+            // check if there is something to delete
+            if (value.certificates && Object.keys(value.certificates).length !== 0) {
+                for (let y = 0; y < value.certificates.length; y++) {
+                    let toDelete = value.certificates[y];
+                    await FirebaseService.remove(toDelete.path);
                 }
             }
         }
@@ -265,6 +270,7 @@ const useStyles = makeStyles((theme) => ({
         marginRight: 20,
     },
 }));
+
 
 // connect() establishes the connection to the redux functionalities
 export default connect()(EditPetView);
