@@ -8,16 +8,17 @@ function ScrollToTop({ history }) {
     const dispatch = useDispatch();
     const loggedInUser = useLoggedInUser();
     useEffect(() => {
-        const unlisten = history.listen(() => {
-            window.scrollTo(0, 0);
-        });
-
         if (loggedInUser) {
+            const unlisten = history.listen(() => {
+                window.scrollTo(0, 0);
+            });
+
             dispatch(getUnseenMessages(loggedInUser._id));
+
+            return () => {
+                unlisten();
+            };
         }
-        return () => {
-            unlisten();
-        };
     }, []);
 
     return null;
