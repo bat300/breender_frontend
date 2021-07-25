@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useHistory, withRouter } from 'react-router-dom';
 import { connect, useDispatch, useSelector } from 'react-redux';
 import LoginComponent from '../components/UserLoginComponent';
-import { login, startLoading, stopLoading, loginReset, me } from '../redux/actions';
+import { login, startLoading, stopLoading, me } from '../redux/actions';
 import NotificationService from 'services/NotificationService';
 
 /**
@@ -33,7 +33,6 @@ function UserLoginView(props) {
     };
 
     const onSignUp = () => {
-        props.dispatch(loginReset());
         props.history.push('/register');
     };
 

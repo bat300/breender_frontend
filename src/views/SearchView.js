@@ -88,7 +88,7 @@ function SearchView(props) {
         },
     ];
 
-    const loadPets = async (pageValue?) => {
+    const loadPets = async (pageValue) => {
         // trigger the redux action getPets
         let pageToFetch = pageValue ? pageValue : 1;
         pets = props.dispatch(getPets(chosenSpecies, sex, breed, ageRange, pageToFetch, false, user));
