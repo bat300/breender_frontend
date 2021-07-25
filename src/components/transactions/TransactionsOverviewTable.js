@@ -49,6 +49,7 @@ const TransactionsOverviewTable = (props) => {
         const onSuccess = () => {
             NotificationService.notify('success', 'Success', 'Your review was successfully added!');
             setIsModalVisible(false);
+            dispatch(getTransactions(user.id));
         };
 
         const onError = () => {
