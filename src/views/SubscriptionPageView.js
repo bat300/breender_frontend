@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme) => ({
     title: theme.typography.h3,
     description: theme.typography.h6,
     paper: {
-        width: '1250px',
+        width: '85%',
         marginLeft: 'auto',
         marginRight: 'auto',
         marginTop: theme.spacing(0),
