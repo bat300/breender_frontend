@@ -45,13 +45,13 @@ const PaymentStepper = ({ pet, close }) => {
     const isButtonDisabled = activeStep === 1 && !isFreeOfCharge;
 
     // helper functions for the transaction generation
-    const amountToPay = () => {
-        if (loggedInUser.subscriptionPlan === 'free') {
+    const calculateFee = () => {
+        if (petOwner.subscriptionPlan === 'free') {
             let fee = Math.min(pet.price * 0.05, 20); // 5% of the pet price or maximum 20€ as fee
             fee = Math.max(fee, 1); // min 1€
-            return pet.price + fee;
+            return fee;
         }
-        return pet.price;
+        return 0;
     };
     // generate order number for new transactions
     const generateId = () => Math.floor(Math.random() * 10000000000).toString(16);
@@ -64,7 +64,8 @@ const PaymentStepper = ({ pet, close }) => {
         senderResponse: 'pending',
         receiverResponse: 'pending',
         status: 'pending',
-        amount: amountToPay(),
+        amount: pet.price,
+        fee: calculateFee(),
         processed: false,
         reminderSent: false,
     };
@@ -121,9 +122,9 @@ const PaymentStepper = ({ pet, close }) => {
     const getStepContent = (stepIndex) => {
         switch (stepIndex) {
             case 0:
-                return <StepperInformation petOwner={petOwner} pet={pet} loggedInUser={loggedInUser} step={0} isFreeOfCharge={isFreeOfCharge} onApprove={onApprove} onError={onError} amount={amountToPay()} />;
+                return <StepperInformation petOwner={petOwner} pet={pet} loggedInUser={loggedInUser} step={0} isFreeOfCharge={isFreeOfCharge} onApprove={onApprove} onError={onError} />;
             case 1:
-                return <StepperInformation petOwner={petOwner} pet={pet} loggedInUser={loggedInUser} step={1} isFreeOfCharge={isFreeOfCharge} onApprove={onApprove} onError={onError} amount={amountToPay()} />;
+                return <StepperInformation petOwner={petOwner} pet={pet} loggedInUser={loggedInUser} step={1} isFreeOfCharge={isFreeOfCharge} onApprove={onApprove} onError={onError} />;
             case 2:
                 return <PaymentResultComponent status={paymentStatus} transaction={transaction} />;
             default:

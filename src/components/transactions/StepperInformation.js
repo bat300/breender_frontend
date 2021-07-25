@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const StepperInformation = ({ step, pet, petOwner, amount, loggedInUser, isFreeOfCharge, onApprove, onError }) => {
+const StepperInformation = ({ step, pet, petOwner, loggedInUser, isFreeOfCharge, onApprove, onError }) => {
     const classes = useStyles();
 
     function formatProvince(province) {
@@ -123,12 +123,7 @@ const StepperInformation = ({ step, pet, petOwner, amount, loggedInUser, isFreeO
                             <>
                                 <Typography>Pay now </Typography>
                                 {/* Payment with PayPal Component */}
-                                <PayPalPayment amount={amount} onApprove={onApprove} onError={onError} />
-                                {loggedInUser.subscriptionPlan === 'free' ? (
-                                    <Typography variant="body2" color="textSecondary" component="p">
-                                        * We additionally charge 5% (min 1€ and max 20€) from the price for the transaction, because you have a free plan.
-                                    </Typography>
-                                ) : null}
+                                <PayPalPayment amount={pet.price} onApprove={onApprove} onError={onError} />
                             </>
                         )}
                     </Grid>

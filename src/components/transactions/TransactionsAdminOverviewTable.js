@@ -65,7 +65,7 @@ const TransactionsAdminOverviewTable = (props) => {
             dataIndex: 'amount',
             key: 'amount',
             align: 'right',
-            render: (_, record) => <PriceTag price={record.amount} />,
+            render: (_, record) => <PriceTag price={record.amount} fee={record.fee} />,
         },
         {
             title: 'DEADLINE',
