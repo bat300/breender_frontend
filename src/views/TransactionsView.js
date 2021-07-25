@@ -63,8 +63,8 @@ const useStyles = makeStyles((theme) => ({
     layout: {
         justifyContent: 'center',
         paddingTop: 50,
-        paddingLeft: 100,
-        paddingRight: 100,
+        paddingLeft: 50,
+        paddingRight: 50,
         [theme.breakpoints.down('sm')]: {
             width: 'auto',
         },

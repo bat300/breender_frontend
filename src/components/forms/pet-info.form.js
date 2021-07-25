@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import DateFnsUtils from '@date-io/date-fns';
 import { makeStyles } from '@material-ui/core/styles';
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
-import { FormControl, Grid, InputLabel, InputAdornment, MenuItem, Select, TextField, Paper, Divider, FormHelperText } from '@material-ui/core';
+import { FormControl, Grid, InputLabel, InputAdornment, MenuItem, Select, TextField, Paper, Divider, FormHelperText, Typography } from '@material-ui/core';
 import { breeds } from 'helper/data/breeds';
 import DocumentsUpload from '../upload/documents.upload';
 import CompetitionsComponent from '../competitions';
@@ -26,7 +26,6 @@ const PetInformationForm = ({ nameProp, nicknameProp, sexProp, breedProp, specie
     const { price, setPrice } = priceProp;
     const { birthDate, setBirthDate } = birthDateProp;
     const [errors, setErrors] = useState({ name: false, nickname: false, sex: false, species: false, breed: false });
-
     const validationErrors = {
         name: 'Name is required',
         nickname: 'Nickname is required',
@@ -80,7 +79,7 @@ const PetInformationForm = ({ nameProp, nicknameProp, sexProp, breedProp, specie
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
                 <form autoComplete="off">
                     <Paper className={classes.paper}>
-                        <label className={classes.title}>Information about your pet</label>
+                        <Typography variant="h5" className={classes.title}>Information about your pet</Typography>
                         <React.Fragment>
                             <Grid container spacing={3}>
                                 <Grid item xs={12}>
@@ -180,9 +179,12 @@ const PetInformationForm = ({ nameProp, nicknameProp, sexProp, breedProp, specie
                                     <Divider />
                                     <Grid>
                                         <label className={classes.label}>Upload Documents (birth certificates, etc.)</label>
+                                        <label className={classes.label2}>Please make sure that the documents have a right name</label>
                                     </Grid>
                                     <DocumentsUpload mode={props.mode} />
+                                   
                                 </Grid>
+                                
                                 <Grid item xs={12}>
                                     <TextField
                                         fullWidth
@@ -220,9 +222,10 @@ const useStyles = makeStyles((theme) => ({
         margin: 10,
     },
     paper: {
+        borderRadius: 25,
         marginTop: theme.spacing(6),
         marginBottom: theme.spacing(6),
-        padding: theme.spacing(3),
+        padding: 40,
         [theme.breakpoints.down('sm')]: {
             marginTop: theme.spacing(3),
             marginBottom: theme.spacing(3),
@@ -231,17 +234,17 @@ const useStyles = makeStyles((theme) => ({
     },
     label: {
         display: 'flex',
-        fontSize: 16,
-        fontWeight: 500,
+        fontSize: 20,
+        fontWeight: 300,
         marginBottom: 15,
         marginTop: 15,
+        fontFamily: "'Open Sans', sans-serif"
     },
+    label2: theme.typography.body1,
     title: {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        fontSize: 22,
-        fontWeight: 500,
         marginBottom: 15,
         marginTop: 15,
     },

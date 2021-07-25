@@ -6,15 +6,15 @@ import { connect } from 'react-redux';
 import NotificationService from 'services/NotificationService';
 
 const useStyles = makeStyles((theme) => ({
-    usersignUpRoot: {
+    root: {
         margin: 'auto',
     },
-    signUpPaper: {
+    paper: {
         width: '1000px',
         height: '425px',
         padding: theme.spacing(2),
     },
-    signUpRow: {
+    row: {
         paddingTop: theme.spacing(1.5),
         paddingBottom: theme.spacing(1),
         '&:last-child': {
@@ -24,13 +24,13 @@ const useStyles = makeStyles((theme) => ({
             paddingTop: theme.spacing(0),
         },
     },
-    signUpButtons: {
+    buttons: {
         display: 'flex',
         justifyContent: 'flex-end',
     },
-    signUpButton: {
+    button: {
         marginLeft: theme.spacing(1),
-    },
+    }
 }));
 
 /**
@@ -60,21 +60,21 @@ function PaymentInformationComponent(props) {
     }
 
     return (
-        <div className={classes.usersignUpRoot} align="center">
-            <Paper className={classes.signUpPaper} component="form">
-                <div className={classes.signUpRow}>
+        <div className={classes.root} align="center">
+            <Paper className={classes.paper} component="form">
+                <div className={classes.row}>
                     <Typography variant="h4">Choose payment plan</Typography>
                 </div>
-                <div className={classes.signUpRow}>
+                <div className={classes.row}>
                     <FormControl component="fieldset">
                         <RadioGroup aria-label="plan" value={props.values.chosenPayment} onChange={(e) => props.handleChange('chosenPayment', e)} id="payment">
                             {props.payments.map((payment) => (
-                                <FormControlLabel value={payment.price} control={<Radio />} label={payment.description} key={payment.price} />
+                                <FormControlLabel value={payment.price} control={<Radio style={{color: "#D37F65"}}/>} label={payment.description} key={payment.price} className={classes.radio}/>
                             ))}
                         </RadioGroup>
                     </FormControl>
                 </div>
-                <div className={classes.signUpRow}>
+                <div className={classes.row}>
                     <PayPalScriptProvider options={options}>
                         <PayPalButtons
                             disabled={disabled}
@@ -106,8 +106,8 @@ function PaymentInformationComponent(props) {
                         />
                     </PayPalScriptProvider>
                 </div>
-                <div className={classes.signUpRow + ' ' + classes.signUpButtons}>
-                    <Button className={classes.signUpButton} onClick={props.prevStep} disabled={disabled}>
+                <div className={classes.row + ' ' + classes.buttons}>
+                    <Button className={classes.button} onClick={props.prevStep} disabled={disabled}>
                         Back
                     </Button>
                 </div>

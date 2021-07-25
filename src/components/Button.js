@@ -20,6 +20,7 @@ const useStyles = makeStyles((theme) => ({
         minWidth: '60vw',
         maxWidth: '80vw',
         width: 'auto',
+        borderRadius: 25,
     },
 }));
 
@@ -67,7 +68,7 @@ function ContactButton(contactProps) {
 
     return (
         <Button variant="contained" color="primary" className={classes.button} endIcon={<SendIcon />} onClick={() => handleContact()} disabled={user.user.subscriptionPlan === 'free'}>
-            Contact Breeder
+            Contact Owner
         </Button>
     );
 }

@@ -212,15 +212,15 @@ export default function UserForm({ usernameProp, emailProp, provinceProp, cityPr
                                 disabled
                                 id="plan"
                                 name="plan"
-                                value={props.subscriptionPlan}
-                                label="Subscription plan"
+                                value={props.subscriptionPlan === 'premium' ? "Premium" : "Basic"}
+                                label="Pricing"
                                 variant="outlined"
                                 fullWidth
                             />
                         </Grid>
                         <Grid item xs={12} sm={6}>
                             <Button style={{ margin: '0 auto', display: "flex" }} variant="contained" color="secondary" onClick={handleAddPet}>
-                                Adjust subscription plan
+                                Adjust the plan
                             </Button>
                         </Grid>
                     </Grid>

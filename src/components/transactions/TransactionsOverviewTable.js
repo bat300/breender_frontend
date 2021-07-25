@@ -11,7 +11,7 @@ import { useUser } from 'helper/hooks/auth.hooks';
 import PriceTag from 'components/PriceTag';
 import { getTransactions, updateTransaction } from 'redux/actions';
 import moment from 'moment';
-import { Chip } from '@material-ui/core';
+import { Chip, Typography } from '@material-ui/core';
 
 const TransactionsOverviewTable = (props) => {
     const classes = useStyles();
@@ -75,7 +75,7 @@ const TransactionsOverviewTable = (props) => {
             title: 'ID',
             dataIndex: 'orderNr',
             key: 'orderNr',
-            render: (id) => <p>{String(id).toUpperCase()}</p>,
+            render: (id) => <Typography>{String(id).toUpperCase()}</Typography>,
         },
         {
             title: 'MATE',
@@ -96,7 +96,7 @@ const TransactionsOverviewTable = (props) => {
             dataIndex: 'deadline',
             key: 'deadline',
             align: 'center',
-            render: (deadline) => <div>{String(moment(deadline).format('LLL'))}</div>,
+            render: (deadline) => <Typography>{String(moment(deadline).format('LLL'))}</Typography>,
         },
         {
             title: 'YOUR RESPONSE',
