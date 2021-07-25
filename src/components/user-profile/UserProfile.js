@@ -125,7 +125,7 @@ export default function UserProfile(props) {
                 <Grid item />
                 <Grid item >
                     <Typography variant="h6" align="center" style={{ fontWeight: 600 }}>
-                        {props.profileOfLoggedInUser ? "Account information" : username.toUpperCase()}
+                        {props.profileOfLoggedInUser ? "Account information" : props.user.username.toUpperCase()}
                     </Typography>
                 </Grid>
                 <Grid item>

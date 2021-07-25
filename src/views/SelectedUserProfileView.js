@@ -14,42 +14,54 @@ function SelectedUserProfileView(props) {
     var pets = useSelector((state) => state.user.selectedUserPets);
     var reviews = useSelector((state) => state.user.reviewsOnSelectedUser);
 
-    const loadUser = async (id) => {
-        // trigger the redux action getUser
-        selectedUser = props.dispatch(getUser(id));
-    };
-
-    const loadUserPets = async () => {
-        // trigger the redux action getSelectedUserPets
-        pets = props.dispatch(getSelectedUserPets(userId));
-    };
-
-    const loadReviews = async () => {
-        // trigger the redux action getReviewsOnSelectedUser
-        reviews = props.dispatch(getReviewsOnSelectedUser(userId));
-    };
-
     useEffect(() => {
+        let loading = true;
+
+        const loadUser = async (id) => {
+            // trigger the redux action getUser
+            if (!loading) return;
+            await props.dispatch(getUser(id));
+        };
         // load user when the page is loaded
-        if (!selectedUser || (selectedUser && selectedUser._id !== userId)) {
-            loadUser(userId);
-            loadReviews();
-        }
-    }, [selectedUser, reviews]);
+        loadUser(userId);
+
+        return () => {
+            loading = false;
+        };
+    }, [props, userId]);
 
     useEffect(() => {
+        let loading = true;
+
+        const loadUserPets = async () => {
+            // trigger the redux action getUserPets
+            if (!loading) return;
+            await props.dispatch(getSelectedUserPets(userId));
+        };
         // load pets of a user when the page is loaded
-        if (!pets || (pets && pets.length > 0 && pets[0].ownerId !== userId)) {
-            loadUserPets();
-        }
-    }, [pets]);
+        loadUserPets();
+    
+        return () => {
+            loading = false;
+        };
+    }, [props, userId]);
 
     useEffect(() => {
+        let loading = true;
+
+        const loadReviews = async () => {
+            // trigger the redux action getReviewsOnUser
+            if (!loading) return;
+            await props.dispatch(getReviewsOnSelectedUser(userId));
+        };
+
         // load reviews on a user when the page is loaded
-        if (!reviews || (reviews && reviews.length > 0 && reviews[0].revieweeId !== userId)) {
-            loadReviews();
-        }
-    }, [reviews]);
+        loadReviews();
+    
+        return () => {
+            loading = false;
+        };
+    }, [props, userId]);
 
     return !selectedUser || selectedUser._id !== userId ? (
         <Loading />
