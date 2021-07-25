@@ -4,6 +4,7 @@ import PetInformationListItem from './PetInformationListItem';
 import { getAgeString } from 'helper/helpers';
 import { Row, Col } from 'antd';
 import { useSelectedUser } from 'helper/hooks';
+import Loading from '../Loading';
 
 const useStyles = makeStyles((theme) => ({
     layout: {
@@ -15,8 +16,10 @@ function PetInformation(props) {
     const classes = useStyles();
     const petOwner = useSelectedUser();
 
-    return (
-        <Row align="middle" gutter={{ xs: 24, sm: 12 }} className={classes.layout}>
+    return !petOwner || petOwner && petOwner._id !== props.ownerId ?
+        <Loading />
+        :
+        (<Row align="middle" gutter={{ xs: 24, sm: 12 }} className={classes.layout}>
             <Col flex={1} offset={1}>
                 <PetInformationListItem primary={props.officialName} secondary={'Name'} itemType="name" />
                 <PetInformationListItem primary={props.nickname} secondary={'Nickname'} itemType="nickname" />
@@ -28,7 +31,7 @@ function PetInformation(props) {
                 <PetInformationListItem primary={props.breed} secondary={'Breed'} itemType="breed" />
             </Col>
         </Row>
-    );
+        );
 }
 
 export default PetInformation;
