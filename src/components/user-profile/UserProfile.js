@@ -159,7 +159,7 @@ export default function UserProfile(props) {
                             No pets added yet
                         </Typography> : <div />)}
                 {props.user.isVerified ?
-                    <Button style={{ margin: '0 auto', display: "flex" }} variant="contained" color="secondary" onClick={handleAddPet}>
+                    <Button style={{ margin: '0 auto', display: "flex" }} variant="contained" color="primary" onClick={handleAddPet}>
                         Add pet
                     </Button>
                     : <Typography className={classes.typographyNotifications} align="center">
