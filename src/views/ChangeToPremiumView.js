@@ -69,7 +69,7 @@ function ChangeToPremiumView(props) {
     }
 
     const prevStep = () => {
-        props.history.push('/premium');
+        props.history.push('/pricing');
     };
 
     function handleChange(input, event) {

@@ -158,13 +158,13 @@ export default function UserProfile(props) {
                         <Typography className={classes.typographyNotifications} align="center">
                             No pets added yet
                         </Typography> : <div />)}
-                {editingMode ? (props.user.isVerified ?
-                    <Button style={{ margin: '0 auto', display: "flex" }} variant="contained" color="secondary" onClick={handleAddPet}>
+                {props.user.isVerified ?
+                    <Button style={{ margin: '0 auto', display: "flex" }} variant="contained" color="primary" onClick={handleAddPet}>
                         Add pet
                     </Button>
                     : <Typography className={classes.typographyNotifications} align="center">
                         Please verify your email to add a pet
-                    </Typography>) : <div />}
+                    </Typography>}
             </List>
             {editingMode ? <div />
                 :

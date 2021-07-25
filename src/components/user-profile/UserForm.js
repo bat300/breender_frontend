@@ -182,7 +182,7 @@ export default function UserForm({ usernameProp, emailProp, provinceProp, cityPr
     }
 
     const handleChangeSubscriptionPlan = (e) => {
-        history.push('/premium');
+        history.push('/pricing');
     };
 
 

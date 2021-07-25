@@ -197,13 +197,13 @@ const TransactionsOverviewTable = (props) => {
             dataIndex: 'review',
             key: 'review',
             align: 'center',
-            render: (_, record) => <Button disabled={!checkUserIsSender(record)}> <AddBoxIcon onClick={function () { showModal(record); }} /> </Button>,
+            render: (_, record) => <Button disabled={!checkUserIsSender(record)}> <AddBoxIcon onClick={function () { if (checkUserIsSender(record)) { showModal(record); } }} /> </Button>,
         },
     ];
 
     return (
         <div>
-            <Table columns={columns} dataSource={transactions}/>
+            <Table columns={columns} dataSource={transactions} />
             <Modal visible={isModalVisible} onOk={saveReview} onCancel={hideModal} className={classes.modal}>
                 <AddReviewComponent ratingProp={{ rating, setRating }} reviewProp={{ review, setReview }} name={name} />
             </Modal>
