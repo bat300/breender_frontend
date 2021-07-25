@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
-import { getTransactions, getUsersInfo, logout } from '../redux/actions';
+import { getReviewsOnUser, getTransactions, getUsersInfo, logout } from '../redux/actions';
 import { Menu, MenuItem, Avatar, Divider, Typography } from '@material-ui/core';
 import { connect, useSelector } from 'react-redux';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
@@ -60,6 +60,7 @@ function KebabMenu(props) {
     };
 
     const onClickGoToUserProfile = () => {
+        props.dispatch(getReviewsOnUser(user.id))
         props.history.push('/user');
     };
 

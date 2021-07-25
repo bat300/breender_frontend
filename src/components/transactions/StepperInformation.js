@@ -1,7 +1,6 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Card, CardContent, CardMedia, Grid, Table, TableCell, TableRow, Typography } from '@material-ui/core';
-import SubscriptionPlanPreview from 'components/premium/SubscriptionPlanPreview';
 import PayPalPayment from './PayPalPayment';
 
 const useStyles = makeStyles((theme) => ({
@@ -108,15 +107,9 @@ const StepperInformation = ({ step, pet, petOwner, loggedInUser, isFreeOfCharge,
                 </Grid>
             ) : step === 1 ? (
                 <Grid container direction="column" alignItems="center" justify="center" item xs={12} spacing={5}>
-                    <Grid item align="center">
-                        <Typography gutterBottom style={{ fontSize: 16 }}>
-                            Your Current Subscription
-                        </Typography>
-                        <SubscriptionPlanPreview user={loggedInUser} />
-                    </Grid>
                     <Grid item align="center" style={{ maxWidth: 500 }}>
                         {isFreeOfCharge ? (
-                            <Typography variant="body2" color="textSecondary" component="p">
+                            <Typography variant="body2" color="textPrimary" component="p">
                                 You can directly proceed.
                             </Typography>
                         ) : (

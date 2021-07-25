@@ -12,7 +12,7 @@ import StepperInformation from './StepperInformation';
 import { useLoggedInUser, useSelectedUser } from 'helper/hooks/auth.hooks';
 import PaymentResultComponent from './PaymentResult';
 import { useDispatch, useSelector } from 'react-redux';
-import { changePet, createTransaction, getUser } from 'redux/actions';
+import { changePet, createTransaction, getPet } from 'redux/actions';
 import { NotificationService } from 'services';
 
 const STATUS_TYPE = {
@@ -30,14 +30,14 @@ const PaymentStepper = ({ pet, close }) => {
 
     const [paymentStatus, setPaymentStatus] = useState('none');
     const [activeStep, setActiveStep] = useState(0);
-    const [isFreeOfCharge, setIsFreeOfCharge] = useState(false);
+    const [isFreeOfCharge, setIsFreeOfCharge] = useState(pet.price === 0 || pet.price === null); // if pet is free
 
     const steps = ['Confirm general information', 'Confirm payment', 'Finish'];
 
 
     useEffect(() => {
         if (loggedInUser) {
-            setIsFreeOfCharge(loggedInUser.subscriptionPlan === 'premium' && pet.price === 0) // premium user don't need to pay any fees for the free pet
+            setIsFreeOfCharge(pet.price === 0 || pet.price === null) // premium user don't need to pay any fees for the free pet
         }
     }, [loggedInUser, pet.ownerId, pet.price, dispatch])
 
@@ -64,7 +64,7 @@ const PaymentStepper = ({ pet, close }) => {
         senderResponse: 'pending',
         receiverResponse: 'pending',
         status: 'pending',
-        amount: pet.price,
+        amount: pet.price ? pet.price : 0,
         fee: calculateFee(),
         processed: false,
         reminderSent: false,
@@ -104,6 +104,7 @@ const PaymentStepper = ({ pet, close }) => {
                     // update pet status to purchased
                     let newPet = { ...pet, purchased: true };
                     dispatch(changePet(newPet));
+                    dispatch(getPet(pet.id));
                 },
                 () => {
                     NotificationService.notify('error', 'Transaction Error', 'Error occurred during transaction creation');
