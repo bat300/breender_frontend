@@ -74,7 +74,6 @@ const PaymentStepper = ({ pet, close }) => {
     const handleNext = () => {
         if (activeStep === steps.length - 1) {
             close();
-            setActiveStep(0);
             return;
         }
         // skip payment and create transaction directly
