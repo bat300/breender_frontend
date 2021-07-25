@@ -96,7 +96,9 @@ function SearchView(props) {
     };
 
     useEffect(() => {
-        props.dispatch(getUsersInfo(user.id));
+        if (user) {
+            props.dispatch(getUsersInfo(user.id));
+        }
     }, []);
 
     useEffect(() => {
