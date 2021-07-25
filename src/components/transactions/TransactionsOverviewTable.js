@@ -34,7 +34,6 @@ const TransactionsOverviewTable = (props) => {
     const [revieweeId, setRevieweeId] = React.useState('');
 
     const showModal = (record) => {
-        console.log(record);
         setTransactionId(record.orderNr);
         let petOwner = getPetOwner(record)
         setName(petOwner.username);

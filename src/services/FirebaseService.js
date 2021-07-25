@@ -17,7 +17,7 @@ const FirebaseService = {
             .child(path)
             .delete()
             .then(() => {
-                console.log('Deletion was successful');
+                console.log('Deletion of the file was successful');
             })
             .catch((error) => {
                 console.log('Error while deletion has occurred', error);

@@ -54,7 +54,7 @@ export const getMessages = (conversationId) => {
     // when the backend call was failed
     const onFailure = (error) => {
         // error handling
-        console.log('failed to get the messages', error);
+        console.log('Failed to get the messages', error);
     };
 
     return async (dispatch, getState) => {
@@ -78,7 +78,7 @@ export const getUnseenMessages = (userId) => {
     // when the backend call was failed
     const onFailure = (error) => {
         // error handling
-        console.log('failed to get the messages', error);
+        console.log('Failed to get the messages', error);
     };
 
     return async (dispatch, getState) => {

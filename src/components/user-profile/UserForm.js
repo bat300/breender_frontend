@@ -174,7 +174,6 @@ export default function UserForm({ usernameProp, emailProp, provinceProp, cityPr
         validate(UserFormInputs.paymentEmail, e.target.value);
         paymentEmail = e.target.value;
         if (paymentEmail === '') {
-            console.log("Email is empty, set payment method to null");
             setPaymentMethod(null);
         } else {
             setPaymentMethod({ type: type, email: e.target.value });

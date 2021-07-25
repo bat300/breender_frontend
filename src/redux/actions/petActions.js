@@ -21,7 +21,7 @@ export const getPets = (species, sex, breed, age, page, showOwn = false, user) =
     // when the backend call was failed
     function onFailure(error) {
         // error handling
-        console.log('failed to get the pets', error);
+        console.log('Failed to get the pets', error);
     }
 
     return async (dispatch) => {

@@ -19,7 +19,6 @@ function MessengerNewContactView(props) {
         let userId = user.id;
 
         async function loadConversation(id1, id2) {
-            console.log('Checking conversations and creating if needed...');
             await dispatch(getOrAddConversation(id1, id2));
         }
         return loadConversation(userId, breederId);

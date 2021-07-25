@@ -124,15 +124,13 @@ export const getUserPets = (ownerId) => {
     // when the backend call was failed
     const onFailure = (error) => {
         // error handling
-        console.log('failed to get the pets', error);
+        console.log('Failed to get the pets', error);
     };
 
     return async (dispatch, getState) => {
         try {
-            console.log('I am in actions');
             // ask for the pets in the backend
             const pets = await UserService.getUserPets(ownerId);
-            console.log('The pets are in the actions: ', pets);
             // call onSuccess in context of redux
             dispatch(onSuccess(pets));
         } catch (e) {
@@ -193,15 +191,13 @@ export const getSelectedUserPets = (ownerId) => {
     // when the backend call was failed
     const onFailure = (error) => {
         // error handling
-        console.log('failed to get the pets', error);
+        console.log('Failed to get the pets', error);
     };
 
     return async (dispatch, getState) => {
         try {
-            console.log('I am in actions');
             // ask for the pets in the backend
             const pets = await UserService.getUserPets(ownerId);
-            console.log('The pets are in the actions: ', pets);
             // call onSuccess in context of redux
             dispatch(onSuccess(pets));
         } catch (e) {
@@ -219,15 +215,13 @@ export const getReviewsOnUser = (id) => {
     // when the backend call was failed
     const onFailure = (error) => {
         // error handling
-        console.log('failed to get the reviews', error);
+        console.log('Failed to get the reviews', error);
     };
 
     return async (dispatch, getState) => {
         try {
-            console.log('I am in actions');
             // ask for the reviews in the backend
             const reviews = await UserService.getReviewsOnUser(id);
-            console.log('The reviews are in the actions: ', reviews);
             // call onSuccess in context of redux
             dispatch(onSuccess(reviews));
         } catch (e) {
@@ -245,15 +239,13 @@ export const getReviewsOnSelectedUser = (id) => {
     // when the backend call was failed
     const onFailure = (error) => {
         // error handling
-        console.log('failed to get the reviews', error);
+        console.log('Failed to get the reviews', error);
     };
 
     return async (dispatch, getState) => {
         try {
-            console.log('I am in actions');
             // ask for the reviews in the backend
             const reviews = await UserService.getReviewsOnUser(id);
-            console.log('The reviews are in the actions: ', reviews);
             // call onSuccess in context of redux
             dispatch(onSuccess(reviews));
         } catch (e) {
@@ -269,7 +261,7 @@ export const addReview = (review, onSuccess = () => null, onError = (err) => nul
     };
     const onFailure = (err) => {
         onError();
-        console.log('failed to save the review', err);
+        console.log('Failed to save the review', err);
     };
 
     return async (dispatch, getState) => {

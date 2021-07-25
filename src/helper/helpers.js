@@ -42,7 +42,6 @@ export  const getUserFromToken = () => {
         const expirationTime = (userJson.exp * 1000) - 60000
         if (Date.now() >= expirationTime) {
             window.localStorage.removeItem('jwtToken');
-            console.log(userJson.exp * 1000, Date.now())
             return { isAuthenticated: false };
         }
         return {

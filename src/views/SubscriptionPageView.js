@@ -73,7 +73,6 @@ function SubscriptionPageView(props) {
     const onChangePlan = (v) => {
         //pass subscription plan to sign up page
         if (userInfo.subscriptionPlan === 'free' && v === 'premium') {
-            console.log('want to change');
             props.history.push('/pricing/changePlan');
         } else if (userInfo.subscriptionPlan === 'premium' && v === 'free') {
             handleOpen();
