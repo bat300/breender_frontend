@@ -55,8 +55,8 @@ export default function PetInformationPaper(props) {
     const history = useHistory();
     const dispatch = useDispatch();
 
-    function goToPetProfile() {
-        dispatch(getPet(props.pet._id));
+    const goToPetProfile = async () => {
+        await dispatch(getPet(props.pet._id));
         if (props.editingMode) {
             history.push('/edit/pet/' + props.pet._id);
         } else {
