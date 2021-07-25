@@ -2,13 +2,16 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Grid, Card, CardHeader, CardContent, Typography, CardActions, Button } from '@material-ui/core';
 import GetAppIcon from '@material-ui/icons/GetApp';
-import VerificationIcon from '../../components/VerificationIcon';
-import CancelIcon from '@material-ui/icons/Cancel';
+import { Tooltip } from 'antd';
+import { VerificationIcon, CancelIcon } from 'components/icons';
 
 const useStyles = makeStyles((theme) => ({
     root: {
         minWidth: 275,
-        backgroundColor: theme.palette.primary.main,
+        padding: 10,
+        backgroundColor: '#7D7F9A',
+        boxShadow: '0 6px 10px rgba(0,0,0,.07), 0 0 6px rgba(0,0,0,.02)',
+        color: 'white',
     },
     pos: {
         marginBottom: 12,
@@ -20,6 +23,9 @@ const useStyles = makeStyles((theme) => ({
         color: 'black',
         textDecoration: 'none',
     },
+    label: {
+        color: theme.palette.text.light,
+    },
 }));
 
 function PetCompetitionsCard(props) {
@@ -28,12 +34,25 @@ function PetCompetitionsCard(props) {
     return (
         <Grid item>
             <Card className={classes.root}>
-                <CardHeader action={props.certificate.declined? <CancelIcon style={{fill: 'red'}}/> : <VerificationIcon verified={props.certificate.verified} />} />
+                <CardHeader action={
+                    props.certificate.declined ?
+                        (<Tooltip trigger="hover" placement="top" title={"The document is checked and DECLINED."}>
+                            <div>
+                                <CancelIcon style={{ fill: 'red' }} />
+                            </div>
+                        </Tooltip>)
+                        : (<Tooltip trigger="hover" placement="top" title={props.verified ? "The document is verified." : "The document is NOT yet verified."}>
+                            <div>
+                                <VerificationIcon verified={props.certificate.verified} />
+                            </div>
+                        </Tooltip>)
+                } />
+
                 <CardContent>
-                    <Typography variant="h5" component="h2">
+                    <Typography variant="h5" className={classes.label} color="textSecondary">
                         {props.name}
                     </Typography>
-                    <Typography className={classes.pos} color="textSecondary">
+                    <Typography className={`${classes.pos}`} color="textSecondary">
                         {props.category}
                     </Typography>
                     <Typography variant="body2" component="p">

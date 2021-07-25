@@ -1,6 +1,6 @@
 import React from 'react';
 // antd imports
-import { Table, Tooltip } from 'antd';
+import { Table, Tag, Tooltip, Modal } from 'antd';
 import '../../theming/antd.css';
 // material-ui imports
 import { makeStyles } from '@material-ui/core/styles';
@@ -11,6 +11,11 @@ import { useUser } from 'helper/hooks/auth.hooks';
 import PriceTag from 'components/PriceTag';
 import { getTransactions, updateTransaction } from 'redux/actions';
 import moment from 'moment';
+import { Button, Typography } from '@material-ui/core';
+import AddBoxIcon from '@material-ui/icons/AddBox';
+import { NotificationService } from 'services';
+import { addReview } from 'redux/actions';
+import AddReviewComponent from 'components/user-profile/AddReview';
 import { Chip } from '@material-ui/core';
 
 const TransactionsOverviewTable = (props) => {
@@ -21,12 +26,53 @@ const TransactionsOverviewTable = (props) => {
     // states
     const user = useUser();
     const checkRequiresInvestigation = (t) => (t.senderResponse === 'fail' && t.receiverResponse === 'success') || (t.senderResponse === 'success' && t.receiverResponse === 'fail');
+    const [isModalVisible, setIsModalVisible] = React.useState(false);
+    const [rating, setRating] = React.useState(0);
+    const [review, setReview] = React.useState('');
+    const [transactionId, setTransactionId] = React.useState('');
+    const [name, setName] = React.useState(false);
+    const [revieweeId, setRevieweeId] = React.useState('');
+
+    const showModal = (record) => {
+        console.log(record);
+        setTransactionId(record.orderNr);
+        let petOwner = getPetOwner(record)
+        setName(petOwner.username);
+        setRevieweeId(petOwner._id)
+        setIsModalVisible(true);
+    };
+
+    const hideModal = () => {
+        setIsModalVisible(false);
+    };
+
+    const saveReview = async () => {
+        const onSuccess = () => {
+            NotificationService.notify('success', 'Success', 'Your review was successfully added!');
+            setIsModalVisible(false);
+        };
+
+        const onError = () => {
+            NotificationService.notify('error', 'Error', 'There was a problem adding your review.');
+            setIsModalVisible(false);
+        };
+
+        let reviewToUpload = {
+            reviewerId: user.id,
+            revieweeId: revieweeId,
+            review: review,
+            rating: rating,
+            transactionNr: transactionId
+        };
+
+        dispatch(addReview(reviewToUpload, onSuccess, onError));
+    };
 
     // check if user is the sender or the receiver
     const checkUserIsSender = (transaction) => {
-        if (transaction.receiverId._id === user.id) {
+        if (transaction.receiverId?._id === user.id) {
             return false;
-        } else if (transaction.senderId._id === user.id) {
+        } else if (transaction.senderId?._id === user.id) {
             return true;
         }
     };
@@ -75,7 +121,7 @@ const TransactionsOverviewTable = (props) => {
             title: 'ID',
             dataIndex: 'orderNr',
             key: 'orderNr',
-            render: (id) => <p>{String(id).toUpperCase()}</p>,
+            render: (id) => <Typography>{String(id).toUpperCase()}</Typography>,
         },
         {
             title: 'MATE',
@@ -96,7 +142,7 @@ const TransactionsOverviewTable = (props) => {
             dataIndex: 'deadline',
             key: 'deadline',
             align: 'center',
-            render: (deadline) => <div>{String(moment(deadline).format('LLL'))}</div>,
+            render: (deadline) => <Typography>{String(moment(deadline).format('LLL'))}</Typography>,
         },
         {
             title: 'YOUR RESPONSE',
@@ -123,16 +169,26 @@ const TransactionsOverviewTable = (props) => {
                         <StatusTag status={record.status} isSelected={true} />
                     </div>
                     {checkRequiresInvestigation(record) ? (
-                        <Chip className={classes.tags} variant="outlined" label="Requires Investigation" style={{color: 'black', background: '#FCCA46', borderColor: '#FDCD7F', borderWidth: 2, fontWeight: 'lighter'}} />
+                        <Chip className={classes.tags} variant="outlined" label="Requires Investigation" style={{ color: 'black', background: '#FCCA46', borderColor: '#FDCD7F', borderWidth: 2, fontWeight: 'lighter' }} />
                     ) : null}
                 </Tooltip>
             ),
+        },
+        {
+            title: 'REVIEW',
+            dataIndex: 'review',
+            key: 'review',
+            align: 'center',
+            render: (_, record) => <Button disabled={!checkUserIsSender(record)}> <AddBoxIcon onClick={function () { showModal(record); }} /> </Button>,
         },
     ];
 
     return (
         <div>
             <Table columns={columns} dataSource={transactions} />
+            <Modal visible={isModalVisible} onOk={saveReview} onCancel={hideModal} className={classes.modal}>
+                <AddReviewComponent ratingProp={{ rating, setRating }} reviewProp={{ review, setReview }} name={name} />
+            </Modal>
         </div>
     );
 };
@@ -155,6 +211,11 @@ const useStyles = makeStyles((theme) => ({
     },
     tags: {
         marginTop: 10,
+    },
+    modal: {
+        width: '80vw',
+        margin: '0 auto',
+        marginTop: 100,
     },
 }));
 

@@ -12,32 +12,41 @@ import CloseIcon from '@material-ui/icons/Close';
 import { NotificationService } from 'services';
 import { useDispatch } from 'react-redux';
 import { deletePet, getUserPets, getPets } from 'redux/actions';
+import RemoveShoppingCartIcon from '@material-ui/icons/RemoveShoppingCart';
+import { Tooltip } from 'antd';
 
 const useStyles = makeStyles((theme) => ({
     root: {
         flexGrow: 1,
         padding: theme.spacing(1),
     },
-    paper: {
-        padding: theme.spacing(2),
+    paperLight: {
+        padding: theme.spacing(4),
+        paddingLeft: 50,
+        paddingRight: 50,
         margin: 'auto',
-        maxWidth: '95%',
+        maxWidth: '90%',
+        borderRadius: 25,
+    },
+    paperDark: {
+        padding: theme.spacing(4),
+        paddingLeft: 50,
+        paddingRight: 50,
+        margin: 'auto',
+        maxWidth: '90%',
+        borderRadius: 25,
+        backgroundColor: '#7D7F9A',
     },
     image: {
-        width: 256,
-        height: 256,
+        width: 220,
+        height: 220,
+        marginRight: 40,
     },
     img: {
-        margin: 'auto',
-        display: 'block',
-        maxWidth: '100%',
-        maxHeight: '100%',
-    },
-    button: {
-        margin: theme.spacing(1),
+        borderRadius: '50%',
     },
     accentText: {
-        color: 'ternary',
+        fontWeight: 500,
     },
 }));
 
@@ -48,17 +57,17 @@ export default function PetInformationPaper(props) {
 
     function goToPetProfile() {
         if (props.editingMode) {
-            history.push("/edit/pet/" + props.pet._id);
+            history.push('/edit/pet/' + props.pet._id);
         } else {
-            history.push("/pet/" + props.pet._id);
+            history.push('/pet/' + props.pet._id);
         }
-    };
+    }
 
     const deletePetOnClick = async () => {
         const onSuccess = () => {
             NotificationService.notify('success', 'Success', 'Your pet was successfully deleted!');
             dispatch(getUserPets(props.user._id));
-            dispatch(getPets('', '', '', ''));
+            dispatch(getPets('', '', '', [1, 5]));
             history.push('/user');
         };
 
@@ -71,25 +80,25 @@ export default function PetInformationPaper(props) {
 
     return (
         <div className={classes.root}>
-            <Paper className={classes.paper}>
-                <Grid container spacing={2} justify="center">
-                    <Grid item className={classes.image}>
-                        <Image style={{ objectFit: 'contain' }} className={classes.img} src={props.pet.profilePicture ? props.pet.profilePicture.src : ''} />
+            <Paper className={props.fromSearch ? classes.paperLight : classes.paperDark}>
+                <Grid container spacing={2} justify="center" alignItems="stretch">
+                    <Grid item className={classes.image} spacing={4}>
+                        <Image style={props.fromSearch ? { objectFit: 'cover', } : { objectFit: 'cover', backgroundColor: '#7D7F9A', }} className={classes.img} src={props.pet.profilePicture ? props.pet.profilePicture.src : ''} />
                     </Grid>
-                    <Grid item xs={8} sm container>
+                    <Grid item xs sm={6} container>
                         <Grid item xs container direction="column" spacing={2}>
                             <Grid item xs>
-                                <Typography className={classes.accentText} gutterBottom variant="h6">
+                                <Typography gutterBottom variant="h5" style={props.fromSearch ? { color: "black" } : { color: "white" }} >
                                     {props.pet.officialName}
                                 </Typography>
                                 <Grid container spacing={2}>
                                     <Grid item xs>
-                                        <Typography variant="body2" gutterBottom style={{ fontWeight: 600 }}>
+                                        <Typography className={classes.accentText} gutterBottom style={props.fromSearch ? { color: "black" } : { color: "white" }}>
                                             Age:
                                         </Typography>
                                     </Grid>
                                     <Grid item xs>
-                                        <Typography variant="body2" gutterBottom>
+                                        <Typography gutterBottom style={props.fromSearch ? { color: "black" } : { color: "white" }}>
                                             {getAgeString(props.pet.age)}
                                         </Typography>
                                     </Grid>
@@ -97,54 +106,72 @@ export default function PetInformationPaper(props) {
 
                                 <Grid container spacing={2}>
                                     <Grid item xs>
-                                        <Typography variant="body2" gutterBottom style={{ fontWeight: 600 }}>
+                                        <Typography className={classes.accentText} gutterBottom style={props.fromSearch ? { color: "black" } : { color: "white" }}>
                                             Sex:
                                         </Typography>
                                     </Grid>
                                     <Grid item xs>
-                                        <Typography variant="body2" gutterBottom>
+                                        <Typography gutterBottom style={props.fromSearch ? { color: "black" } : { color: "white" }}>
                                             {props.pet.sex}
                                         </Typography>
                                     </Grid>
                                 </Grid>
                                 <Grid container spacing={2}>
                                     <Grid item xs>
-                                        <Typography variant="body2" gutterBottom style={{ fontWeight: 600 }}>
+                                        <Typography className={classes.accentText} gutterBottom style={props.fromSearch ? { color: "black" } : { color: "white" }}>
                                             Breed:
                                         </Typography>
                                     </Grid>
                                     <Grid item xs>
-                                        <Typography variant="body2" gutterBottom>
+                                        <Typography gutterBottom style={props.fromSearch ? { color: "black" } : { color: "white" }}>
                                             {props.pet.breed}
                                         </Typography>
                                     </Grid>
                                 </Grid>
                                 <Grid container spacing={2}>
                                     <Grid item xs>
-                                        <Typography variant="body2" gutterBottom style={{ fontWeight: 600 }}>
+                                        <Typography className={classes.accentText} gutterBottom style={props.fromSearch ? { color: "black" } : { color: "white" }}>
                                             Competition:
                                         </Typography>
                                     </Grid>
                                     <Grid item xs>
-                                        <Typography variant="body2" gutterBottom>
+                                        <Typography gutterBottom style={props.fromSearch ? { color: "black" } : { color: "white" }}>
                                             {props.pet.competitions.length === 0 ? 'no' : 'yes'}
                                         </Typography>
                                     </Grid>
                                 </Grid>
-                                <Grid container justify="flex-end" spacing={2}>
-                                    <Button className={classes.button} variant="contained" color="secondary" onClick={goToPetProfile}>
-                                        {props.editingMode ? 'Edit pet' : 'View profile'}
-                                    </Button>
-                                </Grid>
                             </Grid>
                         </Grid>
-                        <Grid item>
-                            {props.editingMode ? <Button onClick={deletePetOnClick}><CloseIcon /></Button> : <Typography className={classes.accentText} gutterBottom variant="h6" style={{ fontWeight: 600 }}>{props.pet.price ? props.pet.price : 0}€</Typography>}
+                    </Grid>
+                    <Grid item xs sm container>
+                        <Grid item xs container direction="column" alignItems="flex-end" justify="space-between">
+                            <Grid item>
+                                {props.editingMode ? (
+                                    <Button onClick={deletePetOnClick}>
+                                        <CloseIcon />
+                                    </Button>
+                                ) : (
+                                    props.pet.purchased ?
+                                        <Tooltip trigger="hover" placement="top" title={"The pet is not available."}>
+                                            <div>
+                                                <RemoveShoppingCartIcon />
+                                            </div>
+                                        </Tooltip>
+                                        : <Typography className={classes.accentText} gutterBottom variant="h6" style={props.fromSearch ? { color: "black", fontWeight: 600 } : { color: "white", fontWeight: 600 }}>
+                                            {props.pet.price ? `${props.pet.price} €` : 'Free'}
+                                        </Typography>
+                                )}
+                            </Grid>
+                            <Grid item>
+                                <Button className="resize-on-hover" variant="contained" color={props.fromSearch ? "primary" : "secondary"} onClick={goToPetProfile}>
+                                    {props.editingMode ? 'Edit pet' : 'View profile'}
+                                </Button>
+                            </Grid>
                         </Grid>
                     </Grid>
                 </Grid>
             </Paper>
-        </div >
+        </div>
     );
 }
 

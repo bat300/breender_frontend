@@ -7,7 +7,7 @@ const PetPreviewProfileComponent = (props) => {
     const history = useHistory();
 
     const { pet, username } = props;
-    const image = pet.profilePicture.src;
+    const image = pet?.profilePicture.src;
 
     const redirectToPetPage = () => history.push(`/pet/${pet._id}`);
 
@@ -18,7 +18,7 @@ const PetPreviewProfileComponent = (props) => {
                     <Avatar className={classes.picture} src={image} alt="Pet Profile Picture" />
                 </Grid>
                 <Grid item direction="column" spacing={2} className={classes.textLayout}>
-                    <Typography variant="caption">{pet.officialName}</Typography>
+                    <Typography variant="caption">{pet?.officialName}</Typography>
                     <Typography variant="caption">{username}</Typography>
                 </Grid>
             </Grid>
@@ -37,8 +37,8 @@ const useStyles = makeStyles((theme) => ({
     textLayout: {
         display: 'flex',
         flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'left',
+        justifyContent: 'flex-start',
+        alignItems: 'flex-start',
     },
     picture: {
         width: 50,

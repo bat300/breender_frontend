@@ -85,12 +85,6 @@ export default class UserService {
         });
     }
 
-    static async getLoggedInUser(id) {
-        this.setToken();
-        const { data } = await axios.get(`/auth/me/${id}`);
-        return data;
-    }
-
     static logout() {
         window.localStorage.removeItem('jwtToken');
     }

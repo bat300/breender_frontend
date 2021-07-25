@@ -20,12 +20,6 @@ const useStyles = makeStyles((theme) => ({
     active: {
         color: '#D37F65',
     },
-    circle: {
-        width: 12,
-        height: 12,
-        borderRadius: '50%',
-        backgroundColor: 'currentColor',
-    },
     completed: {
         color: '#D37F65',
         zIndex: 1,
@@ -59,7 +53,7 @@ function ChangeToPremiumView(props) {
             setPaymentProcessed(false);
             setStatus(true);
             setTimeout(function () {
-                props.history.push('/login');
+                props.history.push('/');
             }, 2000);
         };
 
@@ -71,7 +65,7 @@ function ChangeToPremiumView(props) {
             }, 1000);
         };
 
-        props.dispatch(update(user.user.id, 'premium', plan, paymentMethod, onSuccess, onError));
+        props.dispatch(update(user.userInfo.id, 'premium', plan, paymentMethod, onSuccess, onError));
     }
 
     const prevStep = () => {
@@ -87,9 +81,18 @@ function ChangeToPremiumView(props) {
     ) : (
         <div className={classes.root} align="center">
             <Paper className={classes.paper}>
-            {status? <div><Result status="success" title="Congratulations!" /> <Typography variant="h5">You will be redirected to log in page shortly.</Typography></div> : <div><Result status="warning" title="Something went wrong :(" /><Typography variant="h5">There was a problem in changing your plan. Please try again later or contact our customer service.</Typography></div>} 
+                {status ? (
+                    <div>
+                        <Result status="success" title="Congratulations!" /> <Typography variant="h5">You will be redirected to home page shortly.</Typography>
+                    </div>
+                ) : (
+                    <div>
+                        <Result status="warning" title="Something went wrong :(" />
+                        <Typography variant="h5">There was a problem in changing your plan. Please try again later or contact our customer service.</Typography>
+                    </div>
+                )}
                 <div>
-                    <img src={cat}  alt="cat"/>
+                    <img src={cat} alt="cat" />
                 </div>
             </Paper>
         </div>

@@ -8,11 +8,12 @@ import PetPhotos from './PetPhotos';
 import PetInformation from './PetInformation';
 import PetCompetitionsList from './PetCompetitionsList';
 import PetDocumentsList from './PetDocumentsList';
-import PaymentButton from '../../components/PaymentButton';
+import { PaymentButton, ContactButton } from '../Button';
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
 // state imports
 import { getPet } from 'redux/actions';
 import { useUser } from 'helper/hooks';
+import { Col, Row } from 'antd';
 
 /**
  * Manages the process of getting pet details data
@@ -36,42 +37,53 @@ function PetProfileComponent(props) {
     return (
         <div className={classes.layout}>
             <Grid container>
-                <Grid item className={classes.maxWidth}>
-                    <Paper className={classes.paper}>
-                        <Grid container alignItems="stretch" align="center" justify="center" direction="row" className={classes.gridMargin} spacing={2}>
-                            <Grid item xs={4}>
-                                <Typography variant="h4" align="center">
+                <Grid item className={classes.maxWidth} spacing={2}>
+                    <Paper className={classes.paper} style={{ padding: 60, paddingTop: 24 }}>
+                        <Grid container alignItems="center" justify="space-between" className={classes.gridMargin}>
+                            <Grid item container xs justify="center" alignItems="center">
+                                <Typography variant="h3" className={classes.label}>
                                     {props.officialName}
                                 </Typography>
-                                <PetPhotos pictures={props.pictures} profilePicture={props.profilePicture} />
-                                <PaymentButton pet={props} />
                             </Grid>
-                            <Divider variant="middle" />
-                            <Grid xs={7} direction="column">
+                            <Grid item container xs={7} justify="flex-end">
                                 {myPet ? (
-                                    <Grid item xs={12} className={classes.buttonGrid}>
-                                        <Button variant="contained" color="secondary" startIcon={<EditOutlinedIcon />} onClick={fetchPet}>
+                                    <div className={classes.buttonGrid}>
+                                        <Button variant="contained" color="primary" startIcon={<EditOutlinedIcon />} onClick={fetchPet}>
                                             Edit
                                         </Button>
-                                    </Grid>
-                                ) : null}
-
-                                <Grid item xs={12}>
-                                    <PetInformation
-                                        officialName={props.officialName}
-                                        nickname={props.nickname}
-                                        age={props.age}
-                                        sex={props.sex}
-                                        price={props.price}
-                                        breed={props.breed}
-                                        species={props.species}
-                                        ownerId={props.ownerId}
-                                    />
-                                </Grid>
+                                    </div>
+                                ) : (
+                                    <ContactButton breederId={props.ownerId} petId={id} />
+                                )}
                             </Grid>
                         </Grid>
+                        <Divider variant="middle" />
+                        <Row align="middle" gutter={[64, 32]} className={classes.centerGridMargin}>
+                            <Col span={9} offset={1}>
+                                <div className={classes.leftLayout}>
+                                    <Row justify="center">
+                                        <PetPhotos pictures={props.pictures} profilePicture={props.profilePicture} />
+                                        <PaymentButton pet={props} />
+                                    </Row>
+                                </div>
+                            </Col>
+                            <Col span={13}>
+                                <PetInformation
+                                    officialName={props.officialName}
+                                    nickname={props.nickname}
+                                    age={props.age}
+                                    sex={props.sex}
+                                    price={props.price}
+                                    breed={props.breed}
+                                    species={props.species}
+                                    ownerId={props.ownerId}
+                                />
+                            </Col>
+                        </Row>
                         {props.documents.length === 0 && props.competitions.length === 0 ? null : <Divider variant="middle" />}
-                        <PetOptionalInformation ownerId={props.ownerId} documents={props.documents} competitions={props.competitions} />
+                        <Grid container justify="space-between" className={classes.gridMargin}>
+                            <PetOptionalInformation ownerId={props.ownerId} documents={props.documents} competitions={props.competitions} />
+                        </Grid>
                     </Paper>
                 </Grid>
             </Grid>
@@ -84,7 +96,7 @@ function LeftTypography(props) {
 
     return (
         <div className={classes.leftTypography}>
-            <Typography variant="h6">{props.text}</Typography>
+            <Typography variant="h5">{props.text}</Typography>
         </div>
     );
 }
@@ -92,7 +104,7 @@ function LeftTypography(props) {
 function PetOptionalInformation(props) {
     const classes = useStyles();
     return (
-        <Grid container alignItems="center" justify="center" direction="column" className={classes.gridMargin} spacing={2}>
+        <Grid container alignItems="center" justify="center" direction="column" className={classes.gridMargin}>
             {props.competitions.length !== 0 && <Competitions competitions={props.competitions} />}
             {props.documents.length !== 0 && <Documents documents={props.documents} />}
         </Grid>
@@ -105,7 +117,6 @@ function Competitions(props) {
         <Grid item className={classes.maxWidth}>
             <LeftTypography text="Competitions:" />
             <PetCompetitionsList competitions={props.competitions} ownerId={props.ownerId} />
-            <Divider variant="middle" />
         </Grid>
     );
 }
@@ -128,18 +139,20 @@ const useStyles = makeStyles((theme) => ({
         alignSelf: 'center',
     },
     maxWidth: {
+        marginTop: 50,
         width: '100%',
     },
     paper: {
-        padding: theme.spacing(2),
+        background: '#FDFDFD',
+        borderRadius: 25,
         [theme.breakpoints.up(600 + theme.spacing(3) * 2)]: {
             marginTop: theme.spacing(6),
             marginBottom: theme.spacing(6),
             padding: theme.spacing(3),
         },
     },
-    cards: {
-        margin: theme.spacing(2),
+    label: {
+        padding: 10,
     },
     leftTypography: {
         width: '100%',
@@ -148,12 +161,29 @@ const useStyles = makeStyles((theme) => ({
         marginLeft: theme.spacing(4),
     },
     gridMargin: {
-        marginTop: theme.spacing(2),
+        marginTop: 10,
+        marginBottom: 10,
+        [theme.breakpoints.down('sm')]: {
+            flexDirection: 'column',
+        },
+    },
+    centerGridMargin: {
+        marginTop: 40,
+        marginBottom: 40,
+        [theme.breakpoints.down('sm')]: {
+            flexDirection: 'column',
+        },
     },
     buttonGrid: {
-        marginBottom: 100,
-        display: 'flex',
-        justifyContent: 'flex-end',
-        alignItems: 'flex-end',
+        marginTop: 20,
+        marginBottom: 20,
+        paddingRight: 15,
+    },
+    leftLayout: {
+        padding: 20,
+        borderRadius: 25,
+        width: '100%',
+        background: 'white',
+        boxShadow: '0 6px 10px rgba(0,0,0,.07), 0 0 6px rgba(0,0,0,.02)',
     },
 }));

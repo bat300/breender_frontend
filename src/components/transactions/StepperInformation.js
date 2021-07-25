@@ -21,6 +21,21 @@ const useStyles = makeStyles((theme) => ({
 const StepperInformation = ({ step, pet, petOwner, amount, loggedInUser, isFreeOfCharge, onApprove, onError }) => {
     const classes = useStyles();
 
+    function formatProvince(province) {
+        switch (province) {
+            case 'bavaria':
+                return 'Bavaria';
+            case 'lower-saxony':
+                return 'Lower Saxony';
+            case 'baden-wuerttemberg':
+                return 'Baden Württemberg';
+            case 'north-rhine-westphalia':
+                return 'North Rhine-Westphalia';
+            default:
+                return '';
+        }
+    }
+
     const petColumns = [
         { title: 'Name', data: pet.officialName },
         { title: 'Sex', data: pet.sex },
@@ -31,7 +46,7 @@ const StepperInformation = ({ step, pet, petOwner, amount, loggedInUser, isFreeO
     const userColumns = [
         { title: 'Username', data: petOwner?.username },
         { title: 'City', data: petOwner?.city },
-        { title: 'State', data: petOwner?.state },
+        { title: 'Province', data: formatProvince(petOwner?.province) },
     ];
 
     return (
@@ -51,7 +66,7 @@ const StepperInformation = ({ step, pet, petOwner, amount, loggedInUser, isFreeO
                                         return (
                                             <TableRow hover>
                                                 <TableCell>
-                                                    <Typography variant="body2" color="textSecondary" component="p">
+                                                    <Typography variant="body2" color="textPrimary" component="p">
                                                         {item.title}
                                                     </Typography>
                                                 </TableCell>
@@ -76,7 +91,7 @@ const StepperInformation = ({ step, pet, petOwner, amount, loggedInUser, isFreeO
                                         return (
                                             <TableRow hover>
                                                 <TableCell>
-                                                    <Typography variant="body2" color="textSecondary" component="p">
+                                                    <Typography variant="body2" color="textPrimary" component="p">
                                                         {item.title}
                                                     </Typography>
                                                 </TableCell>

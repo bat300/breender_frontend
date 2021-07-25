@@ -129,10 +129,10 @@ export const getUserPets = (ownerId) => {
 
     return async (dispatch, getState) => {
         try {
-            console.log('I am in actions')
+            console.log('I am in actions');
             // ask for the pets in the backend
             const pets = await UserService.getUserPets(ownerId);
-            console.log('The pets are in the actions: ', pets)
+            console.log('The pets are in the actions: ', pets);
             // call onSuccess in context of redux
             dispatch(onSuccess(pets));
         } catch (e) {
@@ -147,7 +147,7 @@ export const updateUser = (user, onSuccess = () => null, onError = (err) => null
         let user_for_redux = {
             id: user._id,
             username: user.username,
-            role: user.role
+            role: user.role,
         };
         return { type: 'UPDATE_USER', user: user_for_redux, userInfo: user };
     };
@@ -198,10 +198,10 @@ export const getSelectedUserPets = (ownerId) => {
 
     return async (dispatch, getState) => {
         try {
-            console.log('I am in actions')
+            console.log('I am in actions');
             // ask for the pets in the backend
             const pets = await UserService.getUserPets(ownerId);
-            console.log('The pets are in the actions: ', pets)
+            console.log('The pets are in the actions: ', pets);
             // call onSuccess in context of redux
             dispatch(onSuccess(pets));
         } catch (e) {
@@ -224,10 +224,10 @@ export const getReviewsOnUser = (id) => {
 
     return async (dispatch, getState) => {
         try {
-            console.log('I am in actions')
+            console.log('I am in actions');
             // ask for the reviews in the backend
             const reviews = await UserService.getReviewsOnUser(id);
-            console.log('The reviews are in the actions: ', reviews)
+            console.log('The reviews are in the actions: ', reviews);
             // call onSuccess in context of redux
             dispatch(onSuccess(reviews));
         } catch (e) {
@@ -250,10 +250,10 @@ export const getReviewsOnSelectedUser = (id) => {
 
     return async (dispatch, getState) => {
         try {
-            console.log('I am in actions')
+            console.log('I am in actions');
             // ask for the reviews in the backend
             const reviews = await UserService.getReviewsOnUser(id);
-            console.log('The reviews are in the actions: ', reviews)
+            console.log('The reviews are in the actions: ', reviews);
             // call onSuccess in context of redux
             dispatch(onSuccess(reviews));
         } catch (e) {
@@ -265,7 +265,7 @@ export const getReviewsOnSelectedUser = (id) => {
 export const addReview = (review, onSuccess = () => null, onError = (err) => null) => {
     const addReviewAction = () => {
         onSuccess();
-        return { type: "ADD_REVIEW" };
+        return { type: 'ADD_REVIEW' };
     };
     const onFailure = (err) => {
         onError();
@@ -283,20 +283,3 @@ export const addReview = (review, onSuccess = () => null, onError = (err) => nul
         }
     };
 };
-export function me(id) {
-    function onSuccess(user) {
-        return { type: 'GET_LOGGEDINUSER', loggedInUser: user };
-    }
-    function onFailure(error) {
-        return { type: 'LOGIN_RESET' };
-    }
-
-    return async (dispatch) => {
-        try {
-            let resp = await UserService.getLoggedInUser(id);
-            dispatch(onSuccess(resp));
-        } catch (e) {
-            dispatch(onFailure(e));
-        }
-    };
-}

@@ -4,17 +4,21 @@ import { createStore, applyMiddleware } from 'redux';
 import { persistStore, persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 import thunkMiddleware from 'redux-thunk';
-import { MuiThemeProvider, createMuiTheme, makeStyles } from '@material-ui/core/styles';
+import { MuiThemeProvider, createMuiTheme, makeStyles, StylesProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import ScrollContainer from './components/ScrollContainer';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import rootReducer from './redux/reducers';
+import reducers from './redux/reducers';
+import routes from './routes';
+import Header from './components/Header';
 import AppTheme from './theming/themetypes';
 import AppThemeOptions from './theming/themes';
 import AxiosConfiguration from './helper/axios';
 import { PersistGate } from 'redux-persist/integration/react';
 import Routes from './routes';
 import DataFetcher from 'datafetcher';
+
+import './theming/main.css';
 
 const useStyles = makeStyles((theme) => ({
     appRoot: {
@@ -32,7 +36,7 @@ const persistConfig = {
 
 function App() {
     const classes = useStyles();
-    
+
     useEffect(() => AxiosConfiguration.setupInterceptors(), []);
 
     // set document title
@@ -50,19 +54,19 @@ function App() {
 
     return (
         <div className={classes.appRoot}>
+            <StylesProvider injectFirst>
             <MuiThemeProvider theme={createMuiTheme(AppThemeOptions[theme])}>
                 <Provider store={store}>
                     <PersistGate loading={null} persistor={persistor}>
                         <CssBaseline />
                         <React.Fragment>
-                            <ScrollContainer>
-                                <DataFetcher />
-                                <Routes />
-                            </ScrollContainer>
+                            <DataFetcher />
+                            <Routes />
                         </React.Fragment>
                     </PersistGate>
                 </Provider>
             </MuiThemeProvider>
+            </StylesProvider>
         </div>
     );
 }

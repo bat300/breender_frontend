@@ -6,20 +6,31 @@ import SignUpView from './views/SignUpView';
 import AddPetView from './views/AddPetView';
 import PetProfileView from './views/PetProfileView';
 import EmailConfirmationView from './views/EmailConfirmationView';
-import UserProfileView from "./views/UserProfileView";
+import UserProfileView from './views/UserProfileView';
 import SubscriptionPageView from './views/SubscriptionPageView';
 import EditPetView from './views/EditPetView';
 import NotFoundView from './views/NotFoundView';
 import SearchView from './views/SearchView';
 import SelectedUserProfileView from './views/SelectedUserProfileView';
 import TransactionsView from 'views/TransactionsView';
+import MessengerView from './views/MessengerView';
+import MessengerNewContactView from './views/MessengerNewContactView';
 import ChangeToPremiumView from 'views/ChangeToPremiumView';
 import AdminConsoleView from 'views/AdminConsoleView';
+import BlogView from 'views/BlogView';
+
 // services
 import { LocalStorageService, NotificationService } from 'services';
 import Header from 'components/Header';
+import ScrollToTop from 'components/ScrollToTop';
 import AppTheme from 'theming/themetypes';
 import { useSelector } from 'react-redux';
+// Scroll to top dependencies
+import useScrollTrigger from '@material-ui/core/useScrollTrigger';
+import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
+import { makeStyles } from '@material-ui/core/styles';
+import Zoom from '@material-ui/core/Zoom';
+import Fab from '@material-ui/core/Fab';
 
 const DefaultHeader = () => {
     // theme for app
@@ -29,7 +40,13 @@ const DefaultHeader = () => {
     const toggleTheme = () => {
         setTheme(theme === AppTheme.LIGHT ? AppTheme.DARK : AppTheme.LIGHT);
     };
-    return <Header darkmode={theme === AppTheme.DARK} toggletheme={toggleTheme} />;
+    return (
+        <div>
+            <div id="top-anchor" />
+            <ScrollToTop />
+            <Header darkmode={theme === AppTheme.DARK} toggletheme={toggleTheme} />
+        </div>
+    );
 };
 
 // used for routing
@@ -54,7 +71,7 @@ export const PrivateRoute = (props) => {
 export const AdminRoute = (props) => {
     const user = useSelector((state) => state.user);
 
-    return LocalStorageService.isAuthorized() && user.user.role === "admin"? (
+    return LocalStorageService.isAuthorized() && user.user.role === 'admin' ? (
         <Route {...props}>
             <DefaultHeader />
             {props.children}
@@ -109,6 +126,15 @@ const Routes = () => {
             </PrivateRoute>
             <PrivateRoute exact path="/transactions">
                 <TransactionsView />
+            </PrivateRoute>
+            <PrivateRoute exact path="/messenger/:breederId/:petId">
+                <MessengerNewContactView />
+            </PrivateRoute>
+            <PrivateRoute exact path="/messenger">
+                <MessengerView />
+            </PrivateRoute>
+            <PrivateRoute exact path="/blog">
+                <BlogView />
             </PrivateRoute>
             <DefaultRoute path="*">
                 <DefaultHeader />

@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import { FormControl, Grid, InputLabel, Button, MenuItem, Select, TextField, FormHelperText, Divider, Typography } from '@material-ui/core';
-import CloseIcon from '@material-ui/icons/Close';
+import * as EmailValidator from 'email-validator';
+import { Tooltip } from 'antd';
 
 const useStyles = makeStyles((theme) => ({
     layout: {
@@ -58,6 +59,7 @@ const UserFormInputs = {
     city: 'city',
     password: 'password',
     password2: 'password2',
+    paymentEmail: 'paymentEmail',
 };
 
 const provincesAndCities = {
@@ -67,22 +69,28 @@ const provincesAndCities = {
     'north-rhine-westphalia': ['Cologne', 'Düsseldorf', 'Dortmund', 'Essen', 'Duisburg', 'Bochum'],
 };
 
-export default function UserForm({ usernameProp, emailProp, provinceProp, cityProp, passwordProp, password2Prop, paymentMethodProp, ...props }) {
+export default function UserForm({ usernameProp, emailProp, provinceProp, cityProp, passwordProp, password2Prop, paymentMethodProp, disableSaveProp, ...props }) {
     const classes = useStyles();
     const history = useHistory();
     const { username, setUsername } = usernameProp;
     const { email, setEmail } = emailProp;
     const { province, setProvince } = provinceProp;
     const { city, setCity } = cityProp;
-    const [errors, setErrors] = useState({ username: false, province: false, city: false });
+    const [errors, setErrors] = useState({ username: false, province: false, city: false, password: false, password2: false, paymentEmail: false });
     const { password, setPassword } = passwordProp;
     const { password2, setPassword2 } = password2Prop;
-    const { paymentMethod, setpaymentMethod } = paymentMethodProp;
+    const { paymentMethod, setPaymentMethod } = paymentMethodProp;
+    const [type, setType] = React.useState('PayPal');
+    const { disableSave, setDisableSave } = disableSaveProp;
+    var paymentEmail = paymentMethod ? paymentMethod.email : '';
 
     const validationErrors = {
         username: 'Userame is required',
         province: 'Province is required',
         city: 'City is required',
+        password: 'The passwords should be the same',
+        password2: 'The passwords should be the same',
+        paymentEmail: 'Email is not valid',
     };
 
     let cityOptions = null;
@@ -105,9 +113,31 @@ export default function UserForm({ usernameProp, emailProp, provinceProp, cityPr
         }
 
         if (type === UserFormInputs.password2) {
-            if (value !== password) {
+            if (value !== '' && value !== password) {
                 temp[type] = true;
+                temp[UserFormInputs.password] = true;
+            } else {
+                temp[type] = false;
+                temp[UserFormInputs.password] = false;
             }
+        }
+
+        if (type === UserFormInputs.paymentEmail) {
+            if (value !== '' && !EmailValidator.validate(value)) {
+                temp[type] = true;
+            } else {
+                temp[type] = false;
+            }
+        }
+
+        let values = Object.keys(temp).map(function (key) {
+            return temp[key];
+        });
+
+        if (values.every(element => element === false)) {
+            setDisableSave(false);
+        } else {
+            setDisableSave(true);
         }
         setErrors({ ...temp });
     };
@@ -136,7 +166,22 @@ export default function UserForm({ usernameProp, emailProp, provinceProp, cityPr
         setPassword2(e.target.value);
     };
 
-    const handleAddPet = (e) => {
+    const handleTypeChange = (e) => {
+        setType(e.target.value);
+    };
+
+    const handlePaymentEmailChange = (e) => {
+        validate(UserFormInputs.paymentEmail, e.target.value);
+        paymentEmail = e.target.value;
+        if (paymentEmail === '') {
+            console.log("Email is empty, set payment method to null");
+            setPaymentMethod(null);
+        } else {
+            setPaymentMethod({ type: type, email: e.target.value });
+        }
+    }
+
+    const handleChangeSubscriptionPlan = (e) => {
         history.push('/premium');
     };
 
@@ -196,14 +241,28 @@ export default function UserForm({ usernameProp, emailProp, provinceProp, cityPr
                         </Grid>
                         <Grid item xs={12} sm={6}>
                             <FormControl required variant="outlined" size="small" fullWidth error={errors[UserFormInputs.province]}>
-                                <TextField size="small" label="New Password" fullWidth value={password} onChange={handlePasswordChange} type="password" variant="outlined" />
-                                <FormHelperText>{errors[UserFormInputs.password] && validationErrors[UserFormInputs.password]}</FormHelperText>
+                                <TextField
+                                    size="small"
+                                    label="New Password"
+                                    fullWidth
+                                    value={password}
+                                    onChange={handlePasswordChange}
+                                    type="password"
+                                    variant="outlined"
+                                    {...(errors[UserFormInputs.password] && { error: true, helperText: validationErrors[UserFormInputs.password] })} />
                             </FormControl>
                         </Grid>
                         <Grid item xs={12} sm={6}>
                             <FormControl required variant="outlined" size="small" fullWidth error={errors[UserFormInputs.city]}>
-                                <TextField size="small" label="Repeat new Password" fullWidth value={password2} onChange={handlePassword2Change} type="password" variant="outlined" />
-                                <FormHelperText>{errors[UserFormInputs.password2] && validationErrors[UserFormInputs.password2]}</FormHelperText>
+                                <TextField
+                                    size="small"
+                                    label="Repeat new Password"
+                                    fullWidth
+                                    value={password2}
+                                    onChange={handlePassword2Change}
+                                    type="password"
+                                    variant="outlined"
+                                    {...(errors[UserFormInputs.password2] && { error: true, helperText: validationErrors[UserFormInputs.password2] })} />
                             </FormControl>
                         </Grid>
                         <Grid item xs={12} sm={6}>
@@ -212,54 +271,52 @@ export default function UserForm({ usernameProp, emailProp, provinceProp, cityPr
                                 disabled
                                 id="plan"
                                 name="plan"
-                                value={props.subscriptionPlan}
-                                label="Subscription plan"
+                                value={props.subscriptionPlan === 'premium' ? "Premium" : "Basic"}
+                                label="Pricing"
                                 variant="outlined"
                                 fullWidth
                             />
                         </Grid>
                         <Grid item xs={12} sm={6}>
-                            <Button style={{ margin: '0 auto', display: "flex" }} variant="contained" color="secondary" onClick={handleAddPet}>
-                                Adjust subscription plan
-                            </Button>
+                            {props.subscriptionPlan === 'premium' ?
+                                <Tooltip trigger="hover" placement="top" title={"After your premium subscription ends your plan will be automatically switched to free."}>
+                                    <div>
+                                        <Button style={{ margin: '0 auto', display: "flex", pointerEvents: 'none' }} variant="contained" color="secondary" onClick={handleChangeSubscriptionPlan} disabled={props.subscriptionPlan === 'premium'}>
+                                            Adjust the plan
+                                        </Button>
+                                    </div>
+                                </Tooltip>
+                                : <Button style={{ margin: '0 auto', display: "flex" }} variant="contained" color="secondary" onClick={handleChangeSubscriptionPlan} disabled={props.subscriptionPlan === 'premium'}>
+                                    Adjust the plan
+                                </Button>}
                         </Grid>
                     </Grid>
                     <Divider variant="middle" className={classes.divider} />
                     <Typography className={classes.typography} variant="h6" align="center" style={{ fontWeight: 600 }}>
                         Payment method
                     </Typography>
-                    {paymentMethod ?
-                        <Grid container spacing={3}>
-                            <Grid item xs={12} sm={6}>
+                    <Grid container direction="row" spacing={3} item>
+                        <Grid item xs={12} sm={6}>
+                            <FormControl required variant="outlined" size="small" fullWidth>
+                                <InputLabel>Payment type</InputLabel>
+                                <Select label="Payment type" value={type} onChange={handleTypeChange}>
+                                    <MenuItem value={'PayPal'}>PayPal</MenuItem>
+                                </Select>
+                            </FormControl>
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
+                            <FormControl required variant="outlined" size="small" fullWidth error={errors[UserFormInputs.paymentEmail]}>
                                 <TextField
                                     size="small"
-                                    disabled
-                                    id="plan"
-                                    name="plan"
-                                    value={paymentMethod.email}
-                                    label={paymentMethod.type}
+                                    label="Payment Email"
+                                    fullWidth value={paymentEmail}
+                                    onChange={handlePaymentEmailChange}
+                                    type="paymentEmail"
                                     variant="outlined"
-                                    fullWidth
-                                />
-                            </Grid>
-                            <Grid container xs={12} sm={6} justify="space-around" alignItems="center" spacing={3}>
-                                <Grid item xs={12} sm={6}>
-                                    <Button variant="contained" style={{ width: '230px' }} color="secondary" onClick={handleAddPet}>
-                                        Adjust payment method
-                                    </Button>
-                                </Grid>
-                                <Grid item xs={1} sm={1}>
-                                    <Button onClick={handleAddPet}>
-                                        <CloseIcon />
-                                    </Button>
-                                </Grid>
-                            </Grid>
-
-                        </Grid> :
-                        <Button style={{ margin: '0 auto', display: "flex" }} variant="contained" color="secondary" >
-                            Add payment method
-                        </Button>}
-
+                                    {...(errors[UserFormInputs.paymentEmail] && { error: true, helperText: validationErrors[UserFormInputs.paymentEmail] })} />
+                            </FormControl>
+                        </Grid>
+                    </Grid>
                 </React.Fragment>
             </form>
         </div>

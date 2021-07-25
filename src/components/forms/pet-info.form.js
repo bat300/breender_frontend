@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import DateFnsUtils from '@date-io/date-fns';
 import { makeStyles } from '@material-ui/core/styles';
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
-import { FormControl, Grid, InputLabel, InputAdornment, MenuItem, Select, TextField, Paper, Divider, FormHelperText } from '@material-ui/core';
+import { FormControl, Grid, InputLabel, InputAdornment, MenuItem, Select, TextField, Paper, Divider, FormHelperText, Typography } from '@material-ui/core';
 import { breeds } from 'helper/data/breeds';
 import DocumentsUpload from '../upload/documents.upload';
 import CompetitionsComponent from '../competitions';
@@ -14,9 +14,10 @@ const PetFormInputs = {
     sex: 'sex',
     species: 'species',
     breed: 'breed',
+    price: 'price'
 };
 
-const PetInformationForm = ({ nameProp, nicknameProp, sexProp, breedProp, speciesProp, priceProp, birthDateProp, ...props }) => {
+const PetInformationForm = ({ nameProp, nicknameProp, sexProp, breedProp, speciesProp, priceProp, birthDateProp, disabledProp, purchasedProp, ...props }) => {
     const classes = useStyles();
     const { name, setName } = nameProp;
     const { nickname, setNickname } = nicknameProp;
@@ -25,7 +26,9 @@ const PetInformationForm = ({ nameProp, nicknameProp, sexProp, breedProp, specie
     const { species, setSpecies } = speciesProp;
     const { price, setPrice } = priceProp;
     const { birthDate, setBirthDate } = birthDateProp;
-    const [errors, setErrors] = useState({ name: false, nickname: false, sex: false, species: false, breed: false });
+    const [errors, setErrors] = useState({ name: false, nickname: false, sex: false, species: false, breed: false, price: false });
+    const { formIsDisabled, setFormIsDisabled } = disabledProp;
+    const { purchased, setPurchased } = purchasedProp;
 
     const validationErrors = {
         name: 'Name is required',
@@ -33,15 +36,35 @@ const PetInformationForm = ({ nameProp, nicknameProp, sexProp, breedProp, specie
         sex: 'Sex is required',
         species: 'Species is required',
         breed: 'Breed is required',
+        price: 'Please add payment method to your account to add a price tag!'
     };
 
     // validate fields
     const validate = (type, value) => {
         let temp = { ...errors };
-        if (value === '') {
+        if (type !== PetFormInputs.price && value === '') {
             temp[type] = true;
         } else {
             temp[type] = false;
+        }
+
+
+        if (type == PetFormInputs.price && (typeof props.user.paymentMethod === 'undefined' || (typeof props.user.paymentMethod !== 'undefined' && props.user.paymentMethod === null))) {
+            if (value > 0) {
+                temp[type] = true;
+            } else {
+                temp[type] = false;
+            }
+        }
+
+        let values = Object.keys(temp).map(function (key) {
+            return temp[key];
+        });
+
+        if (values.every(element => element === false)) {
+            setFormIsDisabled(false);
+        } else {
+            setFormIsDisabled(true);
         }
         setErrors({ ...temp });
     };
@@ -57,7 +80,10 @@ const PetInformationForm = ({ nameProp, nicknameProp, sexProp, breedProp, specie
         validate(PetFormInputs.sex, e.target.value);
         setSex(e.target.value);
     };
-    const handlePriceChange = (e) => setPrice(e.target.value);
+    const handlePriceChange = (e) => {
+        validate(PetFormInputs.price, e.target.value);
+        setPrice(e.target.value);
+    }
 
     const handleDateChange = (date) => setBirthDate(date);
 
@@ -68,6 +94,9 @@ const PetInformationForm = ({ nameProp, nicknameProp, sexProp, breedProp, specie
     const handleBreedChange = (e) => {
         validate(PetFormInputs.breed, e.target.value);
         setBreed(e.target.value);
+    };
+    const handlePurchasedChange = (e) => {
+        setPurchased(e.target.value);
     };
 
     // sort breeds data
@@ -80,7 +109,7 @@ const PetInformationForm = ({ nameProp, nicknameProp, sexProp, breedProp, specie
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
                 <form autoComplete="off">
                     <Paper className={classes.paper}>
-                        <label className={classes.title}>Information about your pet</label>
+                        <Typography variant="h5" className={classes.title}>Information about your pet</Typography>
                         <React.Fragment>
                             <Grid container spacing={3}>
                                 <Grid item xs={12}>
@@ -123,6 +152,7 @@ const PetInformationForm = ({ nameProp, nicknameProp, sexProp, breedProp, specie
                                         format="dd.MM.yyyy"
                                         margin="none"
                                         label="Birth Date"
+                                        maxDate={new Date()}
                                         value={birthDate}
                                         onChange={handleDateChange}
                                         KeyboardButtonProps={{
@@ -173,15 +203,27 @@ const PetInformationForm = ({ nameProp, nicknameProp, sexProp, breedProp, specie
                                     </FormControl>
                                 </Grid>
                                 <Grid item xs={12}>
+                                    <FormControl required variant="outlined" size="small" fullWidth>
+                                        <InputLabel id="purchased-label">Availability</InputLabel>
+                                        <Select label="Availability" id="purchased" value={purchased} onChange={handlePurchasedChange} onBlur={handlePurchasedChange}>
+                                            <MenuItem value={true}>Not available</MenuItem>
+                                            <MenuItem value={false}>Available</MenuItem>
+                                        </Select>
+                                    </FormControl>
+                                </Grid>
+                                <Grid item xs={12}>
                                     <CompetitionsComponent mode={props.mode} />
                                 </Grid>
                                 <Grid item xs={12}>
                                     <Divider />
                                     <Grid>
-                                        <label className={classes.label}>Upload Documents</label>
+                                        <label className={classes.label}>Upload Documents (birth certificates, etc.)</label>
+                                        <label className={classes.label2}>Please make sure that the documents have a right name</label>
                                     </Grid>
                                     <DocumentsUpload mode={props.mode} />
+
                                 </Grid>
+
                                 <Grid item xs={12}>
                                     <TextField
                                         fullWidth
@@ -200,6 +242,7 @@ const PetInformationForm = ({ nameProp, nicknameProp, sexProp, breedProp, specie
                                                 min: 0,
                                             },
                                         }}
+                                        {...(errors[PetFormInputs.price] && { error: true, helperText: validationErrors[PetFormInputs.price] })}
                                     />
                                 </Grid>
                             </Grid>
@@ -219,9 +262,10 @@ const useStyles = makeStyles((theme) => ({
         margin: 10,
     },
     paper: {
+        borderRadius: 25,
         marginTop: theme.spacing(6),
         marginBottom: theme.spacing(6),
-        padding: theme.spacing(3),
+        padding: 40,
         [theme.breakpoints.down('sm')]: {
             marginTop: theme.spacing(3),
             marginBottom: theme.spacing(3),
@@ -230,17 +274,17 @@ const useStyles = makeStyles((theme) => ({
     },
     label: {
         display: 'flex',
-        fontSize: 16,
-        fontWeight: 500,
+        fontSize: 20,
+        fontWeight: 300,
         marginBottom: 15,
         marginTop: 15,
+        fontFamily: "'Open Sans', sans-serif"
     },
+    label2: theme.typography.body1,
     title: {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        fontSize: 22,
-        fontWeight: 500,
         marginBottom: 15,
         marginTop: 15,
     },
