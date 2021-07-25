@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { connect, useSelector } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import { withRouter } from 'react-router-dom';
@@ -45,17 +45,23 @@ const useStyles = makeStyles((theme) => ({
     darkSlider: {
         color: theme.palette.primary.dark,
     },
+    filters: {
+        display: 'flex',
+        flex: 1,
+        flexDirection: 'row',
+        alignItems: 'baseline',
+        justifyContent: 'center',
+    },
 }));
 
 function SearchView(props) {
     const searchRef = useRef();
     const classes = useStyles();
-    let pets = useSelector((state) => state.entities.pets); // get pets from redux store
+    let pets = useSelector((state) => state.pets.pets); // get pets from redux store
     let user = useUser();
     // for scrolling to the search
-    const ref = React.useRef(null);
     const loggedInUser = useLoggedInUser();
-    var totalPages = useSelector((state) => state.entities.totalPages);
+    var totalPages = useSelector((state) => state.pets.totalPages);
 
     const [isLoading, setIsLoading] = React.useState(true);
     const [chosenSpecies, setSpecies] = React.useState('');
@@ -134,11 +140,21 @@ function SearchView(props) {
 
     const onSubscribe = () => props.history.push('/premium');
 
-    const onSearchTrigger = () => ref.current.scrollIntoView({ behavior: 'smooth' });
+    const onSearchTrigger = () => searchRef.current.scrollIntoView({ behavior: 'smooth' });
+
+    function scrollToTargetAdjusted() {
+        var headerOffset = document.querySelector('#header').clientHeight;
+        var elementPosition = searchRef.current?.getBoundingClientRect().top;
+        var offsetPosition = window.scrollY + elementPosition - headerOffset;
+        window.scrollTo({
+            top: offsetPosition,
+            behavior: 'smooth',
+        });
+    }
 
     const handleChange = async (event, value) => {
         loadPets(value);
-        searchRef.current?.scrollIntoView({ behavior: 'smooth' });
+        scrollToTargetAdjusted();
     };
 
     return (
@@ -164,7 +180,7 @@ function SearchView(props) {
                     </div>
                 </Grid>
             </Grid>
-            <Grid container direction="row" ref={ref} justify="center" alignItems="center">
+            <Grid container direction="row" ref={searchRef} justify="center" alignItems="center">
                 <Grid item>
                     <FormControl className={classes.formControl} variant="outlined" size="small">
                         <InputLabel id="species-select-label">Species</InputLabel>

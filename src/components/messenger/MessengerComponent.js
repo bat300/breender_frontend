@@ -120,7 +120,7 @@ function MessengerComponent(props) {
                                         return m._id !== props.currentUser.id;
                                     });
                                     if (friend.username) {
-                                        return friend.username.includes(searchName);
+                                        return friend.username.toLowerCase().includes(searchName.toLowerCase());
                                     }
                                 }
                             }

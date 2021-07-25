@@ -1,38 +1,45 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 // antd imports
 import { Table } from 'antd';
 import '../../theming/antd.css';
 // material-ui imports
 import { makeStyles } from '@material-ui/core/styles';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import PetPreviewProfileComponent from 'components/pet-profile/PetPreviewProfileComponent';
-import { useUser } from 'helper/hooks/auth.hooks';
 import PriceTag from 'components/PriceTag';
 import { getAdminTransactions, updateTransaction } from 'redux/actions';
 import moment from 'moment';
 import { Chip } from '@material-ui/core';
 import AdminStatusTag from 'components/tags/AdminStatusTag';
+import Loading from 'components/Loading';
 
 const TransactionsAdminOverviewTable = (props) => {
     const classes = useStyles();
     const dispatch = useDispatch();
-    const { transactions } = props;
+    const transactions = useSelector((state) => state.transaction.transactions);
 
     // states
-    const user = useUser();
     const checkRequiresInvestigation = (t) => (t.senderResponse === 'fail' && t.receiverResponse === 'success') || (t.senderResponse === 'success' && t.receiverResponse === 'fail');
+
+    useEffect(() => {
+        
+           if (props.active) { //get transactions when tab is opened
+            dispatch(getAdminTransactions(props.user.id)); 
+            
+        }       
+    }, [props, dispatch])
 
 
 
     // update transaction on confirming to change the transaction status
     const confirm = async (transaction) => {
         await dispatch(updateTransaction(transaction));
-        await dispatch(getAdminTransactions(user.id));
+        await dispatch(getAdminTransactions(props.user.id));
     };
 
     // get the owner of the pet
     const getPetOwner = (transaction) => {
-        if (transaction.pet.ownerId === transaction.senderId._id) {
+        if (transaction.pet?.ownerId === transaction.senderId?._id) {
             return transaction.senderId;
         } else {
             return transaction.receiverId;
@@ -99,9 +106,9 @@ const TransactionsAdminOverviewTable = (props) => {
         },
     ];
 
-    return (
+    return (//if transactions are loaded, shw the table; otherwise loading indicator
         <div>
-            <Table columns={columns} dataSource={transactions} />
+            {transactions? <Table columns={columns} dataSource={transactions} /> : <Loading />} 
         </div>
     );
 };

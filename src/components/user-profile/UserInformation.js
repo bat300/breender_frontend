@@ -103,7 +103,7 @@ export default function UserInformation(props) {
                         <AttachMoneyIcon />
                     </Avatar>
                 </ListItemAvatar>
-                <ListItemText primary={capitalizeFirstLetter(props.user.subscriptionPlan)} secondary="Subscription plan" />
+                <ListItemText primary={props.user.subscriptionPlan === "premium" ? "Premium" : "Basic"} secondary="Pricing" />
             </ListItem>
             {props.user.subscriptionPlan === 'premium' && (
                 <ListItem className={classes.listItem}>
@@ -112,7 +112,7 @@ export default function UserInformation(props) {
                             <EventIcon />
                         </Avatar>
                     </ListItemAvatar>
-                    <ListItemText primary={props.user.nextRenewalDate} secondary="Premium subscription untill" />
+                    <ListItemText primary={props.user.nextRenewalDate} secondary="Premium plan untill" />
                 </ListItem>
             )}
             <Divider variant="middle" className={classes.divider} />
