@@ -4,15 +4,13 @@ import { Grid, Card, CardHeader, CardContent, Typography, CardActions, Button } 
 import GetAppIcon from '@material-ui/icons/GetApp';
 import { VerificationIcon, CancelIcon } from 'components/icons';
 
-
 const useStyles = makeStyles((theme) => ({
     root: {
         minWidth: 275,
         padding: 10,
         backgroundColor: '#7D7F9A',
         boxShadow: '0 6px 10px rgba(0,0,0,.07), 0 0 6px rgba(0,0,0,.02)',
-        borderRadius: 25,
-        color: 'white'
+        color: 'white',
     },
     pos: {
         marginBottom: 12,
@@ -26,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
     },
     label: {
         color: theme.palette.text.light,
-    }
+    },
 }));
 
 function PetCompetitionsCard(props) {
@@ -34,8 +32,8 @@ function PetCompetitionsCard(props) {
 
     return (
         <Grid item>
-            <Card className={classes.root}>
-                <CardHeader action={props.certificate.declined? <CancelIcon /> : <VerificationIcon verified={props.certificate.verified} />} />
+            <Card className={classes.root} style={{ borderRadius: 25 }}>
+                <CardHeader action={props.certificate.declined ? <CancelIcon /> : <VerificationIcon verified={props.certificate.verified} />} />
                 <CardContent>
                     <Typography variant="h5" className={classes.label} color="textSecondary">
                         {props.name}
