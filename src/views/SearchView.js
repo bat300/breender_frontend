@@ -138,7 +138,7 @@ function SearchView(props) {
         return `${age} years old`;
     }
 
-    const onSubscribe = () => props.history.push('/premium');
+    const onSubscribe = () => props.history.push('/pricing');
 
     const onSearchTrigger = () => searchRef.current.scrollIntoView({ behavior: 'smooth' });
 

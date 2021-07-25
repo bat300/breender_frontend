@@ -63,7 +63,7 @@ function Header(props) {
             case '/':
                 setNavigationSelectedStyle({ search: { fontWeight: 'normal' }, blog: null, premium: null, admin: null });
                 break;
-            case '/premium':
+            case '/pricing':
                 setNavigationSelectedStyle({ search: null, blog: null, premium: { fontWeight: 'normal' }, admin: null });
                 break;
             case '/blog':
@@ -80,7 +80,7 @@ function Header(props) {
 
     const goToHome = () => props.history.push('/');
     const onClickAdminConsole = () => props.history.push('/admin-console');
-    const onClickPremium = () => props.history.push('/premium');
+    const onClickPremium = () => props.history.push('/pricing');
     const goToBlog = () => props.history.push('/blog');
 
     const onClickMessenger = () => {
