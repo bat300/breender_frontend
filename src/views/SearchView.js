@@ -61,7 +61,7 @@ function SearchView(props) {
     let user = useUser();
     // for scrolling to the search
     const loggedInUser = useLoggedInUser();
-    var totalPages = useSelector((state) => state.pets.totalPages);
+    const totalPages = useSelector((state) => state.pets.pets.totalPages);
 
     const [isLoading, setIsLoading] = React.useState(true);
     const [chosenSpecies, setSpecies] = React.useState('');
@@ -257,10 +257,11 @@ function SearchView(props) {
                 </Grid>
             </Grid>
             <SearchResults pets={pets} order={order} />
-
-            <Box my={2} display="flex" justifyContent="center">
-                <Pagination count={totalPages} variant="outlined" shape="rounded" onChange={handleChange} />
-            </Box>
+            {totalPages ? (
+                <Box my={2} display="flex" justifyContent="center">
+                    <Pagination count={totalPages} variant="outlined" shape="rounded" onChange={handleChange} />
+                </Box>
+            ) : null}
         </div>
     );
 }

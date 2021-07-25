@@ -74,3 +74,7 @@ a:hover{
 .MuiDialog-paper {
     padding: 15px;
 }
+
+.MuiTypography-colorTextSecondary.MuiListItemText-secondary {
+    color: #7d7f9a;
+}
