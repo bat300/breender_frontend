@@ -1,15 +1,21 @@
 import React from 'react';
 import { Avatar, CardActionArea, Grid, makeStyles, Typography } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { getPet } from 'redux/actions';
 
 const PetPreviewProfileComponent = (props) => {
     const classes = useStyles();
     const history = useHistory();
+    const dispatch = useDispatch();
 
     const { pet, username } = props;
     const image = pet.profilePicture.src;
 
-    const redirectToPetPage = () => history.push(`/pet/${pet._id}`);
+    const redirectToPetPage = () => {
+        dispatch(getPet(pet._id));
+        history.push(`/pet/${pet._id}`);
+    };
 
     return (
         <CardActionArea onClick={redirectToPetPage}>

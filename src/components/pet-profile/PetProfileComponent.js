@@ -12,7 +12,7 @@ import { PaymentButton, ContactButton } from '../Button';
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
 // state imports
 import { getPet } from 'redux/actions';
-import { useUser } from 'helper/hooks';
+import { useLoggedInUser } from 'helper/hooks';
 
 /**
  * Manages the process of getting pet details data
@@ -24,9 +24,9 @@ function PetProfileComponent(props) {
     const dispatch = useDispatch();
     const history = useHistory();
 
-    const loggedInUser = useUser();
+    const loggedInUser = useLoggedInUser();
     const id = props.id;
-    const myPet = loggedInUser.id === props.ownerId;
+    const myPet = loggedInUser._id === props.ownerId;
 
     const fetchPet = async () => {
         await dispatch(getPet(id));

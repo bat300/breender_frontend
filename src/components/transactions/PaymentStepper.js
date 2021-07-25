@@ -9,7 +9,7 @@ import { Check } from '@material-ui/icons';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import StepperInformation from './StepperInformation';
-import { useLoggedInUser } from 'helper/hooks/auth.hooks';
+import { useLoggedInUser, useSelectedUser } from 'helper/hooks/auth.hooks';
 import PaymentResultComponent from './PaymentResult';
 import { useDispatch, useSelector } from 'react-redux';
 import { changePet, createTransaction, getUser } from 'redux/actions';
@@ -24,20 +24,20 @@ const PaymentStepper = ({ pet, close }) => {
     const classes = useStyles();
     const dispatch = useDispatch();
 
-    const [paymentStatus, setPaymentStatus] = useState('none');
     const transaction = useSelector((state) => state.transaction.transaction);
-    const petOwner = useSelector((state) => state.user.selectedUser);
+    const petOwner = useSelectedUser();
+    const loggedInUser = useLoggedInUser();
 
+    const [paymentStatus, setPaymentStatus] = useState('none');
     const [activeStep, setActiveStep] = useState(0);
+    const [isFreeOfCharge, setIsFreeOfCharge] = useState(false);
 
     const steps = ['Confirm general information', 'Confirm payment', 'Finish'];
-    const loggedInUser = useLoggedInUser();
-    const [isFreeOfCharge, setIsFreeOfCharge] = useState(false);
+
 
     useEffect(() => {
         if(loggedInUser) {
             setIsFreeOfCharge(loggedInUser.subscriptionPlan === 'premium' && pet.price === 0) // premium user don't need to pay any fees for the free pet
-            dispatch(getUser(pet.ownerId));
         }
     }, [loggedInUser, pet.ownerId, pet.price, dispatch])
 
