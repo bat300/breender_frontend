@@ -20,7 +20,7 @@ import { useUser } from 'helper/hooks/auth.hooks';
 import { useLoggedInUser } from 'helper/hooks/auth.hooks';
 import PremiumBanner from 'components/PremiumBanner';
 import { showPremiumBanner } from 'helper/helpers';
-import { getUsersInfo } from 'redux/actions';
+import { getUsersInfo, getUser } from 'redux/actions';
 
 const useStyles = makeStyles((theme) => ({
     formControl: {
@@ -98,6 +98,7 @@ function SearchView(props) {
     useEffect(() => {
         if (user) {
             props.dispatch(getUsersInfo(user.id));
+            props.dispatch(getUser(user.id));
         }
     }, []);
 
