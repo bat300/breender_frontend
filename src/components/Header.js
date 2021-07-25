@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react';
 import { withRouter } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
-import { AppBar, IconButton, Toolbar, Typography } from '@material-ui/core';
+import { AppBar, IconButton, Toolbar, Typography, Badge } from '@material-ui/core';
 import logo from '../images/breender.svg';
 import ChatBubbleOutlineIcon from '@material-ui/icons/ChatBubbleOutline';
+import ChatIcon from '@material-ui/icons/Chat';
 import PersonIcon from '@material-ui/icons/Person';
 import KebabMenu from './KebabMenu';
 import { useSelector } from 'react-redux';
@@ -51,6 +52,7 @@ const useStyles = makeStyles((theme) => ({
 function Header(props) {
     const classes = useStyles();
     const user = useSelector((state) => state.user);
+    const unseenMessages = useSelector((state) => state.messages.unseenMessages);
 
     const [menuAnchor, setMenuAnchor] = React.useState(null);
     const [navigationSelectedStyle, setNavigationSelectedStyle] = React.useState({ search: null, blog: null, premium: null, admin: null });
@@ -130,7 +132,17 @@ function Header(props) {
                             ) : null}
                         </div>
                         <IconButton onClick={onClickMessenger} color="inherit">
-                            <ChatBubbleOutlineIcon />
+                            {unseenMessages ? (
+                                unseenMessages.map((m) => m.count).reduce((c1, c2) => c1 + c2, 0) !== 0 ? (
+                                    <Badge badgeContent={unseenMessages.map((m) => m.count).reduce((c1, c2) => c1 + c2, 0)} color="secondary">
+                                        <ChatIcon />
+                                    </Badge>
+                                ) : (
+                                    <ChatBubbleOutlineIcon />
+                                )
+                            ) : (
+                                <ChatBubbleOutlineIcon />
+                            )}
                         </IconButton>
                         <IconButton onClick={(event) => setMenuAnchor(event.currentTarget)} color="inherit">
                             <PersonIcon />

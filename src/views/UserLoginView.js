@@ -22,6 +22,7 @@ function UserLoginView(props) {
             NotificationService.notify('success', 'Success', 'Sucessfully signed in.');
             props.history.push('/');
             props.dispatch(getUsersInfo(user.user.id));
+            props.dispatch(getUnseenMessages(user.user.id));
         }
     }, [user, props]);
 

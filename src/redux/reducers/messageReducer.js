@@ -17,12 +17,10 @@ function messages(state = {}, action) {
             } else {
                 return state;
             }
-        case 'DELETE_MESSAGE':
-            return { ...state, messages: action.messages };
+        case 'GET_UNREAD_MESSAGES':
+            return { ...state, unseenMessages: action.unseenMessages };
         case 'ADD_MESSAGE':
             return { ...state };
-        case 'UPDATE_MESSAGE':
-            return { ...state, message: action.message };
         case 'GET_MESSAGE':
             return { ...state, message: action.message };
         default:
