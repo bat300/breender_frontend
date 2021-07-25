@@ -24,8 +24,8 @@ const AvatarUpload = (props) => {
     const [loading, setLoading] = useState(false);
     const [openAlert, setOpenAlert] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
-    const [imageUrl, setImageUrl] = useState(mode === 'add' ? '' : pet.profilePicture.src);
- 
+    const [imageUrl, setImageUrl] = useState(mode === 'add' ? '' : pet.profilePicture?.src);
+
     const user = useUser();
     const petProfilePictureToRemove = usePetProfilePictureToRemove();
 
@@ -104,12 +104,12 @@ const AvatarUpload = (props) => {
         const image = pet.profilePicture;
         let imageToDelete = petProfilePictureToRemove;
 
-        if(image && image?.src !== '' && Object.keys(petProfilePictureToRemove).length === 0) {
+        if (image && image?.src !== '' && Object.keys(petProfilePictureToRemove).length === 0) {
             imageToDelete = image;
         }
-    
+
         // update in global state
-         await dispatch(updateProfilePicture({}, imageToDelete));
+        await dispatch(updateProfilePicture({}, imageToDelete));
     };
 
     return (
