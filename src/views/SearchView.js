@@ -20,6 +20,7 @@ import { useUser } from 'helper/hooks/auth.hooks';
 import { useLoggedInUser } from 'helper/hooks/auth.hooks';
 import PremiumBanner from 'components/PremiumBanner';
 import { showPremiumBanner } from 'helper/helpers';
+import { getUsersInfo } from 'redux/actions';
 
 const useStyles = makeStyles((theme) => ({
     formControl: {
@@ -93,6 +94,10 @@ function SearchView(props) {
         let pageToFetch = pageValue ? pageValue : 1;
         pets = props.dispatch(getPets(chosenSpecies, sex, breed, ageRange, pageToFetch, false, user));
     };
+
+    useEffect(() => {
+        props.dispatch(getUsersInfo(user.id));
+    }, []);
 
     useEffect(() => {
         // load pets when the page is loaded or the pets were filtered.

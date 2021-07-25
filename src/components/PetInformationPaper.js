@@ -9,6 +9,8 @@ import Image from 'material-ui-image';
 import { useHistory } from 'react-router-dom';
 import { getAgeString } from 'helper/helpers';
 import CloseIcon from '@material-ui/icons/Close';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCrown } from '@fortawesome/free-solid-svg-icons';
 import { NotificationService } from 'services';
 import { useDispatch } from 'react-redux';
 import { deletePet, getUserPets, getPets, getPet } from 'redux/actions';
@@ -48,6 +50,9 @@ const useStyles = makeStyles((theme) => ({
     accentText: {
         fontWeight: 500,
     },
+    icon: {
+        paddingBottom: 3,
+    },
 }));
 
 export default function PetInformationPaper(props) {
@@ -55,8 +60,8 @@ export default function PetInformationPaper(props) {
     const history = useHistory();
     const dispatch = useDispatch();
 
-    function goToPetProfile() {
-        dispatch(getPet(props.pet._id));
+    const goToPetProfile = async () => {
+        await dispatch(getPet(props.pet._id));
         if (props.editingMode) {
             history.push('/edit/pet/' + props.pet._id);
         } else {
@@ -89,8 +94,11 @@ export default function PetInformationPaper(props) {
                     <Grid item xs sm={6} container>
                         <Grid item xs container direction="column" spacing={2}>
                             <Grid item xs>
-                                <Typography gutterBottom variant="h5" style={props.fromSearch ? { color: "black" } : { color: "white" }} >
-                                    {props.pet.officialName}
+                                <Typography gutterBottom variant="h5" style={props.fromSearch ? { color: 'black' } : { color: 'white' }}>
+                                    {props.pet.officialName}{' '}
+                                    {(props.pet.ownerId && props.pet.ownerId.subscriptionPlan === 'premium') || (props.user && props.user.subscriptionPlan === 'premium') ? (
+                                        <FontAwesomeIcon icon={faCrown} size={'xs'} className={classes.icon} />
+                                    ) : null}
                                 </Typography>
                                 <Grid container spacing={2}>
                                     <Grid item xs>

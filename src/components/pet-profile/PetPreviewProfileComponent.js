@@ -12,8 +12,8 @@ const PetPreviewProfileComponent = (props) => {
     const { pet, username } = props;
     const image = pet?.profilePicture.src;
 
-    const redirectToPetPage = () => {
-        dispatch(getPet(pet._id));
+    const redirectToPetPage = async () => {
+        await dispatch(getPet(pet._id));
         history.push(`/pet/${pet._id}`);
     };
 

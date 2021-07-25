@@ -132,7 +132,7 @@ export default function UserInformation(props) {
                             <EventIcon className={classes.icon} />
                         </Avatar>
                     </ListItemAvatar>
-                    <ListItemText primary={props.user.nextRenewalDate} secondary="Premium plan untill" />
+                    <ListItemText primary={changeDateFormat()} secondary="Premium plan until" />
                 </ListItem>
             )}
             <Divider variant="middle" className={classes.divider} />

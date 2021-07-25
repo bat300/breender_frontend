@@ -292,6 +292,8 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         justifyContent: 'flex-end',
         marginRight: 20,
+        marginBottom: 25,
+        marginTop: -25,
     },
 }));
 
