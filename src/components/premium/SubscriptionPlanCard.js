@@ -15,19 +15,10 @@ import { faCrown } from '@fortawesome/free-solid-svg-icons';
 
 const useStyles = makeStyles((theme) => ({
     rootChosen: {
-        background: theme.palette.primary.main,
         minWidth: 275,
-        border: `1px solid rgba(145, 147, 179, 0.5)`,
-        boxShadow: '0 6px 10px rgba(0,0,0,.07), 0 0 6px rgba(0,0,0,.02)',
-        cursor: 'pointer',
-        marginBottom: 30,
+        border: `4px solid ${theme.palette.secondary.main}`,
     },
-    root: {
-        border: `1px solid rgba(145, 147, 179, 0.5)`,
-        boxShadow: '0 6px 10px rgba(0,0,0,.07), 0 0 6px rgba(0,0,0,.02)',
-        cursor: 'pointer',
-        marginBottom: 30,
-    },
+    root: {},
     cardHeader: {
         backgroundColor: theme.palette.type === 'light' ? theme.palette.grey[200] : theme.palette.grey[700],
         paddingLeft: theme.spacing(3)

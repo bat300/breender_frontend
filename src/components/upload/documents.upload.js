@@ -151,7 +151,7 @@ const DocumentsUpload = (props) => {
         <div>
             <Upload listType="text" fileList={fileList} onChange={handleChange} customRequest={customUpload} onRemove={handleRemove}>
                 {fileList.length >= maxFileNumber ? null : (
-                    <Button size={props.size || 'medium'} variant="contained" color="secondary" startIcon={<UploadOutlined />}>
+                    <Button size={props.size || 'medium'} variant="outlined" color="primary" startIcon={<UploadOutlined />}>
                         Upload
                     </Button>
                 )}

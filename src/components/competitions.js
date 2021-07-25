@@ -333,7 +333,7 @@ const CompetitionsComponent = (props) => {
                     <Button
                         onClick={showModal}
                         variant="outlined"
-                        color="secondary"
+                        color="primary"
                         style={{
                             margin: 10,
                         }}
@@ -372,8 +372,8 @@ const useStyles = makeStyles((theme) => ({
         alignItems: 'center',
     },
     label: {
-        fontSize: 16,
-        fontWeight: 500,
+        fontSize: 20,
+        fontWeight: 300,
     },
     grid: {
         display: 'flex',

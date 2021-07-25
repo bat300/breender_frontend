@@ -5,15 +5,13 @@ import GetAppIcon from '@material-ui/icons/GetApp';
 import { Tooltip } from 'antd';
 import { VerificationIcon, CancelIcon } from 'components/icons';
 
-
 const useStyles = makeStyles((theme) => ({
     root: {
         minWidth: 275,
         padding: 10,
         backgroundColor: '#7D7F9A',
         boxShadow: '0 6px 10px rgba(0,0,0,.07), 0 0 6px rgba(0,0,0,.02)',
-        borderRadius: 25,
-        color: 'white'
+        color: 'white',
     },
     pos: {
         marginBottom: 12,
@@ -27,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
     },
     label: {
         color: theme.palette.text.light,
-    }
+    },
 }));
 
 function PetCompetitionsCard(props) {
